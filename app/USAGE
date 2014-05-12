@@ -1,0 +1,17 @@
+Description:
+  Creates a LoopBack application.
+
+Example:
+
+  yo loopback
+
+  This will create:
+    package.json: Development packages installed by npm.
+
+    app.js: The main application file.
+    app.json: Machine-editable app configuration.
+
+    datasources.json: Definition of data sources.
+    models.json: Definition of basic models provided by LoopBack.
+
+    models/ Directory where to put custom model code.
