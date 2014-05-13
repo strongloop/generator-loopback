@@ -1,4 +1,4 @@
-/*global describe, beforeEach, it */
+/*global beforeEach */
 'use strict';
 
 var workspace = require('loopback-workspace');

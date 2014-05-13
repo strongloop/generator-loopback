@@ -5,8 +5,7 @@ var yeoman = require('yeoman-generator');
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 
-
-var ModelGenerator = yeoman.generators.NamedBase.extend({
+module.exports = yeoman.generators.NamedBase.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
@@ -75,5 +74,3 @@ var ModelGenerator = yeoman.generators.NamedBase.extend({
     }.bind(this));
   }
 });
-
-module.exports = ModelGenerator;

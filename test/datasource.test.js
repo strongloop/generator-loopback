@@ -31,9 +31,10 @@ describe('loopback:datasource generator', function() {
     });
   });
 
-  function givenDataSourceGenerator(modelArgs) {
+  function givenDataSourceGenerator(dsArgs) {
     var deps = [ '../../datasource' ];
-    var gen = helpers.createGenerator('loopback:datasource', deps, modelArgs, {});
+    var name = 'loopback:datasource';
+    var gen = helpers.createGenerator(name, deps, dsArgs, {});
     return gen;
   }
 

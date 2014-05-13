@@ -17,6 +17,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
+    "pretest": "jshint .",
     "test": "mocha"
   },
   "files": [
@@ -37,6 +38,7 @@
     "yo": ">=1.0.0"
   },
   "devDependencies": {
+    "jshint": "^2.5",
     "mocha": "^1.18.2",
     "must": "^0.11.0"
   }

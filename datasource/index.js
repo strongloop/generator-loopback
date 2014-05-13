@@ -1,12 +1,11 @@
 'use strict';
-var util = require('util');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 
-var DataSourceGenerator = yeoman.generators.NamedBase.extend({
+module.exports = yeoman.generators.NamedBase.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
@@ -56,7 +55,8 @@ var DataSourceGenerator = yeoman.generators.NamedBase.extend({
       },
       {
         name: 'customConnector',
-        message: 'Enter the connector name without the loopback-connector- prefix:',
+        message:
+          'Enter the connector name without the loopback-connector- prefix:',
         validate: function(input) {
           return input ? true : 'You have to provide the connector name.';
         },
@@ -91,5 +91,3 @@ var DataSourceGenerator = yeoman.generators.NamedBase.extend({
     }.bind(this));
   }
 });
-
-module.exports = DataSourceGenerator;

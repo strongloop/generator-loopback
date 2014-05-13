@@ -1,13 +1,12 @@
 'use strict';
 var util = require('util');
-var fs = require('fs');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Project = workspace.models.Project;
 
-var LoopBackGenerator = module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.generators.Base.extend({
   constructor: function() {
     yeoman.generators.Base.apply(this, arguments);
 

@@ -17,5 +17,5 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
-  "white": true
+  "maxlen": 80
 }
