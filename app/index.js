@@ -12,9 +12,14 @@ var LoopBackGenerator = module.exports = yeoman.generators.Base.extend({
     yeoman.generators.Base.apply(this, arguments);
 
     this.argument('name', {
-      description: 'Name of the application to scaffold.',
+      desc: 'Name of the application to scaffold.',
       required: false,
       type: String
+    });
+
+    this.option('skip-install', {
+      desc: 'Do not install npm dependencies.',
+      type: Boolean
     });
   },
 
