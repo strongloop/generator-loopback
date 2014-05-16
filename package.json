@@ -17,6 +17,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
+    "pretest": "jshint .",
     "test": "mocha"
   },
   "files": [
@@ -29,10 +30,16 @@
   ],
   "dependencies": {
     "yeoman-generator": "~0.16.0",
+    "loopback-workspace": "~2.4.0",
     "chalk": "~0.4.0",
     "yosay": "^0.1.0"
   },
   "peerDependencies": {
     "yo": ">=1.0.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.5",
+    "mocha": "^1.18.2",
+    "must": "^0.11.0"
   }
 }
