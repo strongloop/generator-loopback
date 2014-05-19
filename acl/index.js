@@ -1,5 +1,9 @@
 'use strict';
 var yeoman = require('yeoman-generator');
+var async = require('async');
+
+var workspace = require('loopback-workspace');
+var AclDefinition = workspace.models.AclDefinition;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
@@ -77,67 +81,58 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Select the access type:',
         type: 'list',
         default: 'all',
-        choices: [
-          { name: 'All (match all types)', value: 'all' },
-          'read',
-          'write',
-          'execute',
-        ]
+        choices: AclDefinition.accessTypeValues,
       },
       {
         name: 'role',
         message: 'Select the role',
         type: 'list',
-        default: 'everyone',
-        choices: [
-          { name: 'All users', value: 'everyone' },
-          { name: 'Any unauthenticated user', value: 'unauthenticated' },
-          { name: 'Any authenticated user', value: 'authenticated' },
-          { name: 'Any user related to the object', value: 'related' },
-          { name: 'The user owning the object', value: 'owner' },
-        ]
+        default: '$everyone',
+        choices: AclDefinition.builtinRoleValues,
       },
       {
         name: 'permission',
         message: 'Select the permission to apply',
         type: 'list',
-        choices: [
-          { name: 'Explicitly grant access to the model', value: 'allow' },
-          { name: 'Explicitly deny access to the model', value: 'deny' },
-          { name: 'Generate an alarm of the access to the model',
-            value: 'alarm' },
-          { name: 'Log the access to the model', value: 'audit' }
-        ]
+        choices: AclDefinition.permissionValues,
       }
     ];
     this.prompt(prompts, function(answers) {
-      this.aclOptions = {};
-      if (this.modelName) {
-        this.aclOptions.model = this.modelName;
-      } else {
-        this.aclOptions['all-models'] = true;
-      }
-
-      if (answers.property) {
-        this.aclOptions.property = answers.property;
-      }
-
-      var flags = ['scope', 'accessType', 'role', 'permission'];
-      flags.forEach(function(k) {
-        if (answers[k]) {
-          this.aclOptions[answers[k]] = true;
-        }
-      }.bind(this));
+      this.aclDef = {
+        property: answers.property,
+        accessType: answers.accessType,
+        principalType: AclDefinition.ROLE,
+        principalId: answers.role,
+        permission: answers.permission
+      };
       done();
     }.bind(this));
   },
 
   acl: function() {
     var done = this.async();
-    this.project.addPermission(this.aclOptions, function(err) {
-      helpers.reportValidationError(err, this.log);
-      return done(err);
-    }.bind(this));
+
+    var aclDef = this.aclDef;
+    var filter = this.modelName ?
+      { where: { name: this.modelName }, limit: 1 } :
+      true /* all models, force refresh */;
+
+    this.project.models(filter, function(err, models) {
+      if (err) {
+        return done(err);
+      }
+
+      var firstError = true;
+      async.each(models, function(model, cb) {
+        model.permissions.create(aclDef, function(err) {
+          if (err && firstError) {
+            helpers.reportValidationError(err);
+            firstError = false;
+          }
+          cb(err);
+        });
+      }, done);
+    });
   },
 
   saveProject: actions.saveProject
