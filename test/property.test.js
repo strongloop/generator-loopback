@@ -7,7 +7,7 @@ var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
 
-describe('loopback:model generator', function() {
+describe('loopback:property generator', function() {
   beforeEach(function createSandbox(done) {
     helpers.testDirectory(SANDBOX, done);
   });
@@ -17,24 +17,30 @@ describe('loopback:model generator', function() {
   });
 
   it('adds an entry to models.json', function(done) {
-    var modelGen = givenModelGenerator(['Product']);
-    helpers.mockPrompt(modelGen, {
-      dataSource: 'db',
-      propertyName: ''
+    var propertyGenerator = givenPropertyGenerator();
+    helpers.mockPrompt(propertyGenerator, {
+      model: 'user',
+      name: 'isPreferred',
+      type: 'boolean',
+      required: 'true'
     });
 
-    var builtinModels = Object.keys(readModelsJsonSync());
-    modelGen.run({}, function() {
-      var newModels = Object.keys(readModelsJsonSync());
-      var expectedModels = builtinModels.concat(['Product']);
-      expect(newModels).to.have.members(expectedModels);
+    propertyGenerator.run({}, function() {
+      var models = readModelsJsonSync();
+      var userOpts = models.user.properties || {};
+      expect(userOpts).to.have.property('isPreferred');
+      expect(userOpts.isPreferred).to.eql({
+        type: 'boolean',
+        required: true
+      });
       done();
     });
   });
 
-  function givenModelGenerator(modelArgs) {
-    var deps = [ '../../model', '../../property' ];
-    var gen = helpers.createGenerator('loopback:model', deps, modelArgs, {});
+  function givenPropertyGenerator() {
+    var deps = [ '../../property' ];
+    var name = 'loopback:property';
+    var gen = helpers.createGenerator(name, deps, [], {});
     return gen;
   }
 

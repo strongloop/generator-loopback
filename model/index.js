@@ -29,19 +29,20 @@ module.exports = yeoman.generators.NamedBase.extend({
   askForParameters: function() {
     var done = this.async();
 
-    var displayName = chalk.yellow(this.name);
+    this.displayName = chalk.yellow(this.name);
 
     var prompts = [
       {
         name: 'dataSource',
-        message: 'Select the data-source to attach ' + displayName + ' to:',
+        message: 'Select the data-source to attach ' +
+          this.displayName + ' to:',
         type: 'list',
         default: 'db',
         choices: this.dataSources
       },
       {
         name: 'public',
-        message: 'Expose ' + displayName + ' via the REST API?',
+        message: 'Expose ' + this.displayName + ' via the REST API?',
         type: 'confirm'
       }
     ];
@@ -65,6 +66,45 @@ module.exports = yeoman.generators.NamedBase.extend({
     this.project.models.create(config, function(err) {
       helpers.reportValidationError(err, this.log);
       return done(err);
+    }.bind(this));
+  },
+
+  delim: function() {
+    this.log('Let\'s add some ' + this.displayName + ' properties now.\n');
+  },
+
+  property: function() {
+    var done = this.async();
+    this.log('Enter an empty property name when done.');
+    var prompts = [
+      {
+        name: 'propertyName',
+        message: 'Property name:'
+      }
+    ];
+    this.prompt(prompts, function(answers) {
+      if (answers.propertyName === '') {
+        return done();
+      }
+
+      this.invoke(
+        'loopback:property',
+        {
+          options: {
+            nested: true,
+            projectDir: this.projectDir,
+            project: this.project,
+            modelName: this.name,
+            propertyName: answers.propertyName,
+          },
+        },
+        function(err) {
+          if (err) {
+            return done(err);
+          }
+          this.log('\nLet\'s add another ' + this.displayName + ' property.');
+          this.property();
+        }.bind(this));
     }.bind(this));
   },
 
