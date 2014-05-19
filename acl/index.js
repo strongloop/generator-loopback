@@ -135,14 +135,10 @@ module.exports = yeoman.generators.Base.extend({
   acl: function() {
     var done = this.async();
     this.project.addPermission(this.aclOptions, function(err) {
-      if (!err) {
-        return this.project.saveToFiles(this.projectDir, done);
-      }
-
-      if (err.name === 'ValidationError') {
-        helpers.reportValidationError(err, this.log);
-      }
+      helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  }
+  },
+
+  saveProject: actions.saveProject
 });

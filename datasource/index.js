@@ -80,14 +80,10 @@ module.exports = yeoman.generators.NamedBase.extend({
     };
 
     this.project.dataSources.create(config, function(err) {
-      if (!err) {
-        return this.project.saveToFiles(this.projectDir, done);
-      }
-
-      if (err.name === 'ValidationError') {
-        helpers.reportValidationError(err, this.log);
-      }
+      helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  }
+  },
+
+  saveProject: actions.saveProject
 });
