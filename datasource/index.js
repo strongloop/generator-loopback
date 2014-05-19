@@ -2,6 +2,9 @@
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 
+var workspace = require('loopback-workspace');
+var Project = workspace.models.Project;
+
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 
@@ -14,28 +17,24 @@ module.exports = yeoman.generators.NamedBase.extend({
   loadProject: actions.loadProject,
 
   loadConnectors: function() {
-    // TODO(bajtos) build this list from published npm modules
-    var list = this.listOfAvailableConnectors = [];
+    var done = this.async();
+    Project.listAvailableConnectors(function(err, list) {
+      if (err) {
+        return done(err);
+      }
 
-    function addOfficial(name, value) {
-      list.push({ name: name + ' (supported by StrongLoop)', value: value });
-    }
+      this.listOfAvailableConnectors = list.map(function(c) {
+        var support = c.supportedByStrongLoop ?
+          ' (supported by StrongLoop)' :
+          ' (provided by community)';
+        return {
+          name: c.description + support,
+          value: c.name
+        };
+      });
 
-    function addCommunity(name, value) {
-      list.push({ name: name + ' (provided by community)', value: value });
-    }
-
-    addOfficial('In-memory db', 'memory');
-    addOfficial('MySQL', 'mysql');
-    addOfficial('PostgreSQL', 'postgresql');
-    addOfficial('Oracle', 'oracle');
-    addOfficial('Microsoft SQL', 'mssql');
-    addOfficial('MongoDB', 'mongodb');
-    addOfficial('SOAP webservices', 'soap');
-    addOfficial('REST services', 'rest');
-
-    addCommunity('Neo4j', 'neo4j');
-    addCommunity('Kafka', 'kafka');
+      done();
+    }.bind(this));
   },
 
   askForParameters: function() {
