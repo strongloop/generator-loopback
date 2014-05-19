@@ -12,19 +12,7 @@ module.exports = yeoman.generators.Base.extend({
 
   loadProject: actions.loadProject,
 
-  loadModels: function() {
-    var done = this.async();
-    this.project.models(function(err, results) {
-      if (err) {
-        return done(err);
-      }
-      this.projectModels = results;
-      this.modelNames = results.map(function(m) {
-        return m.name;
-      });
-      done();
-    }.bind(this));
-  },
+  loadModels: actions.loadModels,
 
   askForModel: function() {
     var done = this.async();
