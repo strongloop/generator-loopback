@@ -21,9 +21,9 @@ describe('loopback:acl generator', function() {
     helpers.mockPrompt(aclGen, {
       model: 'user',
       scope: 'all',
-      accessType: 'all',
-      role: 'everyone',
-      permission: 'audit'
+      accessType: '*',
+      role: '$everyone',
+      permission: 'AUDIT'
     });
 
     aclGen.run({}, function() {
