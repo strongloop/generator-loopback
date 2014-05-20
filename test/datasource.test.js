@@ -6,6 +6,7 @@ var Project = require('loopback-workspace').models.Project;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
+var common = require('./common');
 
 describe('loopback:datasource generator', function() {
   beforeEach(function createSandbox(done) {
@@ -32,9 +33,9 @@ describe('loopback:datasource generator', function() {
   });
 
   function givenDataSourceGenerator(dsArgs) {
-    var deps = [ '../../datasource' ];
+    var path = '../../datasource';
     var name = 'loopback:datasource';
-    var gen = helpers.createGenerator(name, deps, dsArgs, {});
+    var gen = common.createGenerator(name, path, [], dsArgs, {});
     return gen;
   }
 

@@ -6,6 +6,7 @@ var Project = require('loopback-workspace').models.Project;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
+var common = require('./common');
 
 describe('loopback:acl generator', function() {
   beforeEach(function createSandbox(done) {
@@ -42,9 +43,9 @@ describe('loopback:acl generator', function() {
   });
 
   function givenAclGenerator() {
-    var deps = [ '../../acl' ];
     var name = 'loopback:acl';
-    var gen = helpers.createGenerator(name, deps, [], {});
+    var path = '../../acl';
+    var gen = common.createGenerator(name, path);
     return gen;
   }
 

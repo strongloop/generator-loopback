@@ -6,6 +6,7 @@ var Project = require('loopback-workspace').models.Project;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
+var common = require('./common');
 
 describe('loopback:property generator', function() {
   beforeEach(function createSandbox(done) {
@@ -38,9 +39,9 @@ describe('loopback:property generator', function() {
   });
 
   function givenPropertyGenerator() {
-    var deps = [ '../../property' ];
     var name = 'loopback:property';
-    var gen = helpers.createGenerator(name, deps, [], {});
+    var path = '../../property';
+    var gen = common.createGenerator(name, path);
     return gen;
   }
 

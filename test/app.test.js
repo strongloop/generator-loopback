@@ -3,6 +3,7 @@
 var path = require('path');
 var helpers = require('yeoman-generator').test;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
+var common = require('./common');
 
 describe('loopback:app generator', function() {
   beforeEach(function createSandbox(done) {
@@ -37,8 +38,9 @@ describe('loopback:app generator', function() {
   });
 
   function givenAppGenerator(modelArgs) {
-    var deps = [ '../../app' ];
-    var gen = helpers.createGenerator('loopback:app', deps, modelArgs, {});
+    var name = 'loopback:app';
+    var path = '../../app';
+    var gen = common.createGenerator(name, path, [], modelArgs, {});
     gen.options['skip-install'] = true;
     return gen;
   }
