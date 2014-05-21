@@ -1,6 +1,14 @@
 /*jshint latedef:nofunc */
 'use strict';
 var generators = require('yeoman-generator');
+var must = require('must');
+
+must.prototype.members = function members(ary) {
+  var self = this;
+  ary.forEach(function(key) {
+    self.include(key);
+  });
+};
 
 exports.createGenerator = createGenerator;
 
