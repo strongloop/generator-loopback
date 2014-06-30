@@ -1,8 +1,8 @@
-/*global describe, beforeEach, it */
+/*global describe, beforeEach, afterEach, it */
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-generator').test;
-var Project = require('loopback-workspace').models.Project;
+var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
@@ -14,13 +14,28 @@ describe('loopback:acl generator', function() {
   });
 
   beforeEach(function createProject(done) {
-    Project.createFromTemplate(SANDBOX, 'test-app', 'mobile', done);
+    common.createDummyProject(SANDBOX, 'test-app', done);
+  });
+
+  afterEach(common.resetWorkspace);
+
+  beforeEach(function createCarModel(done) {
+    var test = this;
+    wsModels.ModelDefinition.create(
+      {
+        name: 'Car',
+        componentName: '.',
+      },
+      function(err, model) {
+        test.Model = model;
+        done(err);
+      });
   });
 
   it('adds an entry to models.json', function(done) {
     var aclGen = givenAclGenerator();
     helpers.mockPrompt(aclGen, {
-      model: 'user',
+      model: 'Car',
       scope: 'all',
       accessType: '*',
       role: '$everyone',
@@ -28,11 +43,11 @@ describe('loopback:acl generator', function() {
     });
 
     aclGen.run({}, function() {
-      var models = readModelsJsonSync();
-      var userOpts = models.user.options || {};
-      var userAcls = userOpts.acls;
+      var def = readJsonSync('models/car.json');
+      var carAcls = def.acls;
 
-      expect(userAcls).to.eql([{
+      expect(carAcls).to.eql([{
+        id: 1, // TODO fix workspace to not add this extra property
         accessType: '*',
         permission: 'AUDIT',
         principalType: 'ROLE',
@@ -49,8 +64,8 @@ describe('loopback:acl generator', function() {
     return gen;
   }
 
-  function readModelsJsonSync() {
-    var filepath = path.resolve(SANDBOX, 'models.json');
+  function readJsonSync(relativePath) {
+    var filepath = path.resolve(SANDBOX, relativePath);
     var content = fs.readFileSync(filepath, 'utf-8');
     return JSON.parse(content);
   }

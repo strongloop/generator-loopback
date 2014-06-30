@@ -1,8 +1,7 @@
-/*global describe, beforeEach, it */
+/*global describe, beforeEach, afterEach, it */
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-generator').test;
-var Project = require('loopback-workspace').models.Project;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
@@ -14,18 +13,20 @@ describe('loopback:datasource generator', function() {
   });
 
   beforeEach(function createProject(done) {
-    Project.createFromTemplate(SANDBOX, 'test-app', 'mobile', done);
+    common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-  it('adds an entry to datasources.json', function(done) {
+  afterEach(common.resetWorkspace);
+
+  it('adds an entry to rest/datasources.json', function(done) {
     var modelGen = givenDataSourceGenerator(['crm']);
     helpers.mockPrompt(modelGen, {
       connector: 'mysql'
     });
 
-    var builtinSources = Object.keys(readDataSourcesJsonSync());
+    var builtinSources = Object.keys(readDataSourcesJsonSync('rest'));
     modelGen.run({}, function() {
-      var newSources = Object.keys(readDataSourcesJsonSync());
+      var newSources = Object.keys(readDataSourcesJsonSync('rest'));
       var expectedSources = builtinSources.concat(['crm']);
       expect(newSources).to.have.members(expectedSources);
       done();
@@ -39,8 +40,8 @@ describe('loopback:datasource generator', function() {
     return gen;
   }
 
-  function readDataSourcesJsonSync() {
-    var filepath = path.resolve(SANDBOX, 'datasources.json');
+  function readDataSourcesJsonSync(component) {
+    var filepath = path.resolve(SANDBOX, component || '.', 'datasources.json');
     var content = fs.readFileSync(filepath, 'utf-8');
     return JSON.parse(content);
   }

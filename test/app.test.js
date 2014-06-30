@@ -17,17 +17,20 @@ describe('loopback:app generator', function() {
   it('creates expected files', function(done) {
     var expected = [
       'package.json',
-      'app.js',
-      'app.json',
-      'datasources.json',
-      'models.json',
+
+      'rest/datasources.json',
+      'rest/models.json',
+      // TODO rest/rest.js
+
+      'server/config.json',
+      // TODO server/server.js
     ];
 
     var gen = givenAppGenerator();
 
     helpers.mockPrompt(gen, {
       name: 'test-app',
-      template: 'empty'
+      template: 'api-server'
     });
 
     gen.options['skip-install'] = true;

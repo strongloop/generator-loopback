@@ -1,10 +1,9 @@
 'use strict';
-var util = require('util');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
 var workspace = require('loopback-workspace');
-var Project = workspace.models.Project;
+var Workspace = workspace.models.Workspace;
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function() {
@@ -23,6 +22,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   injectProjectWriteFile: function() {
+    /* TODO inject `this.directory` to replace `ncp` in workspace
     // Modify Project.writeFile use yeoman's write
     var _projectWriteFile = Project.writeFile;
     Project.writeFile = function(filepath, content, encoding, cb) {
@@ -34,10 +34,29 @@ module.exports = yeoman.generators.Base.extend({
     this.on('end', function() {
       Project.writeFile = _projectWriteFile;
     });
+    */
   },
 
-  init: function() {
-    this.pkg = require('../package.json');
+  initWorkspace: function() {
+    process.env.WORKSPACE_DIR = this.destinationRoot();
+  },
+
+  loadTemplates: function() {
+    var done = this.async();
+
+    Workspace.getAvailableTemplates(function(err, list) {
+      if (err) return done(err);
+      this.templates = list.map(function(t) {
+        return {
+          // TODO - workspace does not provide template details yet
+          // name: util.format('%s (%s)', t.name, t.description),
+          // value: t.name
+          name: t,
+          value: t
+        };
+      });
+      done();
+    }.bind(this));
   },
 
   askForParameters: function() {
@@ -53,23 +72,23 @@ module.exports = yeoman.generators.Base.extend({
         message: 'What\'s the name of your application?',
         default: name
       },
+      /*
+       TODO: not all templates are projects, some of them are mere components
+       The only functional project template is 'api-server' at the moment
       {
         name: 'template',
         message: 'What kind of application do you have in mind?',
         type: 'list',
-        default: 'mobile',
-        choices: Project.listTemplates().map(function(t) {
-          return {
-            name: util.format('%s (%s)', t.name, t.description),
-            value: t.name
-          };
-        }),
+        default: 'api-server',
+        choices: this.templates
       }
+       */
     ];
 
     this.prompt(prompts, function(props) {
       this.appname = props.appname;
-      this.template = props.template;
+      //this.template = props.template;
+      this.template = 'api-server';
 
       done();
     }.bind(this));
@@ -78,10 +97,9 @@ module.exports = yeoman.generators.Base.extend({
   project: function() {
     var done = this.async();
 
-    Project.createFromTemplate(
-      this.destinationRoot(),
-      this.appname,
+    Workspace.createFromTemplate(
       this.template,
+      this.appname,
       done
     );
   },

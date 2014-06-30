@@ -1,5 +1,8 @@
 'use strict';
+var async = require('async');
 var generators = require('yeoman-generator');
+var workspace = require('loopback-workspace');
+var Workspace = workspace.models.Workspace;
 var must = require('must');
 
 exports.createGenerator = createGenerator;
@@ -27,3 +30,14 @@ if (!must.prototype.members) {
     });
   };
 }
+
+exports.createDummyProject = function(dir, name, done) {
+  process.env.WORKSPACE_DIR = dir;
+  Workspace.createFromTemplate('api-server', name, done);
+};
+
+exports.resetWorkspace = function(done) {
+  async.each(workspace.models(), function(model, cb) {
+    model.destroyAll(cb);
+  }, done);
+};

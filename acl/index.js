@@ -2,8 +2,8 @@
 var yeoman = require('yeoman-generator');
 var async = require('async');
 
-var workspace = require('loopback-workspace');
-var AclDefinition = workspace.models.AclDefinition;
+var wsModels = require('loopback-workspace').models;
+var ModelAccessControl = wsModels.ModelAccessControl;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
@@ -17,6 +17,30 @@ module.exports = yeoman.generators.Base.extend({
   loadProject: actions.loadProject,
 
   loadModels: actions.loadModels,
+
+  loadAccessTypeValues: function() {
+    var done = this.async();
+    ModelAccessControl.getAccessTypes(function(err, list) {
+      this.accessTypeValues = list;
+      done(err);
+    }.bind(this));
+  },
+
+  loadRoleValues: function() {
+    var done = this.async();
+    ModelAccessControl.getBuiltinRoles(function(err, list) {
+      this.roleValues = list;
+      done(err);
+    }.bind(this));
+  },
+
+  loadPermissionValues: function() {
+    var done = this.async();
+    ModelAccessControl.getPermissionTypes(function(err, list) {
+      this.permissionValues = list;
+      done(err);
+    }.bind(this));
+  },
 
   askForModel: function() {
     var done = this.async();
@@ -81,27 +105,27 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Select the access type:',
         type: 'list',
         default: 'all',
-        choices: AclDefinition.accessTypeValues,
+        choices: this.accessTypeValues,
       },
       {
         name: 'role',
         message: 'Select the role',
         type: 'list',
         default: '$everyone',
-        choices: AclDefinition.builtinRoleValues,
+        choices: this.roleValues,
       },
       {
         name: 'permission',
         message: 'Select the permission to apply',
         type: 'list',
-        choices: AclDefinition.permissionValues,
+        choices: this.permissionValues,
       }
     ];
     this.prompt(prompts, function(answers) {
       this.aclDef = {
         property: answers.property,
         accessType: answers.accessType,
-        principalType: AclDefinition.ROLE,
+        principalType: 'ROLE', // TODO support all principal types
         principalId: answers.role,
         permission: answers.permission
       };
@@ -117,14 +141,14 @@ module.exports = yeoman.generators.Base.extend({
       { where: { name: this.modelName }, limit: 1 } :
       true /* all models, force refresh */;
 
-    this.project.models(filter, function(err, models) {
+    wsModels.ModelDefinition.find(filter, function(err, models) {
       if (err) {
         return done(err);
       }
 
       var firstError = true;
       async.each(models, function(model, cb) {
-        model.permissions.create(aclDef, function(err) {
+        model.accessControls.create(aclDef, function(err) {
           if (err && firstError) {
             helpers.reportValidationError(err);
             firstError = false;

@@ -2,7 +2,7 @@
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-generator').test;
-var Project = require('loopback-workspace').models.Project;
+var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
@@ -14,23 +14,36 @@ describe('loopback:property generator', function() {
   });
 
   beforeEach(function createProject(done) {
-    Project.createFromTemplate(SANDBOX, 'test-app', 'mobile', done);
+    common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-  it('adds an entry to models.json', function(done) {
+  beforeEach(function createCarModel(done) {
+    var test = this;
+    wsModels.ModelDefinition.create(
+      {
+        name: 'Car',
+        componentName: '.',
+      },
+      function(err, model) {
+        test.Model = model;
+        done(err);
+      });
+  });
+
+  it('adds an entry to models/{name}.json', function(done) {
     var propertyGenerator = givenPropertyGenerator();
     helpers.mockPrompt(propertyGenerator, {
-      model: 'user',
+      model: 'Car',
       name: 'isPreferred',
       type: 'boolean',
       required: 'true'
     });
 
     propertyGenerator.run({}, function() {
-      var models = readModelsJsonSync();
-      var userOpts = models.user.properties || {};
-      expect(userOpts).to.have.property('isPreferred');
-      expect(userOpts.isPreferred).to.eql({
+      var definition = readJsonSync('models/car.json');
+      var props = definition.properties || {};
+      expect(props).to.have.property('isPreferred');
+      expect(props.isPreferred).to.eql({
         type: 'boolean',
         required: true
       });
@@ -45,8 +58,8 @@ describe('loopback:property generator', function() {
     return gen;
   }
 
-  function readModelsJsonSync() {
-    var filepath = path.resolve(SANDBOX, 'models.json');
+  function readJsonSync(relativePath) {
+    var filepath = path.resolve(SANDBOX, relativePath);
     var content = fs.readFileSync(filepath, 'utf-8');
     return JSON.parse(content);
   }
