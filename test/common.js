@@ -1,4 +1,3 @@
-/*jshint latedef:nofunc */
 'use strict';
 var generators = require('yeoman-generator');
 var must = require('must');
