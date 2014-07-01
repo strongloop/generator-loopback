@@ -2,8 +2,7 @@
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 
-var workspace = require('loopback-workspace');
-var Project = workspace.models.Project;
+var wsModels = require('loopback-workspace').models;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
@@ -18,7 +17,7 @@ module.exports = yeoman.generators.NamedBase.extend({
 
   loadConnectors: function() {
     var done = this.async();
-    Project.listAvailableConnectors(function(err, list) {
+    wsModels.Workspace.listAvailableConnectors(function(err, list) {
       if (err) {
         return done(err);
       }
@@ -75,10 +74,11 @@ module.exports = yeoman.generators.NamedBase.extend({
     var done = this.async();
     var config = {
       name: this.name,
-      connector: this.connector
+      connector: this.connector,
+      componentName: 'rest' // hard-coded for now
     };
 
-    this.project.dataSources.create(config, function(err) {
+    wsModels.DataSourceDefinition.create(config, function(err) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));

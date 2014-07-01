@@ -1,8 +1,7 @@
-/*global describe, beforeEach, it */
+/*global describe, beforeEach, afterEach, it */
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-generator').test;
-var Project = require('loopback-workspace').models.Project;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
@@ -14,19 +13,37 @@ describe('loopback:model generator', function() {
   });
 
   beforeEach(function createProject(done) {
-    Project.createFromTemplate(SANDBOX, 'test-app', 'mobile', done);
+    common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-  it('adds an entry to models.json', function(done) {
+  afterEach(common.resetWorkspace);
+
+  it('creates models/{name}.json', function(done) {
     var modelGen = givenModelGenerator(['Product']);
     helpers.mockPrompt(modelGen, {
       dataSource: 'db',
       propertyName: ''
     });
 
-    var builtinModels = Object.keys(readModelsJsonSync());
     modelGen.run({}, function() {
-      var newModels = Object.keys(readModelsJsonSync());
+      var productJson = path.resolve(SANDBOX, 'models/product.json');
+      expect(fs.existsSync(productJson), 'file exists');
+      var content = JSON.parse(fs.readFileSync(productJson));
+      expect(content).to.have.property('name', 'Product');
+      done();
+    });
+  });
+
+  it('adds an entry to rest/models.json', function(done) {
+    var modelGen = givenModelGenerator(['Product']);
+    helpers.mockPrompt(modelGen, {
+      dataSource: 'db',
+      propertyName: ''
+    });
+
+    var builtinModels = Object.keys(readModelsJsonSync('rest'));
+    modelGen.run({}, function() {
+      var newModels = Object.keys(readModelsJsonSync('rest'));
       var expectedModels = builtinModels.concat(['Product']);
       expect(newModels).to.have.members(expectedModels);
       done();
@@ -41,8 +58,8 @@ describe('loopback:model generator', function() {
     return gen;
   }
 
-  function readModelsJsonSync() {
-    var filepath = path.resolve(SANDBOX, 'models.json');
+  function readModelsJsonSync(component) {
+    var filepath = path.resolve(SANDBOX, component || '.', 'models.json');
     var content = fs.readFileSync(filepath, 'utf-8');
     return JSON.parse(content);
   }
