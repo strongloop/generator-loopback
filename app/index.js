@@ -21,20 +21,17 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
-  injectProjectWriteFile: function() {
-    /* TODO inject `this.directory` to replace `ncp` in workspace
-    // Modify Project.writeFile use yeoman's write
-    var _projectWriteFile = Project.writeFile;
-    Project.writeFile = function(filepath, content, encoding, cb) {
-      this.write(filepath, content, { encoding: encoding });
-      cb();
+  injectWorkspaceCopyRecursive: function() {
+    var originalMethod = Workspace.copyRecursive;
+    Workspace.copyRecursive = function(src, dest, cb) {
+      this.directory(src, dest);
+      process.nextTick(cb);
     }.bind(this);
 
-    // Restore Project.writeFile when done
+    // Restore the original method when done
     this.on('end', function() {
-      Project.writeFile = _projectWriteFile;
+      Workspace.copyRecursive = originalMethod;
     });
-    */
   },
 
   initWorkspace: function() {
@@ -48,7 +45,7 @@ module.exports = yeoman.generators.Base.extend({
       if (err) return done(err);
       this.templates = list.map(function(t) {
         return {
-          // TODO - workspace does not provide template details yet
+          // TODO(bajtos) - workspace does not provide template details yet
           // name: util.format('%s (%s)', t.name, t.description),
           // value: t.name
           name: t,
@@ -73,7 +70,7 @@ module.exports = yeoman.generators.Base.extend({
         default: name
       },
       /*
-       TODO: not all templates are projects, some of them are mere components
+       TODO(bajtos) not all templates are projects, some of them are components
        The only functional project template is 'api-server' at the moment
       {
         name: 'template',
@@ -87,6 +84,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function(props) {
       this.appname = props.appname;
+      // TODO(bajtos) see the TODO comment above
       //this.template = props.template;
       this.template = 'api-server';
 

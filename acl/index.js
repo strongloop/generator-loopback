@@ -125,7 +125,7 @@ module.exports = yeoman.generators.Base.extend({
       this.aclDef = {
         property: answers.property,
         accessType: answers.accessType,
-        principalType: 'ROLE', // TODO support all principal types
+        principalType: 'ROLE', // TODO(bajtos) support all principal types
         principalId: answers.role,
         permission: answers.permission
       };

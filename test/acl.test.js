@@ -47,7 +47,7 @@ describe('loopback:acl generator', function() {
       var carAcls = def.acls;
 
       expect(carAcls).to.eql([{
-        id: 1, // TODO fix workspace to not add this extra property
+        id: 1, // TODO(bajtos) fix workspace to not add this extra property
         accessType: '*',
         permission: 'AUDIT',
         principalType: 'ROLE',
