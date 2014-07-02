@@ -21,20 +21,17 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
-  injectProjectWriteFile: function() {
-    /* TODO inject `this.directory` to replace `ncp` in workspace
-    // Modify Project.writeFile use yeoman's write
-    var _projectWriteFile = Project.writeFile;
-    Project.writeFile = function(filepath, content, encoding, cb) {
-      this.write(filepath, content, { encoding: encoding });
-      cb();
+  injectWorkspaceCopyRecursive: function() {
+    var originalMethod = Workspace.copyRecursive;
+    Workspace.copyRecursive = function(src, dest, cb) {
+      this.directory(src, dest);
+      process.nextTick(cb);
     }.bind(this);
 
-    // Restore Project.writeFile when done
+    // Restore the original method when done
     this.on('end', function() {
-      Project.writeFile = _projectWriteFile;
+      Workspace.copyRecursive = originalMethod;
     });
-    */
   },
 
   initWorkspace: function() {
