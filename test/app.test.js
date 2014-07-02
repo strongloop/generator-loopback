@@ -20,10 +20,10 @@ describe('loopback:app generator', function() {
 
       'rest/datasources.json',
       'rest/models.json',
-      // TODO rest/rest.js
+      'rest/rest.js',
 
       'server/config.json',
-      // TODO server/server.js
+      'server/server.js',
     ];
 
     var gen = givenAppGenerator();
