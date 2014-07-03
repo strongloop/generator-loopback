@@ -59,10 +59,8 @@ module.exports = yeoman.generators.NamedBase.extend({
   modelDefinition: function() {
     var done = this.async();
     var config = {
-      properties: {},
       name: this.name,
       componentName: wsModels.ConfigFile.ROOT_COMPONENT,
-      public: this.public,
     };
 
     wsModels.ModelDefinition.create(config, function(err) {
@@ -76,7 +74,8 @@ module.exports = yeoman.generators.NamedBase.extend({
     var config = {
       name: this.name,
       componentName: 'rest', // hard-coded for now
-      dataSource: this.dataSource
+      dataSource: this.dataSource,
+      public: this.public,
     };
 
     wsModels.ComponentModel.create(config, function(err) {
