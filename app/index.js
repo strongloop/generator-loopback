@@ -5,6 +5,8 @@ var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
+var actions = require('../lib/actions');
+
 module.exports = yeoman.generators.Base.extend({
   constructor: function() {
     yeoman.generators.Base.apply(this, arguments);
@@ -34,9 +36,7 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
-  initWorkspace: function() {
-    process.env.WORKSPACE_DIR = this.destinationRoot();
-  },
+  initWorkspace: actions.initWorkspace,
 
   loadTemplates: function() {
     var done = this.async();
