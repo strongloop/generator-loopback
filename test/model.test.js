@@ -1,4 +1,4 @@
-/*global describe, beforeEach, afterEach, it */
+/*global describe, beforeEach, it */
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-generator').test;
@@ -8,6 +8,8 @@ var expect = require('must');
 var common = require('./common');
 
 describe('loopback:model generator', function() {
+  beforeEach(common.resetWorkspace);
+
   beforeEach(function createSandbox(done) {
     helpers.testDirectory(SANDBOX, done);
   });
@@ -15,8 +17,6 @@ describe('loopback:model generator', function() {
   beforeEach(function createProject(done) {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
-
-  afterEach(common.resetWorkspace);
 
   it('creates models/{name}.json', function(done) {
     var modelGen = givenModelGenerator(['Product']);
@@ -30,6 +30,7 @@ describe('loopback:model generator', function() {
       expect(fs.existsSync(productJson), 'file exists');
       var content = JSON.parse(fs.readFileSync(productJson));
       expect(content).to.have.property('name', 'Product');
+      expect(content).to.not.have.property('public');
       done();
     });
   });
@@ -38,14 +39,20 @@ describe('loopback:model generator', function() {
     var modelGen = givenModelGenerator(['Product']);
     helpers.mockPrompt(modelGen, {
       dataSource: 'db',
+      public: false,
       propertyName: ''
     });
 
     var builtinModels = Object.keys(readModelsJsonSync('rest'));
     modelGen.run({}, function() {
-      var newModels = Object.keys(readModelsJsonSync('rest'));
+      var modelConfig = readModelsJsonSync('rest');
+      var newModels = Object.keys(modelConfig);
       var expectedModels = builtinModels.concat(['Product']);
       expect(newModels).to.have.members(expectedModels);
+      expect(modelConfig.Product).to.eql({
+        dataSource: 'db',
+        public: false
+      });
       done();
     });
   });
