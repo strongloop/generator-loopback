@@ -21,8 +21,7 @@ describe('loopback:model generator', function() {
   it('creates models/{name}.json', function(done) {
     var modelGen = givenModelGenerator(['Product']);
     helpers.mockPrompt(modelGen, {
-      dataSource: 'db',
-      propertyName: ''
+      dataSource: 'db'
     });
 
     modelGen.run({}, function() {
