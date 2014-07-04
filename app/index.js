@@ -102,19 +102,7 @@ module.exports = yeoman.generators.Base.extend({
     );
   },
 
-  installDeps: function() {
-    this._skipInstall = this.options['skip-install'];
-
-    // Workaround for sync/async inconsistency of the yeoman API
-    var done = this._skipInstall ? function(){} : this.async();
-
-    this.installDependencies({
-      npm: true,
-      bower: false,
-      skipInstall: this._skipInstall,
-      callback: done
-    });
-  },
+  installDeps: actions.installDeps,
 
   whatsNext: function() {
     if (!this._skipInstall) {

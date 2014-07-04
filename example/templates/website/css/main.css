@@ -1,0 +1,87 @@
+/* Since we generate (both via Marked and JSDoc) empty anchors as jump link
+targets, we can target them here to offset said jump links. */
+a[name] {
+  display: block; position: relative; top: -70px; visibility: hidden;
+}
+
+.column {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.scroll-spy-target {
+  border-right: 1px solid #ccc;
+}
+
+.readability {
+  padding-left: 40px;
+  max-width: 700px;
+}
+
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .hide-mobile {
+    display: inherit;
+  }
+
+  .column {
+    position: absolute;
+    top: 52px;
+    bottom: 0;
+    overflow-y: auto;
+  }
+}
+
+.nav-pills a {
+  color: #08592b;
+}
+
+.nav .depth-1 > a { font-size: 170%; }
+.nav .depth-2 > a { font-size: 140%; }
+.nav .depth-3 > a { font-size: 120%; }
+.nav .depth-4 > a { font-size: 100%; font-weight: 500; }
+.nav .depth-5 > a { font-size: 90%; font-weight: 500; }
+.nav .depth-6 > a { font-size: 80%; font-weight: 500; }
+
+.nav-pills li > a {
+  padding: 3px 6px;
+}
+.nav .depth-1 { margin: 0; padding: 0 0 0 0; }
+.nav .depth-2 { margin: 0; padding: 20px 0 0 0; }
+.nav .depth-3 { margin: 0; padding: 10px 0 0 10px; }
+.nav .depth-4 { margin: 0; padding: 0 0 0 20px; }
+.nav .depth-5 { margin: 0; padding: 0 0 0 40px; }
+.nav .depth-6 { margin: 0; padding: 0 0 0 60px; }
+
+/* Annotations */
+.code-arguments-hdr {
+  text-transform: capitalize;
+  font-size: 120%;
+  margin-top: 20px;
+  display: block;
+}
+.code-arg {
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.code-arg div {
+  display: inline;
+}
+.code-arg-types {
+  font-weight: bold;
+}
+.code-arg-types:before { content: "{"; }
+.code-arg-types:after { content: "}"; }
+
+.readability {
+  position: relative;
+  height: 100%;
+}
+
+.intentionally-left-blank {
+  display: block;
+  height: 100%;
+}
