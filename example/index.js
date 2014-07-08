@@ -315,8 +315,8 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
-  addConnectors: function() {
-    this._logPart('Add connectors to package.json');
+  addDependencies: function() {
+    this._logPart('Add dependencies (connectors, async) to package.json');
 
     var packageJson = 'package.json';
     var pkg = JSON.parse(this.readFileAsString(packageJson));
@@ -325,6 +325,7 @@ module.exports = yeoman.generators.Base.extend({
       'loopback-connector-oracle': '^1.2.1',
       'loopback-connector-mongodb': '^1.2.5',
       'loopback-connector-mysql': '^1.2.1',
+      'async': '~0.9.0'
     });
 
     this.writeFileFromString(JSON.stringify(pkg, null, 2), packageJson);
