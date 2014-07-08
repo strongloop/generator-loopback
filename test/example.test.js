@@ -160,6 +160,11 @@ describe('loopback:example generator', function() {
         'Note',
       ]);
     });
+
+    it('has "geo" datasource', function() {
+      var config = readProjectFile('rest', 'datasources.json');
+      expect(Object.keys(config)).to.include('geo');
+    });
   });
 
   function createGenerator() {
@@ -175,11 +180,14 @@ describe('loopback:example generator', function() {
   }
 
   function readModelDefinition(name) {
-    return fs.readJsonFileSync(path.join(SANDBOX, 'models', name + '.json'));
+    return readProjectFile('models', name + '.json');
   }
 
   function readModelConfig(componentName) {
-    return fs.readJsonFileSync(
-      path.join(SANDBOX, componentName, 'models.json'));
+    return readProjectFile(componentName, 'models.json');
+  }
+
+  function readProjectFile(componentName, file) {
+    return fs.readJsonFileSync(path.join(SANDBOX, componentName, file));
   }
 });

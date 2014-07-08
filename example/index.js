@@ -53,6 +53,31 @@ module.exports = yeoman.generators.Base.extend({
       { /* no answers */});
   },
 
+  datasourceGeo: function() {
+    this._createDatasource('geo', {
+      connector: 'rest',
+      operations: [
+        {
+          template: {
+            'method': 'GET',
+            'url': 'http://maps.googleapis.com/maps/api/geocode/{format=json}',
+            'headers': {
+              'accepts': 'application/json',
+              'content-type': 'application/json'
+            },
+            'query': {
+              'address': '{street},{city},{zipcode}',
+              'sensor': '{sensor=false}'
+            },
+            'responsePath': '$.results[0].geometry.location'
+          },
+          functions: {
+            'geocode': ['street', 'city', 'zipcode']
+          }
+        }
+      ]});
+  },
+
   modelCar: function() {
     this._createModel('Car', {
         id: { type: 'string', id: true },
@@ -325,6 +350,7 @@ module.exports = yeoman.generators.Base.extend({
       'loopback-connector-oracle': '^1.2.1',
       'loopback-connector-mongodb': '^1.2.5',
       'loopback-connector-mysql': '^1.2.1',
+      'loopback-connector-rest': '^1.1.4',
       'async': '~0.9.0'
     });
 
@@ -369,6 +395,38 @@ module.exports = yeoman.generators.Base.extend({
   installDeps: actions.installDeps,
 
   /*--- HELPERS ---*/
+
+  _createDatasource: function(dsName, options, cb) {
+    cb = cb || this.async();
+
+    var self = this;
+    this._runGeneratorWithAnswers(
+      'loopback:datasource',
+      [dsName],
+      {
+        connector: options.connector,
+      },
+      function setExtraOptions(err) {
+        if (err) return cb(err);
+
+        var extras = util._extend({}, options);
+        delete extras.connector;
+
+        var extraNames = Object.keys(extras);
+        if (!extraNames.length) return cb();
+
+        self._logStep('Set datasource options: %s', extraNames.join(' '));
+
+        wsModels.DataSourceDefinition.findOne({ where: {
+          name: dsName,
+          componentName: 'rest'
+        } }, function(err, dsDef) {
+          if (err) return cb(err);
+          util._extend(dsDef, extras);
+          dsDef.save(cb);
+        });
+      });
+  },
 
   _createModel: function(modelName, properties, options, cb) {
     cb = cb || this.async();

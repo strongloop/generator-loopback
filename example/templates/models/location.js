@@ -24,6 +24,22 @@ module.exports = function(RentalLocation, Base) {
     }, fn);
   };
 
+  RentalLocation.beforeSave = function(next, loc) {
+    if (loc.geo) return next();
+
+    // geo code the address
+    var geoService = RentalLocation.app.dataSources.geo;
+    geoService.geocode(loc.street, loc.city, loc.state,
+      function(err, result) {
+        if (result && result[0]) {
+          loc.geo = result[0].lng + ',' + result[0].lat;
+          next();
+        } else {
+          next(new Error('could not find location'));
+        }
+      });
+  };
+
   RentalLocation.setup = function() {
     Base.setup.apply(this, arguments);
 
@@ -37,27 +53,10 @@ module.exports = function(RentalLocation, Base) {
         {arg: 'max', type: 'Number',
           description: 'max distance in miles'}
       ],
-      returns: {arg: 'locations', root: true}
+      returns: {arg: 'locations', root: true},
+      http: { verb: 'GET' }
     });
-
-    /* TODO(bajtos) this requires `rest` ds using REST connector
-       See sls-sample-app/data-sources/rest.js
-
-    this.beforeSave = function(next, loc) {
-      // geo code the address
-      if (!loc.geo) {
-        rest.geocode(loc.street, loc.city, loc.state, function(err, result, res) {
-          if (result && result[0]) {
-            loc.geo = result[0].lng + ',' + result[0].lat;
-            next();
-          } else {
-            next(new Error('could not find location'));
-          }
-        });
-      } else {
-        next();
-      }
-    };
-    */
   };
+
+  RentalLocation.setup();
 };
