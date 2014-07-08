@@ -75,7 +75,8 @@ module.exports = yeoman.generators.Base.extend({
             'geocode': ['street', 'city', 'zipcode']
           }
         }
-      ]});
+      ]
+    });
   },
 
   modelCar: function() {
@@ -308,9 +309,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   modelNote: function() {
-    this._createModel('Note', {
-      // no properties
-      },
+    this._createModel('Note', { },
       {
         plural: 'notes',
         mongodb: {
@@ -386,7 +385,7 @@ module.exports = yeoman.generators.Base.extend({
 
     script = script.replace(
       /(app\.use\(loopback\.static\(.*)$/m,
-      '$1\n' + SNIPPET);
+        '$1\n' + SNIPPET);
 
     this.writeFileFromString(script, serverJs);
 
