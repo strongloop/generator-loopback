@@ -353,6 +353,17 @@ module.exports = yeoman.generators.Base.extend({
       'async': '~0.9.0'
     });
 
+    this._logPart('Add dev dependencies to package.json');
+    pkg.devDependencies = pkg.devDependencies || {};
+    util._extend(pkg.devDependencies, {
+      'supertest': '^0.13.0',
+      'mocha': '^1.20.1'
+    });
+
+    this._logPart('Add `npm test` script to package.json');
+    pkg.scripts = pkg.scripts || {};
+    pkg.scripts.test = 'mocha -R spec';
+
     this.writeFileFromString(JSON.stringify(pkg, null, 2), packageJson);
   },
 

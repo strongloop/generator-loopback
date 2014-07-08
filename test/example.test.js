@@ -16,7 +16,7 @@ describe('loopback:example generator', function() {
     });
 
     before(function runGenerator(done) {
-      var gen = createGenerator();
+      var gen = common.createExampleGenerator();
       helpers.mockPrompt(gen, {});
 
       gen.run({}, function() {});
@@ -166,18 +166,6 @@ describe('loopback:example generator', function() {
       expect(Object.keys(config)).to.include('geo');
     });
   });
-
-  function createGenerator() {
-    var name = 'example';
-    var path = '../../example';
-    var deps = common.findAllGeneratorsExcept('example');
-    var args = [];
-    var options = {
-      'skip-install': true
-    };
-
-    return common.createGenerator(name, path, deps, args, options);
-  }
 
   function readModelDefinition(name) {
     return readProjectFile('models', name + '.json');

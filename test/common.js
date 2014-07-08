@@ -57,3 +57,15 @@ exports.findAllGeneratorsExcept = function(except) {
       return ['../../' + name, 'loopback:' + name];
     });
 };
+
+exports.createExampleGenerator = function() {
+  var name = 'example';
+  var path = '../../example';
+  var deps = exports.findAllGeneratorsExcept('example');
+  var args = [];
+  var options = {
+    'skip-install': true
+  };
+
+  return exports.createGenerator(name, path, deps, args, options);
+};
