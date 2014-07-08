@@ -38,6 +38,17 @@ module.exports = yeoman.generators.Base.extend({
 
   initWorkspace: actions.initWorkspace,
 
+  detectExistingProject: function() {
+    var cb = this.async();
+    Workspace.isValidDir(function(err) {
+      if (err) {
+        cb();
+      } else {
+        cb(new Error('The generator must be run in an empty directory.'));
+      }
+    });
+  },
+
   loadTemplates: function() {
     var done = this.async();
 
