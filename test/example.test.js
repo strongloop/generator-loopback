@@ -76,7 +76,7 @@ describe('loopback:example generator', function() {
       it('has expected Oracle config', function() {
         expect(definition.options).to.have.property('oracle');
         expect(definition.options.oracle).to.eql({
-          schema: 'BLACKPOOL',
+          schema: 'DEMO',
           table: 'PRODUCT'
         });
       });

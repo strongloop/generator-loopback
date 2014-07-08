@@ -73,7 +73,7 @@ module.exports = yeoman.generators.Base.extend({
           }
         },
         oracle: {
-          schema: 'BLACKPOOL',
+          schema: 'DEMO',
           table: 'PRODUCT'
         }
       });
