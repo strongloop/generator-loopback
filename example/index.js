@@ -75,7 +75,13 @@ module.exports = yeoman.generators.Base.extend({
         oracle: {
           schema: 'DEMO',
           table: 'PRODUCT'
-        }
+        },
+        mongodb: {
+          collection: 'car'
+        },
+        mysql: {
+          table: 'car'
+        },
       });
   },
 
@@ -109,7 +115,13 @@ module.exports = yeoman.generators.Base.extend({
         oracle: {
           schema: 'BLACKPOOL',
           table: 'CUSTOMER'
-        }
+        },
+        mongodb: {
+          collection: 'customer'
+        },
+        mysql: {
+          table: 'customer'
+        },
       });
   },
 
@@ -179,6 +191,12 @@ module.exports = yeoman.generators.Base.extend({
           schema: 'BLACKPOOL',
           table: 'INVENTORY'
         },
+        mongodb: {
+          collection: 'inventory'
+        },
+        mysql: {
+          table: 'inventory'
+        },
       });
   },
 
@@ -245,7 +263,7 @@ module.exports = yeoman.generators.Base.extend({
       },
       {
         relations: {
-          inventories: {
+          inventory: {
             type: 'hasMany',
             model: 'Inventory'
           }
@@ -254,16 +272,28 @@ module.exports = yeoman.generators.Base.extend({
         oracle: {
           schema: 'BLACKPOOL',
           table: 'LOCATION'
-        }
+        },
+        mongodb: {
+          collection: 'location'
+        },
+        mysql: {
+          table: 'location'
+        },
       });
   },
 
   modelNote: function() {
     this._createModel('Note', {
       // no properties
-    },
+      },
       {
-        plural: 'notes'
+        plural: 'notes',
+        mongodb: {
+          collection: 'note'
+        },
+        mysql: {
+          table: 'note'
+        },
       });
   },
 
