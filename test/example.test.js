@@ -49,7 +49,7 @@ describe('loopback:example generator', function() {
     describe('model "Car"', function() {
       var definition;
       before(function() {
-        definition = readModelDefinition('Car');
+        definition = readModelDefinition('car');
       });
 
       it('has expected properties', function() {
