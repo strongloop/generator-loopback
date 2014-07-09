@@ -43,6 +43,8 @@ module.exports = yeoman.generators.Base.extend({
     return !!this.options.l;
   },
 
+  askForDestinationDir: actions.askForDestinationDir,
+
   initWorkspace: actions.initWorkspace,
 
   app: function() {

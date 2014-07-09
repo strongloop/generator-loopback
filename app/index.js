@@ -23,6 +23,10 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
+  greet: function() {
+    this.log(yosay('Let\'s create a LoopBack application!'));
+  },
+
   injectWorkspaceCopyRecursive: function() {
     var originalMethod = Workspace.copyRecursive;
     Workspace.copyRecursive = function(src, dest, cb) {
@@ -35,6 +39,8 @@ module.exports = yeoman.generators.Base.extend({
       Workspace.copyRecursive = originalMethod;
     });
   },
+
+  askForDestinationDir: actions.askForDestinationDir,
 
   initWorkspace: actions.initWorkspace,
 
@@ -69,8 +75,6 @@ module.exports = yeoman.generators.Base.extend({
 
   askForParameters: function() {
     var done = this.async();
-
-    this.log(yosay('Let\'s create a LoopBack application!'));
 
     var name = this.name || this.appname;
 
