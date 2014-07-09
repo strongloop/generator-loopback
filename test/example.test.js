@@ -177,7 +177,15 @@ describe('loopback:example generator', function() {
     return readProjectFile(componentName, 'models.json');
   }
 
+  var glob = require('loopback-workspace/node_modules/glob');
+
   function readProjectFile(componentName, file) {
-    return fs.readJsonFileSync(path.join(SANDBOX, componentName, file));
+    try {
+      return fs.readJsonFileSync(path.join(SANDBOX, componentName, file));
+    } catch (err) {
+      console.error('SANDBOX files', glob.sync('**', { cwd: SANDBOX }));
+      throw err;
+    }
   }
+
 });
