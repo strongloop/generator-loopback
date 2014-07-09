@@ -9,6 +9,8 @@ var wsModels = require('loopback-workspace').models;
 var expect = require('must');
 
 describe('loopback:example generator', function() {
+  this.timeout(10000);
+
   describe('output project', function() {
     before(common.resetWorkspace);
     before(function createSandbox(done) {
