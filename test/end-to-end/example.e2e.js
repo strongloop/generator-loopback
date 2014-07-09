@@ -1,11 +1,14 @@
 /*global describe, before, it */
 'use strict';
+var path = require('path');
 var exec = require('child_process').exec;
 var extend = require('util')._extend;
-var path = require('path');
+var install = require('strong-cached-install');
 var helpers = require('yeoman-generator').test;
-var SANDBOX = path.resolve(__dirname, '..', 'sandbox');
 var common = require('../common');
+
+var SANDBOX = path.resolve(__dirname, '..', 'sandbox');
+var PKG_CACHE = path.resolve(__dirname, '..', '.pkgcache');
 
 // Note: this end-to-end test takes several minutes to run.
 describe('loopback:example generator (end-to-end)', function() {
@@ -25,8 +28,8 @@ describe('loopback:example generator (end-to-end)', function() {
   });
 
   before(function installPackage(done) {
-    console.error('Running `npm install`');
-    execNpm(['install'], { cwd: SANDBOX }, done);
+    console.error('Installing project dependencies');
+    install(SANDBOX, PKG_CACHE, ['dependencies', 'devDependencies'], done);
   });
 
   test('memory');
