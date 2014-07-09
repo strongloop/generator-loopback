@@ -98,7 +98,7 @@ module.exports = yeoman.generators.NamedBase.extend({
       }
     ];
     this.prompt(prompts, function(answers) {
-      if (answers.propertyName === '') {
+      if (answers.propertyName == null || answers.propertyName === '') {
         return done();
       }
 

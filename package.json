@@ -18,7 +18,8 @@
   },
   "scripts": {
     "pretest": "jshint .",
-    "test": "mocha"
+    "test": "mocha -R spec && mocha -R spec test/end-to-end",
+    "testdb": "TEST_SLOW=1 mocha -R spec test/end-to-end"
   },
   "files": [
     "app"
@@ -31,6 +32,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "chalk": "^0.4.0",
+    "debug": "^1.0.2",
     "loopback-workspace": "strongloop/loopback-workspace#3.0",
     "yeoman-generator": "^0.16.0",
     "yosay": "^0.1.0"
@@ -39,8 +41,10 @@
     "yo": ">=1.0.0"
   },
   "devDependencies": {
+    "fs-extra": "^0.10.0",
     "jshint": "^2.5",
     "mocha": "^1.18.2",
-    "must": "^0.11.0"
+    "must": "^0.12.0",
+    "strong-cached-install": "^1.1.0"
   }
 }

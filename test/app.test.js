@@ -6,6 +6,7 @@ var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var common = require('./common');
 
 describe('loopback:app generator', function() {
+  beforeEach(common.resetWorkspace);
   beforeEach(function createSandbox(done) {
     helpers.testDirectory(SANDBOX, done);
   });
@@ -14,17 +15,18 @@ describe('loopback:app generator', function() {
   // Since most of the heavy lifting is done by loopback-workspace,
   // we don't have to test it again.
 
+  var EXPECTED_PROJECT_FILES = [
+    'package.json',
+
+    'rest/datasources.json',
+    'rest/models.json',
+    'rest/rest.js',
+
+    'server/config.json',
+    'server/server.js',
+  ];
+
   it('creates expected files', function(done) {
-    var expected = [
-      'package.json',
-
-      'rest/datasources.json',
-      'rest/models.json',
-      'rest/rest.js',
-
-      'server/config.json',
-      'server/server.js',
-    ];
 
     var gen = givenAppGenerator();
 
@@ -35,7 +37,28 @@ describe('loopback:app generator', function() {
 
     gen.options['skip-install'] = true;
     gen.run({}, function () {
-      helpers.assertFile(expected);
+      helpers.assertFile(EXPECTED_PROJECT_FILES);
+      done();
+    });
+  });
+
+  it('creates the project in a subdirectory if asked to', function(done) {
+    var gen = givenAppGenerator();
+
+    helpers.mockPrompt(gen, {
+      name: 'test-app',
+      template: 'api-server',
+      dir: 'test-app',
+    });
+
+    gen.run({}, function() {
+      // generator calls `chdir` on change of the destination root
+      process.chdir(SANDBOX);
+
+      var expectedFiles = EXPECTED_PROJECT_FILES.map(function(f) {
+        return 'test-app/' + f;
+      });
+      helpers.assertFile(expectedFiles);
       done();
     });
   });

@@ -9,6 +9,7 @@ var expect = require('must');
 var common = require('./common');
 
 describe('loopback:property generator', function() {
+  beforeEach(common.resetWorkspace);
   beforeEach(function createSandbox(done) {
     helpers.testDirectory(SANDBOX, done);
   });

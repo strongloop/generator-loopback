@@ -1,4 +1,4 @@
-/*global describe, beforeEach, afterEach, it */
+/*global describe, beforeEach, it */
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-generator').test;
@@ -8,6 +8,7 @@ var expect = require('must');
 var common = require('./common');
 
 describe('loopback:datasource generator', function() {
+  beforeEach(common.resetWorkspace);
   beforeEach(function createSandbox(done) {
     helpers.testDirectory(SANDBOX, done);
   });
@@ -16,7 +17,6 @@ describe('loopback:datasource generator', function() {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-  afterEach(common.resetWorkspace);
 
   it('adds an entry to rest/datasources.json', function(done) {
     var modelGen = givenDataSourceGenerator(['crm']);

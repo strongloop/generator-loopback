@@ -5,6 +5,8 @@ var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
+var actions = require('../lib/actions');
+
 module.exports = yeoman.generators.Base.extend({
   constructor: function() {
     yeoman.generators.Base.apply(this, arguments);
@@ -21,6 +23,10 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
+  greet: function() {
+    this.log(yosay('Let\'s create a LoopBack application!'));
+  },
+
   injectWorkspaceCopyRecursive: function() {
     var originalMethod = Workspace.copyRecursive;
     Workspace.copyRecursive = function(src, dest, cb) {
@@ -34,8 +40,19 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
-  initWorkspace: function() {
-    process.env.WORKSPACE_DIR = this.destinationRoot();
+  askForDestinationDir: actions.askForDestinationDir,
+
+  initWorkspace: actions.initWorkspace,
+
+  detectExistingProject: function() {
+    var cb = this.async();
+    Workspace.isValidDir(function(err) {
+      if (err) {
+        cb();
+      } else {
+        cb(new Error('The generator must be run in an empty directory.'));
+      }
+    });
   },
 
   loadTemplates: function() {
@@ -58,8 +75,6 @@ module.exports = yeoman.generators.Base.extend({
 
   askForParameters: function() {
     var done = this.async();
-
-    this.log(yosay('Let\'s create a LoopBack application!'));
 
     var name = this.name || this.appname;
 
@@ -102,19 +117,7 @@ module.exports = yeoman.generators.Base.extend({
     );
   },
 
-  installDeps: function() {
-    this._skipInstall = this.options['skip-install'];
-
-    // Workaround for sync/async inconsistency of the yeoman API
-    var done = this._skipInstall ? function(){} : this.async();
-
-    this.installDependencies({
-      npm: true,
-      bower: false,
-      skipInstall: this._skipInstall,
-      callback: done
-    });
-  },
+  installDeps: actions.installDeps,
 
   whatsNext: function() {
     if (!this._skipInstall) {
