@@ -41,7 +41,8 @@ console.error('  `DB=oracle node .` or `DB=oracle slc run .`');
 console.error('  `DB=mongodb node .` or `DB=mongodb slc run .`');
 console.error('  `DB=mysql node .` or `DB=mysql slc run .`');
 
-var config = extend({ connector: DB }, DATASTORES[DB]);
+var connector = DB === 'memory' ? DB : 'loopback-connector-' + DB;
+var config = extend({ connector: connector }, DATASTORES[DB]);
 
 module.exports = {
   db: config
