@@ -9,6 +9,7 @@ var common = require('../common');
 
 var SANDBOX = path.resolve(__dirname, '..', 'sandbox');
 var PKG_CACHE = path.resolve(__dirname, '..', '.pkgcache');
+var TEST_SLOW = process.env.TEST_SLOW;
 
 // Note: this end-to-end test takes several minutes to run.
 describe('loopback:example generator (end-to-end)', function() {
@@ -29,12 +30,17 @@ describe('loopback:example generator (end-to-end)', function() {
 
   before(function installPackage(done) {
     console.error('Installing project dependencies');
-    install(SANDBOX, PKG_CACHE, ['dependencies', 'devDependencies'], done);
+
+    var deps = ['dependencies', 'devDependencies'];
+    if (TEST_SLOW)
+      deps.push('optionalDependencies');
+
+    install(SANDBOX, PKG_CACHE, deps, done);
   });
 
   test('memory');
 
-  if (process.env.TEST_SLOW) {
+  if (TEST_SLOW) {
     ['mongodb', 'mysql', 'oracle'].forEach(function(db) {
       it('passes generated tests against ' + db, function(done) {
         var opts = {

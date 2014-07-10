@@ -348,11 +348,15 @@ module.exports = yeoman.generators.Base.extend({
     var pkg = JSON.parse(this.readFileAsString(packageJson));
 
     util._extend(pkg.dependencies, {
+      'loopback-connector-rest': '^1.1.4',
+      'async': '~0.9.0'
+    });
+
+    pkg.optionalDependencies = pkg.optionalDependencies || {};
+    util._extend(pkg.optionalDependencies, {
       'loopback-connector-oracle': '^1.2.1',
       'loopback-connector-mongodb': '^1.2.5',
       'loopback-connector-mysql': '^1.2.1',
-      'loopback-connector-rest': '^1.1.4',
-      'async': '~0.9.0'
     });
 
     this._logPart('Add dev dependencies to package.json');
