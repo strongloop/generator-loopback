@@ -68,7 +68,7 @@ describe('loopback:example generator', function() {
       it('has expected relations', function() {
         expect(definition.relations).to.eql({
           reservations: {
-            'model': 'reservation',
+            'model': 'Reservation',
             'type': 'hasMany',
             'foreignKey': 'productId'
           }

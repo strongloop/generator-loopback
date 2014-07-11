@@ -95,7 +95,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         relations: {
           reservations: {
-            'model': 'reservation',
+            'model': 'Reservation',
             'type': 'hasMany',
             'foreignKey': 'productId'
           }
@@ -416,6 +416,7 @@ module.exports = yeoman.generators.Base.extend({
   /*--- HELPERS ---*/
 
   _createDatasource: function(dsName, options, cb) {
+    this._logPart('Add datasource %s', dsName);
     cb = cb || this.async();
 
     var self = this;
