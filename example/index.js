@@ -370,6 +370,9 @@ module.exports = yeoman.generators.Base.extend({
     pkg.scripts = pkg.scripts || {};
     pkg.scripts.test = 'mocha -R spec';
 
+    this._logPart('Add `npm pretest` script to package.json');
+    pkg.scripts.pretest = 'jshint .';
+
     this.writeFileFromString(JSON.stringify(pkg, null, 2), packageJson);
   },
 
@@ -395,7 +398,7 @@ module.exports = yeoman.generators.Base.extend({
     var SNIPPET =
       'var websitePath = require(\'path\').' +
       'resolve(__dirname, \'../website\');\n' +
-      'app.use(loopback.static(websitePath))';
+      'app.use(loopback.static(websitePath));';
 
     var serverJs = 'server/server.js';
     var script = this.readFileAsString(serverJs);

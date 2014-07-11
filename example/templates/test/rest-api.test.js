@@ -1,3 +1,4 @@
+/*global describe, it, before */
 /**
  * REST API Tests
  */
@@ -51,13 +52,13 @@ describe('REST', function() {
       it('should create a new car', function(done) {
         json('post', '/api/cars')
           .send({
-            "vin": "ebaddaa5-35bb-4b33-a388-87203acb6478",
-            "year": "2013",
-            "make": "Dodge",
-            "model": "Taurus",
-            "image": "/images/car/car_0.jpg",
-            "carClass": "suv",
-            "color": "white"
+            vin: 'ebaddaa5-35bb-4b33-a388-87203acb6478',
+            year: '2013',
+            make: 'Dodge',
+            model: 'Taurus',
+            image: '/images/car/car_0.jpg',
+            carClass: 'suv',
+            color: 'white'
           })
           .expect(200)
           .end(function(err, res) {
@@ -108,7 +109,9 @@ describe('REST', function() {
 
     describe('GET /api/locations/nearby', function() {
       it('should return a list of locations near given point', function(done) {
-        json('get', '/api/locations/nearby?here[lat]=37.7883415&here[lng]=-122.4209035')
+        var url = '/api/locations/nearby?' +
+          'here[lat]=37.7883415&here[lng]=-122.4209035';
+        json('get', url)
           .expect(200, function(err, res) {
             var locations = res.body;
             assert(Array.isArray(locations));
@@ -126,17 +129,19 @@ describe('REST', function() {
     });
 
     describe('GET /api/locations/:id/inventory', function() {
-      it('should return a list of inventory for the given location id', function(done) {
-        json('get', '/api/locations/88/inventory')
-          .expect(200, function(err, res) {
-            var inventory = res.body;
-            inventory.forEach(function(inv) {
-              assert.equal(typeof inv.total, 'number');
-              assert.equal(typeof inv.available, 'number');
+      it('should return a list of inventory for the given location id',
+        function(done) {
+          json('get', '/api/locations/88/inventory')
+            .expect(200, function(err, res) {
+              var inventory = res.body;
+              inventory.forEach(function(inv) {
+                assert.equal(typeof inv.total, 'number');
+                assert.equal(typeof inv.available, 'number');
+              });
+              done();
             });
-            done();
-          });
-      });
+        }
+      );
     });
 
     describe('/api/customers', function() {
@@ -145,17 +150,19 @@ describe('REST', function() {
       var token;
       var customerId;
 
-      it('should login existing customer on POST /api/customers/login', function(done) {
-        json('post', '/api/customers/login?include=user')
-          .send(credentials)
-          .expect(200, function(err, res) {
-            if (err) return done(err);
-            token = res.body;
-            assert(token.userId !== undefined);
-            customerId = token.userId;
-            done();
-          });
-      });
+      it('should login existing customer on POST /api/customers/login',
+        function(done) {
+          json('post', '/api/customers/login?include=user')
+            .send(credentials)
+            .expect(200, function(err, res) {
+              if (err) return done(err);
+              token = res.body;
+              assert(token.userId !== undefined);
+              customerId = token.userId;
+              done();
+            });
+        }
+      );
 
       it('should allow GET /api/customers/{my-id}', function(done) {
         json('get', '/api/customers/' + customerId)
@@ -175,12 +182,14 @@ describe('REST', function() {
           });
       });
 
-      it('should logout existing customer on POST /api/customers/logout', function(done) {
-        json('post', '/api/customers/logout')
-          .set('Authorization', token.id)
-          .send({})
-          .expect(204, done);
-      });
+      it('should logout existing customer on POST /api/customers/logout',
+        function(done) {
+          json('post', '/api/customers/logout')
+            .set('Authorization', token.id)
+            .send({})
+            .expect(204, done);
+        }
+      );
     });
   });
 
