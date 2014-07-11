@@ -129,7 +129,7 @@ describe('loopback:example generator', function() {
       });
 
       it('has expected options', function() {
-        expect(definition.options).to.have.property('idInjection', false);
+        expect(definition).to.have.property('idInjection', false);
       });
     });
 
