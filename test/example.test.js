@@ -25,10 +25,10 @@ describe('loopback:example generator', function() {
       gen.once('end', done);
     });
 
-    it('has name "loopback-example"', function() {
+    it('has name "loopback-example-app"', function() {
       var pkg = JSON.parse(fs.readFileSync(
         path.resolve(SANDBOX, 'package.json')));
-      expect(pkg.name).to.equal('loopback-example');
+      expect(pkg.name).to.equal('loopback-example-app');
     });
 
     it('has all model definitions', function(done) {
@@ -145,7 +145,7 @@ describe('loopback:example generator', function() {
     });
 
     it('has correct models configured for REST API', function() {
-      var config = readModelConfig('rest');
+      var config = readModelConfig('server');
       expect(Object.keys(config)).to.eql([
         // models metadata - not a proper model, but still a key/value
         '_meta',
@@ -164,17 +164,17 @@ describe('loopback:example generator', function() {
     });
 
     it('has "geo" datasource', function() {
-      var config = readProjectFile('rest', 'datasources.json');
+      var config = readProjectFile('server', 'datasources.json');
       expect(Object.keys(config)).to.include('geo');
     });
   });
 
   function readModelDefinition(name) {
-    return readProjectFile('models', name + '.json');
+    return readProjectFile('common', 'models/' + name + '.json');
   }
 
   function readModelConfig(componentName) {
-    return readProjectFile(componentName, 'models.json');
+    return readProjectFile(componentName, 'model-config.json');
   }
 
   var glob = require('loopback-workspace/node_modules/glob');

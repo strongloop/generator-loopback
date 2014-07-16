@@ -18,14 +18,14 @@ describe('loopback:model generator', function() {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-  it('creates models/{name}.json', function(done) {
+  it('creates common/models/{name}.json', function(done) {
     var modelGen = givenModelGenerator(['Product']);
     helpers.mockPrompt(modelGen, {
       dataSource: 'db'
     });
 
     modelGen.run({}, function() {
-      var productJson = path.resolve(SANDBOX, 'models/product.json');
+      var productJson = path.resolve(SANDBOX, 'common/models/product.json');
       expect(fs.existsSync(productJson), 'file exists');
       var content = JSON.parse(fs.readFileSync(productJson));
       expect(content).to.have.property('name', 'Product');
@@ -34,7 +34,7 @@ describe('loopback:model generator', function() {
     });
   });
 
-  it('adds an entry to rest/models.json', function(done) {
+  it('adds an entry to server/models.json', function(done) {
     var modelGen = givenModelGenerator(['Product']);
     helpers.mockPrompt(modelGen, {
       dataSource: 'db',
@@ -42,9 +42,9 @@ describe('loopback:model generator', function() {
       propertyName: ''
     });
 
-    var builtinModels = Object.keys(readModelsJsonSync('rest'));
+    var builtinModels = Object.keys(readModelsJsonSync('server'));
     modelGen.run({}, function() {
-      var modelConfig = readModelsJsonSync('rest');
+      var modelConfig = readModelsJsonSync('server');
       var newModels = Object.keys(modelConfig);
       var expectedModels = builtinModels.concat(['Product']);
       expect(newModels).to.have.members(expectedModels);
@@ -64,8 +64,9 @@ describe('loopback:model generator', function() {
     return gen;
   }
 
-  function readModelsJsonSync(component) {
-    var filepath = path.resolve(SANDBOX, component || '.', 'models.json');
+  function readModelsJsonSync(facet) {
+    facet = facet || 'server';
+    var filepath = path.resolve(SANDBOX, facet, 'model-config.json');
     var content = fs.readFileSync(filepath, 'utf-8');
     return JSON.parse(content);
   }

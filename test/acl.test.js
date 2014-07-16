@@ -24,7 +24,7 @@ describe('loopback:acl generator', function() {
     wsModels.ModelDefinition.create(
       {
         name: 'Car',
-        componentName: '.',
+        facetName: 'common'
       },
       function(err, model) {
         test.Model = model;
@@ -43,7 +43,7 @@ describe('loopback:acl generator', function() {
     });
 
     aclGen.run({}, function() {
-      var def = readJsonSync('models/car.json');
+      var def = readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
       expect(carAcls).to.eql([{

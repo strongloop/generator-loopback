@@ -33,7 +33,7 @@
     "async": "^0.9.0",
     "chalk": "^0.4.0",
     "debug": "^1.0.2",
-    "loopback-workspace": "strongloop/loopback-workspace#f17e652f",
+    "loopback-workspace": "strongloop/loopback-workspace#3.0",
     "yeoman-generator": "^0.16.0",
     "yosay": "^0.1.0"
   },
