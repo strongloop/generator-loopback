@@ -51,7 +51,7 @@ module.exports = yeoman.generators.Base.extend({
     this._logPart('Create initial project scaffolding');
     this._runGeneratorWithAnswers(
       'loopback:app',
-      ['loopback-example'],
+      ['loopback-example-app'],
       { /* no answers */});
   },
 
@@ -326,10 +326,10 @@ module.exports = yeoman.generators.Base.extend({
   configureModels: function() {
     var done = this.async();
     this._logPart('Remove `User` from `rest/models.json`');
-    wsModels.ComponentModel.findOne({
+    wsModels.ModelConfig.findOne({
       where: {
         name: 'User',
-        componentName: 'rest'
+        facetName: 'server'
       }
     }, function(err, model) {
       if (err) return done(err);
@@ -368,7 +368,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this._logPart('Add `npm test` script to package.json');
     pkg.scripts = pkg.scripts || {};
-    pkg.scripts.test = 'mocha -R spec';
+    pkg.scripts.test = 'mocha -R spec server/test';
 
     this._logPart('Add `npm pretest` script to package.json');
     pkg.scripts.pretest = 'jshint .';
@@ -397,7 +397,7 @@ module.exports = yeoman.generators.Base.extend({
 
     var SNIPPET =
       'var websitePath = require(\'path\').' +
-      'resolve(__dirname, \'../website\');\n' +
+      'resolve(__dirname, \'../client\');\n' +
       'app.use(loopback.static(websitePath));';
 
     var serverJs = 'server/server.js';
@@ -439,7 +439,7 @@ module.exports = yeoman.generators.Base.extend({
 
         wsModels.DataSourceDefinition.findOne({ where: {
           name: dsName,
-          componentName: 'rest'
+          facetName: 'server'
         } }, function(err, dsDef) {
           if (err) return cb(err);
           util._extend(dsDef, extras);

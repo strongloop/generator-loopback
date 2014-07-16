@@ -75,7 +75,7 @@ module.exports = yeoman.generators.NamedBase.extend({
     var config = {
       name: this.name,
       connector: this.connector,
-      componentName: 'rest' // hard-coded for now
+      facetName: 'server' // hard-coded for now
     };
 
     wsModels.DataSourceDefinition.create(config, function(err) {

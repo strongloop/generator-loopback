@@ -60,7 +60,7 @@ module.exports = yeoman.generators.NamedBase.extend({
     var done = this.async();
     var config = {
       name: this.name,
-      componentName: wsModels.ConfigFile.ROOT_COMPONENT,
+      facetName: 'common' // hard-coded for now
     };
 
     wsModels.ModelDefinition.create(config, function(err) {
@@ -73,12 +73,12 @@ module.exports = yeoman.generators.NamedBase.extend({
     var done = this.async();
     var config = {
       name: this.name,
-      componentName: 'rest', // hard-coded for now
+      facetName: 'server', // hard-coded for now
       dataSource: this.dataSource,
       public: this.public,
     };
 
-    wsModels.ComponentModel.create(config, function(err) {
+    wsModels.ModelConfig.create(config, function(err) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));

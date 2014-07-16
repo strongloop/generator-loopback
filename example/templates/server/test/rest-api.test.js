@@ -3,14 +3,13 @@
  * REST API Tests
  */
 var request = require('supertest');
-var app = require('../');
+var app = require('../server');
 var assert = require('assert');
 
 before(function importSampleData(done) {
   this.timeout(50000);
-  var restApp = require('../rest');
-  if (restApp.importing) {
-    restApp.on('import done', done);
+  if (app.importing) {
+    app.on('import done', done);
   } else {
     done();
   }

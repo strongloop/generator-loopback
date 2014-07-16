@@ -23,7 +23,7 @@ describe('loopback:property generator', function() {
     wsModels.ModelDefinition.create(
       {
         name: 'Car',
-        componentName: '.',
+        facetName: 'common'
       },
       function(err, model) {
         test.Model = model;
@@ -31,7 +31,7 @@ describe('loopback:property generator', function() {
       });
   });
 
-  it('adds an entry to models/{name}.json', function(done) {
+  it('adds an entry to common/models/{name}.json', function(done) {
     var propertyGenerator = givenPropertyGenerator();
     helpers.mockPrompt(propertyGenerator, {
       model: 'Car',
@@ -41,7 +41,7 @@ describe('loopback:property generator', function() {
     });
 
     propertyGenerator.run({}, function() {
-      var definition = readJsonSync('models/car.json');
+      var definition = readJsonSync('common/models/car.json');
       var props = definition.properties || {};
       expect(props).to.have.property('isPreferred');
       expect(props.isPreferred).to.eql({

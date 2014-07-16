@@ -18,15 +18,15 @@ describe('loopback:datasource generator', function() {
   });
 
 
-  it('adds an entry to rest/datasources.json', function(done) {
+  it('adds an entry to server/datasources.json', function(done) {
     var modelGen = givenDataSourceGenerator(['crm']);
     helpers.mockPrompt(modelGen, {
       connector: 'mysql'
     });
 
-    var builtinSources = Object.keys(readDataSourcesJsonSync('rest'));
+    var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
     modelGen.run({}, function() {
-      var newSources = Object.keys(readDataSourcesJsonSync('rest'));
+      var newSources = Object.keys(readDataSourcesJsonSync('server'));
       var expectedSources = builtinSources.concat(['crm']);
       expect(newSources).to.have.members(expectedSources);
       done();
@@ -40,8 +40,8 @@ describe('loopback:datasource generator', function() {
     return gen;
   }
 
-  function readDataSourcesJsonSync(component) {
-    var filepath = path.resolve(SANDBOX, component || '.', 'datasources.json');
+  function readDataSourcesJsonSync(facet) {
+    var filepath = path.resolve(SANDBOX, facet || 'server', 'datasources.json');
     var content = fs.readFileSync(filepath, 'utf-8');
     return JSON.parse(content);
   }

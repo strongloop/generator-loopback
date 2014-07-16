@@ -18,11 +18,9 @@ describe('loopback:app generator', function() {
   var EXPECTED_PROJECT_FILES = [
     'package.json',
 
-    'rest/datasources.json',
-    'rest/models.json',
-    'rest/rest.js',
-
     'server/config.json',
+    'server/datasources.json',
+    'server/model-config.json',
     'server/server.js',
   ];
 
