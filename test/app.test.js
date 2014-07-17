@@ -22,6 +22,8 @@ describe('loopback:app generator', function() {
     'server/datasources.json',
     'server/model-config.json',
     'server/server.js',
+
+    'client/README.md'
   ];
 
   it('creates expected files', function(done) {

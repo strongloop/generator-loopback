@@ -384,6 +384,7 @@ module.exports = yeoman.generators.Base.extend({
       this.env.adapter.log = this.log;
     }
 
+    fs.unlink(path.resolve(this.projectDir, 'client', 'README.md'));
     this.directory('.', '.');
   },
 
