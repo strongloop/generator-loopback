@@ -19,8 +19,9 @@ describe('loopback:model generator', function() {
   });
 
   it('creates common/models/{name}.json', function(done) {
-    var modelGen = givenModelGenerator(['Product']);
+    var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
+      name: 'Product',
       dataSource: 'db'
     });
 
@@ -35,8 +36,9 @@ describe('loopback:model generator', function() {
   });
 
   it('adds an entry to server/models.json', function(done) {
-    var modelGen = givenModelGenerator(['Product']);
+    var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
+      name: 'Product',
       dataSource: 'db',
       public: false,
       propertyName: ''

@@ -6,11 +6,21 @@ var wsModels = require('loopback-workspace').models;
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 
-module.exports = yeoman.generators.NamedBase.extend({
+module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
+
+  constructor: function() {
+    yeoman.generators.Base.apply(this, arguments);
+
+    this.argument('name', {
+      desc: 'Name of the model to create.',
+      required: false,
+      type: String
+    });
+  },
 
   loadProject: actions.loadProject,
 
@@ -26,6 +36,27 @@ module.exports = yeoman.generators.NamedBase.extend({
       });
       done();
     }.bind(this));
+  },
+
+  askForName: function() {
+    var done = this.async();
+
+    var prompts = [
+      {
+        name: 'name',
+        message: 'Enter the model name:',
+        default: this.name,
+        validate: function(input) {
+          return !!input.length || 'You need to provide a name.';
+        }
+      }
+    ];
+
+    this.prompt(prompts, function(props) {
+      this.name = props.name;
+      done();
+    }.bind(this));
+
   },
 
   askForParameters: function() {
