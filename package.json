@@ -1,6 +1,6 @@
 {
   "name": "generator-loopback",
-  "version": "1.0.0-beta1",
+  "version": "1.0.0-beta2",
   "description": "Yeoman generator",
   "license": {
     "name": "Dual MIT/StrongLoop",
@@ -21,9 +21,6 @@
     "test": "mocha -R spec && mocha -R spec test/end-to-end",
     "testdb": "TEST_SLOW=1 mocha -R spec test/end-to-end"
   },
-  "files": [
-    "app"
-  ],
   "keywords": [
     "yeoman-generator",
     "loopback",
