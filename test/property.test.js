@@ -64,7 +64,7 @@ describe('loopback:property generator', function() {
     propertyGenerator.run({}, function() {
       var definition = readJsonSync('common/models/car.json');
       var prop = definition.properties.list;
-      expect(prop.type).to.equal('[string]');
+      expect(prop.type).to.eql(['string']);
       done();
     });
   });
