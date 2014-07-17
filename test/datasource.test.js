@@ -19,8 +19,9 @@ describe('loopback:datasource generator', function() {
 
 
   it('adds an entry to server/datasources.json', function(done) {
-    var modelGen = givenDataSourceGenerator(['crm']);
+    var modelGen = givenDataSourceGenerator();
     helpers.mockPrompt(modelGen, {
+      name: 'crm',
       connector: 'mysql'
     });
 
