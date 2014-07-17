@@ -80,12 +80,21 @@ module.exports = yeoman.generators.Base.extend({
         name: 'public',
         message: 'Expose ' + this.displayName + ' via the REST API?',
         type: 'confirm'
+      },
+      {
+        name: 'plural',
+        message: 'Custom plural form (used to build REST URL):',
+        when: function(answers) {
+          return answers.public;
+        }
       }
     ];
 
     this.prompt(prompts, function(props) {
       this.dataSource = props.dataSource;
       this.public = props.public;
+      this.plural = props.plural || undefined;
+
       done();
     }.bind(this));
   },
@@ -94,6 +103,7 @@ module.exports = yeoman.generators.Base.extend({
     var done = this.async();
     var config = {
       name: this.name,
+      plural: this.plural,
       facetName: 'common' // hard-coded for now
     };
 
