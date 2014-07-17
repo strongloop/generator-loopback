@@ -32,7 +32,10 @@ module.exports = yeoman.generators.Base.extend({
         return done(err);
       }
       this.dataSources = results.map(function(ds) {
-        return ds.name;
+        return {
+          name: ds.name + ' (' + ds.connector +')',
+          value: ds.name
+        };
       });
       done();
     }.bind(this));
