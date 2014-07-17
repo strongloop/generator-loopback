@@ -1,13 +1,13 @@
 'use strict';
-var util = require('util');
-var fs = require('fs');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
 var workspace = require('loopback-workspace');
-var Project = workspace.models.Project;
+var Workspace = workspace.models.Workspace;
 
-var LoopBackGenerator = module.exports = yeoman.generators.Base.extend({
+var actions = require('../lib/actions');
+
+module.exports = yeoman.generators.Base.extend({
   constructor: function() {
     yeoman.generators.Base.apply(this, arguments);
 
@@ -23,28 +23,58 @@ var LoopBackGenerator = module.exports = yeoman.generators.Base.extend({
     });
   },
 
-  injectProjectWriteFile: function() {
-    // Modify Project.writeFile use yeoman's write
-    var _projectWriteFile = Project.writeFile;
-    Project.writeFile = function(filepath, content, encoding, cb) {
-      this.write(filepath, content, { encoding: encoding });
-      cb();
+  greet: function() {
+    this.log(yosay('Let\'s create a LoopBack application!'));
+  },
+
+  injectWorkspaceCopyRecursive: function() {
+    var originalMethod = Workspace.copyRecursive;
+    Workspace.copyRecursive = function(src, dest, cb) {
+      this.directory(src, dest);
+      process.nextTick(cb);
     }.bind(this);
 
-    // Restore Project.writeFile when done
+    // Restore the original method when done
     this.on('end', function() {
-      Project.writeFile = _projectWriteFile;
+      Workspace.copyRecursive = originalMethod;
     });
   },
 
-  init: function() {
-    this.pkg = require('../package.json');
+  askForDestinationDir: actions.askForDestinationDir,
+
+  initWorkspace: actions.initWorkspace,
+
+  detectExistingProject: function() {
+    var cb = this.async();
+    Workspace.isValidDir(function(err) {
+      if (err) {
+        cb();
+      } else {
+        cb(new Error('The generator must be run in an empty directory.'));
+      }
+    });
+  },
+
+  loadTemplates: function() {
+    var done = this.async();
+
+    Workspace.getAvailableTemplates(function(err, list) {
+      if (err) return done(err);
+      this.templates = list.map(function(t) {
+        return {
+          // TODO(bajtos) - workspace does not provide template details yet
+          // name: util.format('%s (%s)', t.name, t.description),
+          // value: t.name
+          name: t,
+          value: t
+        };
+      });
+      done();
+    }.bind(this));
   },
 
   askForParameters: function() {
     var done = this.async();
-
-    this.log(yosay('Let\'s create a LoopBack application!'));
 
     var name = this.name || this.appname;
 
@@ -54,23 +84,24 @@ var LoopBackGenerator = module.exports = yeoman.generators.Base.extend({
         message: 'What\'s the name of your application?',
         default: name
       },
+      /*
+       TODO(bajtos) not all templates are projects, some of them are components
+       The only functional project template is 'api-server' at the moment
       {
         name: 'template',
         message: 'What kind of application do you have in mind?',
         type: 'list',
-        default: 'mobile',
-        choices: Project.listTemplates().map(function(t) {
-          return {
-            name: util.format('%s (%s)', t.name, t.description),
-            value: t.name
-          };
-        }),
+        default: 'api-server',
+        choices: this.templates
       }
+       */
     ];
 
     this.prompt(prompts, function(props) {
       this.appname = props.appname;
-      this.template = props.template;
+      // TODO(bajtos) see the TODO comment above
+      //this.template = props.template;
+      this.template = 'api-server';
 
       done();
     }.bind(this));
@@ -79,27 +110,18 @@ var LoopBackGenerator = module.exports = yeoman.generators.Base.extend({
   project: function() {
     var done = this.async();
 
-    Project.createFromTemplate(
-      this.destinationRoot(),
-      this.appname,
+    Workspace.createFromTemplate(
       this.template,
+      this.appname,
       done
     );
   },
 
-  installDeps: function() {
-    this._skipInstall = this.options['skip-install'];
-
-    // Workaround for sync/async inconsistency of the yeoman API
-    var done = this._skipInstall ? function(){} : this.async();
-
-    this.installDependencies({
-      npm: true,
-      bower: false,
-      skipInstall: this._skipInstall,
-      callback: done
-    });
+  copyFiles: function() {
+    this.directory('.', '.');
   },
+
+  installDeps: actions.installDeps,
 
   whatsNext: function() {
     if (!this._skipInstall) {

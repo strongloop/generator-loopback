@@ -1,0 +1,322 @@
+[
+  {
+    "name": "City Rent-a-Car",
+    "street": "1433 Bush St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(415) 359-1331"
+  },
+  {
+    "name": "Thrifty Car Rental",
+    "street": "350 O'Farrell St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(415) 788-8111"
+  },
+  {
+    "name": "GoCar Tours",
+    "street": "431 Beach St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(415) 441-5695"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "727 Folsom St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(415) 546-6777"
+  },
+  {
+    "name": "Budget Rent A Car",
+    "street": "5 Embarcadero Center",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(415) 433-3717"
+  },
+  {
+    "name": "National Car Rental",
+    "street": "750 Bush St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(650) 238-5302"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "1600 Mission St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(415) 522-5900"
+  },
+  {
+    "name": "Alamo Rent A Car",
+    "street": "750 Bush St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(888) 826-6893"
+  },
+  {
+    "name": "DOLLAR RENT A CAR",
+    "street": "364 O'Farrell St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(866) 434-2226"
+  },
+  {
+    "name": "RelayRides",
+    "street": "116 Natoma St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "US",
+    "phone": "(866) 735-2901"
+  },
+  {
+    "name": "Pacific Car Rentals",
+    "street": "501 W Georgia St",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-689-4506"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "1250 Granville St #2",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-688-5500"
+  },
+  {
+    "name": "Riz Rent a Car & Truck",
+    "street": "1361 Robson St",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-689-1231"
+  },
+  {
+    "name": "Vancouver West Side",
+    "street": "906 W Broadway #101",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada ‎",
+    "phone": "+1 604-606-2821"
+  },
+  {
+    "name": "Enterprise Rent-A-Car ",
+    "street": "3510 Fraser St",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-872-7368"
+  },
+  {
+    "name": "Hertz Rent a Car",
+    "street": "1270 Granville St",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-606-4711"
+  },
+  {
+    "name": "Mr Rent-A-Car (Downtown) Ltd",
+    "street": "968 Kingsway",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-876-7777"
+  },
+  {
+    "name": "Thrifty Car Rental",
+    "street": "413 Seymour St",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-606-1666"
+  },
+  {
+    "name": "Budget Car & Truck Rental",
+    "street": "855 Kingsway",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-668-7000"
+  },
+  {
+    "name": "Pacific Car Rentals",
+    "street": "1132 W Hastings St",
+    "city": "Vancouver",
+    "state": "BC",
+    "country": "Canada",
+    "phone": "+1 604-689-3994"
+  },
+  {
+    "name": "Dollar Rent A Car",
+    "street": "1659 Airport Blvd",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(866) 434-2226"
+  },
+  {
+    "name": "Avis Rent A Car",
+    "street": "1659 Airport Blvd #3",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(408) 993-2224"
+  },
+  {
+    "name": "National Car Rental",
+    "street": "1659 Airport Blvd #8",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(408) 288-4662"
+  },
+  {
+    "name": "Alamo Rent A Car",
+    "street": "2300 Airport Blvd #120",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(888) 826-6893"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "598 S 1st St",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(408) 286-4444"
+  },
+  {
+    "name": "Club Sportiva",
+    "street": "521 Charcot Ave #237",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(866) 719-1600"
+  },
+  {
+    "name": "Service Rent-A-Car Inc",
+    "street": "698 S 1st St",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(408) 554-6351"
+  },
+  {
+    "name": "Budget Rent A Car",
+    "street": "1659 Airport Blvd #3",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(408) 286-7850"
+  },
+  {
+    "name": "Hertz Rent A Car",
+    "street": "1659 Airport Blvd",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(408) 450-6000"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "1485 Kerley Dr",
+    "city": "San Jose",
+    "state": "CA",
+    "country": "US",
+    "phone": "(408) 437-1001"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "445 SW Pine St",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 275-5359"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "1623 W Burnside St",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 220-8200"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "8360 SW Barbur Blvd",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 977-7700"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "611 E Burnside St",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 230-1212"
+  },
+  {
+    "name": "Enterprise Rent-A-Car",
+    "street": "2740 NE Sandy Blvd",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 963-1795"
+  },
+  {
+    "name": "Budget Rent-A-Car",
+    "street": "3400 NE Columbia Blvd",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 288-2985"
+  },
+  {
+    "name": "Hertz Rent A Car",
+    "street": "1441 NE 2nd Ave",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 282-2644"
+  },
+  {
+    "name": "Avis Rent A Car",
+    "street": "330 SW Washington St",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 227-0220"
+  },
+  {
+    "name": "Dollar Rent a Car",
+    "street": "132 NW Broadway",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 228-3540"
+  },
+  {
+    "name": "Crown Auto Rental",
+    "street": "4826 NE 105 Ave",
+    "city": "Portland",
+    "state": "OR",
+    "country": "US",
+    "phone": "(503) 230-1103"
+  }
+]

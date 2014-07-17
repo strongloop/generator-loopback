@@ -1,6 +1,6 @@
 {
   "name": "generator-loopback",
-  "version": "0.0.0",
+  "version": "1.0.0-beta1",
   "description": "Yeoman generator",
   "license": {
     "name": "Dual MIT/StrongLoop",
@@ -17,7 +17,9 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha"
+    "pretest": "jshint .",
+    "test": "mocha -R spec && mocha -R spec test/end-to-end",
+    "testdb": "TEST_SLOW=1 mocha -R spec test/end-to-end"
   },
   "files": [
     "app"
@@ -28,15 +30,21 @@
     "strongloop"
   ],
   "dependencies": {
-    "yeoman-generator": "~0.16.0",
-    "loopback-workspace": "~2.4.0",
-    "chalk": "~0.4.0",
+    "async": "^0.9.0",
+    "chalk": "^0.4.0",
+    "debug": "^1.0.2",
+    "loopback-workspace": "^3.0.0-beta1",
+    "yeoman-generator": "^0.16.0",
     "yosay": "^0.1.0"
   },
   "peerDependencies": {
     "yo": ">=1.0.0"
   },
   "devDependencies": {
-    "must": "^0.11.0"
+    "fs-extra": "^0.10.0",
+    "jshint": "^2.5",
+    "mocha": "^1.18.2",
+    "must": "^0.12.0",
+    "strong-cached-install": "^1.1.0"
   }
 }

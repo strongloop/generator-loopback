@@ -1,107 +1,171 @@
 'use strict';
-var util = require('util');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
+var wsModels = require('loopback-workspace').models;
 
-var workspace = require('loopback-workspace');
-var Project = workspace.models.Project;
+var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 
-
-var ModelGenerator = yeoman.generators.NamedBase.extend({
+module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
-  // adding new models.
+  // saving project changes.
 
-  loadProject: function () {
-    var done = this.async();
+  constructor: function() {
+    yeoman.generators.Base.apply(this, arguments);
 
-    this.projectDir = this.destinationRoot();
-    Project.isValidProjectDir(this.projectDir, function(err, isValid, message) {
-      if (err) {
-        return done(err);
-      }
-
-      if (!isValid) {
-        var msg = util.format(
-          'The directory %s is not a valid LoopBack project. %s',
-          this.projectDir,
-          message);
-        return done(new Error(msg));
-      }
-
-      Project.loadFromFiles(this.projectDir, function(err, project) {
-        if (err) {
-          return done(err);
-        }
-
-        this.project = project;
-        done();
-      }.bind(this));
-    }.bind(this));
+    this.argument('name', {
+      desc: 'Name of the model to create.',
+      required: false,
+      type: String
+    });
   },
+
+  loadProject: actions.loadProject,
 
   loadDataSources: function() {
     var done = this.async();
-    this.project.dataSources(function(err, results) {
+
+    wsModels.DataSourceDefinition.find(function(err, results) {
       if (err) {
         return done(err);
       }
       this.dataSources = results.map(function(ds) {
-        return ds.name;
+        return {
+          name: ds.name + ' (' + ds.connector +')',
+          value: ds.name
+        };
       });
       done();
     }.bind(this));
   },
 
+  askForName: function() {
+    var done = this.async();
+
+    var prompts = [
+      {
+        name: 'name',
+        message: 'Enter the model name:',
+        default: this.name,
+        validate: function(input) {
+          return !!input.length || 'You need to provide a name.';
+        }
+      }
+    ];
+
+    this.prompt(prompts, function(props) {
+      this.name = props.name;
+      done();
+    }.bind(this));
+
+  },
+
   askForParameters: function() {
     var done = this.async();
 
-    var displayName = chalk.yellow(this.name);
+    this.displayName = chalk.yellow(this.name);
 
     var prompts = [
       {
         name: 'dataSource',
-        message: 'Select the data-source to attach ' + displayName + ' to:',
+        message: 'Select the data-source to attach ' +
+          this.displayName + ' to:',
         type: 'list',
         default: 'db',
         choices: this.dataSources
       },
       {
         name: 'public',
-        message: 'Expose ' + displayName + ' via the REST API?',
+        message: 'Expose ' + this.displayName + ' via the REST API?',
         type: 'confirm'
+      },
+      {
+        name: 'plural',
+        message: 'Custom plural form (used to build REST URL):',
+        when: function(answers) {
+          return answers.public;
+        }
       }
     ];
 
     this.prompt(prompts, function(props) {
       this.dataSource = props.dataSource;
       this.public = props.public;
+      this.plural = props.plural || undefined;
+
       done();
     }.bind(this));
   },
 
-  model: function() {
+  modelDefinition: function() {
     var done = this.async();
     var config = {
-      properties: {},
       name: this.name,
-      public: this.public,
-      dataSource: this.dataSource
+      plural: this.plural,
+      facetName: 'common' // hard-coded for now
     };
 
-    this.project.models.create(config, function(err) {
-      if (!err) {
-        return this.project.saveToFiles(this.projectDir, done);
-      }
-
-      if (err.name === 'ValidationError') {
-        helpers.reportValidationError(err, this.log);
-      }
+    wsModels.ModelDefinition.create(config, function(err) {
+      helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  }
-});
+  },
 
-module.exports = ModelGenerator;
+  modelConfiguration: function() {
+    var done = this.async();
+    var config = {
+      name: this.name,
+      facetName: 'server', // hard-coded for now
+      dataSource: this.dataSource,
+      public: this.public,
+    };
+
+    wsModels.ModelConfig.create(config, function(err) {
+      helpers.reportValidationError(err, this.log);
+      return done(err);
+    }.bind(this));
+  },
+
+  delim: function() {
+    this.log('Let\'s add some ' + this.displayName + ' properties now.\n');
+  },
+
+  property: function() {
+    var done = this.async();
+    this.log('Enter an empty property name when done.');
+    var prompts = [
+      {
+        name: 'propertyName',
+        message: 'Property name:'
+      }
+    ];
+    this.prompt(prompts, function(answers) {
+      if (answers.propertyName == null || answers.propertyName === '') {
+        return done();
+      }
+
+      this.invoke(
+        'loopback:property',
+        {
+          options: {
+            nested: true,
+            projectDir: this.projectDir,
+            project: this.project,
+            modelName: this.name,
+            propertyName: answers.propertyName,
+          },
+        },
+        function(err) {
+          if (err) {
+            return done(err);
+          }
+          this.log('\nLet\'s add another ' + this.displayName + ' property.');
+          this.property();
+        }.bind(this));
+    }.bind(this));
+  },
+
+  saveProject: actions.saveProject
+});

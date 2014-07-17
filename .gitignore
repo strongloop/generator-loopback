@@ -26,3 +26,4 @@ node_modules/
 
 temp/
 test/sandbox
+test/.pkgcache/
