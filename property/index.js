@@ -110,7 +110,7 @@ module.exports = yeoman.generators.Base.extend({
       this.name = answers.name || this.name;
       if (answers.type === 'array') {
         var itemType =  answers.customItemType || answers.itemType;
-        this.type = itemType ? '[' + itemType + ']' : 'array';
+        this.type = itemType ? [itemType] : 'array';
       } else {
         this.type = answers.customType || answers.type;
       }
