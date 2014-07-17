@@ -349,7 +349,8 @@ module.exports = yeoman.generators.Base.extend({
 
     util._extend(pkg.dependencies, {
       'loopback-connector-rest': '^1.1.4',
-      'async': '~0.9.0'
+      'async': '~0.9.0',
+      'function-rate-limit': '~0.0.1'
     });
 
     pkg.optionalDependencies = pkg.optionalDependencies || {};

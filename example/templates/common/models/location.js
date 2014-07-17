@@ -24,12 +24,18 @@ module.exports = function(RentalLocation, Base) {
     }, fn);
   };
 
+  // Google Maps API has a rate limit of 10 requests per second
+  // Seems we need to enforce a lower rate to prevent errors
+  var lookupGeo = require('function-rate-limit')(5, 1000, function() {
+    var geoService = RentalLocation.app.dataSources.geo;
+    geoService.geocode.apply(geoService, arguments);
+  });
+
   RentalLocation.beforeSave = function(next, loc) {
     if (loc.geo) return next();
 
     // geo code the address
-    var geoService = RentalLocation.app.dataSources.geo;
-    geoService.geocode(loc.street, loc.city, loc.state,
+    lookupGeo(loc.street, loc.city, loc.state,
       function(err, result) {
         if (result && result[0]) {
           loc.geo = result[0].lng + ',' + result[0].lat;
