@@ -52,6 +52,23 @@ describe('loopback:property generator', function() {
     });
   });
 
+  it('creates a typed array', function(done) {
+    var propertyGenerator = givenPropertyGenerator();
+    helpers.mockPrompt(propertyGenerator, {
+      model: 'Car',
+      name: 'list',
+      type: 'array',
+      itemType: 'string'
+    });
+
+    propertyGenerator.run({}, function() {
+      var definition = readJsonSync('common/models/car.json');
+      var prop = definition.properties.list;
+      expect(prop.type).to.equal('[string]');
+      done();
+    });
+  });
+
   function givenPropertyGenerator() {
     var name = 'loopback:property';
     var path = '../../property';
