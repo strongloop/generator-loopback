@@ -83,7 +83,9 @@ module.exports = yeoman.generators.Base.extend({
         choices: [
           { name: 'All methods and properties', value: 'all' },
           { name: 'A single method', value: 'method' },
+          /* not supported by loopback yet
           { name: 'A single property', value: 'property' }
+          */
         ]
       },
       {

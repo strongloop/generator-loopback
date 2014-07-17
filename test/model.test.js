@@ -19,8 +19,10 @@ describe('loopback:model generator', function() {
   });
 
   it('creates common/models/{name}.json', function(done) {
-    var modelGen = givenModelGenerator(['Product']);
+    var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
+      name: 'Product',
+      plural: 'pds',
       dataSource: 'db'
     });
 
@@ -30,13 +32,15 @@ describe('loopback:model generator', function() {
       var content = JSON.parse(fs.readFileSync(productJson));
       expect(content).to.have.property('name', 'Product');
       expect(content).to.not.have.property('public');
+      expect(content).to.have.property('plural', 'pds');
       done();
     });
   });
 
   it('adds an entry to server/models.json', function(done) {
-    var modelGen = givenModelGenerator(['Product']);
+    var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
+      name: 'Product',
       dataSource: 'db',
       public: false,
       propertyName: ''

@@ -117,6 +117,10 @@ module.exports = yeoman.generators.Base.extend({
     );
   },
 
+  copyFiles: function() {
+    this.directory('.', '.');
+  },
+
   installDeps: actions.installDeps,
 
   whatsNext: function() {

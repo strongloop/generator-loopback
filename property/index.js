@@ -84,6 +84,22 @@ module.exports = yeoman.generators.Base.extend({
         }
       },
       {
+        name: 'itemType',
+        message: 'The type of array items:',
+        type: 'list',
+        choices: typeChoices.filter(function(t) { return t !== 'array'; }),
+        when: function(answers) {
+          return answers.type === 'array';
+        }
+      },
+      {
+        name: 'customItemType',
+        message: 'Enter the item type:',
+        when: function(answers) {
+          return answers.type === 'array' && answers.itemType === null;
+        }
+      },
+      {
         name: 'required',
         message: 'Required?',
         type: 'confirm',
@@ -92,7 +108,12 @@ module.exports = yeoman.generators.Base.extend({
     ];
     this.prompt(prompts, function(answers) {
       this.name = answers.name || this.name;
-      this.type = answers.customType || answers.type;
+      if (answers.type === 'array') {
+        var itemType =  answers.customItemType || answers.itemType;
+        this.type = itemType ? '[' + itemType + ']' : 'array';
+      } else {
+        this.type = answers.customType || answers.type;
+      }
       this.required = answers.required;
       done();
     }.bind(this));

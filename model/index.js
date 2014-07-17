@@ -6,11 +6,21 @@ var wsModels = require('loopback-workspace').models;
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 
-module.exports = yeoman.generators.NamedBase.extend({
+module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
+
+  constructor: function() {
+    yeoman.generators.Base.apply(this, arguments);
+
+    this.argument('name', {
+      desc: 'Name of the model to create.',
+      required: false,
+      type: String
+    });
+  },
 
   loadProject: actions.loadProject,
 
@@ -22,10 +32,34 @@ module.exports = yeoman.generators.NamedBase.extend({
         return done(err);
       }
       this.dataSources = results.map(function(ds) {
-        return ds.name;
+        return {
+          name: ds.name + ' (' + ds.connector +')',
+          value: ds.name
+        };
       });
       done();
     }.bind(this));
+  },
+
+  askForName: function() {
+    var done = this.async();
+
+    var prompts = [
+      {
+        name: 'name',
+        message: 'Enter the model name:',
+        default: this.name,
+        validate: function(input) {
+          return !!input.length || 'You need to provide a name.';
+        }
+      }
+    ];
+
+    this.prompt(prompts, function(props) {
+      this.name = props.name;
+      done();
+    }.bind(this));
+
   },
 
   askForParameters: function() {
@@ -46,12 +80,21 @@ module.exports = yeoman.generators.NamedBase.extend({
         name: 'public',
         message: 'Expose ' + this.displayName + ' via the REST API?',
         type: 'confirm'
+      },
+      {
+        name: 'plural',
+        message: 'Custom plural form (used to build REST URL):',
+        when: function(answers) {
+          return answers.public;
+        }
       }
     ];
 
     this.prompt(prompts, function(props) {
       this.dataSource = props.dataSource;
       this.public = props.public;
+      this.plural = props.plural || undefined;
+
       done();
     }.bind(this));
   },
@@ -60,6 +103,7 @@ module.exports = yeoman.generators.NamedBase.extend({
     var done = this.async();
     var config = {
       name: this.name,
+      plural: this.plural,
       facetName: 'common' // hard-coded for now
     };
 
