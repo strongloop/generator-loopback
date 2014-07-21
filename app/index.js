@@ -131,6 +131,11 @@ module.exports = yeoman.generators.Base.extend({
 
     this.log('Next steps:');
     this.log();
+    if (this.name && this.name !== '.') {
+      this.log('  Change directory to your app');
+      this.log(chalk.green('    $ cd ' + this.name));
+      this.log();
+    }
     this.log('  Create a model in your app');
     this.log(chalk.green('    $ yo loopback:model'));
     this.log();
