@@ -6,6 +6,7 @@ var wsModels = require('loopback-workspace').models;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
+var validateName = helpers.validateName;
 
 module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
@@ -54,9 +55,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'name',
         message: 'Enter the data-source name:',
         default: this.name,
-        validate: function(input) {
-          return !!input.length || 'You need to provide a name.';
-        }
+        validate: validateName
       }
     ];
 
@@ -86,9 +85,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'customConnector',
         message:
           'Enter the connector name without the loopback-connector- prefix:',
-        validate: function(input) {
-          return input ? true : 'You have to provide the connector name.';
-        },
+        validate: validateName,
         when: function(answers) {
           return answers.connector === 'other';
         }

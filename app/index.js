@@ -6,6 +6,7 @@ var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
 var actions = require('../lib/actions');
+var validateAppName = require('../lib/helpers').validateAppName;
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function() {
@@ -82,8 +83,9 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'appname',
         message: 'What\'s the name of your application?',
-        default: name
-      },
+        default: name,
+        validate: validateAppName
+      }
       /*
        TODO(bajtos) not all templates are projects, some of them are components
        The only functional project template is 'api-server' at the moment
