@@ -1,4 +1,4 @@
-module.exports = function(RentalLocation, Base) {
+module.exports = function(RentalLocation) {
   RentalLocation.nearby = function(here, page, max, fn) {
     if (typeof page === 'function') {
       fn = page;
@@ -47,7 +47,7 @@ module.exports = function(RentalLocation, Base) {
   };
 
   RentalLocation.setup = function() {
-    Base.setup.apply(this, arguments);
+    RentalLocation.base.setup.apply(this, arguments);
 
     this.remoteMethod('nearby', {
       description: 'Find nearby locations around the geo point',
