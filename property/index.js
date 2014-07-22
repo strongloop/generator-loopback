@@ -7,6 +7,7 @@ var ModelProperty = workspace.models.ModelProperty;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
+var validateName = helpers.validateName;
 
 module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
@@ -65,6 +66,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'name',
         message: 'Enter the property name:',
+        validate: validateName,
         when: function() {
           return !this.name && this.name !== 0;
         }.bind(this)
@@ -73,12 +75,13 @@ module.exports = yeoman.generators.Base.extend({
         name: 'type',
         message: 'Property type:',
         type: 'list',
-        choices: typeChoices,
+        choices: typeChoices
       },
       {
         name: 'customType',
         message: 'Enter the type:',
         required: true,
+        validate: validateName,
         when: function(answers) {
           return answers.type === null;
         }
@@ -95,6 +98,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'customItemType',
         message: 'Enter the item type:',
+        validate: validateName,
         when: function(answers) {
           return answers.type === 'array' && answers.itemType === null;
         }

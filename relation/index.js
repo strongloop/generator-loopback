@@ -7,6 +7,7 @@ var ModelRelation = workspace.models.ModelRelation;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
+var validateName = helpers.validateName;
 
 module.exports = yeoman.generators.Base.extend({
 
@@ -67,13 +68,13 @@ module.exports = yeoman.generators.Base.extend({
         name: 'type',
         message: 'Relation type:',
         type: 'list',
-        choices: this.availableTypes,
+        choices: this.availableTypes
       },
       {
         name: 'toModel',
         message: 'Choose a model to create a relationship with:',
         type: 'list',
-        choices: this.modelNames,
+        choices: this.modelNames
       }
     ];
     this.prompt(prompts, function(answers) {
@@ -88,7 +89,8 @@ module.exports = yeoman.generators.Base.extend({
     this.prompt([{
       name: 'asPropertyName',
       message: 'Enter the property name for the relation:',
-      required: true
+      required: true,
+      validate: validateName
     }], function(answers) {
       this.asPropertyName = answers.asPropertyName;
       done();
