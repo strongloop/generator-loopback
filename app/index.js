@@ -77,7 +77,7 @@ module.exports = yeoman.generators.Base.extend({
   askForParameters: function() {
     var done = this.async();
 
-    var name = this.name || this.appname;
+    var name = this.name || this.dir || this.appname;
 
     var prompts = [
       {
@@ -133,9 +133,9 @@ module.exports = yeoman.generators.Base.extend({
 
     this.log('Next steps:');
     this.log();
-    if (this.name && this.name !== '.') {
+    if (this.dir && this.dir !== '.') {
       this.log('  Change directory to your app');
-      this.log(chalk.green('    $ cd ' + this.name));
+      this.log(chalk.green('    $ cd ' + this.dir));
       this.log();
     }
     this.log('  Create a model in your app');
