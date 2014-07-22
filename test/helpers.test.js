@@ -1,7 +1,9 @@
+/*global describe, it */
+'use strict';
 var helpers = require('../lib/helpers');
 var validateAppName = helpers.validateAppName;
 var validateName = helpers.validateName;
-var expect = require('must');
+require('must');
 
 describe('helpers', function() {
   describe('validateAppName()', function() {
@@ -27,7 +29,7 @@ describe('helpers', function() {
       result.must.be.string();
     });
 
-    it('should report errors for a name containing special chars', function() {
+    it('should report errors for a name containing special chars', function () {
       var result = validateAppName('my app');
       result.must.be.string();
       result = validateAppName('my/app');
@@ -42,16 +44,17 @@ describe('helpers', function() {
       result.must.be.string();
     });
 
-    it('should report errors for a name as node_modules/favicon.ico', function() {
-      var result = validateAppName('node_modules');
-      result.must.be.string();
-      result = validateAppName('Node_Modules');
-      result.must.be.string();
-      result = validateAppName('favicon.ico');
-      result.must.be.string();
-      result = validateAppName('favicon.ICO');
-      result.must.be.string();
-    });
+    it('should report errors for a name as node_modules/favicon.ico',
+      function () {
+        var result = validateAppName('node_modules');
+        result.must.be.string();
+        result = validateAppName('Node_Modules');
+        result.must.be.string();
+        result = validateAppName('favicon.ico');
+        result.must.be.string();
+        result = validateAppName('favicon.ICO');
+        result.must.be.string();
+      });
 
   });
 
