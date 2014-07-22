@@ -34,7 +34,8 @@ module.exports = yeoman.generators.Base.extend({
       this.dataSources = results.map(function(ds) {
         return {
           name: ds.name + ' (' + ds.connector +')',
-          value: ds.name
+          value: ds.name,
+          _connector: ds.connector
         };
       });
       done();
@@ -99,11 +100,35 @@ module.exports = yeoman.generators.Base.extend({
     }.bind(this));
   },
 
+  loadDataSourceConnectorMeta: function() {
+    var done = this.async();
+    var self = this;
+
+    var dataSource = findFirstOrEmptyObject(self.dataSources, function(item) {
+      return item.value === self.dataSource;
+    });
+
+    wsModels.Workspace.listAvailableConnectors(function(err, list) {
+      if (err) return done(err);
+
+      self.connectorMeta = findFirstOrEmptyObject(list, function(item) {
+        return item.name === dataSource._connector;
+      });
+
+      done();
+    });
+
+    function findFirstOrEmptyObject(list, filterFn) {
+      return list.filter(filterFn)[0] || {};
+    }
+  },
+
   modelDefinition: function() {
     var done = this.async();
     var config = {
       name: this.name,
       plural: this.plural,
+      base: this.connectorMeta.baseModel,
       facetName: 'common' // hard-coded for now
     };
 
