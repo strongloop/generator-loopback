@@ -59,7 +59,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForParameters: function() {
-    var self = this;
     var done = this.async();
     this.name = this.options.propertyName;
 
@@ -85,7 +84,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   propertyName: function() {
-    var self = this;
     var done = this.async();
     this.prompt([{
       name: 'asPropertyName',
