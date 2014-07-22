@@ -28,11 +28,11 @@
   ],
   "dependencies": {
     "async": "^0.9.0",
-    "chalk": "^0.4.0",
+    "chalk": "^0.5.0",
     "debug": "^1.0.2",
-    "loopback-workspace": "^3.0.0-beta1",
+    "loopback-workspace": "^3.0.0",
     "yeoman-generator": "^0.16.0",
-    "yosay": "^0.1.0"
+    "yosay": "^0.3.0"
   },
   "peerDependencies": {
     "yo": ">=1.0.0"
