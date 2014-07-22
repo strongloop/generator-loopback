@@ -5,6 +5,7 @@ var wsModels = require('loopback-workspace').models;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
+var validateName = helpers.validateName;
 
 module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
@@ -34,7 +35,8 @@ module.exports = yeoman.generators.Base.extend({
       this.dataSources = results.map(function(ds) {
         return {
           name: ds.name + ' (' + ds.connector +')',
-          value: ds.name
+          value: ds.name,
+          _connector: ds.connector
         };
       });
       done();
@@ -49,9 +51,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'name',
         message: 'Enter the model name:',
         default: this.name,
-        validate: function(input) {
-          return !!input.length || 'You need to provide a name.';
-        }
+        validate: validateName
       }
     ];
 
@@ -99,11 +99,35 @@ module.exports = yeoman.generators.Base.extend({
     }.bind(this));
   },
 
+  loadDataSourceConnectorMeta: function() {
+    var done = this.async();
+    var self = this;
+
+    var dataSource = findFirstOrEmptyObject(self.dataSources, function(item) {
+      return item.value === self.dataSource;
+    });
+
+    wsModels.Workspace.listAvailableConnectors(function(err, list) {
+      if (err) return done(err);
+
+      self.connectorMeta = findFirstOrEmptyObject(list, function(item) {
+        return item.name === dataSource._connector;
+      });
+
+      done();
+    });
+
+    function findFirstOrEmptyObject(list, filterFn) {
+      return list.filter(filterFn)[0] || {};
+    }
+  },
+
   modelDefinition: function() {
     var done = this.async();
     var config = {
       name: this.name,
       plural: this.plural,
+      base: this.connectorMeta.baseModel,
       facetName: 'common' // hard-coded for now
     };
 
@@ -119,7 +143,7 @@ module.exports = yeoman.generators.Base.extend({
       name: this.name,
       facetName: 'server', // hard-coded for now
       dataSource: this.dataSource,
-      public: this.public,
+      public: this.public
     };
 
     wsModels.ModelConfig.create(config, function(err) {
@@ -138,7 +162,14 @@ module.exports = yeoman.generators.Base.extend({
     var prompts = [
       {
         name: 'propertyName',
-        message: 'Property name:'
+        message: 'Property name:',
+        validate: function (input) {
+          if (input) {
+            return validateName(input);
+          } else {
+            return true;
+          }
+        }
       }
     ];
     this.prompt(prompts, function(answers) {
@@ -154,8 +185,8 @@ module.exports = yeoman.generators.Base.extend({
             projectDir: this.projectDir,
             project: this.project,
             modelName: this.name,
-            propertyName: answers.propertyName,
-          },
+            propertyName: answers.propertyName
+          }
         },
         function(err) {
           if (err) {

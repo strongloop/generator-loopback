@@ -5,6 +5,7 @@ var helpers = require('yeoman-generator').test;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
+var wsModels = require('loopback-workspace').models;
 var common = require('./common');
 
 describe('loopback:model generator', function() {
@@ -18,6 +19,14 @@ describe('loopback:model generator', function() {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
+  beforeEach(function addRestDataSource(done) {
+    wsModels.DataSourceDefinition.create({
+      name: 'rest',
+      connector: 'rest',
+      facetName: 'server'
+    }, done);
+  });
+
   it('creates common/models/{name}.json', function(done) {
     var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
@@ -27,9 +36,7 @@ describe('loopback:model generator', function() {
     });
 
     modelGen.run({}, function() {
-      var productJson = path.resolve(SANDBOX, 'common/models/product.json');
-      expect(fs.existsSync(productJson), 'file exists');
-      var content = JSON.parse(fs.readFileSync(productJson));
+      var content = readProductJsonSync();
       expect(content).to.have.property('name', 'Product');
       expect(content).to.not.have.property('public');
       expect(content).to.have.property('plural', 'pds');
@@ -60,12 +67,46 @@ describe('loopback:model generator', function() {
     });
   });
 
+  it('sets `base: PersistedModel` when attached to memory', function(done) {
+    var modelGen = givenModelGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'Product',
+      dataSource: 'db',
+    });
+
+    modelGen.run({}, function() {
+      var product = readProductJsonSync();
+      expect(product).to.have.property('base', 'PersistedModel');
+      done();
+    });
+  });
+
+  it('sets `base: Model` when attached to REST', function(done) {
+    var modelGen = givenModelGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'Product',
+      dataSource: 'rest',
+    });
+
+    modelGen.run({}, function() {
+      var product = readProductJsonSync();
+      expect(product).to.have.property('base', 'Model');
+      done();
+    });
+  });
+
   function givenModelGenerator(modelArgs) {
     var path = '../../model';
     var name = 'loopback:model';
     var deps = [ ['../../property', 'loopback:property'] ];
     var gen = common.createGenerator(name, path, deps, modelArgs, {});
     return gen;
+  }
+
+  function readProductJsonSync() {
+    var productJson = path.resolve(SANDBOX, 'common/models/product.json');
+    expect(fs.existsSync(productJson), 'file exists');
+    return JSON.parse(fs.readFileSync(productJson));
   }
 
   function readModelsJsonSync(facet) {
