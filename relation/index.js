@@ -61,7 +61,6 @@ module.exports = yeoman.generators.Base.extend({
 
   askForParameters: function() {
     var done = this.async();
-    this.name = this.options.propertyName;
 
     var prompts = [
       {
@@ -75,24 +74,26 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Choose a model to create a relationship with:',
         type: 'list',
         choices: this.modelNames
+      },
+      {
+        name: 'asPropertyName',
+        message: 'Enter the property name for the relation:',
+        required: true,
+        validate: validateName
+      },
+      {
+        name: 'foreignKey',
+        message: 'Optionally enter a custom foreign key:',
+        validate: function(value) {
+          return value === undefined || value === '' || validateName(value);
+        }
       }
     ];
     this.prompt(prompts, function(answers) {
       this.type = answers.type;
       this.toModel = answers.toModel;
-      done();
-    }.bind(this));
-  },
-
-  propertyName: function() {
-    var done = this.async();
-    this.prompt([{
-      name: 'asPropertyName',
-      message: 'Enter the property name for the relation:',
-      required: true,
-      validate: validateName
-    }], function(answers) {
       this.asPropertyName = answers.asPropertyName;
+      this.foreignKey = answers.foreignKey;
       done();
     }.bind(this));
   },
@@ -102,6 +103,7 @@ module.exports = yeoman.generators.Base.extend({
     var def = {
       type: this.type,
       model: this.toModel,
+      foreignKey: this.foreignKey,
       name: this.asPropertyName
     };
     this.modelDefinition.relations.create(def, function(err) {

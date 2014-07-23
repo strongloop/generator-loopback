@@ -37,6 +37,7 @@ describe('loopback:relation generator', function() {
       model: 'Car',
       toModel: 'Part',
       asPropertyName: 'parts',
+      foreignKey: 'customKey',
       type: 'hasMany'
     });
 
@@ -46,12 +47,13 @@ describe('loopback:relation generator', function() {
       expect(relations).to.have.property('parts');
       expect(relations.parts).to.eql({
         type: 'hasMany',
+        foreignKey: 'customKey',
         model: 'Part'
       });
       done();
     });
   });
-  
+
   function givenRelationGenerator() {
     var name = 'loopback:relation';
     var path = '../../relation';
