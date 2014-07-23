@@ -31,7 +31,7 @@
     "chalk": "^0.5.0",
     "debug": "^1.0.2",
     "loopback-workspace": "^3.0.0",
-    "yeoman-generator": "^0.16.0",
+    "yeoman-generator": "^0.17.1",
     "yosay": "^0.3.0"
   },
   "peerDependencies": {

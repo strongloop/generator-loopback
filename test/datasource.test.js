@@ -22,6 +22,8 @@ describe('loopback:datasource generator', function() {
     var modelGen = givenDataSourceGenerator();
     helpers.mockPrompt(modelGen, {
       name: 'crm',
+      customConnector: '', // temporary workaround for
+                           // https://github.com/yeoman/generator/issues/600
       connector: 'mysql'
     });
 

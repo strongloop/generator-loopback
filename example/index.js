@@ -573,8 +573,15 @@ module.exports = yeoman.generators.Base.extend({
 
     this._logStep('$ yo %s', [namespace].concat(args).join(' '));
 
+    // Create a new environment for the generator
+    // This prevents the generator from sharing the same event loop with us
+    var env = yeoman(this.env.arguments, this.env.options, this.env.adapter);
+
+    // Share the generator registry
+    env.store = this.env.store;
+
     // based on yeoman-generator/lib/actions/invoke
-    var generator = this.env.create(namespace, {
+    var generator = env.create(namespace, {
       options: {
         nested: true,
         projectDir: this.projectDir,
