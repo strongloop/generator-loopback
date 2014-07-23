@@ -1,6 +1,7 @@
 'use strict';
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
+var inflection = require('inflection');
 
 var workspace = require('loopback-workspace');
 var ModelRelation = workspace.models.ModelRelation;
@@ -79,6 +80,16 @@ module.exports = yeoman.generators.Base.extend({
         name: 'asPropertyName',
         message: 'Enter the property name for the relation:',
         required: true,
+        default: function(answers) {
+          var m = answers.toModel;
+          // Model -> model
+          m = inflection.camelize(m, true);
+          if (answers.type !== 'belongsTo') {
+            // model -> models
+            m = inflection.pluralize(m);
+          }
+          return m;
+        },
         validate: validateName
       },
       {
