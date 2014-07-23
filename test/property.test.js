@@ -36,6 +36,10 @@ describe('loopback:property generator', function() {
     helpers.mockPrompt(propertyGenerator, {
       model: 'Car',
       name: 'isPreferred',
+      customType: '', // temporary workaround for
+                      // https://github.com/yeoman/generator/issues/600
+      customItemType: '', // temporary workaround for
+                          // https://github.com/yeoman/generator/issues/600
       type: 'boolean',
       required: 'true'
     });
@@ -58,6 +62,10 @@ describe('loopback:property generator', function() {
       model: 'Car',
       name: 'list',
       type: 'array',
+      customType: '', // temporary workaround for
+                      // https://github.com/yeoman/generator/issues/600
+      customItemType: '', // temporary workaround for
+                          // https://github.com/yeoman/generator/issues/600
       itemType: 'string'
     });
 
