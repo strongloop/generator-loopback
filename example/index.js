@@ -371,9 +371,6 @@ module.exports = yeoman.generators.Base.extend({
     pkg.scripts = pkg.scripts || {};
     pkg.scripts.test = 'mocha -R spec server/test';
 
-    this._logPart('Add `npm pretest` script to package.json');
-    pkg.scripts.pretest = 'jshint .';
-
     this.writeFileFromString(JSON.stringify(pkg, null, 2), packageJson);
   },
 
