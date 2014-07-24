@@ -384,6 +384,10 @@ module.exports = yeoman.generators.Base.extend({
 
     fs.unlink(path.resolve(this.projectDir, 'client', 'README.md'));
     this.directory('.', '.');
+
+    // force yeoman to execute all copy operations now
+    // the files are copied at the end by default
+    this.conflicter.resolve(this.async());
   },
 
   removeStatus: function() {
