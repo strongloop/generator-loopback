@@ -371,9 +371,6 @@ module.exports = yeoman.generators.Base.extend({
     pkg.scripts = pkg.scripts || {};
     pkg.scripts.test = 'mocha -R spec server/test';
 
-    this._logPart('Add `npm pretest` script to package.json');
-    pkg.scripts.pretest = 'jshint .';
-
     this.writeFileFromString(JSON.stringify(pkg, null, 2), packageJson);
   },
 
@@ -387,6 +384,10 @@ module.exports = yeoman.generators.Base.extend({
 
     fs.unlink(path.resolve(this.projectDir, 'client', 'README.md'));
     this.directory('.', '.');
+
+    // force yeoman to execute all copy operations now
+    // the files are copied at the end by default
+    this.conflicter.resolve(this.async());
   },
 
   removeStatus: function() {
