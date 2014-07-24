@@ -371,9 +371,6 @@ module.exports = yeoman.generators.Base.extend({
     pkg.scripts = pkg.scripts || {};
     pkg.scripts.test = 'mocha -R spec server/test';
 
-    this._logPart('Add `npm pretest` script to package.json');
-    pkg.scripts.pretest = 'jshint .';
-
     this.writeFileFromString(JSON.stringify(pkg, null, 2), packageJson);
   },
 
@@ -387,6 +384,10 @@ module.exports = yeoman.generators.Base.extend({
 
     fs.unlink(path.resolve(this.projectDir, 'client', 'README.md'));
     this.directory('.', '.');
+
+    // force yeoman to execute all copy operations now
+    // the files are copied at the end by default
+    this.conflicter.resolve(this.async());
   },
 
   removeStatus: function() {
@@ -554,15 +555,17 @@ module.exports = yeoman.generators.Base.extend({
   _createRelation: function(modelName, relDef, cb) {
     cb = cb || this.async();
 
-    // NOTE(bajtos) We don't have a generator for relations yet
-
-    this._logStep('Add relation %s %s %s',
-      modelName, relDef.type, relDef.model);
-
-    findModelByName(modelName, function(err, modelDef) {
-      if (err) return cb(err);
-      modelDef.relations.create(relDef, cb);
-    });
+    this._runGeneratorWithAnswers(
+      'loopback:relation',
+      [],
+      {
+        model: modelName,
+        toModel: relDef.model,
+        type: relDef.type,
+        asPropertyName: relDef.name,
+        foreignKey: relDef.foreignKey
+      },
+      cb);
   },
 
   _runGeneratorWithAnswers: function(namespace, args, answers, cb) {
@@ -571,8 +574,15 @@ module.exports = yeoman.generators.Base.extend({
 
     this._logStep('$ yo %s', [namespace].concat(args).join(' '));
 
+    // Create a new environment for the generator
+    // This prevents the generator from sharing the same event loop with us
+    var env = yeoman(this.env.arguments, this.env.options, this.env.adapter);
+
+    // Share the generator registry
+    env.store = this.env.store;
+
     // based on yeoman-generator/lib/actions/invoke
-    var generator = this.env.create(namespace, {
+    var generator = env.create(namespace, {
       options: {
         nested: true,
         projectDir: this.projectDir,

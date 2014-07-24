@@ -37,6 +37,7 @@ describe('loopback:relation generator', function() {
       model: 'Car',
       toModel: 'Part',
       asPropertyName: 'parts',
+      foreignKey: 'customKey',
       type: 'hasMany'
     });
 
@@ -46,12 +47,47 @@ describe('loopback:relation generator', function() {
       expect(relations).to.have.property('parts');
       expect(relations.parts).to.eql({
         type: 'hasMany',
+        foreignKey: 'customKey',
         model: 'Part'
       });
       done();
     });
   });
-  
+
+  it('provides default property name based on target model for belongsTo',
+    function(done) {
+      var relationGenerator = givenRelationGenerator();
+      helpers.mockPrompt(relationGenerator, {
+        model: 'Car',
+        toModel: 'Part',
+        type: 'belongsTo'
+      });
+      relationGenerator.run({}, function() {
+        var definition = readJsonSync('common/models/car.json');
+        var relations = definition.relations || {};
+        expect(Object.keys(relations)).to.include('part');
+        done();
+      });
+    }
+  );
+
+  it('provides default property name based on target model for hasMany',
+    function(done) {
+      var relationGenerator = givenRelationGenerator();
+      helpers.mockPrompt(relationGenerator, {
+        model: 'Car',
+        toModel: 'Part',
+        type: 'hasMany'
+      });
+      relationGenerator.run({}, function() {
+        var definition = readJsonSync('common/models/car.json');
+        var relations = definition.relations || {};
+        expect(Object.keys(relations)).to.include('parts');
+        done();
+      });
+    }
+  );
+
   function givenRelationGenerator() {
     var name = 'loopback:relation';
     var path = '../../relation';
