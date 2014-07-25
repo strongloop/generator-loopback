@@ -27,8 +27,16 @@ describe('loopback:acl generator', function() {
         facetName: 'common'
       },
       function(err, model) {
+        if(err) {
+          return done(err);
+        }
         test.Model = model;
-        done(err);
+        // Create another model
+        wsModels.ModelDefinition.create(
+          {
+            name: 'Location',
+            facetName: 'common'
+          }, done);
       });
   });
 
@@ -52,6 +60,40 @@ describe('loopback:acl generator', function() {
         principalType: 'ROLE',
         principalId: '$everyone'
       }]);
+      done();
+    });
+  });
+
+  it('adds an entry to all models.json', function(done) {
+    var aclGen = givenAclGenerator();
+    helpers.mockPrompt(aclGen, {
+      scope: 'all',
+      accessType: '*',
+      role: '$owner',
+      permission: 'ALLOW'
+    });
+
+    aclGen.run({}, function() {
+      var def = readJsonSync('common/models/car.json');
+      var carAcls = def.acls;
+
+      expect(carAcls).to.eql([{
+        accessType: '*',
+        permission: 'ALLOW',
+        principalType: 'ROLE',
+        principalId: '$owner'
+      }]);
+
+      def = readJsonSync('common/models/location.json');
+      var locationACLs = def.acls;
+
+      expect(locationACLs).to.eql([{
+        accessType: '*',
+        permission: 'ALLOW',
+        principalType: 'ROLE',
+        principalId: '$owner'
+      }]);
+
       done();
     });
   });
