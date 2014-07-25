@@ -141,7 +141,7 @@ module.exports = yeoman.generators.Base.extend({
     var aclDef = this.aclDef;
     var filter = this.modelName ?
       { where: { name: this.modelName }, limit: 1 } :
-      true /* all models, force refresh */;
+    {} /* all models, force refresh */;
 
     wsModels.ModelDefinition.find(filter, function(err, models) {
       if (err) {
