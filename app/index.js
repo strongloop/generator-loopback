@@ -7,6 +7,7 @@ var Workspace = workspace.models.Workspace;
 
 var actions = require('../lib/actions');
 var validateAppName = require('../lib/helpers').validateAppName;
+var pkg = require('../package.json');
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function() {
@@ -139,7 +140,7 @@ module.exports = yeoman.generators.Base.extend({
       this.log();
     }
     this.log('  Create a model in your app');
-    this.log(chalk.green('    $ yo loopback:model'));
+    this.log(chalk.green('    $ slc loopback:model'));
     this.log();
     this.log('  Optional: Enable StrongOps monitoring');
     this.log(chalk.green('    $ slc strongops'));
@@ -149,3 +150,7 @@ module.exports = yeoman.generators.Base.extend({
     this.log();
   }
 });
+
+// Export it for strong-cli to use
+module.exports._package = pkg.name + ': ' + pkg.version;
+module.exports._yeoman = yeoman;

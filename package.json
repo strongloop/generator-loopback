@@ -35,9 +35,6 @@
     "yeoman-generator": "^0.16.0",
     "yosay": "^0.3.0"
   },
-  "peerDependencies": {
-    "yo": ">=1.0.0"
-  },
   "devDependencies": {
     "fs-extra": "^0.10.0",
     "jshint": "^2.5",
