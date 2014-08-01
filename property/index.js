@@ -15,6 +15,10 @@ module.exports = yeoman.generators.Base.extend({
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
+  help: function() {
+    return helpers.customHelp(this);
+  },
+
   loadProject: actions.loadProject,
 
   loadModels: actions.loadModels,

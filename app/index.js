@@ -6,7 +6,8 @@ var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
 var actions = require('../lib/actions');
-var validateAppName = require('../lib/helpers').validateAppName;
+var helpers = require('../lib/helpers');
+var validateAppName = helpers.validateAppName;
 var pkg = require('../package.json');
 
 module.exports = yeoman.generators.Base.extend({
@@ -27,6 +28,10 @@ module.exports = yeoman.generators.Base.extend({
 
   greet: function() {
     this.log(yosay('Let\'s create a LoopBack application!'));
+  },
+
+  help: function() {
+    return helpers.customHelp(this);
   },
 
   injectWorkspaceCopyRecursive: function() {
@@ -127,6 +132,7 @@ module.exports = yeoman.generators.Base.extend({
   installDeps: actions.installDeps,
 
   whatsNext: function() {
+    var cmd = helpers.getCommandName();
     if (!this._skipInstall) {
       this.log();
       this.log();
@@ -140,13 +146,13 @@ module.exports = yeoman.generators.Base.extend({
       this.log();
     }
     this.log('  Create a model in your app');
-    this.log(chalk.green('    $ slc loopback:model'));
+    this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
     this.log();
     this.log('  Optional: Enable StrongOps monitoring');
-    this.log(chalk.green('    $ slc strongops'));
+    this.log(chalk.green('    $ ' + cmd + ' strongops'));
     this.log();
     this.log('  Run the app');
-    this.log(chalk.green('    $ slc run .'));
+    this.log(chalk.green('    $ ' + cmd + ' run .'));
     this.log();
   }
 });

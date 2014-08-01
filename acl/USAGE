@@ -6,4 +6,4 @@ Example:
   slc loopback:acl
 
   This will ask several questions do determine ACL options and
-  then add an entry to `models.json`.
+  then add an entry to the corresponding model json.
