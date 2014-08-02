@@ -3,6 +3,6 @@ Description:
 
 Example:
 
-  yo loopback:model Product
+  slc loopback:model Product
 
-  This adds an entry to `models.json` defining the model "Product".
+  This adds an entry to `Product.json` defining the model "Product".

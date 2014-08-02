@@ -206,7 +206,7 @@ Once you have the generators installed, run the following command to recreate
 the sample app from scratch:
 
 ```
-$ yo loopback:example -l
+$ slc loopback:example -l
 ```
 
 This will call other generators like `yo loopback` and `yo loopback:model`
@@ -223,7 +223,7 @@ This is how the output looks like:
 
 ```
 Create initial project scaffolding
-  $ yo loopback:app loopback-example
+  $ slc loopback:app loopback-example
     [?] Enter a directory name where to create the project: .
     [?] What's the name of your application? loopback-example
 
@@ -232,15 +232,15 @@ I'm all done. Just run npm install to install the required dependencies.
 
 
 Add datasource geo
-  $ yo loopback:datasource geo
+  $ slc loopback:datasource geo
     [?] Select the connector for geo: rest
   Set datasource options: operations
 Add model Car
-  $ yo loopback:model Car
+  $ slc loopback:model Car
     [?] Select the data-source to attach Car to: db
     [?] Expose Car via the REST API?
     [?] Property name:
-  $ yo loopback:property
+  $ slc loopback:property
     [?] Select the model: Car
     [?] Enter the property name: id
     [?] Property type: string
@@ -254,15 +254,15 @@ Add model Customer
 ```
 
 The first step is to prepare the project infrastructure by
-running `yo loopback:app`, which is an alias for `yo loopback`.
+running `slc loopback:app`, which is an alias for `slc loopback`.
 
-Then there is a `geo` datasource added by running `yo loopback:datasource geo`.
+Then there is a `geo` datasource added by running `slc loopback:datasource geo`.
 When prompted for the connector to use, the `rest` is selected. After the
 datasource was created, the REST operations are added to the generated
 file `datasources.json` manually.
 
 The next step is to create all application models. The generator
-`yo loopback:model` is called to define a new model, `yo loopback:property` to
+`slc loopback:model` is called to define a new model, `slc loopback:property` to
 add a property definition to the new model. Some property options like
 `"id": true` are not supported by the generator, they are added manually.
 
