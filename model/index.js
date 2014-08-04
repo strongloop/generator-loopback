@@ -23,6 +23,10 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
+  help: function() {
+    return helpers.customHelp(this);
+  },
+
   loadProject: actions.loadProject,
 
   loadDataSources: function() {

@@ -11,6 +11,7 @@ var util = require('util');
 var wsModels = require('loopback-workspace').models;
 
 var actions = require('../lib/actions');
+var helpers = require('../lib/helpers');
 
 var debugLogger = createDebugLogger();
 
@@ -37,6 +38,10 @@ module.exports = yeoman.generators.Base.extend({
 
     // Always overwrite existing files
     this.conflicter.force = true;
+  },
+
+  help: function() {
+    return helpers.customHelp(this);
   },
 
   _isVerbose: function() {
@@ -572,7 +577,8 @@ module.exports = yeoman.generators.Base.extend({
     var self = this;
     cb = cb || this.async();
 
-    this._logStep('$ yo %s', [namespace].concat(args).join(' '));
+    this._logStep('$ %s %s', helpers.getCommandName(),
+      [namespace].concat(args).join(' '));
 
     /* This is needed for yeoman-generator v0.17,
      * probably due to a bug in v0.17.1

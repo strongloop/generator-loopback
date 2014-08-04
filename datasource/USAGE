@@ -3,6 +3,6 @@ Description:
 
 Example:
 
-  yo loopback:datasource crm
+  slc loopback:datasource crm
 
   This adds an entry to `datasources.json` defining the data-source "crm".

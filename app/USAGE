@@ -3,15 +3,17 @@ Description:
 
 Example:
 
-  yo loopback
+  slc loopback
 
   This will create:
+
     package.json: Development packages installed by npm.
 
-    app.js: The main application file.
-    app.json: Machine-editable app configuration.
+    common/models/<modelName>.json: Definition of basic models provided by LoopBack.
+    common/models/ Directory where to put custom model code.
 
-    datasources.json: Definition of data sources.
-    models.json: Definition of basic models provided by LoopBack.
+    server/server.js: The main application file.
+    server/config.json: Machine-editable app configuration.
+    server/datasources.json: Definition of data sources.
+    server/model-config.json: Model configuration.
 
-    models/ Directory where to put custom model code.

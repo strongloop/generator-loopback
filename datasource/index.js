@@ -26,6 +26,10 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
+  help: function() {
+    return helpers.customHelp(this);
+  },
+
   loadConnectors: function() {
     var done = this.async();
     wsModels.Workspace.listAvailableConnectors(function(err, list) {
