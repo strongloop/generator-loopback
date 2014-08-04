@@ -2,7 +2,7 @@
  * Run `node import.js` to import the test data into the db.
  */
 
-var app = require('../app');
+var app = require('../server');
 var db = app.dataSources.db;
 
 var models = ['AccessToken', 'Role', 'ACL', 'RoleMapping'];
