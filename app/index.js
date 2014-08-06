@@ -31,7 +31,13 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   help: function() {
-    return helpers.customHelp(this);
+    var msgs = [helpers.customHelp(this)];
+    msgs.push('Available generators: \n\n  ');
+    msgs.push(Object.keys(this.options.env.getGeneratorsMeta())
+      .filter(function (name) {
+        return name.indexOf('loopback:') !== -1;
+      }).join('\n  '));
+    return msgs.join('');
   },
 
   injectWorkspaceCopyRecursive: function() {
