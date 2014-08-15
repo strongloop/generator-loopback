@@ -67,6 +67,11 @@ module.exports = yeoman.generators.Base.extend({
   askForParameters: function() {
     var done = this.async();
 
+    var modelChoices = this.modelNames.concat({
+      name: '(other)',
+      value: null
+    });
+
     var prompts = [
       {
         name: 'type',
@@ -78,14 +83,23 @@ module.exports = yeoman.generators.Base.extend({
         name: 'toModel',
         message: 'Choose a model to create a relationship with:',
         type: 'list',
-        choices: this.modelNames
+        choices: modelChoices
+      },
+      {
+        name: 'customToModel',
+        message: 'Enter the model name:',
+        required: true,
+        validate: validateName,
+        when: function(answers) {
+          return answers.toModel === null;
+        }
       },
       {
         name: 'asPropertyName',
         message: 'Enter the property name for the relation:',
         required: true,
         default: function(answers) {
-          var m = answers.toModel;
+          var m = answers.customToModel || answers.toModel;
           // Model -> model
           m = inflection.camelize(m, true);
           if (answers.type !== 'belongsTo') {
@@ -106,7 +120,7 @@ module.exports = yeoman.generators.Base.extend({
     ];
     this.prompt(prompts, function(answers) {
       this.type = answers.type;
-      this.toModel = answers.toModel;
+      this.toModel = answers.customToModel || answers.toModel;
       this.asPropertyName = answers.asPropertyName;
       this.foreignKey = answers.foreignKey;
       done();
