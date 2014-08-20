@@ -55,7 +55,7 @@ module.exports = function(app, cb) {
 
 if (require.main === module) {
   // Run the import
-  module.exports(require('../'), function(err) {
+  module.exports(require('../server'), function(err) {
     if (err) {
       console.error('Cannot import sample data - ', err);
     } else {
