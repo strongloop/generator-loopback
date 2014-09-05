@@ -118,7 +118,7 @@ module.exports = yeoman.generators.Base.extend({
         self.modelDefs.push({
           name: model.name,
           plural: model.plural,
-          base: 'PersistedModel',
+          base: model.base || 'PersistedModel',
           facetName: 'server', // hard-coded for now
           properties: model.properties
         });

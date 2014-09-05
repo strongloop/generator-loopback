@@ -554,7 +554,7 @@
   "Order": {
     "properties": {
       "complete": {
-        "$ref": "boolean"
+        "type": "boolean"
       },
       "shipDate": {
         "type": "string",
@@ -577,8 +577,5 @@
         "position": 0
       }
     }
-  },
-  "boolean": {
-    "properties": {}
   }
 }}
