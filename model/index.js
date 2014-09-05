@@ -29,23 +29,7 @@ module.exports = yeoman.generators.Base.extend({
 
   loadProject: actions.loadProject,
 
-  loadDataSources: function() {
-    var done = this.async();
-
-    wsModels.DataSourceDefinition.find(function(err, results) {
-      if (err) {
-        return done(err);
-      }
-      this.dataSources = results.map(function(ds) {
-        return {
-          name: ds.name + ' (' + ds.connector +')',
-          value: ds.name,
-          _connector: ds.connector
-        };
-      });
-      done();
-    }.bind(this));
-  },
+  loadDataSources: actions.loadDataSources,
 
   askForName: function() {
     var done = this.async();
