@@ -54,12 +54,9 @@ module.exports = function(app, cb) {
 };
 
 if (require.main === module) {
-  // Run the import
-  module.exports(require('../server'), function(err) {
-    if (err) {
-      console.error('Cannot import sample data - ', err);
-    } else {
-      console.log('Sample data was imported.');
-    }
+  // Run the import (server runs it automatically during boot)
+  var app = require('../server');
+  app.on('import done', function(err) {
+    process.exit(err ? 1 : 0);
   });
 }
