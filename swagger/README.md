@@ -192,10 +192,20 @@ Now you can restart the server and try again:
 You can also use the `pet` model directly. It will provide you the full CRUD
 operations.
 
+## Swagger versions
+
+The LoopBack swagger generator supports both [2.0](https://github.com/reverb/swagger-spec/blob/master/versions/2.0.md) 
+and [1.2](https://github.com/reverb/swagger-spec/blob/master/versions/1.2.md) versions. 
+Feel free to try it out with the pet store v1.2 spec at http://petstore.swagger.wordnik.com/api/api-docs. 
+Please note in 1.2, the spec URL can be the resource listing or a specific api 
+specification. For resource listing, all api specifications will be automatically
+fetched and processed. 
+
+
 ## Summary
 
 With the swagger generator, we now have the complete round trip: 
 - Start with a swagger spec
 - Generate corresponding models and methods for your application
 - Implement the remote methods
-- Explore the live APIs served by LoopBack using the explorer
+- Play with the live APIs served by LoopBack using the explorer
