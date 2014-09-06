@@ -54,6 +54,30 @@ describe('loopback:relation generator', function() {
     });
   });
 
+  it('asks for custom model name', function(done) {
+    var relationGenerator = givenRelationGenerator();
+    helpers.mockPrompt(relationGenerator, {
+      model: 'Car',
+      toModel: null,
+      customToModel: 'Part',
+      asPropertyName: 'parts',
+      foreignKey: 'customKey',
+      type: 'hasMany'
+    });
+
+    relationGenerator.run({}, function() {
+      var definition = readJsonSync('common/models/car.json');
+      var relations = definition.relations || {};
+      expect(relations).to.have.property('parts');
+      expect(relations.parts).to.eql({
+        type: 'hasMany',
+        foreignKey: 'customKey',
+        model: 'Part'
+      });
+      done();
+    });
+  });
+
   // requires generator-yeoman v0.17
   it.skip('provides default property name based on target model for belongsTo',
     function(done) {
