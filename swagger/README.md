@@ -76,8 +76,23 @@ to select from the list of models to be created.
 
 ### Check the project
 
+The models and corresponding JS files are generated into the server/models folder:
 ![demo project](images/demo-project.png)
 
+- server/model-config.json: Config for all models
+
+- server/models:
+
+  - swagger-api.json: model to host all swagger APIs
+  - swagger-api.js: JS file containing all api methods
+  - error-model.json: errorModel model definition
+  - error-model.js: errorModel extension
+  - pet.json: pet definition
+  - pet.js: pet model extension
+  - new-pet.json: newPet model definition
+  - new-pet.js: newPet model extension
+
+Please note pet/newPet/errorModel models are now connected to the database selected.
 
 ### Run the application
 
