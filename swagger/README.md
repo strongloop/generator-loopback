@@ -81,6 +81,7 @@ to select from the list of models to be created.
 
 ### Run the application
 
+To run the application:
 ```sh
 node .
 ```
@@ -114,7 +115,8 @@ module.exports = function(SwaggerApi) {
 
 /**
  * Returns all pets from the system that the user has access to
- * @param {array} tags tags to filter by * @param {integer} limit maximum number of results to return
+ * @param {array} tags tags to filter by 
+ * @param {integer} limit maximum number of results to return
  * @callback {Function} callback Callback function
  * @param {Error|String} err Error object
  * @param {errorModel} result Result object
@@ -133,7 +135,7 @@ SwaggerApi.remoteMethod('findPets',
   produces: [ 'application/json', 'application/xml', 'text/xml', 'text/html' ],
   accepts: 
    [ { arg: 'tags',
-       type: 'array',
+       type: [ 'string' ],
        description: 'tags to filter by',
        required: false,
        http: { source: 'query' } },
@@ -152,16 +154,48 @@ SwaggerApi.remoteMethod('findPets',
 );
 ```
 
-Let's use the Pet model to implement the findPets:
+Let's use the Pet model to implement the corresponding methods:
 
-```
-SwaggerApi.findPets = function (tags, limit, callback) {
-  SwaggerApi.app.models.pet.find({limit: limit}, callback);
+```js
+SwaggerApi.findPets = function(tags, limit, callback) {
+  var filter = {limit: limit};
+  if (tags && tags.length) {
+    filter.where = {tag: {inq: tags}};
+  }
+  SwaggerApi.app.models.pet.find(filter, callback);
+}
+
+SwaggerApi.addPet = function (pet, callback) {
+  SwaggerApi.app.models.pet.create(pet, callback);
+  
+}
+
+SwaggerApi.findPetById = function (id, callback) {
+  SwaggerApi.app.models.pet.findById(id, callback);
+  
+}
+
+SwaggerApi.deletePet = function (id, callback) {
+  SwaggerApi.app.models.pet.deleteById(id, callback);
+  
 }
 ```
 
 Now you can restart the server and try again:
 
 1. Try `getPets`. You'll see an empty array coming back.
-2. Try `pets` to post one or more records to create new pets.
-3. Try `getPets` again.
+2. Try `addPet` to post one or more records to create new pets.
+3. Try `getPets` again. You'll see the newly created pets.
+4. Try `findPetById`. You should be look up pets by id now.
+5. Try `deletePet`. Pets can be deleted by id.
+
+You can also use the `pet` model directly. It will provide you the full CRUD
+operations.
+
+## Summary
+
+With the swagger generator, we now have the complete round trip: 
+- Start with a swagger spec
+- Generate corresponding models and methods for your application
+- Implement the remote methods
+- Explore the live APIs served by LoopBack using the explorer
