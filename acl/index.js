@@ -110,7 +110,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'accessType',
         message: 'Select the access type:',
         type: 'list',
-        default: 'all',
+        default: '*',
         choices: this.accessTypeValues,
       },
       {
