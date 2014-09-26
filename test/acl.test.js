@@ -64,6 +64,31 @@ describe('loopback:acl generator', function() {
     });
   });
 
+  it('adds an entry to models.json for custom role', function(done) {
+    var aclGen = givenAclGenerator();
+    helpers.mockPrompt(aclGen, {
+      model: 'Car',
+      scope: 'all',
+      accessType: '*',
+      role: 'other',
+      customRole: 'myRole',
+      permission: 'DENY'
+    });
+
+    aclGen.run({}, function() {
+      var def = readJsonSync('common/models/car.json');
+      var carAcls = def.acls;
+
+      expect(carAcls).to.eql([{
+        accessType: '*',
+        permission: 'DENY',
+        principalType: 'ROLE',
+        principalId: 'myRole'
+      }]);
+      done();
+    });
+  });
+
   it('adds an entry to all models.json', function(done) {
     var aclGen = givenAclGenerator();
     helpers.mockPrompt(aclGen, {

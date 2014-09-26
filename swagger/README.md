@@ -76,11 +76,27 @@ to select from the list of models to be created.
 
 ### Check the project
 
+The models and corresponding JS files are generated into the server/models folder:
 ![demo project](images/demo-project.png)
 
+- server/model-config.json: Config for all models
+
+- server/models:
+
+  - swagger-api.json: model to host all swagger APIs
+  - swagger-api.js: JS file containing all api methods
+  - error-model.json: errorModel model definition
+  - error-model.js: errorModel extension
+  - pet.json: pet definition
+  - pet.js: pet model extension
+  - new-pet.json: newPet model definition
+  - new-pet.js: newPet model extension
+
+Please note pet/newPet/errorModel models are now connected to the database selected.
 
 ### Run the application
 
+To run the application:
 ```sh
 node .
 ```
@@ -114,7 +130,8 @@ module.exports = function(SwaggerApi) {
 
 /**
  * Returns all pets from the system that the user has access to
- * @param {array} tags tags to filter by * @param {integer} limit maximum number of results to return
+ * @param {array} tags tags to filter by 
+ * @param {integer} limit maximum number of results to return
  * @callback {Function} callback Callback function
  * @param {Error|String} err Error object
  * @param {errorModel} result Result object
@@ -133,7 +150,7 @@ SwaggerApi.remoteMethod('findPets',
   produces: [ 'application/json', 'application/xml', 'text/xml', 'text/html' ],
   accepts: 
    [ { arg: 'tags',
-       type: 'array',
+       type: [ 'string' ],
        description: 'tags to filter by',
        required: false,
        http: { source: 'query' } },
@@ -152,16 +169,58 @@ SwaggerApi.remoteMethod('findPets',
 );
 ```
 
-Let's use the Pet model to implement the findPets:
+Let's use the Pet model to implement the corresponding methods:
 
-```
-SwaggerApi.findPets = function (tags, limit, callback) {
-  SwaggerApi.app.models.pet.find({limit: limit}, callback);
+```js
+SwaggerApi.findPets = function(tags, limit, callback) {
+  var filter = {limit: limit};
+  if (tags && tags.length) {
+    filter.where = {tag: {inq: tags}};
+  }
+  SwaggerApi.app.models.pet.find(filter, callback);
+}
+
+SwaggerApi.addPet = function (pet, callback) {
+  SwaggerApi.app.models.pet.create(pet, callback);
+  
+}
+
+SwaggerApi.findPetById = function (id, callback) {
+  SwaggerApi.app.models.pet.findById(id, callback);
+  
+}
+
+SwaggerApi.deletePet = function (id, callback) {
+  SwaggerApi.app.models.pet.deleteById(id, callback);
+  
 }
 ```
 
 Now you can restart the server and try again:
 
 1. Try `getPets`. You'll see an empty array coming back.
-2. Try `pets` to post one or more records to create new pets.
-3. Try `getPets` again.
+2. Try `addPet` to post one or more records to create new pets.
+3. Try `getPets` again. You'll see the newly created pets.
+4. Try `findPetById`. You should be look up pets by id now.
+5. Try `deletePet`. Pets can be deleted by id.
+
+You can also use the `pet` model directly. It will provide you the full CRUD
+operations.
+
+## Swagger versions
+
+The LoopBack swagger generator supports both [2.0](https://github.com/reverb/swagger-spec/blob/master/versions/2.0.md) 
+and [1.2](https://github.com/reverb/swagger-spec/blob/master/versions/1.2.md) versions. 
+Feel free to try it out with the pet store v1.2 spec at http://petstore.swagger.wordnik.com/api/api-docs. 
+Please note in 1.2, the spec URL can be the resource listing or a specific api 
+specification. For resource listing, all api specifications will be automatically
+fetched and processed. 
+
+
+## Summary
+
+With the swagger generator, we now have the complete round trip: 
+- Start with a swagger spec
+- Generate corresponding models and methods for your application
+- Implement the remote methods
+- Play with the live APIs served by LoopBack using the explorer

@@ -155,10 +155,13 @@ module.exports = yeoman.generators.Base.extend({
     this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
     this.log();
     this.log('  Optional: Enable StrongOps monitoring');
-    this.log(chalk.green('    $ ' + cmd + ' strongops'));
+    this.log(chalk.green('    $ slc strongops'));
     this.log();
     this.log('  Run the app');
-    this.log(chalk.green('    $ ' + cmd + ' run .'));
+    if (cmd === 'yo')
+      this.log(chalk.green('    $ node .'));
+    else
+      this.log(chalk.green('    $ ' + cmd + ' run .'));
     this.log();
   }
 });
