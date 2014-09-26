@@ -153,7 +153,7 @@ module.exports = yeoman.generators.Base.extend({
       }
 
       var firstError = true;
-      async.each(models, function(model, cb) {
+      async.eachSeries(models, function(model, cb) {
         model.accessControls.create(aclDef, function(err) {
           if (err && firstError) {
             helpers.reportValidationError(err);
