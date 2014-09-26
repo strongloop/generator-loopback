@@ -118,7 +118,15 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Select the role',
         type: 'list',
         default: '$everyone',
-        choices: this.roleValues,
+        choices: this.roleValues.concat(['other']),
+      },
+      {
+        name: 'customRole',
+        message:
+          'Enter the role name:',
+        when: function(answers) {
+          return answers.role === 'other';
+        }
       },
       {
         name: 'permission',
@@ -132,7 +140,7 @@ module.exports = yeoman.generators.Base.extend({
         property: answers.property,
         accessType: answers.accessType,
         principalType: 'ROLE', // TODO(bajtos) support all principal types
-        principalId: answers.role,
+        principalId: answers.customRole || answers.role,
         permission: answers.permission
       };
       done();
