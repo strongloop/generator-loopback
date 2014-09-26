@@ -82,7 +82,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'connector',
         message: 'Select the connector for ' + displayName + ':',
         type: 'list',
-        default: 'db',
+        default: 'memory',
         choices: connectorChoices
       },
       {
