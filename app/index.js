@@ -5,6 +5,8 @@ var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
+var path = require('path');
+
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateAppName = helpers.validateAppName;
@@ -89,6 +91,11 @@ module.exports = yeoman.generators.Base.extend({
   askForParameters: function() {
     var done = this.async();
 
+    // https://github.com/strongloop/generator-loopback/issues/38
+    // yeoman-generator normalize the appname with ' '
+    this.appname =
+      path.basename(process.cwd()).replace(/[\/@\s\+%:\.]+?/g, '-');
+
     var name = this.name || this.dir || this.appname;
 
     var prompts = [
@@ -112,7 +119,7 @@ module.exports = yeoman.generators.Base.extend({
     ];
 
     this.prompt(prompts, function(props) {
-      this.appname = props.appname;
+      this.appname = props.appname || this.appname;
       // TODO(bajtos) see the TODO comment above
       //this.template = props.template;
       this.template = 'api-server';
