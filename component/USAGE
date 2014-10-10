@@ -1,0 +1,12 @@
+Description:
+  Creates a LoopBack component.
+
+Example:
+
+  slc loopback:component
+
+  This will create:
+
+    package.json: Development packages installed by npm.
+
+
