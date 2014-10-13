@@ -55,13 +55,18 @@ module.exports = yeoman.generators.Base.extend({
 
     this.displayName = chalk.yellow(this.name);
 
+    var defaultDataSource = 'db';
+    if(this.dataSources.length === 1) {
+      defaultDataSource = 'null';
+    }
+
     var prompts = [
       {
         name: 'dataSource',
         message: 'Select the data-source to attach ' +
           this.displayName + ' to:',
         type: 'list',
-        default: 'db',
+        default: defaultDataSource,
         choices: this.dataSources
       },
       {
@@ -80,6 +85,9 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function(props) {
       this.dataSource = props.dataSource;
+      if (this.dataSource === 'null') {
+        this.dataSource = null;
+      }
       this.public = props.public;
       this.plural = props.plural || undefined;
 

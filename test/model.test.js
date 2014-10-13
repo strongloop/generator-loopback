@@ -67,6 +67,22 @@ describe('loopback:model generator', function() {
     });
   });
 
+  it('supports null data source', function(done) {
+    var modelGen = givenModelGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'Product',
+      plural: 'pds',
+      dataSource: 'null'
+    });
+
+    modelGen.run({}, function() {
+      var content = readProductJsonSync();
+      expect(content).to.have.property('name', 'Product');
+      expect(content).to.not.have.property('dataSource');
+      done();
+    });
+  });
+
   it('sets `base: PersistedModel` when attached to memory', function(done) {
     var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
