@@ -1,14 +1,15 @@
-/*global describe, beforeEach, afterEach, it */
+/*global describe, beforeEach, it */
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-generator').test;
-var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('must');
 var common = require('./common');
 
 describe('loopback:install generator', function() {
+  beforeEach(common.resetWorkspace);
+  
   beforeEach(function createSandbox(done) {
     helpers.testDirectory(SANDBOX, done);
   });
@@ -16,8 +17,6 @@ describe('loopback:install generator', function() {
   beforeEach(function createProject(done) {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
-
-  afterEach(common.resetWorkspace);
 
   it('adds a dep to package.json', function(done) {
     var instGen = givenInstallGenerator();
