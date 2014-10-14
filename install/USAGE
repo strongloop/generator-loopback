@@ -1,0 +1,6 @@
+Description:
+  Install a new dependency to the LoopBack application/component.
+
+Example:
+
+  slc loopback:install
