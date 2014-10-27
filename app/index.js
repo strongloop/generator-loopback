@@ -104,7 +104,7 @@ module.exports = yeoman.generators.Base.extend({
         message: 'What\'s the name of your application?',
         default: name,
         validate: validateAppName
-      }
+      },
       /*
        TODO(bajtos) not all templates are projects, some of them are components
        The only functional project template is 'api-server' at the moment
@@ -116,6 +116,12 @@ module.exports = yeoman.generators.Base.extend({
         choices: this.templates
       }
        */
+      {
+        name: 'subclassingBuiltinModels',
+        type: 'confirm',
+        message: 'Generating sub-models for built-in models?',
+        default: true
+      }
     ];
 
     this.prompt(prompts, function(props) {
@@ -123,6 +129,7 @@ module.exports = yeoman.generators.Base.extend({
       // TODO(bajtos) see the TODO comment above
       //this.template = props.template;
       this.template = 'api-server';
+      this.subclassingBuiltinModels = props.subclassingBuiltinModels;
 
       done();
     }.bind(this));
@@ -134,6 +141,7 @@ module.exports = yeoman.generators.Base.extend({
     Workspace.createFromTemplate(
       this.template,
       this.appname,
+      this.subclassingBuiltinModels,
       done
     );
   },
