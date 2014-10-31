@@ -48,16 +48,22 @@ module.exports = yeoman.generators.Base.extend({
     return !!this.options.l;
   },
 
-  askForDestinationDir: actions.askForDestinationDir,
+  setupProjectName: function() {
+    this.appname = 'loopback-example-app';
+  },
 
-  initWorkspace: actions.initWorkspace,
+  configureDestinationDir: actions.configureDestinationDir,
+
+  updateProjectDir: function() {
+    this.projectDir = this.destinationRoot();
+  },
 
   app: function() {
     this._logPart('Create initial project scaffolding');
     this._runGeneratorWithAnswers(
       'loopback:app',
-      ['loopback-example-app'],
-      { /* no answers */});
+      [this.appname],
+      {});
   },
 
   datasourceGeo: function() {

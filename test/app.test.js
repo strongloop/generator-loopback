@@ -47,9 +47,9 @@ describe('loopback:app generator', function() {
     var gen = givenAppGenerator();
 
     helpers.mockPrompt(gen, {
-      name: 'test-app',
+      appname: 'test-app',
       template: 'api-server',
-      dir: 'test-app',
+      dir: 'test-dir',
     });
 
     gen.run({}, function() {
@@ -57,7 +57,7 @@ describe('loopback:app generator', function() {
       process.chdir(SANDBOX);
 
       var expectedFiles = EXPECTED_PROJECT_FILES.map(function(f) {
-        return 'test-app/' + f;
+        return 'test-dir/' + f;
       });
       helpers.assertFile(expectedFiles);
       done();
