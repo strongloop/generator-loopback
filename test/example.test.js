@@ -19,10 +19,11 @@ describe('loopback:example generator', function() {
 
     before(function runGenerator(done) {
       var gen = common.createExampleGenerator();
-      helpers.mockPrompt(gen, {});
+      helpers.mockPrompt(gen, {
+        dir: '.'
+      });
 
-      gen.run({}, function() {});
-      gen.once('end', done);
+      gen.run({}, done);
     });
 
     it('has name "loopback-example-app"', function() {

@@ -6,14 +6,11 @@ var format = require('util').format;
 var fs = require('fs');
 var path = require('path');
 var yeoman = require('yeoman-generator');
-var yolog = require('yeoman-generator/lib/util/log')();
 var util = require('util');
 var wsModels = require('loopback-workspace').models;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
-
-var debugLogger = createDebugLogger();
 
 module.exports = yeoman.generators.Base.extend({
   constructor: function() {
@@ -30,7 +27,7 @@ module.exports = yeoman.generators.Base.extend({
     });
 
     // force all sub-generators to use our debug logger
-    this.env.adapter.log = debugLogger;
+    this.env.adapter.log = createDebugLogger(this.env.adapter.log);
     this.on('end', function() {
       // restore the logger
       this.env.adapter.log = this.log;
@@ -578,20 +575,13 @@ module.exports = yeoman.generators.Base.extend({
     this._logStep('$ %s %s', helpers.getCommandName(),
       [namespace].concat(args).join(' '));
 
-    /* This is needed for yeoman-generator v0.17,
-     * probably due to a bug in v0.17.1
-     * see https://github.com/yeoman/generator/pull/602
-     *
-    // Create a new environment for the generator
-    // This prevents the generator from sharing the same event loop with us
-    var env = yeoman(this.env.arguments, this.env.options, this.env.adapter);
-
-    // Share the generator registry
-    env.store = this.env.store;
-     */
+    // Hack: create a clone of the environment because we don't want to share
+    // the runLoop. Based on yeoman-generator/lib/actions/invoke
+    var YeomanEnv = require('yeoman-generator/node_modules/yeoman-environment');
+    var env = YeomanEnv.util.duplicateEnv(this.env);
 
     // based on yeoman-generator/lib/actions/invoke
-    var generator = this.env.create(namespace, {
+    var generator = env.create(namespace, {
       options: {
         nested: true,
         projectDir: this.projectDir,
@@ -638,7 +628,7 @@ function findModelByName(modelName, cb) {
   wsModels.ModelDefinition.findOne({ where: { name: modelName } }, cb);
 }
 
-function createDebugLogger() {
+function createDebugLogger(yolog) {
   function debugLog() {
     debug.apply(null, arguments);
     return debugLog;
