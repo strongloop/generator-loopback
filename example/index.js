@@ -600,7 +600,7 @@ module.exports = yeoman.generators.Base.extend({
         force: true,
         'skip-install': true
       },
-      args: args || []
+      arguments: args || []
     });
 
     generator.prompt = function(prompts, done) {
