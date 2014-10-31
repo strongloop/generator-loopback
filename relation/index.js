@@ -116,13 +116,43 @@ module.exports = yeoman.generators.Base.extend({
         validate: function(value) {
           return value === undefined || value === '' || validateName(value);
         }
-      }
+      },
+      {
+        name: 'through',
+        message: 'Require a through model?',
+        type: 'confirm',
+        default: false,
+        when: function(answers) {
+          return answers.type === 'hasMany';
+        }
+      },
+      {
+        name: 'throughModel',
+        message: 'Choose a through model:',
+        type: 'list',
+        choices: modelChoices,
+        when: function(answers) {
+          return answers.through;
+        }
+      },
+      {
+        name: 'customThroughModel',
+        message: 'Enter the model name:',
+        required: true,
+        validate: validateName,
+        when: function(answers) {
+          return answers.through && answers.throughModel === null;
+        }
+      },
     ];
     this.prompt(prompts, function(answers) {
       this.type = answers.type;
       this.toModel = answers.customToModel || answers.toModel;
       this.asPropertyName = answers.asPropertyName;
       this.foreignKey = answers.foreignKey;
+      if (answers.through) {
+        this.throughModel = answers.customThroughModel || answers.throughModel;
+      }
       done();
     }.bind(this));
   },
@@ -135,6 +165,9 @@ module.exports = yeoman.generators.Base.extend({
       foreignKey: this.foreignKey,
       name: this.asPropertyName
     };
+    if (this.throughModel) {
+      def.through = this.throughModel;
+    }
     this.modelDefinition.relations.create(def, function(err) {
       helpers.reportValidationError(err, this.log);
       return done(err);
