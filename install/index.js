@@ -83,7 +83,9 @@ module.exports = yeoman.generators.Base.extend({
         if (err) {
           return done(err);
         }
-        var pkgName = self.name.split('@')[0];
+        var names = self.name.split('@')[0].split('/');
+        names = names.filter(Boolean);
+        var pkgName = names[names.length - 1];
         var pkg = self.dest.readJSON(
           path.join('node_modules', pkgName, 'package.json'));
         if (pkg && pkg['loopback-component']) {
