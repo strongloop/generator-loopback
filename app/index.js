@@ -55,21 +55,6 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
-  askForDestinationDir: actions.askForDestinationDir,
-
-  initWorkspace: actions.initWorkspace,
-
-  detectExistingProject: function() {
-    var cb = this.async();
-    Workspace.isValidDir(function(err) {
-      if (err) {
-        cb();
-      } else {
-        cb(new Error('The generator must be run in an empty directory.'));
-      }
-    });
-  },
-
   loadTemplates: function() {
     var done = this.async();
 
@@ -88,7 +73,12 @@ module.exports = yeoman.generators.Base.extend({
     }.bind(this));
   },
 
-  askForParameters: function() {
+  askForProjectName: function() {
+    if (this.options.nested && this.name) {
+      this.appname = this.name;
+      return;
+    }
+
     var done = this.async();
 
     // https://github.com/strongloop/generator-loopback/issues/38
@@ -105,9 +95,21 @@ module.exports = yeoman.generators.Base.extend({
         default: name,
         validate: validateAppName
       }
-      /*
-       TODO(bajtos) not all templates are projects, some of them are components
-       The only functional project template is 'api-server' at the moment
+    ];
+
+    this.prompt(prompts, function(props) {
+      this.appname = props.appname || this.appname;
+      done();
+    }.bind(this));
+  },
+
+  configureDestinationDir: actions.configureDestinationDir,
+
+  askForTemplate: function() {
+    /*
+     TODO(bajtos) not all templates are projects, some of them are components
+     The only functional project template is 'api-server' at the moment
+    var prompts = [
       {
         name: 'template',
         message: 'What kind of application do you have in mind?',
@@ -115,17 +117,22 @@ module.exports = yeoman.generators.Base.extend({
         default: 'api-server',
         choices: this.templates
       }
-       */
-    ];
+     */
 
-    this.prompt(prompts, function(props) {
-      this.appname = props.appname || this.appname;
-      // TODO(bajtos) see the TODO comment above
-      //this.template = props.template;
-      this.template = 'api-server';
+    this.template = 'api-server';
+  },
 
-      done();
-    }.bind(this));
+  initWorkspace: actions.initWorkspace,
+
+  detectExistingProject: function() {
+    var cb = this.async();
+    Workspace.isValidDir(function(err) {
+      if (err) {
+        cb();
+      } else {
+        cb(new Error('The generator must be run in an empty directory.'));
+      }
+    });
   },
 
   project: function() {
