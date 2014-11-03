@@ -64,6 +64,31 @@ describe('loopback:acl generator', function() {
     });
   });
 
+  it('skips accessType is the scope is method', function(done) {
+    var aclGen = givenAclGenerator();
+    helpers.mockPrompt(aclGen, {
+      model: 'Car',
+      scope: 'method',
+      property: 'find',
+      role: '$everyone',
+      permission: 'AUDIT'
+    });
+
+    aclGen.run({}, function() {
+      var def = readJsonSync('common/models/car.json');
+      var carAcls = def.acls;
+
+      expect(carAcls).to.eql([{
+        accessType: 'EXECUTE',
+        property: 'find',
+        permission: 'AUDIT',
+        principalType: 'ROLE',
+        principalId: '$everyone'
+      }]);
+      done();
+    });
+  });
+
   it('adds an entry to models.json for custom role', function(done) {
     var aclGen = givenAclGenerator();
     helpers.mockPrompt(aclGen, {

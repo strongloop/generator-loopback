@@ -111,6 +111,9 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Select the access type:',
         type: 'list',
         default: '*',
+        when: function(answers) {
+          return answers.scope === 'all';
+        },
         choices: this.accessTypeValues,
       },
       {
@@ -136,9 +139,13 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
     this.prompt(prompts, function(answers) {
+      var accessType = answers.accessType;
+      if (answers.scope === 'method') {
+        accessType = 'EXECUTE';
+      }
       this.aclDef = {
         property: answers.property,
-        accessType: answers.accessType,
+        accessType: accessType,
         principalType: 'ROLE', // TODO(bajtos) support all principal types
         principalId: answers.customRole || answers.role,
         permission: answers.permission
