@@ -31,6 +31,8 @@ module.exports = yeoman.generators.Base.extend({
 
   loadDataSources: actions.loadDataSources,
 
+  addNullDataSourceItem: actions.addNullDataSourceItem,
+
   askForName: function() {
     var done = this.async();
 

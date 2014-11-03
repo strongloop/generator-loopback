@@ -10,7 +10,7 @@ a [loopback](http://loopback.io/) application.
  * Run `node .` to start the scaffolded server
 
 See the official
-[documentation](http://docs.strongloop.com/display/DOC/Creating+a+LoopBack+application)
+[documentation](http://docs.strongloop.com/display/LB)
 for more information.
 
 ## Mailing List
