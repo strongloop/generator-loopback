@@ -67,11 +67,12 @@ describe('loopback:model generator', function() {
     });
   });
 
-  it('sets `base: PersistedModel` when attached to memory', function(done) {
+  it('sets `base` option from the list', function(done) {
     var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
       name: 'Product',
       dataSource: 'db',
+      base: 'PersistedModel'
     });
 
     modelGen.run({}, function() {
@@ -81,16 +82,18 @@ describe('loopback:model generator', function() {
     });
   });
 
-  it('sets `base: Model` when attached to REST', function(done) {
+  it('sets custom `base` option', function(done) {
     var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
       name: 'Product',
       dataSource: 'rest',
+      base: null,
+      customBase: 'CustomModel'
     });
 
     modelGen.run({}, function() {
       var product = readProductJsonSync();
-      expect(product).to.have.property('base', 'Model');
+      expect(product).to.have.property('base', 'CustomModel');
       done();
     });
   });
