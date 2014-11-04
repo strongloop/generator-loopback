@@ -31,6 +31,8 @@ module.exports = yeoman.generators.Base.extend({
 
   loadDataSources: actions.loadDataSources,
 
+  loadModels: actions.loadModels,
+
   addNullDataSourceItem: actions.addNullDataSourceItem,
 
   askForName: function() {
@@ -57,6 +59,13 @@ module.exports = yeoman.generators.Base.extend({
 
     this.displayName = chalk.yellow(this.name);
 
+    var baseModelChoices = ['Model', 'PersistedModel']
+      .concat(this.modelNames)
+      .concat([{
+        name: '(custom)',
+        value: null
+      }]);
+
     var prompts = [
       {
         name: 'dataSource',
@@ -65,6 +74,25 @@ module.exports = yeoman.generators.Base.extend({
         type: 'list',
         default: 'db',
         choices: this.dataSources
+      },
+      {
+        name: 'base',
+        message: 'Select model\'s base class',
+        type: 'list',
+        default: function(answers) {
+          return helpers.getBaseModelForDataSourceName(
+            answers.dataSource, this.dataSources);
+        }.bind(this),
+        choices: baseModelChoices
+      },
+      {
+        name: 'customBase',
+        message: 'Enter the base model name:',
+        required: true,
+        validate: validateName,
+        when: function(answers) {
+          return answers.base === null;
+        }
       },
       {
         name: 'public',
@@ -84,32 +112,10 @@ module.exports = yeoman.generators.Base.extend({
       this.dataSource = props.dataSource;
       this.public = props.public;
       this.plural = props.plural || undefined;
+      this.base = props.customBase || props.base;
 
       done();
     }.bind(this));
-  },
-
-  loadDataSourceConnectorMeta: function() {
-    var done = this.async();
-    var self = this;
-
-    var dataSource = findFirstOrEmptyObject(self.dataSources, function(item) {
-      return item.value === self.dataSource;
-    });
-
-    wsModels.Workspace.listAvailableConnectors(function(err, list) {
-      if (err) return done(err);
-
-      self.connectorMeta = findFirstOrEmptyObject(list, function(item) {
-        return item.name === dataSource._connector;
-      });
-
-      done();
-    });
-
-    function findFirstOrEmptyObject(list, filterFn) {
-      return list.filter(filterFn)[0] || {};
-    }
   },
 
   modelDefinition: function() {
@@ -117,7 +123,7 @@ module.exports = yeoman.generators.Base.extend({
     var config = {
       name: this.name,
       plural: this.plural,
-      base: this.connectorMeta.baseModel,
+      base: this.base,
       facetName: 'common' // hard-coded for now
     };
 
