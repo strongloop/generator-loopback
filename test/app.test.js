@@ -60,6 +60,7 @@ describe('loopback:app generator', function() {
         return 'test-dir/' + f;
       });
       helpers.assertFile(expectedFiles);
+      assert.equal(gen.dir, 'test-dir');
       done();
     });
   });
