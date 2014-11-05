@@ -475,7 +475,8 @@ module.exports = yeoman.generators.Base.extend({
         'loopback:model',
         [modelName],
         {
-          dataSource: 'db'
+          dataSource: 'db',
+          base: 'PersistedModel'
         },
         nextStep);
     });
