@@ -28,9 +28,10 @@ function buildUrl(base, path) {
 function loadSpec(specUrlStr, log, cb) {
   log(chalk.blue('Loading ' + specUrlStr + '...'));
   var specUrl = url.parse(specUrlStr);
+  specUrl.pathname = encodeURI(specUrl.pathname);
   if (specUrl.protocol === 'http:' || specUrl.protocol === 'https:') {
     var options = {
-      url: specUrl.href,
+      url: url.format(specUrl),
       headers: {
         'Accept': 'application/json'
       }
