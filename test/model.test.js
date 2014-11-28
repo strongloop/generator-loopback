@@ -4,7 +4,7 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
-var expect = require('must');
+var expect = require('chai').expect;
 var wsModels = require('loopback-workspace').models;
 var common = require('./common');
 

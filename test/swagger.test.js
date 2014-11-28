@@ -5,7 +5,7 @@ var helpers = require('yeoman-generator').test;
 var SANDBOX = path.resolve(__dirname, 'sandbox');
 var path = require('path');
 var fs = require('fs');
-var expect = require('must');
+var expect = require('chai').expect;
 var common = require('./common');
 
 describe('loopback:swagger generator', function () {
