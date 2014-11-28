@@ -5,7 +5,7 @@ var helpers = require('yeoman-generator').test;
 var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
-var expect = require('must');
+var expect = require('chai').expect;
 var common = require('./common');
 
 describe('loopback:acl generator', function() {

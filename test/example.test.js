@@ -6,7 +6,7 @@ var helpers = require('yeoman-generator').test;
 var SANDBOX = path.resolve(__dirname, 'sandbox');
 var common = require('./common');
 var wsModels = require('loopback-workspace').models;
-var expect = require('must');
+var expect = require('chai').expect;
 
 describe('loopback:example generator', function() {
   this.timeout(10000);
@@ -35,7 +35,7 @@ describe('loopback:example generator', function() {
       wsModels.ModelDefinition.find(function(err, list) {
         if (err) return done(err);
         var names = list.map(function(m) { return m.name; });
-        expect(names).to.be.permutationOf([
+        expect(names).to.have.members([
           'Car',
           'Customer',
           'Inventory',
