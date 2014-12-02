@@ -401,28 +401,19 @@ module.exports = yeoman.generators.Base.extend({
     this.conflicter.resolve(this.async());
   },
 
-  removeStatus: function() {
+  replaceStatusWithWebsite: function() {
+    var middlewareJSon = 'server/middleware.json';
+    var middleware = JSON.parse(this.readFileAsString(middlewareJSon));
+
     this._logPart('Remove status handler from "/"');
-    fs.unlinkSync(path.join(this.projectDir, 'server/boot/root.js'));
-  },
+    delete middleware.routes['loopback#status'];
 
-  mountWebsite: function() {
-    this._logPart('Mount `website` at "/"');
+    this._logPart('Mount `client` at "/"');
+    middleware.routes['loopback#static'] = { params: '#!../client' };
 
-    var SNIPPET =
-      'var websitePath = require(\'path\').' +
-      'resolve(__dirname, \'../client\');\n' +
-      'app.use(loopback.static(websitePath));';
-
-    var serverJs = 'server/server.js';
-    var script = this.readFileAsString(serverJs);
-
-    script = script.replace(
-      /(app\.use\(loopback\.static\(.*)$/m,
-        '$1\n' + SNIPPET);
-
-    this.writeFileFromString(script, serverJs);
-
+    this.writeFileFromString(
+      JSON.stringify(middleware, null, 2),
+      middlewareJSon);
   },
 
   installDeps: actions.installDeps,
