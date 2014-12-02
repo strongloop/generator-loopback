@@ -1,3 +1,21 @@
+2014-12-02, Version 1.6.0
+=========================
+
+ * example: use the new middleware registration (Miroslav Bajtoš)
+
+ * Drop `must`, use `chai` instead (Miroslav Bajtoš)
+
+ * Fix path encoding when it contains brackets (Peter Nagy)
+
+
+2014-11-05, Version 1.5.1
+=========================
+
+ * Bump version (Raymond Feng)
+
+ * Capture the dir property (Raymond Feng)
+
+
 2014-11-05, Version 1.5.0
 =========================
 
@@ -99,6 +117,13 @@
 
  * Make generator-loopback friendly to slc (Raymond Feng)
 
+ * Fix loopback:acl for all models (Raymond Feng)
+
+
+2014-07-25, Version 1.1.1
+=========================
+
+
 
 2014-07-25, Version 1.1.2
 =========================
@@ -106,10 +131,6 @@
  * Bump version (Raymond Feng)
 
  * Fix loopback:acl for all models (Raymond Feng)
-
-
-2014-07-25, Version 1.1.1
-=========================
 
  * Downgrade to yeoman-generator 0.16 (Miroslav Bajtoš)
 
