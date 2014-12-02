@@ -1,6 +1,6 @@
 var importer = require('../sample-data/import');
 
-module.exports = function(app) {
+module.exports = function(app, done) {
   if (app.dataSources.db.name !== 'Memory') return;
 
   console.error('Started the import of sample data.');
@@ -14,5 +14,6 @@ module.exports = function(app) {
       console.error('Sample data was imported.');
     }
     app.emit('import done', err);
+    done();
   });
 };
