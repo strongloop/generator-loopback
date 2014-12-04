@@ -132,7 +132,7 @@ describe('loopback:relation generator', function() {
   });
 
   // requires generator-yeoman v0.17
-  it.skip('provides default property name based on target model for belongsTo',
+  it('provides default property name based on target model for belongsTo',
     function(done) {
       var relationGenerator = givenRelationGenerator();
       helpers.mockPrompt(relationGenerator, {
@@ -150,7 +150,7 @@ describe('loopback:relation generator', function() {
   );
 
   // requires generator-yeoman v0.17
-  it.skip('provides default property name based on target model for hasMany',
+  it('provides default property name based on target model for hasMany',
     function(done) {
       var relationGenerator = givenRelationGenerator();
       helpers.mockPrompt(relationGenerator, {

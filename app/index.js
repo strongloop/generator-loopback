@@ -149,9 +149,9 @@ module.exports = yeoman.generators.Base.extend({
     this.directory('.', '.');
   },
 
-  installDeps: actions.installDeps,
+  installing: actions.installDeps,
 
-  whatsNext: function() {
+  end: function() {
     var cmd = helpers.getCommandName();
     if (!this._skipInstall) {
       this.log();

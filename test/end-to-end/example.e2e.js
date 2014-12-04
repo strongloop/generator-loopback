@@ -22,10 +22,10 @@ describe('loopback:example generator (end-to-end)', function() {
 
   before(function runGenerator(done) {
     var gen = common.createExampleGenerator();
-    helpers.mockPrompt(gen, {});
-
-    gen.run({}, function() {});
-    gen.once('end', done);
+    helpers.mockPrompt(gen, {
+      dir: '.'
+    });
+    gen.run({}, done);
   });
 
   before(function installPackage(done) {
