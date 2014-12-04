@@ -97,6 +97,7 @@ describe('loopback:app generator', function() {
     helpers.testDirectory(dir, function() {
       helpers.mockPrompt(gen, {
         template: 'api-server',
+        dir: '.'
       });
 
       gen.run({}, function() {
