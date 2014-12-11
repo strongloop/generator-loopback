@@ -406,7 +406,7 @@ module.exports = yeoman.generators.Base.extend({
     delete middleware.routes['loopback#status'];
 
     this._logPart('Mount `client` at "/"');
-    middleware.routes['loopback#static'] = { params: '#!../client' };
+    middleware.routes['loopback#static'] = { params: '$!../client' };
 
     this.writeFileFromString(
       JSON.stringify(middleware, null, 2),
