@@ -1,3 +1,9 @@
+2014-12-11, Version 1.6.2
+=========================
+
+ * Fix bad path expansion in loopback:example (Ryan Graham)
+
+
 2014-12-04, Version 1.6.1
 =========================
 
@@ -188,17 +194,20 @@
 
  * Update package description (Raymond Feng)
 
+ * Remove the 'files' attr which prevents other files to be installed (Raymond Feng)
+
  * Add relation generator (Ritchie Martori)
+
+
+2014-07-17, Version 1.0.0-beta1
+===============================
+
 
 
 2014-07-17, Version 1.0.0-beta2
 ===============================
 
  * Remove the 'files' attr which prevents other files to be installed (Raymond Feng)
-
-
-2014-07-17, Version 1.0.0-beta1
-===============================
 
  * 1.0.0-beta1 (Miroslav Bajtoš)
 
