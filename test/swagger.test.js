@@ -25,7 +25,7 @@ describe('loopback:swagger generator', function () {
       helpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/pet-store-2.0.json'),
         modelSelections:
-          ['swagger_v2', 'Category', 'Pet', 'Tag', 'Order', 'Customer'],
+          ['swagger_v2_petstore', 'Category', 'Pet', 'Tag', 'Order', 'Customer'],
         dataSource: 'db'
       });
 
