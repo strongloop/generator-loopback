@@ -1,3 +1,11 @@
+2014-12-19, Version 1.7.0
+=========================
+
+ * Allow subpath for basePath (Raymond Feng)
+
+ * Fix swagger v2.0 version str (Raymond Feng)
+
+
 2014-12-11, Version 1.6.2
 =========================
 
