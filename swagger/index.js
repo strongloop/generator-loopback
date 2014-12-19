@@ -89,7 +89,7 @@ module.exports = yeoman.generators.Base.extend({
         basePath = basePath.substring(1);
       }
 
-      var swaggerModel = 'swagger_' + basePath;
+      var swaggerModel = 'swagger_' + basePath.replace(/\//g, '_');
       self.modelNames.push(swaggerModel);
       var modelDef = {
         name: swaggerModel,

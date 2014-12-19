@@ -102,7 +102,7 @@ function parseSpec(base, spec, log, cb) {
         cb(err, specs);
       });
     }
-  } else if (spec.swagger === 2) {
+  } else if (spec.swagger === '2.0') {
     process.nextTick(function () {
       cb(null, [spec]);
     });
