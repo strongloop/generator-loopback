@@ -10,7 +10,7 @@
     "name": "Apache 2.0",
     "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
   }
-}, "basePath": "/v2", "paths": {
+}, "basePath": "/v2/petstore", "paths": {
   "/customer/createWithList": {
     "post": {
       "tags": ["customer"],
