@@ -403,7 +403,14 @@ module.exports = yeoman.generators.Base.extend({
     var middleware = JSON.parse(this.readFileAsString(middlewareJSon));
 
     this._logPart('Remove status handler from "/"');
+    // loopback-workspace 3.6.0-3.6.5
     delete middleware.routes['loopback#status'];
+
+    // loopback-workspace <3.6.0 and 3.6.6+
+    var rootJs = path.join(this.projectDir, 'server/boot/root.js');
+    if (fs.existsSync(rootJs)) {
+      fs.unlinkSync(rootJs);
+    }
 
     this._logPart('Mount `client` at "/"');
     middleware.routes['loopback#static'] = { params: '$!../client' };
