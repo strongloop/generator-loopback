@@ -37,7 +37,7 @@ describe('loopback:app generator', function() {
     });
 
     gen.options['skip-install'] = true;
-    gen.run({}, function () {
+    gen.run(function () {
       helpers.assertFile(EXPECTED_PROJECT_FILES);
       done();
     });
@@ -52,7 +52,7 @@ describe('loopback:app generator', function() {
       dir: 'test-dir',
     });
 
-    gen.run({}, function() {
+    gen.run(function() {
       // generator calls `chdir` on change of the destination root
       process.chdir(SANDBOX);
 
@@ -100,7 +100,7 @@ describe('loopback:app generator', function() {
         dir: '.'
       });
 
-      gen.run({}, function() {
+      gen.run(function() {
         // generator calls `chdir` on change of the destination root
         process.chdir(SANDBOX);
 

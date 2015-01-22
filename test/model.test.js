@@ -35,7 +35,7 @@ describe('loopback:model generator', function() {
       dataSource: 'db'
     });
 
-    modelGen.run({}, function() {
+    modelGen.run(function() {
       var content = readProductJsonSync();
       expect(content).to.have.property('name', 'Product');
       expect(content).to.not.have.property('public');
@@ -54,7 +54,7 @@ describe('loopback:model generator', function() {
     });
 
     var builtinModels = Object.keys(readModelsJsonSync('server'));
-    modelGen.run({}, function() {
+    modelGen.run(function() {
       var modelConfig = readModelsJsonSync('server');
       var newModels = Object.keys(modelConfig);
       var expectedModels = builtinModels.concat(['Product']);
@@ -75,7 +75,7 @@ describe('loopback:model generator', function() {
       base: 'PersistedModel'
     });
 
-    modelGen.run({}, function() {
+    modelGen.run(function() {
       var product = readProductJsonSync();
       expect(product).to.have.property('base', 'PersistedModel');
       done();
@@ -91,7 +91,7 @@ describe('loopback:model generator', function() {
       customBase: 'CustomModel'
     });
 
-    modelGen.run({}, function() {
+    modelGen.run(function() {
       var product = readProductJsonSync();
       expect(product).to.have.property('base', 'CustomModel');
       done();

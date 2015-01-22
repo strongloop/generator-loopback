@@ -41,7 +41,7 @@ describe('loopback:relation generator', function() {
       type: 'hasMany'
     });
 
-    relationGenerator.run({}, function() {
+    relationGenerator.run(function() {
       var definition = readJsonSync('common/models/car.json');
       var relations = definition.relations || {};
       expect(relations).to.have.property('parts');
@@ -65,7 +65,7 @@ describe('loopback:relation generator', function() {
       type: 'hasMany'
     });
 
-    relationGenerator.run({}, function() {
+    relationGenerator.run(function() {
       var definition = readJsonSync('common/models/car.json');
       var relations = definition.relations || {};
       expect(relations).to.have.property('parts');
@@ -90,7 +90,7 @@ describe('loopback:relation generator', function() {
       throughModel: 'CarPart'
     });
 
-    relationGenerator.run({}, function() {
+    relationGenerator.run(function() {
       var definition = readJsonSync('common/models/car.json');
       var relations = definition.relations || {};
       expect(relations).to.have.property('parts');
@@ -117,7 +117,7 @@ describe('loopback:relation generator', function() {
       customThroughModel: 'CarPart'
     });
 
-    relationGenerator.run({}, function() {
+    relationGenerator.run(function() {
       var definition = readJsonSync('common/models/car.json');
       var relations = definition.relations || {};
       expect(relations).to.have.property('parts');
@@ -140,7 +140,7 @@ describe('loopback:relation generator', function() {
         toModel: 'Part',
         type: 'belongsTo'
       });
-      relationGenerator.run({}, function() {
+      relationGenerator.run(function() {
         var definition = readJsonSync('common/models/car.json');
         var relations = definition.relations || {};
         expect(Object.keys(relations)).to.include('part');
@@ -158,7 +158,7 @@ describe('loopback:relation generator', function() {
         toModel: 'Part',
         type: 'hasMany'
       });
-      relationGenerator.run({}, function() {
+      relationGenerator.run(function() {
         var definition = readJsonSync('common/models/car.json');
         var relations = definition.relations || {};
         expect(Object.keys(relations)).to.include('parts');

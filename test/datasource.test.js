@@ -28,7 +28,7 @@ describe('loopback:datasource generator', function() {
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
-    modelGen.run({}, function() {
+    modelGen.run(function() {
       var newSources = Object.keys(readDataSourcesJsonSync('server'));
       var expectedSources = builtinSources.concat(['crm']);
       expect(newSources).to.have.members(expectedSources);

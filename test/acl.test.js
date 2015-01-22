@@ -50,7 +50,7 @@ describe('loopback:acl generator', function() {
       permission: 'AUDIT'
     });
 
-    aclGen.run({}, function() {
+    aclGen.run(function() {
       var def = readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
@@ -74,7 +74,7 @@ describe('loopback:acl generator', function() {
       permission: 'AUDIT'
     });
 
-    aclGen.run({}, function() {
+    aclGen.run(function() {
       var def = readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
@@ -100,7 +100,7 @@ describe('loopback:acl generator', function() {
       permission: 'DENY'
     });
 
-    aclGen.run({}, function() {
+    aclGen.run(function() {
       var def = readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
@@ -123,7 +123,7 @@ describe('loopback:acl generator', function() {
       permission: 'ALLOW'
     });
 
-    aclGen.run({}, function() {
+    aclGen.run(function() {
       var def = readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
