@@ -23,7 +23,7 @@ describe('loopback:example generator', function() {
         dir: '.'
       });
 
-      gen.run({}, done);
+      gen.run(done);
     });
 
     it('has name "loopback-example-app"', function() {

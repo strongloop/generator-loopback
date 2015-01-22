@@ -30,7 +30,7 @@ describe('loopback:swagger generator', function () {
         dataSource: 'db'
       });
 
-      modelGen.run({}, function () {
+      modelGen.run(function () {
         var content = readModelJsonSync('pet');
         expect(content).to.have.property('name', 'Pet');
         expect(content).to.not.have.property('public');
@@ -59,7 +59,7 @@ describe('loopback:swagger generator', function () {
         dataSource: 'db'
       });
 
-      modelGen.run({}, function () {
+      modelGen.run(function () {
         var content = readModelJsonSync('pet');
         expect(content).to.have.property('name', 'Pet');
         expect(content).to.not.have.property('public');

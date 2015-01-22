@@ -25,7 +25,7 @@ describe('loopback:example generator (end-to-end)', function() {
     helpers.mockPrompt(gen, {
       dir: '.'
     });
-    gen.run({}, done);
+    gen.run(done);
   });
 
   before(function installPackage(done) {

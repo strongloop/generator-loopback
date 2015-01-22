@@ -44,7 +44,7 @@ describe('loopback:property generator', function() {
       required: 'true'
     });
 
-    propertyGenerator.run({}, function() {
+    propertyGenerator.run(function() {
       var definition = readJsonSync('common/models/car.json');
       var props = definition.properties || {};
       expect(props).to.have.property('isPreferred');
@@ -69,7 +69,7 @@ describe('loopback:property generator', function() {
       itemType: 'string'
     });
 
-    propertyGenerator.run({}, function() {
+    propertyGenerator.run(function() {
       var definition = readJsonSync('common/models/car.json');
       var prop = definition.properties.list;
       expect(prop.type).to.eql(['string']);
