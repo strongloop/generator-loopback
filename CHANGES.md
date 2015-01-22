@@ -1,4 +1,14 @@
-2014-12-19, Version 1.7.0
+2015-01-22, Version 1.7.1
+=========================
+
+ * test: fix jshint warning (Ryan Graham)
+
+ * example: support both flavours of status route (Miroslav Bajtoš)
+
+ * Fix bad CLA URL in CONTRIBUTING.md (Ryan Graham)
+
+
+2014-12-18, Version 1.7.0
 =========================
 
  * Allow subpath for basePath (Raymond Feng)
