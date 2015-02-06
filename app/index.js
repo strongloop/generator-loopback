@@ -5,6 +5,7 @@ var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
+var fs = require('fs');
 var path = require('path');
 
 var actions = require('../lib/actions');
@@ -152,6 +153,11 @@ module.exports = yeoman.generators.Base.extend({
   installing: actions.installDeps,
 
   end: function() {
+    this.log.info('\nRenaming `gitignore` to `.gitignore`');
+    var src = path.resolve(this.destinationRoot(), 'gitignore');
+    var dest = path.resolve(this.destinationRoot(), '.gitignore');
+    fs.renameSync(src, dest);
+
     var cmd = helpers.getCommandName();
     if (!this._skipInstall) {
       this.log();
