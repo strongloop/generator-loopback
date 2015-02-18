@@ -17,6 +17,7 @@ describe('loopback:app generator', function() {
   // we don't have to test it again.
 
   var EXPECTED_PROJECT_FILES = [
+    '.gitignore',
     'package.json',
 
     'server/config.json',
