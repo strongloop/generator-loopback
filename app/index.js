@@ -5,6 +5,7 @@ var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
+var fs = require('fs');
 var path = require('path');
 
 var actions = require('../lib/actions');
@@ -45,7 +46,11 @@ module.exports = yeoman.generators.Base.extend({
   injectWorkspaceCopyRecursive: function() {
     var originalMethod = Workspace.copyRecursive;
     Workspace.copyRecursive = function(src, dest, cb) {
-      this.directory(src, dest);
+      var isDir = fs.statSync(src).isDirectory();
+      if (isDir)
+        this.directory(src, dest);
+      else
+        this.copy(src, dest);
       process.nextTick(cb);
     }.bind(this);
 
