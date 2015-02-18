@@ -1,3 +1,11 @@
+2015-02-18, Version 1.7.2
+=========================
+
+ * Refactor `injectWorkspaceCopyRecursive` (Simon Ho)
+
+ * Fix tests failing on latest yeoman-generator (Miroslav Bajtoš)
+
+
 2015-01-22, Version 1.7.1
 =========================
 
@@ -147,13 +155,6 @@
 
  * Make generator-loopback friendly to slc (Raymond Feng)
 
- * Fix loopback:acl for all models (Raymond Feng)
-
-
-2014-07-25, Version 1.1.1
-=========================
-
-
 
 2014-07-25, Version 1.1.2
 =========================
@@ -161,6 +162,10 @@
  * Bump version (Raymond Feng)
 
  * Fix loopback:acl for all models (Raymond Feng)
+
+
+2014-07-25, Version 1.1.1
+=========================
 
  * Downgrade to yeoman-generator 0.16 (Miroslav Bajtoš)
 
@@ -212,20 +217,17 @@
 
  * Update package description (Raymond Feng)
 
- * Remove the 'files' attr which prevents other files to be installed (Raymond Feng)
-
  * Add relation generator (Ritchie Martori)
-
-
-2014-07-17, Version 1.0.0-beta1
-===============================
-
 
 
 2014-07-17, Version 1.0.0-beta2
 ===============================
 
  * Remove the 'files' attr which prevents other files to be installed (Raymond Feng)
+
+
+2014-07-17, Version 1.0.0-beta1
+===============================
 
  * 1.0.0-beta1 (Miroslav Bajtoš)
 
