@@ -8,11 +8,10 @@ var assert = require('assert');
 
 before(function importSampleData(done) {
   this.timeout(50000);
-  if (app.importing) {
-    app.on('import done', done);
-  } else {
+  if (app.booting)
+    app.on('booted', done);
+  else
     done();
-  }
 });
 
 function json(verb, url) {
