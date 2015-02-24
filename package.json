@@ -42,6 +42,6 @@
     "fs-extra": "^0.12.0",
     "jshint": "^2.5.8",
     "mocha": "^2.0.1",
-    "strong-cached-install": "^1.1.0"
+    "strong-cached-install": "^2.0.0"
   }
 }
