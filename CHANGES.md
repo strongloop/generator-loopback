@@ -1,3 +1,11 @@
+2015-02-25, Version 1.7.3
+=========================
+
+ * Use async features in example generator (Simon Ho)
+
+ * Upgrade strong-cached-install to ^2.0 for io.js (Miroslav Bajtoš)
+
+
 2015-02-18, Version 1.7.2
 =========================
 
