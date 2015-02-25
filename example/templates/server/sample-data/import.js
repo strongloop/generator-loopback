@@ -53,10 +53,6 @@ module.exports = function(app, cb) {
   });
 };
 
-if (require.main === module) {
-  // Run the import (server runs it automatically during boot)
-  var app = require('../server');
-  app.on('import done', function(err) {
-    process.exit(err ? 1 : 0);
-  });
-}
+if (require.main === module)
+  // The import runs automatically during the boot process.
+  require('../server');
