@@ -154,6 +154,11 @@ module.exports = yeoman.generators.Base.extend({
     this.directory('.', '.');
   },
 
+  generateYoRc: function() {
+    this.log('Generating .yo-rc.json');
+    this.config.save();
+  },
+
   installing: actions.installDeps,
 
   end: function() {

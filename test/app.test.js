@@ -5,6 +5,7 @@ var helpers = require('yeoman-generator').test;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var common = require('./common');
 var assert = require('assert');
+var fs = require('fs');
 
 describe('loopback:app generator', function() {
   beforeEach(common.resetWorkspace);
@@ -82,6 +83,16 @@ describe('loopback:app generator', function() {
     var cwdName = 'x@y';
     var expectedAppName = 'x-y';
     testAppNameNormalization(cwdName, expectedAppName, done);
+  });
+
+  it('should create .yo-rc.json', function(done) {
+    var gen = givenAppGenerator();
+    helpers.mockPrompt(gen, {dir: '.'});
+    gen.run(function() {
+      var yoRcPath = path.resolve(SANDBOX, '.yo-rc.json');
+      assert(fs.existsSync(yoRcPath), 'file exists');
+      done();
+    });
   });
 
   function givenAppGenerator(modelArgs) {
