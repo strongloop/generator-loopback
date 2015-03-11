@@ -1,4 +1,10 @@
-2015-02-25, Version 1.7.3
+2015-03-11, Version 1.8.0
+=========================
+
+ * Add boot script generator (Simon Ho)
+
+
+2015-02-24, Version 1.7.3
 =========================
 
  * Use async features in example generator (Simon Ho)
