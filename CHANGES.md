@@ -1,3 +1,9 @@
+2015-03-11, Version 1.9.0
+=========================
+
+ * Create .yo-rc.json when scaffolding new apps (Simon Ho)
+
+
 2015-03-11, Version 1.8.0
 =========================
 
