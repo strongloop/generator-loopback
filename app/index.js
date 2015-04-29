@@ -185,7 +185,7 @@ module.exports = yeoman.generators.Base.extend({
     if (cmd === 'yo')
       this.log(chalk.green('    $ node .'));
     else
-      this.log(chalk.green('    $ ' + cmd + ' run .'));
+      this.log(chalk.green('    $ ' + cmd + ' start'));
     this.log();
   }
 });
