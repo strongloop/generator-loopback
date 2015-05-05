@@ -21,6 +21,11 @@ module.exports = yeoman.generators.Base.extend({
       required: false,
       type: String
     });
+
+    // Prevent "warning: possible EventEmitter memory leak detected"
+    // when adding more than 10 properties
+    // See https://github.com/strongloop/generator-loopback/issues/99
+    this.env.sharedFs.setMaxListeners(256);
   },
 
   help: function() {
