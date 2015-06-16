@@ -182,10 +182,7 @@ module.exports = yeoman.generators.Base.extend({
     this.log(chalk.green('    $ slc strongops'));
     this.log();
     this.log('  Run the app');
-    if (cmd === 'yo')
-      this.log(chalk.green('    $ node .'));
-    else
-      this.log(chalk.green('    $ ' + cmd + ' start'));
+    this.log(chalk.green('    $ node .'));
     this.log();
   }
 });
