@@ -1,3 +1,9 @@
+2015-06-16, Version 1.10.0
+==========================
+
+ * Add a generator for middleware (Raymond Feng)
+
+
 2015-05-05, Version 1.9.1
 =========================
 
