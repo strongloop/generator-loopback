@@ -1,3 +1,9 @@
+2015-06-22, Version 1.10.1
+==========================
+
+ * Update Next Steps instructions (Nick Duffy)
+
+
 2015-06-16, Version 1.10.0
 ==========================
 
