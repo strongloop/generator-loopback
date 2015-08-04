@@ -31,20 +31,23 @@ module.exports = function(RentalLocation) {
     geoService.geocode.apply(geoService, arguments);
   });
 
-  RentalLocation.beforeSave = function(next, loc) {
+  RentalLocation.observe('before save', function(ctx, next) {
+
+    var loc = ctx.instance || ctx.data;
+
     if (loc.geo) return next();
 
     // geo code the address
     lookupGeo(loc.street, loc.city, loc.state,
       function(err, result) {
         if (result && result[0]) {
-          loc.geo = result[0].lng + ',' + result[0].lat;
+          loc.geo = result[0];
           next();
         } else {
           next(new Error('could not find location'));
         }
       });
-  };
+  });
 
   RentalLocation.setup = function() {
     RentalLocation.base.setup.apply(this, arguments);
@@ -53,7 +56,7 @@ module.exports = function(RentalLocation) {
       description: 'Find nearby locations around the geo point',
       accepts: [
         {arg: 'here', type: 'GeoPoint', required: true,
-          description: 'geo location (lat & lng)'},
+          description: 'geo location (lng & lat)'},
         {arg: 'page', type: 'Number',
           description: 'number of pages (page size=10)'},
         {arg: 'max', type: 'Number',
