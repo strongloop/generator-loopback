@@ -1,3 +1,11 @@
+2015-08-04, Version 1.10.2
+==========================
+
+ * Update the hostname for oracle demo DB (Raymond Feng)
+
+ * Backport Location fixes from loopback-example-app (Miroslav Bajtoš)
+
+
 2015-06-22, Version 1.10.1
 ==========================
 
