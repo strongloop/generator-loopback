@@ -7,7 +7,7 @@ var DATASTORES = {
   memory: {
   },
   oracle: {
-    host: 'demo.strongloop.com',
+    host: 'oracle-demo.strongloop.com',
     port: 1521,
     database: 'XE',
     username: 'demo',
