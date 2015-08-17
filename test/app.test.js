@@ -1,7 +1,9 @@
 /*global describe, beforeEach, it */
 'use strict';
 var path = require('path');
-var helpers = require('yeoman-generator').test;
+var yg = require('yeoman-generator');
+var ygAssert = yg.assert;
+var helpers = yg.test;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var common = require('./common');
 var assert = require('assert');
@@ -40,7 +42,7 @@ describe('loopback:app generator', function() {
 
     gen.options['skip-install'] = true;
     gen.run(function () {
-      helpers.assertFile(EXPECTED_PROJECT_FILES);
+      ygAssert.file(EXPECTED_PROJECT_FILES);
       done();
     });
   });
@@ -61,7 +63,7 @@ describe('loopback:app generator', function() {
       var expectedFiles = EXPECTED_PROJECT_FILES.map(function(f) {
         return 'test-dir/' + f;
       });
-      helpers.assertFile(expectedFiles);
+      ygAssert.file(expectedFiles);
       assert.equal(gen.dir, 'test-dir');
       done();
     });
@@ -108,7 +110,7 @@ describe('loopback:app generator', function() {
     var dir = path.join(SANDBOX, cwdName);
     helpers.testDirectory(dir, function() {
       helpers.mockPrompt(gen, {
-        template: 'api-server',
+        wsTemplate: 'api-server',
         dir: '.'
       });
 
@@ -119,7 +121,7 @@ describe('loopback:app generator', function() {
         var expectedFiles = EXPECTED_PROJECT_FILES.map(function(f) {
           return cwdName + '/' + f;
         });
-        helpers.assertFile(expectedFiles);
+        ygAssert.file(expectedFiles);
         var pkg = require(path.join(dir, 'package.json'));
         assert.equal(pkg.name, expectedAppName);
         done();
