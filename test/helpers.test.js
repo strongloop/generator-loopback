@@ -60,7 +60,7 @@ describe('helpers', function() {
 });
 
 function testValidationAcceptsValue(validationFn, value) {
-  expect(validationFn(value), value).to.be.true();
+  expect(validationFn(value), value).to.equal(true);
 }
 
 function testValidationRejectsValue(validationFn, value) {

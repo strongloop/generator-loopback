@@ -182,7 +182,7 @@ describe('loopback:example generator', function() {
 
   function readProjectFile(componentName, file) {
     try {
-      return fs.readJsonFileSync(path.join(SANDBOX, componentName, file));
+      return fs.readJsonSync(path.join(SANDBOX, componentName, file));
     } catch (err) {
       console.error('SANDBOX files', glob.sync('**', { cwd: SANDBOX }));
       throw err;

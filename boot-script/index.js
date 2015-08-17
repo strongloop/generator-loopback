@@ -57,7 +57,8 @@ module.exports = yeoman.generators.Base.extend({
   generate: function() {
     var source = this.templatePath(this.type + '.js');
 
-    var targetPath = path.normalize('/server/boot/' + this.name + '.js');
+    // yeoman-generator 0.20.x doesn't like the leading /
+    var targetPath = path.normalize('server/boot/' + this.name + '.js');
     var target = this.destinationPath(targetPath);
 
     this.copy(source, target);

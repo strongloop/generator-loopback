@@ -47,8 +47,9 @@ module.exports = yeoman.generators.Base.extend({
     var originalMethod = Workspace.copyRecursive;
     Workspace.copyRecursive = function(src, dest, cb) {
       var isDir = fs.statSync(src).isDirectory();
-      if (isDir)
+      if (isDir) {
         this.directory(src, dest);
+      }
       else
         this.copy(src, dest);
       process.nextTick(cb);
@@ -116,7 +117,7 @@ module.exports = yeoman.generators.Base.extend({
      The only functional project template is 'api-server' at the moment
     var prompts = [
       {
-        name: 'template',
+        name: 'wsTemplate',
         message: 'What kind of application do you have in mind?',
         type: 'list',
         default: 'api-server',
@@ -124,7 +125,8 @@ module.exports = yeoman.generators.Base.extend({
       }
      */
 
-    this.template = 'api-server';
+    // Do NOT use name template as it's a method in the base class
+    this.wsTemplate = 'api-server';
   },
 
   initWorkspace: actions.initWorkspace,
@@ -144,7 +146,7 @@ module.exports = yeoman.generators.Base.extend({
     var done = this.async();
 
     Workspace.createFromTemplate(
-      this.template,
+      this.wsTemplate,
       this.appname,
       done
     );

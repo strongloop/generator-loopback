@@ -29,7 +29,11 @@ exports.createDummyProject = function(dir, name, done) {
 
 exports.resetWorkspace = function(done) {
   async.each(workspace.models(), function(model, cb) {
-    model.destroyAll(cb);
+    if (typeof model.destroyAll === 'function') {
+      model.destroyAll(cb);
+    } else {
+      cb();
+    }
   }, done);
 };
 
