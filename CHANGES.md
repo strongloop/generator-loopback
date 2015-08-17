@@ -1,3 +1,9 @@
+2015-08-17, Version 1.11.0
+==========================
+
+ * Upgrade deps to yeoman-generator 0.20.x (Raymond Feng)
+
+
 2015-08-04, Version 1.10.2
 ==========================
 
