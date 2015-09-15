@@ -1,3 +1,11 @@
+2015-09-15, Version 1.12.0
+==========================
+
+ * Add YML support (Christopher A. Moore)
+
+ * Upgrade Travis to container-based infrastructure (Miroslav Bajtoš)
+
+
 2015-08-17, Version 1.11.0
 ==========================
 
