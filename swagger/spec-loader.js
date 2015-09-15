@@ -4,6 +4,7 @@ var chalk = require('chalk');
 
 var generator = require('loopback-swagger');
 var request = require('request');
+var yaml = require('js-yaml');
 var fs = require('fs');
 var async = require('async');
 
@@ -21,7 +22,7 @@ function buildUrl(base, path) {
 }
 
 /**
- * Load swagger specs from the given url or file path
+ * Load swagger specs from the given url or file path; handle yml or json
  * @param {String} specUrlStr The url or file path to the swagger spec
  * @param cb
  */
@@ -62,17 +63,27 @@ function loadSpec(specUrlStr, log, cb) {
       }
     });
   } else {
-    fs.readFile(specUrl.href, 'UTF-8', function (err, body) {
-      if (err) {
-        return cb(err);
-      }
+    if (specUrl.href.match(/.yml/)) {
       try {
-        var spec = JSON.parse(body);
+        var spec = yaml.safeLoad(fs.readFileSync(specUrl.href, 'utf8'));
         cb(null, spec);
       } catch (err) {
         cb(err);
       }
-    });
+    } else {
+      fs.readFile(specUrl.href, 'UTF-8', function (err, body) {
+        if (err) {
+          return cb(err);
+        }
+        try {
+          var spec = JSON.parse(body);
+          cb(null, spec);
+        } catch (err) {
+          cb(err);
+        }
+      });
+    }
+
   }
 }
 
