@@ -91,7 +91,7 @@ describe('loopback:middleware generator', function() {
         var newSources = Object.keys(
           readMiddlewaresJsonSync('server')['routes:after']);
         var expectedSources = builtinSources.concat(['my-middleware-4']);
-        expect(newSources).to.have.members(expectedSources);
+        expect(expectedSources).to.have.include.members(newSources);
         done();
       });
     });
