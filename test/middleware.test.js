@@ -86,7 +86,7 @@ describe('loopback:middleware generator', function() {
       });
 
       var builtinSources = Object.keys(
-        readMiddlewaresJsonSync('server').routes);
+        readMiddlewaresJsonSync('server')['routes:after'] || {});
       modelGen.run(function() {
         var newSources = Object.keys(
           readMiddlewaresJsonSync('server')['routes:after']);
