@@ -114,6 +114,10 @@ module.exports = yeoman.generators.Base.extend({
       api = self.apis[i];
       for (var m in api.models) {
         var model = api.models[m];
+        if (model.type && model.type !== 'object') {
+          // Only handle model of object type (not array or simple types)
+          continue;
+        }
         self.modelNames.push(m);
         self.modelDefs.push({
           name: model.name,
