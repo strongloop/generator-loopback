@@ -1,3 +1,13 @@
+2015-10-14, Version 1.12.1
+==========================
+
+ * Skip non-object model types (Raymond Feng)
+
+ * Use strongloop conventions for licensing (Sam Roberts)
+
+ * test/middleware: fix failure caused by typo (Miroslav Bajtoš)
+
+
 2015-09-15, Version 1.12.0
 ==========================
 
