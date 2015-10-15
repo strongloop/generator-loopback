@@ -115,7 +115,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'facetName',
         message: 'Select Facet',
         type: 'list',
-        default: 'server',
+        default: 'common',
         choices: ['common', 'server']
       }
     ];
