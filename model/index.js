@@ -113,7 +113,7 @@ module.exports = yeoman.generators.Base.extend({
       },
       {
         name: 'facetName',
-        message: 'Select Facet',
+        message: 'Common model or server only?',
         type: 'list',
         default: 'common',
         choices: ['common', 'server']
