@@ -110,6 +110,13 @@ module.exports = yeoman.generators.Base.extend({
         when: function(answers) {
           return answers.public;
         }
+      },
+      {
+        name: 'facetName',
+        message: 'Common model or server only?',
+        type: 'list',
+        default: 'common',
+        choices: ['common', 'server']
       }
     ];
 
@@ -118,6 +125,7 @@ module.exports = yeoman.generators.Base.extend({
       this.public = props.public;
       this.plural = props.plural || undefined;
       this.base = props.customBase || props.base;
+      this.facetName = props.facetName;
 
       done();
     }.bind(this));
@@ -129,7 +137,7 @@ module.exports = yeoman.generators.Base.extend({
       name: this.name,
       plural: this.plural,
       base: this.base,
-      facetName: 'common' // hard-coded for now
+      facetName: this.facetName
     };
 
     wsModels.ModelDefinition.create(config, function(err) {
