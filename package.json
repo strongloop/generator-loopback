@@ -32,7 +32,7 @@
     "loopback-swagger": "^2.0.0",
     "loopback-workspace": "^3.18.0",
     "request": "^2.60.0",
-    "yeoman-generator": "^0.20.2",
+    "yeoman-generator": "^0.21.1",
     "yosay": "^1.0.5"
   },
   "devDependencies": {
