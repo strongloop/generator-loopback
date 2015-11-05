@@ -1,3 +1,17 @@
+2015-11-05, Version 1.13.0
+==========================
+
+ * Fix spawn-sync warning (Simon Ho)
+
+ * Refer to licenses with a link (Sam Roberts)
+
+ * reword message for facetName prompt (Jonathan Prince)
+
+ * set common as default so original tests pass (Jonathan Prince)
+
+ * add prompt for facet name (Jonathan Prince)
+
+
 2015-10-14, Version 1.12.1
 ==========================
 
