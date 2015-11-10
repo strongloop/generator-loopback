@@ -3,6 +3,7 @@
 var helpers = require('../lib/helpers');
 var validateAppName = helpers.validateAppName;
 var validateName = helpers.validateName;
+var checkRelationName = helpers.checkRelationName;
 require('chai').should();
 var expect = require('chai').expect;
 
@@ -57,6 +58,21 @@ describe('helpers', function() {
       testValidationRejectsValue(validateName, 'm.prop');
     });
   });
+
+  // test checkRelationName()
+  describe('checkRelationName()', function() {
+    var sampleModelDefinition = new ModelDefinition([
+      {name: 'name', id: 1},
+      {name: 'city', id: 2}
+    ]);
+    it('should accept names with no conflict', function() {
+      testRelationAcceptsValue(sampleModelDefinition, 'myrelation');
+    });
+
+    it('should report errors for duplicate name', function() {
+      testRelationRejectsValue(sampleModelDefinition, 'city');
+    });
+  });
 });
 
 function testValidationAcceptsValue(validationFn, value) {
@@ -65,4 +81,23 @@ function testValidationAcceptsValue(validationFn, value) {
 
 function testValidationRejectsValue(validationFn, value) {
   expect(validationFn(value), value).to.be.a('string');
+}
+
+function testRelationAcceptsValue(modelDefinition, value) {
+  checkRelationName(modelDefinition, value, function(result) {
+    expect(result, value).to.equal(true);
+  });
+}
+
+function testRelationRejectsValue(modelDefinition, value) {
+  checkRelationName(modelDefinition, value, function(result) {
+    expect(result, value).to.be.a('string');
+  });
+}
+
+function ModelDefinition(propertyList) {
+  this.propertyList = propertyList;
+  this.properties = function(callback) {
+    callback(null, this.propertyList);
+  };
 }
