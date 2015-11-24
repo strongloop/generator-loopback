@@ -9,6 +9,7 @@ var ModelRelation = workspace.models.ModelRelation;
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateName = helpers.validateName;
+var checkRelationName = helpers.checkRelationName;
 
 module.exports = yeoman.generators.Base.extend({
 
@@ -65,6 +66,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForParameters: function() {
+    var modelDef = this.modelDefinition;
     var done = this.async();
 
     var modelChoices = this.modelNames.concat({
@@ -108,7 +110,11 @@ module.exports = yeoman.generators.Base.extend({
           }
           return m;
         },
-        validate: validateName
+        validate: function(value) {
+          var isValid = validateName(value);
+          if (isValid !== true) return isValid;
+          return checkRelationName(modelDef, value, this.async());
+        }
       },
       {
         name: 'foreignKey',
