@@ -584,7 +584,7 @@ module.exports = yeoman.generators.Base.extend({
 
     // Hack: create a clone of the environment because we don't want to share
     // the runLoop. Based on yeoman-generator/lib/actions/invoke
-    var YeomanEnv = require('yeoman-generator/node_modules/yeoman-environment');
+    var YeomanEnv = this.env.constructor;
     var env = YeomanEnv.util.duplicateEnv(this.env);
 
     // based on yeoman-generator/lib/actions/invoke

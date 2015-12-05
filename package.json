@@ -38,6 +38,7 @@
   "devDependencies": {
     "chai": "^3.2.0",
     "fs-extra": "^0.23.1",
+    "glob": "^6.0.1",
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
     "strong-cached-install": "^2.0.0"

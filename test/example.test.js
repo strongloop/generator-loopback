@@ -178,7 +178,7 @@ describe('loopback:example generator', function() {
     return readProjectFile(componentName, 'model-config.json');
   }
 
-  var glob = require('loopback-workspace/node_modules/glob');
+  var glob = require('glob');
 
   function readProjectFile(componentName, file) {
     try {
