@@ -2,6 +2,7 @@
 var async = require('async');
 var fs = require('fs');
 var path = require('path');
+var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var generators = require('yeoman-generator');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
@@ -61,4 +62,10 @@ exports.createExampleGenerator = function() {
   };
 
   return exports.createGenerator(name, path, deps, args, options);
+};
+
+exports.readJsonSync = function(relativePath) {
+    var filepath = path.resolve(SANDBOX, relativePath);
+    var content = fs.readFileSync(filepath, 'utf-8');
+    return JSON.parse(content);
 };
