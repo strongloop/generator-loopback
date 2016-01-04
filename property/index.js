@@ -2,12 +2,10 @@
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
-var workspace = require('loopback-workspace');
-var ModelProperty = workspace.models.ModelProperty;
-
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateName = helpers.validateName;
+var typeChoices = helpers.getTypeChoices();
 
 module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
@@ -60,11 +58,6 @@ module.exports = yeoman.generators.Base.extend({
   askForParameters: function() {
     var done = this.async();
     this.name = this.options.propertyName;
-
-    var typeChoices = ModelProperty.availableTypes.concat({
-      name: '(other)',
-      value: null
-    });
 
     var prompts = [
       {
