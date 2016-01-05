@@ -4,7 +4,6 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
-var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
 
@@ -45,7 +44,7 @@ describe('loopback:property generator', function() {
     });
 
     propertyGenerator.run(function() {
-      var definition = readJsonSync('common/models/car.json');
+      var definition = common.readJsonSync('common/models/car.json');
       var props = definition.properties || {};
       expect(props).to.have.property('isPreferred');
       expect(props.isPreferred).to.eql({
@@ -70,7 +69,7 @@ describe('loopback:property generator', function() {
     });
 
     propertyGenerator.run(function() {
-      var definition = readJsonSync('common/models/car.json');
+      var definition = common.readJsonSync('common/models/car.json');
       var prop = definition.properties.list;
       expect(prop.type).to.eql(['string']);
       done();
@@ -82,11 +81,5 @@ describe('loopback:property generator', function() {
     var path = '../../property';
     var gen = common.createGenerator(name, path);
     return gen;
-  }
-
-  function readJsonSync(relativePath) {
-    var filepath = path.resolve(SANDBOX, relativePath);
-    var content = fs.readFileSync(filepath, 'utf-8');
-    return JSON.parse(content);
   }
 });

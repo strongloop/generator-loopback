@@ -4,7 +4,6 @@ var path = require('path');
 var helpers = require('yeoman-generator').test;
 var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
-var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
 
@@ -51,7 +50,7 @@ describe('loopback:acl generator', function() {
     });
 
     aclGen.run(function() {
-      var def = readJsonSync('common/models/car.json');
+      var def = common.readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
       expect(carAcls).to.eql([{
@@ -75,7 +74,7 @@ describe('loopback:acl generator', function() {
     });
 
     aclGen.run(function() {
-      var def = readJsonSync('common/models/car.json');
+      var def = common.readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
       expect(carAcls).to.eql([{
@@ -101,7 +100,7 @@ describe('loopback:acl generator', function() {
     });
 
     aclGen.run(function() {
-      var def = readJsonSync('common/models/car.json');
+      var def = common.readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
       expect(carAcls).to.eql([{
@@ -124,7 +123,7 @@ describe('loopback:acl generator', function() {
     });
 
     aclGen.run(function() {
-      var def = readJsonSync('common/models/car.json');
+      var def = common.readJsonSync('common/models/car.json');
       var carAcls = def.acls;
 
       expect(carAcls).to.eql([{
@@ -134,7 +133,7 @@ describe('loopback:acl generator', function() {
         principalId: '$owner'
       }]);
 
-      def = readJsonSync('common/models/location.json');
+      def = common.readJsonSync('common/models/location.json');
       var locationACLs = def.acls;
 
       expect(locationACLs).to.eql([{
@@ -153,11 +152,5 @@ describe('loopback:acl generator', function() {
     var path = '../../acl';
     var gen = common.createGenerator(name, path);
     return gen;
-  }
-
-  function readJsonSync(relativePath) {
-    var filepath = path.resolve(SANDBOX, relativePath);
-    var content = fs.readFileSync(filepath, 'utf-8');
-    return JSON.parse(content);
   }
 });
