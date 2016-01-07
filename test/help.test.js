@@ -7,6 +7,8 @@ var helpers = require('yeoman-generator').test;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 
 describe('loopback generator help', function () {
+  this.timeout(300000); // 5 minutes
+
   beforeEach(function createSandbox(done) {
     helpers.testDirectory(SANDBOX, done);
   });
