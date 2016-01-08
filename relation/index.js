@@ -33,7 +33,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'model',
         message: 'Select the model to create the relationship from:',
         type: 'list',
-        choices: this.modelNames
+        choices: this.editableModelNames
       }
     ];
 
@@ -69,7 +69,7 @@ module.exports = yeoman.generators.Base.extend({
     var modelDef = this.modelDefinition;
     var done = this.async();
 
-    var modelChoices = this.modelNames.concat({
+    var modelChoices = this.editableModelNames.concat({
       name: '(other)',
       value: null
     });

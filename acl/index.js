@@ -51,7 +51,7 @@ module.exports = yeoman.generators.Base.extend({
 
     var modelChoices =
       [{ name: '(all existing models)', value: null }]
-      .concat(this.modelNames);
+      .concat(this.editableModelNames);
 
     var prompts = [
       {
