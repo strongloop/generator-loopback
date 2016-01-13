@@ -7,6 +7,7 @@ var path = require('path');
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateName = helpers.validateName;
+var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
 var ModelDefinition = require('loopback-workspace').models.ModelDefinition;
 
@@ -89,7 +90,7 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Enter the remote method name:',
         required: true,
         default: name,
-        validate: validateName
+        validate: checkPropertyName
       },
       {
         name: 'isStatic',
