@@ -1,3 +1,23 @@
+2016-01-15, Version 1.14.0
+==========================
+
+ * Prevent readonly models in some generator Remove uneditable models from choice, applied to acl, property, relation generators (Jue Hou)
+
+ * Fix ci timeout error. (Candy)
+
+ * Add cli tool for printing swagger api definition (Candy)
+
+ * Use shared function (Jue Hou)
+
+ * Remove slc:loopback-example (Candy)
+
+ * Remote-method generator (Jue Hou)
+
+ * fix assumptions about dependency locations (Ryan Graham)
+
+ * Relation name should be different from property name (Jue Hou)
+
+
 2015-11-05, Version 1.13.0
 ==========================
 
@@ -312,8 +332,6 @@
 
 2014-07-17, Version 1.0.0-beta1
 ===============================
-
- * 1.0.0-beta1 (Miroslav Bajtoš)
 
  * property: fix array type (Miroslav Bajtoš)
 
