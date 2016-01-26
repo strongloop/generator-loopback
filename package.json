@@ -33,7 +33,7 @@
     "loopback-workspace": "^3.18.0",
     "mkdirp": "^0.5.1",
     "request": "^2.60.0",
-    "yeoman-generator": "0.18.10",
+    "yeoman-generator": "^0.21.1",
     "yosay": "^1.0.5"
   },
   "devDependencies": {
