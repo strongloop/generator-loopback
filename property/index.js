@@ -137,7 +137,7 @@ module.exports = yeoman.generators.Base.extend({
       def.required = true;
     }
     if (this.defaultValue) {
-      if (this.type == 'boolean'){
+      if (this.type === 'boolean'){
         if (['true', '1', 't'].indexOf(this.defaultValue) !== -1 ){
           def.default = true;
         } else {
@@ -145,8 +145,8 @@ module.exports = yeoman.generators.Base.extend({
         }
       } else if (this.defaultValue === 'uuid' || this.defaultValue === 'guid'){
          def.defaultFn = this.defaultValue;
-      } else if ((this.type === 'date' || this.type === 'datetime') 
-                  && this.defaultValue.toLowerCase() === 'now'){
+      } else if ((this.type === 'date' || this.type === 'datetime') &&
+                  this.defaultValue.toLowerCase() === 'now'){
          def.defaultFn = 'now';
       } else {
          def.default = this.defaultValue;
