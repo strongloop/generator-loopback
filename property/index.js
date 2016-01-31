@@ -143,10 +143,11 @@ module.exports = yeoman.generators.Base.extend({
         } else {
           def.default = false;
         }
-      } else if (this.defaultValue == 'uuid' || this.defaultValue == 'guid'){
+      } else if (this.defaultValue === 'uuid' || this.defaultValue === 'guid'){
          def.defaultFn = this.defaultValue;
-      } else if ((this.type == 'date' || this.type == 'datetime') && this.defaultValue.toLowerCase() == "now"){
-         def.defaultFn = "now"
+      } else if ((this.type === 'date' || this.type === 'datetime') 
+                  && this.defaultValue.toLowerCase() === 'now'){
+         def.defaultFn = 'now';
       } else {
          def.default = this.defaultValue;
       }
