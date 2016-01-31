@@ -30,7 +30,7 @@ module.exports = yeoman.generators.Base.extend({
     // A workaround to get rid of deprecation notice
     //   "generator#invoke() is deprecated. Use generator#composeWith()"
     // See https://github.com/strongloop/generator-loopback/issues/116
-    this.invoke = require('yeoman-generator/actions/invoke');
+    this.invoke = require('yeoman-generator/lib/actions/invoke');
   },
 
   help: function() {
