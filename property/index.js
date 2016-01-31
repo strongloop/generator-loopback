@@ -5,7 +5,6 @@ var chalk = require('chalk');
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateName = helpers.validateName;
-var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
 
 module.exports = yeoman.generators.Base.extend({
@@ -64,7 +63,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'name',
         message: 'Enter the property name:',
-        validate: checkPropertyName,
+        validate: validateName,
         when: function() {
           return !this.name && this.name !== 0;
         }.bind(this)
@@ -106,6 +105,11 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Required?',
         type: 'confirm',
         default: false
+      },
+      {
+         name: 'defaultValue',
+         message: 'Default value[leave blank for none]:',
+         default: null
       }
     ];
     this.prompt(prompts, function(answers) {
@@ -117,6 +121,7 @@ module.exports = yeoman.generators.Base.extend({
         this.type = answers.customType || answers.type;
       }
       this.required = answers.required;
+      this.defaultValue = answers.defaultValue;
       done();
     }.bind(this));
   },
@@ -129,6 +134,21 @@ module.exports = yeoman.generators.Base.extend({
     };
     if (this.required) {
       def.required = true;
+    }
+    if (this.defaultValue) {
+      if (this.type == 'boolean'){
+        if (['true', '1', 't'].indexOf(this.defaultValue) !== -1 ){
+          def.default = true;
+        } else {
+          def.default = false;
+        }
+      } else if (this.defaultValue == 'uuid' || this.defaultValue == 'guid'){
+         def.defaultFn = this.defaultValue;
+      } else if ((this.type == 'date' || this.type == 'datetime') && this.defaultValue.toLowerCase() == "now"){
+         def.defaultFn = "now"
+      } else {
+         def.default = this.defaultValue;
+      }
     }
 
     this.modelDefinition.properties.create(def, function(err) {
