@@ -26,6 +26,11 @@ module.exports = yeoman.generators.Base.extend({
     // when adding more than 10 properties
     // See https://github.com/strongloop/generator-loopback/issues/99
     this.env.sharedFs.setMaxListeners(256);
+
+    // A workaround to get rid of deprecation notice
+    //   "generator#invoke() is deprecated. Use generator#composeWith()"
+    // See https://github.com/strongloop/generator-loopback/issues/116
+    this.invoke = require('yeoman-generator/lib/actions/invoke');
   },
 
   help: function() {
