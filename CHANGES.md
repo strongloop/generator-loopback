@@ -1,3 +1,9 @@
+2016-02-10, Version 1.15.1
+==========================
+
+ * Helpers to display correct usage message for apic (David Cheung)
+
+
 2016-02-10, Version 1.15.0
 ==========================
 
