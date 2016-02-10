@@ -1,3 +1,15 @@
+2016-02-10, Version 1.15.0
+==========================
+
+ * Make `slc arc` conditional based on the cmd name (Raymond Feng)
+
+ * Change path for function invoke (Jue Hou)
+
+ * Import `generator#invoke()` directly (Miroslav Bajtoš)
+
+ * Prevent constructor to be property name (Jue Hou)
+
+
 2016-01-15, Version 1.14.0
 ==========================
 
@@ -332,6 +344,8 @@
 
 2014-07-17, Version 1.0.0-beta1
 ===============================
+
+ * 1.0.0-beta1 (Miroslav Bajtoš)
 
  * property: fix array type (Miroslav Bajtoš)
 
