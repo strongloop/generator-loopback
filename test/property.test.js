@@ -114,7 +114,7 @@ describe('loopback:property generator', function() {
 
     propertyGenerator.run(function() {
       var definition = common.readJsonSync('common/models/car.json');
-      var prop = definition.properties.created;
+      var prop = definition.properties.uniqueId;
       expect(prop.defaultFn).to.eql('uuid');
       done();
     });
