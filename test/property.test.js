@@ -78,7 +78,7 @@ describe('loopback:property generator', function() {
     });
   });
   
-  it('creates a defaultFn of "now" on date fields if specified', function(done) {
+  it('creates a defaultFn: "now" on date fields if specified', function(done) {
     var propertyGenerator = givenPropertyGenerator();
     helpers.mockPrompt(propertyGenerator, {
       model: 'Car',
@@ -99,7 +99,7 @@ describe('loopback:property generator', function() {
     });
   });
 
-  it('creates a defaultFn of "guid" on date fields if specified', function(done) {
+  it('creates a defaultFn: "guid" on date fields if specified', function(done) {
     var propertyGenerator = givenPropertyGenerator();
     helpers.mockPrompt(propertyGenerator, {
       model: 'Car',
