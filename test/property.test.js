@@ -40,7 +40,8 @@ describe('loopback:property generator', function() {
       customItemType: '', // temporary workaround for
                           // https://github.com/yeoman/generator/issues/600
       type: 'boolean',
-      required: 'true'
+      required: 'true',
+      defaultValue: 'true'
     });
 
     propertyGenerator.run(function() {
@@ -49,7 +50,8 @@ describe('loopback:property generator', function() {
       expect(props).to.have.property('isPreferred');
       expect(props.isPreferred).to.eql({
         type: 'boolean',
-        required: true
+        required: true,
+        default: true
       });
       done();
     });
@@ -72,6 +74,48 @@ describe('loopback:property generator', function() {
       var definition = common.readJsonSync('common/models/car.json');
       var prop = definition.properties.list;
       expect(prop.type).to.eql(['string']);
+      done();
+    });
+  });
+  
+  it('creates a defaultFn of "now" on date fields if specified', function(done) {
+    var propertyGenerator = givenPropertyGenerator();
+    helpers.mockPrompt(propertyGenerator, {
+      model: 'Car',
+      name: 'created',
+      type: 'date',
+      customType: '', // temporary workaround for
+                      // https://github.com/yeoman/generator/issues/600
+      customItemType: '', // temporary workaround for
+                          // https://github.com/yeoman/generator/issues/600
+      defaultValue: 'Now'
+    });
+
+    propertyGenerator.run(function() {
+      var definition = common.readJsonSync('common/models/car.json');
+      var prop = definition.properties.created;
+      expect(prop.defaultFn).to.eql('now');
+      done();
+    });
+  });
+
+  it('creates a defaultFn of "guid" on date fields if specified', function(done) {
+    var propertyGenerator = givenPropertyGenerator();
+    helpers.mockPrompt(propertyGenerator, {
+      model: 'Car',
+      name: 'uniqueId',
+      type: 'string',
+      customType: '', // temporary workaround for
+                      // https://github.com/yeoman/generator/issues/600
+      customItemType: '', // temporary workaround for
+                          // https://github.com/yeoman/generator/issues/600
+      defaultValue: 'uuid'
+    });
+
+    propertyGenerator.run(function() {
+      var definition = common.readJsonSync('common/models/car.json');
+      var prop = definition.properties.created;
+      expect(prop.defaultFn).to.eql('uuid');
       done();
     });
   });
