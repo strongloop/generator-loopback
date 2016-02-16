@@ -178,7 +178,11 @@ module.exports = yeoman.generators.Base.extend({
       this.log();
     }
     this.log('  Create a model in your app');
-    this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
+    if (cmd === 'apic') {
+      this.log(chalk.green('    $ ' + cmd + ' create --type model'));
+    } else {
+      this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
+    }
     this.log();
     if (cmd === 'apic') {
       this.log('  Compose your API, run, manage, enforce and deploy it' +
