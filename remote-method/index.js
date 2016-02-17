@@ -59,7 +59,7 @@ module.exports = yeoman.generators.Base.extend({
           name: 'model',
           message: 'Select the model:',
           type: 'list',
-          choices: this.modelNames
+          choices: this.editableModelNames
         }
       ];
       this.prompt(prompts, function(answers) {
