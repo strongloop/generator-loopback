@@ -7,6 +7,7 @@ var Workspace = workspace.models.Workspace;
 
 var fs = require('fs');
 var path = require('path');
+var util = require('util');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
@@ -64,17 +65,25 @@ module.exports = yeoman.generators.Base.extend({
   loadTemplates: function() {
     var done = this.async();
 
-    Workspace.getAvailableTemplates(function(err, list) {
+    Workspace.describeAvailableTemplates(function(err, list) {
       if (err) return done(err);
       this.templates = list.map(function(t) {
         return {
-          // TODO(bajtos) - workspace does not provide template details yet
-          // name: util.format('%s (%s)', t.name, t.description),
-          // value: t.name
-          name: t,
-          value: t
+          name: util.format('%s (%s)', t.name, t.description),
+          value: t.name
         };
       });
+
+      // TODO(bajtos) generator-loopback should not be coupled with APIC
+      // See also https://github.com/strongloop/generator-loopback/issues/139
+      if (helpers.getCommandName() === 'apic') {
+        this.defaultTemplate = 'hello-world';
+        this.templates = this.templates.filter(function (t) {
+          return t.value !== 'api-server';
+        });
+      } else {
+        this.defaultTemplate = 'api-server';
+      }
       done();
     }.bind(this));
   },
@@ -112,21 +121,21 @@ module.exports = yeoman.generators.Base.extend({
   configureDestinationDir: actions.configureDestinationDir,
 
   askForTemplate: function() {
-    /*
-     TODO(bajtos) not all templates are projects, some of them are components
-     The only functional project template is 'api-server' at the moment
-    var prompts = [
-      {
-        name: 'wsTemplate',
-        message: 'What kind of application do you have in mind?',
-        type: 'list',
-        default: 'api-server',
-        choices: this.templates
-      }
-     */
+    var cb = this.async();
+    var prompts = [{
+      name: 'wsTemplate',
+      message: 'What kind of application do you have in mind?',
+      type: 'list',
+      default: this.defaultTemplate,
+      choices: this.templates
+    }];
 
-    // Do NOT use name template as it's a method in the base class
-    this.wsTemplate = 'api-server';
+    var self = this;
+    this.prompt(prompts, function(answers) {
+      // Do NOT use name template as it's a method in the base class
+      self.wsTemplate = answers.wsTemplate;
+      cb();
+    });
   },
 
   initWorkspace: actions.initWorkspace,
