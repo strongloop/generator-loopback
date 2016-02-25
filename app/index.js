@@ -28,6 +28,11 @@ module.exports = yeoman.generators.Base.extend({
       desc: 'Do not install npm dependencies.',
       type: Boolean
     });
+
+    this.option('skip-next-steps', {
+      desc: 'Do not print "next steps" info',
+      type: Boolean
+    });
   },
 
   greet: function() {
@@ -173,6 +178,8 @@ module.exports = yeoman.generators.Base.extend({
   installing: actions.installDeps,
 
   end: function() {
+    if (this.options.skipNextSteps) return;
+
     var cmd = helpers.getCommandName();
     if (!this._skipInstall) {
       this.log();
