@@ -157,8 +157,8 @@ module.exports = yeoman.generators.Base.extend({
 
       this.prompt(subprompts, function(answers) {
         this.http.push({
-          httpPath: httpPath,
-          httpVerb: answers.httpVerb || answers.customHttpVerb
+          path: httpPath,
+          verb: answers.httpVerb || answers.customHttpVerb
         });
         this.log('\nLet\'s add another endpoint.');
         this.askForEndpoints();
