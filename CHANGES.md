@@ -1,3 +1,15 @@
+2016-03-01, Version 1.16.0
+==========================
+
+ * Use http and verb (juehou)
+
+ * Add `yo loopback --skip-next-steps` options (Miroslav Bajtoš)
+
+ * Add project template prompt, support apic (Miroslav Bajtoš)
+
+ * Only show editable model names in remote-method generator (juehou)
+
+
 2016-02-16, Version 1.15.2
 ==========================
 
