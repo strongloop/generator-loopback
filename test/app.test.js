@@ -7,6 +7,7 @@ var helpers = yg.test;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var common = require('./common');
 var assert = require('assert');
+var expect = require('chai').expect;
 var fs = require('fs');
 
 describe('loopback:app generator', function() {
@@ -93,6 +94,29 @@ describe('loopback:app generator', function() {
     gen.run(function() {
       var yoRcPath = path.resolve(SANDBOX, '.yo-rc.json');
       assert(fs.existsSync(yoRcPath), 'file exists');
+      done();
+    });
+  });
+
+  it('includes explorer by default', function(done) {
+    var gen = givenAppGenerator();
+    helpers.mockPrompt(gen, {dir: '.'});
+    gen.run(function() {
+      var compConfig = common.readJsonSync('server/component-config.json', {});
+      expect(Object.keys(compConfig))
+        .to.contain('loopback-component-explorer');
+      done();
+    });
+  });
+
+  it('excludes explorer with --no-explorer', function(done) {
+    var gen = givenAppGenerator();
+    gen.options.explorer = false;
+    helpers.mockPrompt(gen, {dir: '.'});
+    gen.run(function() {
+      var compConfig = common.readJsonSync('server/component-config.json', {});
+      expect(Object.keys(compConfig))
+        .to.not.contain('loopback-component-explorer');
       done();
     });
   });

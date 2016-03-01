@@ -33,6 +33,11 @@ module.exports = yeoman.generators.Base.extend({
       desc: 'Do not print "next steps" info',
       type: Boolean
     });
+
+    this.option('explorer', {
+      desc: 'Add Loopback Explorer to the project (true by default)',
+      type: Boolean
+    });
   },
 
   greet: function() {
@@ -162,6 +167,9 @@ module.exports = yeoman.generators.Base.extend({
     Workspace.createFromTemplate(
       this.wsTemplate,
       this.appname,
+      {
+        'loopback-component-explorer': this.options.explorer !== false,
+      },
       done
     );
   },
