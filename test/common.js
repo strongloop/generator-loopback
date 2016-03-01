@@ -64,8 +64,11 @@ exports.createExampleGenerator = function() {
   return exports.createGenerator(name, path, deps, args, options);
 };
 
-exports.readJsonSync = function(relativePath) {
+exports.readJsonSync = function(relativePath, defaultValue) {
     var filepath = path.resolve(SANDBOX, relativePath);
+    if (defaultValue !== undefined && !fs.existsSync(filepath))
+      return defaultValue;
+
     var content = fs.readFileSync(filepath, 'utf-8');
     return JSON.parse(content);
 };
