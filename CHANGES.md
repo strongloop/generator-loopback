@@ -1,4 +1,14 @@
-2016-03-01, Version 1.16.0
+2016-03-07, Version 1.16.1
+==========================
+
+ * Remove prompt for datasources when none exist (Ritchie Martori)
+
+ * Implement `yo loopback --no-explorer` (Miroslav Bajtoš)
+
+ * datasource: ask for connector-specific settings (Miroslav Bajtoš)
+
+
+2016-02-29, Version 1.16.0
 ==========================
 
  * Use http and verb (juehou)
@@ -368,8 +378,6 @@
 
 2014-07-17, Version 1.0.0-beta1
 ===============================
-
- * 1.0.0-beta1 (Miroslav Bajtoš)
 
  * property: fix array type (Miroslav Bajtoš)
 
