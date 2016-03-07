@@ -7,6 +7,8 @@ var fs = require('fs');
 var expect = require('chai').expect;
 var wsModels = require('loopback-workspace').models;
 var common = require('./common');
+var workspace = require('loopback-workspace');
+var Workspace = workspace.models.Workspace;
 
 describe('loopback:model generator', function() {
   beforeEach(common.resetWorkspace);
@@ -95,6 +97,31 @@ describe('loopback:model generator', function() {
       var product = readProductJsonSync();
       expect(product).to.have.property('base', 'CustomModel');
       done();
+    });
+  });
+
+  describe('in an empty project', function() {
+    beforeEach(common.resetWorkspace);
+    beforeEach(function createSandbox(done) {
+      helpers.testDirectory(SANDBOX, done);
+    });
+    beforeEach(function(done) {
+      process.env.WORKSPACE_DIR = SANDBOX;
+      Workspace.createFromTemplate('empty-server', 'empty', done);
+    });
+
+    it('should set dataSource to null', function(done) {
+      var modelGen = givenModelGenerator();
+      helpers.mockPrompt(modelGen, {
+        name: 'Product',
+        plural: 'pds'
+      });
+
+      modelGen.run(function() {
+        var modelConfig = readModelsJsonSync();
+        expect(modelConfig.Product.dataSource).to.eql(null);
+        done();
+      });
     });
   });
 
