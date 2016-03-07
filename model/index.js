@@ -66,6 +66,7 @@ module.exports = yeoman.generators.Base.extend({
 
   askForParameters: function() {
     var done = this.async();
+    var hasDatasources = this.dataSources && this.dataSources.length > 1;
 
     this.displayName = chalk.yellow(this.name);
 
@@ -77,14 +78,6 @@ module.exports = yeoman.generators.Base.extend({
       }]);
 
     var prompts = [
-      {
-        name: 'dataSource',
-        message: 'Select the data-source to attach ' +
-          this.displayName + ' to:',
-        type: 'list',
-        default: 'db',
-        choices: this.dataSources
-      },
       {
         name: 'base',
         message: 'Select model\'s base class',
@@ -125,8 +118,24 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
+    if (hasDatasources) {
+      prompts.unshift({
+        name: 'dataSource',
+        message: 'Select the data-source to attach ' +
+          this.displayName + ' to:',
+        type: 'list',
+        default: 'db',
+        choices: this.dataSources
+      });
+    }
+
     this.prompt(prompts, function(props) {
-      this.dataSource = props.dataSource;
+      if (hasDatasources) {
+        this.dataSource = props.dataSource;
+      } else {
+        this.dataSource = null;
+      }
+
       this.public = props.public;
       this.plural = props.plural || undefined;
       this.base = props.customBase || props.base;
