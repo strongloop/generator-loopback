@@ -68,6 +68,17 @@ module.exports = yeoman.generators.Base.extend({
     var done = this.async();
     var hasDatasources = this.dataSources && this.dataSources.length > 1;
 
+    // Use 'db' as the default datasource if it exists
+    var defaultDS = null;
+    if (hasDatasources) {
+      var found = this.dataSources.some(function(ds) {
+        return ds.name === 'db';
+      });
+      if (found) {
+        defaultDS = 'db';
+      }
+    }
+
     this.displayName = chalk.yellow(this.name);
 
     var baseModelChoices = ['Model', 'PersistedModel']
@@ -124,7 +135,7 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Select the data-source to attach ' +
           this.displayName + ' to:',
         type: 'list',
-        default: 'db',
+        default: defaultDS,
         choices: this.dataSources
       });
     }
