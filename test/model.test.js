@@ -123,6 +123,27 @@ describe('loopback:model generator', function() {
         done();
       });
     });
+
+    it('should set dataSource to null if db does not exist', function(done) {
+      wsModels.DataSourceDefinition.create({
+        name: 'db1',
+        connector: 'memory',
+        facetName: 'server'
+      }, function(err) {
+        if (err) return done(err);
+        var modelGen = givenModelGenerator();
+        helpers.mockPrompt(modelGen, {
+          name: 'Review',
+          plural: 'Reviews'
+        });
+
+        modelGen.run(function() {
+          var modelConfig = readModelsJsonSync();
+          expect(modelConfig.Review.dataSource).to.eql(null);
+          done();
+        });
+      });
+    });
   });
 
   function givenModelGenerator(modelArgs) {
