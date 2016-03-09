@@ -1,3 +1,9 @@
+2016-03-09, Version 1.16.2
+==========================
+
+ * Only use 'db' as the default datasource for a model if 'db' exists (Raymond Feng)
+
+
 2016-03-07, Version 1.16.1
 ==========================
 
@@ -378,6 +384,8 @@
 
 2014-07-17, Version 1.0.0-beta1
 ===============================
+
+ * 1.0.0-beta1 (Miroslav Bajtoš)
 
  * property: fix array type (Miroslav Bajtoš)
 
