@@ -1,3 +1,9 @@
+2016-03-10, Version 1.17.0
+==========================
+
+ * Add support for object/array data source settings (Raymond Feng)
+
+
 2016-03-10, Version 1.16.3
 ==========================
 
