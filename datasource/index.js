@@ -111,7 +111,10 @@ module.exports = yeoman.generators.Base.extend({
   askForConfig: function() {
     var self = this;
     var settings = this.connectorSettings[this.connector];
-    if (!settings) return;
+    if (!settings) {
+      this.settings = {};
+      return;
+    }
 
     var warnings = [];
     var reportWarnings = function() {
@@ -158,7 +161,7 @@ module.exports = yeoman.generators.Base.extend({
           props[key] = Number(props[key]);
         }
       }
-      this.settings = props;
+      this.settings = props || {};
       reportWarnings();
       done();
     }.bind(this));
