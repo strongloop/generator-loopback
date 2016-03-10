@@ -36,6 +36,24 @@ describe('loopback:datasource generator', function() {
     });
   });
 
+  it('allow connector without settings', function(done) {
+    var modelGen = givenDataSourceGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'proxy',
+      customConnector: '', // temporary workaround for
+                           // https://github.com/yeoman/generator/issues/600
+      connector: 'rest'
+    });
+
+    var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
+    modelGen.run(function() {
+      var newSources = Object.keys(readDataSourcesJsonSync('server'));
+      var expectedSources = builtinSources.concat(['proxy']);
+      expect(newSources).to.have.members(expectedSources);
+      done();
+    });
+  });
+
   function givenDataSourceGenerator(dsArgs) {
     var path = '../../datasource';
     var name = 'loopback:datasource';
