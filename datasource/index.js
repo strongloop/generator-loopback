@@ -8,6 +8,7 @@ var wsModels = require('loopback-workspace').models;
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateName = helpers.validateName;
+var objectValidator = helpers.objectValidator;
 
 module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
@@ -111,8 +112,8 @@ module.exports = yeoman.generators.Base.extend({
   askForConfig: function() {
     var self = this;
     var settings = this.connectorSettings[this.connector];
+    this.settings = {};
     if (!settings) {
-      this.settings = {};
       return;
     }
 
@@ -134,6 +135,12 @@ module.exports = yeoman.generators.Base.extend({
         case 'string':
         case 'number':
           question.type = prop.display === 'password' ? 'password' : 'input';
+          break;
+        case 'object':
+        case 'array':
+          // For object/array, we expect a stringified json
+          question.type = 'input';
+          question.validate = objectValidator(prop.type);
           break;
         case 'boolean':
           question.type = 'confirm';
@@ -157,8 +164,15 @@ module.exports = yeoman.generators.Base.extend({
     var done = this.async();
     this.prompt(prompts, function(props) {
       for (var key in settings) {
-        if (settings[key].type === 'number') {
+        var propType = settings[key].type;
+        if (propType === 'number') {
           props[key] = Number(props[key]);
+        } else if (propType === 'array' || propType === 'object') {
+          if (props[key] == null || props[key] === '') {
+            delete props[key];
+          } else {
+            props[key] = JSON.parse(props[key]);
+          }
         }
       }
       this.settings = props || {};
