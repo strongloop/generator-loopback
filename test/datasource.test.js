@@ -39,17 +39,46 @@ describe('loopback:datasource generator', function() {
   it('allow connector without settings', function(done) {
     var modelGen = givenDataSourceGenerator();
     helpers.mockPrompt(modelGen, {
-      name: 'proxy',
+      name: 'kafka1',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
-      connector: 'rest'
+      connector: 'kafka'
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
     modelGen.run(function() {
       var newSources = Object.keys(readDataSourcesJsonSync('server'));
-      var expectedSources = builtinSources.concat(['proxy']);
+      var expectedSources = builtinSources.concat(['kafka1']);
       expect(newSources).to.have.members(expectedSources);
+      done();
+    });
+  });
+
+  it('should support object/array settings', function(done) {
+    var restOptions = {
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json'
+      }
+    };
+    var modelGen = givenDataSourceGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'rest1',
+      customConnector: '', // temporary workaround for
+                           // https://github.com/yeoman/generator/issues/600
+      connector: 'rest',
+      options: JSON.stringify(restOptions),
+      operations: '[]'
+    });
+
+    var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
+    modelGen.run(function() {
+      var json = readDataSourcesJsonSync('server');
+      var newSources = Object.keys(json);
+      var expectedSources = builtinSources.concat(['rest1']);
+      expect(newSources).to.have.members(expectedSources);
+      expect(json.rest1.options).to.eql(restOptions);
+      expect(json.rest1.operations).to.eql([]);
       done();
     });
   });
