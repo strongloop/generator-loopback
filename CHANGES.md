@@ -1,4 +1,10 @@
-2016-03-09, Version 1.16.2
+2016-03-10, Version 1.16.3
+==========================
+
+ * Allow connectors without config settings (Raymond Feng)
+
+
+2016-03-08, Version 1.16.2
 ==========================
 
  * Only use 'db' as the default datasource for a model if 'db' exists (Raymond Feng)
