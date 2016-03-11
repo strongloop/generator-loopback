@@ -131,6 +131,9 @@ module.exports = yeoman.generators.Base.extend({
         name: key,
         message: (prop.description || key) + ':',
       };
+      if (prop.default !== undefined) {
+        question.default = prop.default;
+      }
       switch ((prop.type || '').toLowerCase()) {
         case 'string':
         case 'number':
