@@ -1,3 +1,9 @@
+2016-03-11, Version 1.17.2
+==========================
+
+ * Allow default value for datasource settings (Raymond Feng)
+
+
 2016-03-10, Version 1.17.1
 ==========================
 
