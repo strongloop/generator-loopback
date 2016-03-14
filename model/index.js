@@ -72,10 +72,13 @@ module.exports = yeoman.generators.Base.extend({
     var defaultDS = null;
     if (hasDatasources) {
       var found = this.dataSources.some(function(ds) {
-        return ds.name === 'db';
+        return ds.value === 'db';
       });
       if (found) {
         defaultDS = 'db';
+      } else {
+        // default to 1st one
+        defaultDS = this.dataSources[0].value;
       }
     }
 

@@ -84,6 +84,22 @@ describe('loopback:model generator', function() {
     });
   });
 
+  it('sets `dataSource` option to db by default', function(done) {
+    var modelGen = givenModelGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'Product',
+      base: 'PersistedModel'
+    });
+
+    modelGen.run(function() {
+      var product = readProductJsonSync();
+      expect(product).to.have.property('base', 'PersistedModel');
+      var modelConfig = readModelsJsonSync();
+      expect(modelConfig.Product.dataSource).to.eql('db');
+      done();
+    });
+  });
+
   it('sets custom `base` option', function(done) {
     var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
@@ -124,7 +140,7 @@ describe('loopback:model generator', function() {
       });
     });
 
-    it('should set dataSource to null if db does not exist', function(done) {
+    it('should set dataSource to 1st one if db does not exist', function(done) {
       wsModels.DataSourceDefinition.create({
         name: 'db1',
         connector: 'memory',
@@ -139,11 +155,37 @@ describe('loopback:model generator', function() {
 
         modelGen.run(function() {
           var modelConfig = readModelsJsonSync();
-          expect(modelConfig.Review.dataSource).to.eql(null);
+          expect(modelConfig.Review.dataSource).to.eql('db1');
           done();
         });
       });
     });
+
+    it('should set dataSource to db if it exists', function(done) {
+      wsModels.DataSourceDefinition.create([{
+        name: 'db1',
+        connector: 'memory',
+        facetName: 'server'
+      }, {
+        name: 'db',
+        connector: 'memory',
+        facetName: 'server'
+      }], function(err) {
+        if (err) return done(err);
+        var modelGen = givenModelGenerator();
+        helpers.mockPrompt(modelGen, {
+          name: 'Review',
+          plural: 'Reviews'
+        });
+
+        modelGen.run(function() {
+          var modelConfig = readModelsJsonSync();
+          expect(modelConfig.Review.dataSource).to.eql('db');
+          done();
+        });
+      });
+    });
+
   });
 
   function givenModelGenerator(modelArgs) {
