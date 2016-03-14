@@ -1,4 +1,10 @@
-2016-03-11, Version 1.17.2
+2016-03-14, Version 1.18.0
+==========================
+
+ * Fix data source ordier and default for models (Raymond Feng)
+
+
+2016-03-10, Version 1.17.2
 ==========================
 
  * Allow default value for datasource settings (Raymond Feng)
@@ -408,8 +414,6 @@
 
 2014-07-17, Version 1.0.0-beta1
 ===============================
-
- * 1.0.0-beta1 (Miroslav Bajtoš)
 
  * property: fix array type (Miroslav Bajtoš)
 
