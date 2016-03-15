@@ -24,7 +24,8 @@ describe('loopback:datasource generator', function() {
       name: 'crm',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
-      connector: 'mysql'
+      connector: 'mysql',
+      installConnector: false
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
@@ -42,7 +43,8 @@ describe('loopback:datasource generator', function() {
       name: 'kafka1',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
-      connector: 'kafka'
+      connector: 'kafka',
+      installConnector: false
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
@@ -50,6 +52,25 @@ describe('loopback:datasource generator', function() {
       var newSources = Object.keys(readDataSourcesJsonSync('server'));
       var expectedSources = builtinSources.concat(['kafka1']);
       expect(newSources).to.have.members(expectedSources);
+      done();
+    });
+  });
+
+  it('should install connector module on demand', function(done) {
+    var modelGen = givenDataSourceGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'rest0',
+      customConnector: '', // temporary workaround for
+                           // https://github.com/yeoman/generator/issues/600
+      connector: 'rest'
+    });
+
+    modelGen.run(function() {
+      var pkg = fs.readFileSync(
+        path.join(SANDBOX, 'package.json'), 'UTF-8');
+      pkg = JSON.parse(pkg);
+      /* jshint -W030 */
+      expect(pkg.dependencies['loopback-connector-rest']).to.exist;
       done();
     });
   });
@@ -68,7 +89,8 @@ describe('loopback:datasource generator', function() {
                            // https://github.com/yeoman/generator/issues/600
       connector: 'rest',
       options: JSON.stringify(restOptions),
-      operations: '[]'
+      operations: '[]',
+      installConnector: false
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
