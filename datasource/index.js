@@ -9,6 +9,8 @@ var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateName = helpers.validateName;
 var objectValidator = helpers.objectValidator;
+var path = require('path');
+var fs = require('fs');
 
 module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
@@ -47,6 +49,11 @@ module.exports = yeoman.generators.Base.extend({
           name: c.description + support,
           value: c.name
         };
+      });
+
+      var availableConnectors = this.availableConnectors = {};
+      list.forEach(function(c) {
+        availableConnectors[c.name] = c;
       });
 
       var connectorSettings = this.connectorSettings = {};
@@ -181,6 +188,42 @@ module.exports = yeoman.generators.Base.extend({
       this.settings = props || {};
       reportWarnings();
       done();
+    }.bind(this));
+  },
+
+  installConnector: function() {
+    var connector = this.availableConnectors[this.connector];
+    var pkg = connector.package;
+    if (!pkg) return;
+
+    var npmModule = pkg.name;
+    if (pkg.version) {
+      npmModule += '@' + pkg.version;
+    }
+    var projectPkg = JSON.parse(
+      fs.readFileSync(path.join(this.projectDir, 'package.json'), 'utf-8'));
+    if (projectPkg.dependencies[pkg.name]) {
+      return;
+    }
+
+    var done = this.async();
+
+    var prompts = [
+      {
+        name: 'installConnector',
+        message: 'Install ' + npmModule,
+        type: 'confirm',
+        default: true
+      }
+    ];
+
+    this.prompt(prompts, function(props) {
+      if (props.installConnector) {
+        this.npmInstall([npmModule], {'save': true});
+        done();
+      } else {
+        done();
+      }
     }.bind(this));
   },
 

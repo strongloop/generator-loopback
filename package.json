@@ -15,7 +15,7 @@
   },
   "scripts": {
     "pretest": "jshint .",
-    "test": "mocha -R spec"
+    "test": "mocha -R spec --timeout 60000"
   },
   "keywords": [
     "yeoman-generator",
