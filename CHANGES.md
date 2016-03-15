@@ -1,3 +1,9 @@
+2016-03-15, Version 1.19.0
+==========================
+
+ * Add the option to install connector modules on demand (Raymond Feng)
+
+
 2016-03-14, Version 1.18.0
 ==========================
 
