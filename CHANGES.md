@@ -1,3 +1,27 @@
+2016-03-18, Version 1.20.0
+==========================
+
+ * Change helpers.getBaseModelForDataSourceName to be async (Raymond Feng)
+
+ * Check the required name (Raymond Feng)
+
+ * Fix the test case (Raymond Feng)
+
+ * Fixing copy-paste error of field name (Sean Moore)
+
+ * Linting updates (Sean Moore)
+
+ * Add tests for default values of properties (Sean Moore)
+
+ * More style changes for project linting (Sean Moore)
+
+ * Style changes to meet project exepectations (Sean Moore)
+
+ * Updating overwritten master changes (Sean Moore)
+
+ * Add prompt for default values on model properties (Sean Moore)
+
+
 2016-03-15, Version 1.19.0
 ==========================
 
