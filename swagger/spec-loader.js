@@ -63,7 +63,7 @@ function loadSpec(specUrlStr, log, cb) {
       }
     });
   } else {
-    if (specUrl.href.match(/.yml/)) {
+    if (specUrl.href.match(/\.(yaml|yml)$/)) {
       try {
         var spec = yaml.safeLoad(fs.readFileSync(specUrl.href, 'utf8'));
         cb(null, spec);
