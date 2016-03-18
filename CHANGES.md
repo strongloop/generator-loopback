@@ -1,4 +1,10 @@
-2016-03-18, Version 1.20.0
+2016-03-18, Version 1.20.1
+==========================
+
+ * Use the correct regex to test yml/yaml extension (Raymond Feng)
+
+
+2016-03-17, Version 1.20.0
 ==========================
 
  * Change helpers.getBaseModelForDataSourceName to be async (Raymond Feng)
