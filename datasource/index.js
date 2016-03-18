@@ -73,7 +73,13 @@ module.exports = yeoman.generators.Base.extend({
         name: 'name',
         message: 'Enter the data-source name:',
         default: this.name,
-        validate: validateName
+        validate: function(name) {
+          if (!name) {
+            return 'Name is required';
+          } else {
+            return validateName(name);
+          }
+        }
       }
     ];
 
