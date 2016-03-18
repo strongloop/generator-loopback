@@ -64,6 +64,16 @@ module.exports = yeoman.generators.Base.extend({
 
   },
 
+  getBaseModels: function() {
+    var done = this.async();
+    helpers.getBaseModelForDataSourceName(
+      this.dataSource, this.dataSources, function(err, models) {
+        if (err) return done(err);
+        this.baseModels = models;
+        done();
+      }.bind(this));
+  },
+
   askForParameters: function() {
     var done = this.async();
     var hasDatasources = this.dataSources && this.dataSources.length > 1;
@@ -96,10 +106,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'base',
         message: 'Select model\'s base class',
         type: 'list',
-        default: function(answers) {
-          return helpers.getBaseModelForDataSourceName(
-            answers.dataSource, this.dataSources);
-        }.bind(this),
+        default: this.baseModels,
         choices: baseModelChoices
       },
       {

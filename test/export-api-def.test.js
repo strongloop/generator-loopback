@@ -75,8 +75,8 @@ describe('loopback:export-api-def generator', function() {
     gen.run(function() {
       var content = readYamlFile();
       expect(content).to.have.property('swagger', '2.0');
-      expect(content).to.have.property('host');
-      expect(content).to.have.property('schemes');
+      expect(content).to.not.have.property('host');
+      expect(content).to.not.have.property('schemes');
       expect(content).to.not.have.property('public');
       expect(content).to.have.property('basePath');
       expect(content).to.have.property('info');
