@@ -30,7 +30,7 @@
     "js-yaml": "^3.4.2",
     "loopback-api-definition": "^1.0.0",
     "loopback-swagger": "^2.0.0",
-    "loopback-workspace": "^3.24.0",
+    "loopback-workspace": "^3.28.0",
     "mkdirp": "^0.5.1",
     "request": "^2.60.0",
     "yeoman-generator": "^0.21.1",
