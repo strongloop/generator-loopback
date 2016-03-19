@@ -81,6 +81,36 @@ describe('loopback:swagger generator', function () {
       });
     });
 
+  it('creates and configures server only note model from swagger 2.0 spec yaml',
+    function (done) {
+      var modelGen = givenModelGenerator();
+      helpers.mockPrompt(modelGen, {
+        url: path.join(__dirname, 'swagger/demo4.yaml'),
+        modelSelections:
+          ['swagger_api', 'note'],
+        dataSource: 'db'
+      });
+
+      modelGen.run(function () {
+        var content = readModelJsonSync('note');
+        expect(content).to.have.property('name', 'note');
+        expect(content).to.not.have.property('public');
+        expect(content).to.have.property('properties');
+        expect(content.properties).to.have.property('title');
+        expect(content.properties).to.have.property('content');
+
+        expect(content.properties.title.type).to.eql('string');
+        expect(content.properties.title.required).to.eql(true);
+        expect(content.properties.content.type).to.eql('string');
+
+        var modelConfig = readModelConfigSync('server');
+        expect(modelConfig).to.have.property('note');
+        expect(modelConfig.note).to.have.property('public', true);
+        expect(modelConfig.note).to.have.property('dataSource', 'db');
+        done();
+      });
+    });
+
   it('creates and configures server only Pet model from swagger 1.2 spec',
     function (done) {
       var modelGen = givenModelGenerator();

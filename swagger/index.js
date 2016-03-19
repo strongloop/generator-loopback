@@ -188,14 +188,15 @@ module.exports = yeoman.generators.Base.extend({
             choices: self.dataSources
           }
         ];
-        self.prompt(prompts, function (answers) {
+        self.prompt(prompts, function(answers) {
           self.dataSource = answers.dataSource;
-          answers.modelSelections.forEach(function (m) {
+          answers.modelSelections.forEach(function(m) {
             for (var i = 0, n = choices.length; i < n; i++) {
               var c = choices[i];
               if (c.name === m) {
                 self.selectedModels[c.modelName] =
-                  (c.flag === -1 ? 1 : 2);
+                  (c.flag === CONFLICT_DETECTED ?
+                    SELECTED_FOR_UPDATE : SELECTED_FOR_CREATE);
                 break;
               }
             }
@@ -207,6 +208,17 @@ module.exports = yeoman.generators.Base.extend({
 
   generateApis: function () {
     var self = this;
+    var found = false;
+    for (var m in this.selectedModels) {
+      if (this.selectedModels[m] === SELECTED_FOR_UPDATE ||
+        this.selectedModels[m] === SELECTED_FOR_CREATE) {
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      return;
+    }
     var done = this.async();
 
     function createModel(self, modelDef, cb) {
@@ -299,6 +311,9 @@ module.exports = yeoman.generators.Base.extend({
       var apis = self.apis;
       async.eachSeries(apis, function (api, done) {
         var modelDef = api.modelDefinition;
+        if (!modelDef) {
+          return done();
+        }
         self.log(chalk.green('Generating ' + modelDef.scriptPath));
         fs.writeFile(modelDef.scriptPath, api.code, done);
       }, cb);
