@@ -1,3 +1,9 @@
+2016-03-19, Version 1.20.2
+==========================
+
+ * Fix code generation from swagger (Raymond Feng)
+
+
 2016-03-18, Version 1.20.1
 ==========================
 
