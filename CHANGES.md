@@ -1,3 +1,9 @@
+2016-03-20, Version 1.20.3
+==========================
+
+ * Fix swagger code gen when no data sources are defined (Raymond Feng)
+
+
 2016-03-19, Version 1.20.2
 ==========================
 
