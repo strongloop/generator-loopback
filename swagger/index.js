@@ -42,6 +42,7 @@ module.exports = yeoman.generators.Base.extend({
   loadProject: actions.loadProject,
 
   loadDataSources: actions.loadDataSources,
+  addNullDataSourceItem: actions.addNullDataSourceItem,
 
   askForSpecUrlOrPath: function () {
     var done = this.async();
@@ -184,7 +185,7 @@ module.exports = yeoman.generators.Base.extend({
             name: 'dataSource',
             message: 'Select the data-source to attach models to:',
             type: 'list',
-            default: 'db',
+            default: self.defaultDataSource,
             choices: self.dataSources
           }
         ];

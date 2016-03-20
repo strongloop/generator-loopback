@@ -76,21 +76,6 @@ module.exports = yeoman.generators.Base.extend({
 
   askForParameters: function() {
     var done = this.async();
-    var hasDatasources = this.dataSources && this.dataSources.length > 1;
-
-    // Use 'db' as the default datasource if it exists
-    var defaultDS = null;
-    if (hasDatasources) {
-      var found = this.dataSources.some(function(ds) {
-        return ds.value === 'db';
-      });
-      if (found) {
-        defaultDS = 'db';
-      } else {
-        // default to 1st one
-        defaultDS = this.dataSources[0].value;
-      }
-    }
 
     this.displayName = chalk.yellow(this.name);
 
@@ -139,19 +124,19 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    if (hasDatasources) {
+    if (this.hasDatasources) {
       prompts.unshift({
         name: 'dataSource',
         message: 'Select the data-source to attach ' +
           this.displayName + ' to:',
         type: 'list',
-        default: defaultDS,
+        default: this.defaultDataSource,
         choices: this.dataSources
       });
     }
 
     this.prompt(prompts, function(props) {
-      if (hasDatasources) {
+      if (this.hasDatasources) {
         this.dataSource = props.dataSource;
       } else {
         this.dataSource = null;
