@@ -1,4 +1,10 @@
-2016-03-20, Version 1.20.3
+2016-03-23, Version 1.20.4
+==========================
+
+ * Exclude .pkgcache (Raymond Feng)
+
+
+2016-03-19, Version 1.20.3
 ==========================
 
  * Fix swagger code gen when no data sources are defined (Raymond Feng)
