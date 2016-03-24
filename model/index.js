@@ -31,6 +31,10 @@ module.exports = yeoman.generators.Base.extend({
     //   "generator#invoke() is deprecated. Use generator#composeWith()"
     // See https://github.com/strongloop/generator-loopback/issues/116
     this.invoke = require('yeoman-generator/lib/actions/invoke');
+
+    this.on('error', function(err) {
+      this.env._lb_abort = err;
+    });
   },
 
   help: function() {
@@ -46,6 +50,7 @@ module.exports = yeoman.generators.Base.extend({
   addNullDataSourceItem: actions.addNullDataSourceItem,
 
   askForName: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
 
     var prompts = [
@@ -65,6 +70,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   getBaseModels: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
     helpers.getBaseModelForDataSourceName(
       this.dataSource, this.dataSources, function(err, models) {
@@ -75,6 +81,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForParameters: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
 
     this.displayName = chalk.yellow(this.name);
@@ -152,6 +159,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   modelDefinition: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
     var config = {
       name: this.name,
@@ -167,6 +175,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   modelConfiguration: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
     var config = {
       name: this.name,
@@ -182,10 +191,12 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   delim: function() {
+    if (this.env._lb_abort) return;
     this.log('Let\'s add some ' + this.displayName + ' properties now.\n');
   },
 
   property: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
     this.log('Enter an empty property name when done.');
     var prompts = [

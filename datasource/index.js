@@ -28,6 +28,10 @@ module.exports = yeoman.generators.Base.extend({
       required: false,
       type: String
     });
+
+    this.on('error', function(err) {
+      this.env._lb_abort = err;
+    });
   },
 
   help: function() {
@@ -35,6 +39,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   loadConnectors: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
     wsModels.Workspace.listAvailableConnectors(function(err, list) {
       if (err) {
@@ -66,6 +71,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForName: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
 
     var prompts = [
@@ -91,6 +97,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForParameters: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
 
     var displayName = chalk.yellow(this.name);
@@ -123,6 +130,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForConfig: function() {
+    if (this.env._lb_abort) return;
     var self = this;
     var settings = this.connectorSettings[this.connector];
     this.settings = {};
@@ -198,6 +206,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   installConnector: function() {
+    if (this.env._lb_abort) return;
     var connector = this.availableConnectors[this.connector];
     var pkg = connector.package;
     if (!pkg) return;
@@ -234,6 +243,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   dataSource: function() {
+    if (this.env._lb_abort) return;
     var done = this.async();
     var config = extend(this.settings, {
       name: this.name,
