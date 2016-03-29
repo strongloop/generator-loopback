@@ -201,27 +201,23 @@ module.exports = yeoman.generators.Base.extend({
       this.log(chalk.green('    $ cd ' + this.dir));
       this.log();
     }
-    this.log('  Create a model in your app');
     if (cmd === 'apic') {
-      this.log(chalk.green('    $ ' + cmd + ' create --type model'));
-    } else {
-      this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
-    }
-    this.log();
-    if (cmd === 'apic') {
-      this.log('  Compose your API, run, manage, enforce and deploy it' +
-        ' with API Connect');
+      this.log('  Run API Designer to create, test, and publish your' +
+        ' application');
       this.log(chalk.green('    $ apic edit'));
+      this.log();
     } else {
+      this.log('  Create a model in your app');
+      this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
+      this.log();
       this.log(
         '  Compose your API, run, deploy, profile, and monitor it with Arc');
       this.log(chalk.green('    $ slc arc'));
+      this.log();
+      this.log('  Run the app');
+      this.log(chalk.green('    $ node .'));
+      this.log();
     }
-
-    this.log();
-    this.log('  Run the app');
-    this.log(chalk.green('    $ node .'));
-    this.log();
   }
 });
 
