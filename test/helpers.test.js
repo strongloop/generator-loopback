@@ -57,6 +57,10 @@ describe('helpers', function() {
       testValidationRejectsValue(validateName, 'my:prop');
       testValidationRejectsValue(validateName, 'm.prop');
     });
+
+    it('should report errors for an empty name', function() {
+      testValidationRejectsValue(validateName, '');
+    });
   });
 
   // test checkRelationName()
