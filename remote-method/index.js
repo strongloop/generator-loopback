@@ -388,7 +388,7 @@ function buildMethodSource(def) {
     def.methodName
   );
   var functionDef = [util.format(
-    ref + ' = funtion(%s) {',
+    ref + ' = function(%s) {',
     chalk.green(buildInputArgs(def.accepts).join(', '))
     )
   ];
