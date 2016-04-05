@@ -1,3 +1,15 @@
+2016-04-05, Version 1.20.5
+==========================
+
+ * Fix how default base model is set (Raymond Feng)
+
+ * typo 'funtion' (Manu Phatak)
+
+ * Check empty name in validateName and add testcase (juehou)
+
+ * Pare down next steps text when running apic. (Rick Curtis)
+
+
 2016-03-23, Version 1.20.4
 ==========================
 
