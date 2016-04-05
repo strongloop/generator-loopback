@@ -87,8 +87,7 @@ describe('loopback:model generator', function() {
   it('sets `dataSource` option to db by default', function(done) {
     var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
-      name: 'Product',
-      base: 'PersistedModel'
+      name: 'Product'
     });
 
     modelGen.run(function() {
@@ -136,6 +135,8 @@ describe('loopback:model generator', function() {
       modelGen.run(function() {
         var modelConfig = readModelsJsonSync();
         expect(modelConfig.Product.dataSource).to.eql(null);
+        var product = readProductJsonSync();
+        expect(product).to.have.property('base', 'Model');
         done();
       });
     });

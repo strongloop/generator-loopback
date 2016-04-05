@@ -64,12 +64,42 @@ module.exports = yeoman.generators.Base.extend({
 
   },
 
+  askForDataSource: function() {
+    if (!this.hasDatasources) {
+      this.dataSource = null;
+      return;
+    }
+    var done = this.async();
+
+    var prompts = [{
+        name: 'dataSource',
+        message: 'Select the data-source to attach ' +
+        this.displayName + ' to:',
+        type: 'list',
+        default: this.defaultDataSource,
+        choices: this.dataSources
+      }];
+
+    this.prompt(prompts, function(props) {
+      if (this.hasDatasources) {
+        this.dataSource = props.dataSource;
+      } else {
+        this.dataSource = null;
+      }
+      done();
+    }.bind(this));
+  },
+
   getBaseModels: function() {
+    if (!this.dataSource) {
+      this.baseModel = 'Model';
+      return;
+    }
     var done = this.async();
     helpers.getBaseModelForDataSourceName(
-      this.dataSource, this.dataSources, function(err, models) {
+      this.dataSource, this.dataSources, function(err, model) {
         if (err) return done(err);
-        this.baseModels = models;
+        this.baseModel = model;
         done();
       }.bind(this));
   },
@@ -91,7 +121,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'base',
         message: 'Select model\'s base class',
         type: 'list',
-        default: this.baseModels,
+        default: this.baseModel,
         choices: baseModelChoices
       },
       {
@@ -124,24 +154,7 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    if (this.hasDatasources) {
-      prompts.unshift({
-        name: 'dataSource',
-        message: 'Select the data-source to attach ' +
-          this.displayName + ' to:',
-        type: 'list',
-        default: this.defaultDataSource,
-        choices: this.dataSources
-      });
-    }
-
     this.prompt(prompts, function(props) {
-      if (this.hasDatasources) {
-        this.dataSource = props.dataSource;
-      } else {
-        this.dataSource = null;
-      }
-
       this.public = props.public;
       this.plural = props.plural || undefined;
       this.base = props.customBase || props.base;
