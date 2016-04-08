@@ -32,7 +32,7 @@ describe('loopback:export-api-def generator', function() {
     wsModels.ModelDefinition.create(
       {
         name: 'Product',
-        facetName: 'common'
+        facetName: 'common',
       },
       function(err, model) {
         test.Model = model;
@@ -62,12 +62,12 @@ describe('loopback:export-api-def generator', function() {
       expect(content.consumes).to.have.members([
         'application/json',
         'application/x-www-form-urlencoded',
-        'application/xml', 'text/xml'
+        'application/xml', 'text/xml',
       ]);
       expect(content.produces).to.have.members([
         'application/json',
         'application/xml', 'text/xml',
-        'application/javascript', 'text/javascript'
+        'application/javascript', 'text/javascript',
       ]);
       done();
     });
@@ -91,12 +91,12 @@ describe('loopback:export-api-def generator', function() {
       expect(content.consumes).to.have.members([
         'application/json',
         'application/x-www-form-urlencoded',
-        'application/xml', 'text/xml'
+        'application/xml', 'text/xml',
       ]);
       expect(content.produces).to.have.members([
         'application/json',
         'application/xml', 'text/xml',
-        'application/javascript', 'text/javascript'
+        'application/javascript', 'text/javascript',
       ]);
       done();
     });

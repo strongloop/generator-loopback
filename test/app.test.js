@@ -34,20 +34,19 @@ describe('loopback:app generator', function() {
     'server/model-config.json',
     'server/server.js',
 
-    'client/README.md'
+    'client/README.md',
   ];
 
   it('creates expected files', function(done) {
-
     var gen = givenAppGenerator();
 
     helpers.mockPrompt(gen, {
       name: 'test-app',
-      template: 'api-server'
+      template: 'api-server',
     });
 
     gen.options['skip-install'] = true;
-    gen.run(function () {
+    gen.run(function() {
       ygAssert.file(EXPECTED_PROJECT_FILES);
       done();
     });
@@ -128,35 +127,35 @@ describe('loopback:app generator', function() {
 
   it('scaffolds 3.x app when option.loopbackVersion is 3.x',
     function(done) {
-    var gen = givenAppGenerator();
+      var gen = givenAppGenerator();
 
-    helpers.mockPrompt(gen, {
-      name: 'test-app',
-      template: 'api-server',
-      loopbackVersion: '3.x'
+      helpers.mockPrompt(gen, {
+        name: 'test-app',
+        template: 'api-server',
+        loopbackVersion: '3.x',
+      });
+      gen.run(function() {
+        var pkg = common.readJsonSync('package.json', {});
+        expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(false);
+        done();
+      });
     });
-    gen.run(function () {
-      var pkg = common.readJsonSync('package.json', {});
-      expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(false);
-      done();
-    });
-  });
 
   it('scaffolds 2.x app when option.loopbackVersion is 2.x',
     function(done) {
-    var gen = givenAppGenerator();
+      var gen = givenAppGenerator();
 
-    helpers.mockPrompt(gen, {
-      name: 'test-app',
-      template: 'api-server',
-      loopbackVersion: '2.x'
+      helpers.mockPrompt(gen, {
+        name: 'test-app',
+        template: 'api-server',
+        loopbackVersion: '2.x',
+      });
+      gen.run(function() {
+        var pkg = common.readJsonSync('package.json', {});
+        expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(true);
+        done();
+      });
     });
-    gen.run(function () {
-      var pkg = common.readJsonSync('package.json', {});
-      expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(true);
-      done();
-    });
-  });
 
   function givenAppGenerator(modelArgs) {
     var name = 'loopback:app';
@@ -172,7 +171,7 @@ describe('loopback:app generator', function() {
     helpers.testDirectory(dir, function() {
       helpers.mockPrompt(gen, {
         wsTemplate: 'api-server',
-        dir: cwdName
+        dir: cwdName,
       });
 
       gen.run(function() {

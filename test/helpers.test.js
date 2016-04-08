@@ -29,7 +29,7 @@ describe('helpers', function() {
       testValidationRejectsValue(validateAppName, '.app');
     });
 
-    it('should report errors for a name containing special chars', function () {
+    it('should report errors for a name containing special chars', function() {
       testValidationRejectsValue(validateAppName, 'my app');
       testValidationRejectsValue(validateAppName, 'my/app');
       testValidationRejectsValue(validateAppName, 'my@app');
@@ -39,13 +39,12 @@ describe('helpers', function() {
     });
 
     it('should report errors for a name as node_modules/favicon.ico',
-      function () {
+      function() {
         testValidationRejectsValue(validateAppName, 'node_modules');
         testValidationRejectsValue(validateAppName, 'Node_Modules');
         testValidationRejectsValue(validateAppName, 'favicon.ico');
         testValidationRejectsValue(validateAppName, 'favicon.ICO');
       });
-
   });
 
   describe('validateRequiredName()', function() {
@@ -111,7 +110,7 @@ describe('helpers', function() {
   describe('checkRelationName()', function() {
     var sampleModelDefinition = new ModelDefinition([
       {name: 'name', id: 1},
-      {name: 'city', id: 2}
+      {name: 'city', id: 2},
     ]);
     it('should accept names with no conflict', function() {
       testRelationAcceptsValue(sampleModelDefinition, 'myrelation');
@@ -148,6 +147,6 @@ function ModelDefinition(propertyList) {
   this.properties = {
     getAsync: function() {
       return promise.resolve(propertyList);
-    }
+    },
   };
 }

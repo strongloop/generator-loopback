@@ -12,7 +12,7 @@ var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
 
-describe('loopback:swagger generator', function () {
+describe('loopback:swagger generator', function() {
   beforeEach(common.resetWorkspace);
 
   beforeEach(function createSandbox(done) {
@@ -24,17 +24,17 @@ describe('loopback:swagger generator', function () {
   });
 
   it('creates and configures server only Pet model from swagger 2.0 spec',
-    function (done) {
+    function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/pet-store-2.0.json'),
         modelSelections:
           ['swagger_v2_petstore', 'Category',
            'Pet', 'Tag', 'Order', 'Customer'],
-        dataSource: 'db'
+        dataSource: 'db',
       });
 
-      modelGen.run(function () {
+      modelGen.run(function() {
         var content = readModelJsonSync('pet');
         expect(content).to.have.property('name', 'Pet');
         expect(content).to.not.have.property('public');
@@ -55,17 +55,17 @@ describe('loopback:swagger generator', function () {
     });
 
   it('creates and configures server only Pet model from swagger 2.0 spec yml',
-    function (done) {
+    function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/pet-store-2.0.yml'),
         modelSelections:
           ['swagger_v2_petstore', 'Category',
            'Pet', 'Tag', 'Order', 'Customer'],
-        dataSource: 'db'
+        dataSource: 'db',
       });
 
-      modelGen.run(function () {
+      modelGen.run(function() {
         var content = readModelJsonSync('pet');
         expect(content).to.have.property('name', 'Pet');
         expect(content).to.not.have.property('public');
@@ -86,16 +86,16 @@ describe('loopback:swagger generator', function () {
     });
 
   it('creates and configures server only note model from swagger 2.0 spec yaml',
-    function (done) {
+    function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/demo4.yaml'),
         modelSelections:
           ['swagger_api', 'note'],
-        dataSource: 'db'
+        dataSource: 'db',
       });
 
-      modelGen.run(function () {
+      modelGen.run(function() {
         var content = readModelJsonSync('note');
         expect(content).to.have.property('name', 'note');
         expect(content).to.not.have.property('public');
@@ -116,15 +116,15 @@ describe('loopback:swagger generator', function () {
     });
 
   it('creates and configures server only Pet model from swagger 1.2 spec',
-    function (done) {
+    function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/pet-store-1.2.json'),
         modelSelections: ['swagger_pet', 'Category', 'Pet', 'Tag'],
-        dataSource: 'db'
+        dataSource: 'db',
       });
 
-      modelGen.run(function () {
+      modelGen.run(function() {
         var content = readModelJsonSync('pet');
         expect(content).to.have.property('name', 'Pet');
         expect(content).to.not.have.property('public');

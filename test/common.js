@@ -25,7 +25,7 @@ function createGenerator(name, path, deps, args, opts) {
 
   env.register(path, name);
 
-  return env.create(name, { arguments: args || [], options: opts || {} });
+  return env.create(name, {arguments: args || [], options: opts || {}});
 }
 
 exports.createDummyProject = function(dir, name, done) {
@@ -63,17 +63,17 @@ exports.createExampleGenerator = function() {
   var deps = exports.findAllGeneratorsExcept('example');
   var args = [];
   var options = {
-    'skip-install': true
+    'skip-install': true,
   };
 
   return exports.createGenerator(name, path, deps, args, options);
 };
 
 exports.readJsonSync = function(relativePath, defaultValue) {
-    var filepath = path.resolve(SANDBOX, relativePath);
-    if (defaultValue !== undefined && !fs.existsSync(filepath))
-      return defaultValue;
+  var filepath = path.resolve(SANDBOX, relativePath);
+  if (defaultValue !== undefined && !fs.existsSync(filepath))
+    return defaultValue;
 
-    var content = fs.readFileSync(filepath, 'utf-8');
-    return JSON.parse(content);
+  var content = fs.readFileSync(filepath, 'utf-8');
+  return JSON.parse(content);
 };

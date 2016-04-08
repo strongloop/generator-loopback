@@ -22,7 +22,6 @@ describe('loopback:datasource generator', function() {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-
   it('adds an entry to server/datasources.json', function(done) {
     var modelGen = givenDataSourceGenerator();
     helpers.mockPrompt(modelGen, {
@@ -30,7 +29,7 @@ describe('loopback:datasource generator', function() {
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
       connector: 'mysql',
-      installConnector: false
+      installConnector: false,
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
@@ -49,7 +48,7 @@ describe('loopback:datasource generator', function() {
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
       connector: 'kafka',
-      installConnector: false
+      installConnector: false,
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
@@ -67,14 +66,14 @@ describe('loopback:datasource generator', function() {
       name: 'rest0',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
-      connector: 'rest'
+      connector: 'rest',
     });
 
     modelGen.run(function() {
       var pkg = fs.readFileSync(
         path.join(SANDBOX, 'package.json'), 'UTF-8');
       pkg = JSON.parse(pkg);
-      /* jshint -W030 */
+      // eslint-disable-next-line no-unused-expressions
       expect(pkg.dependencies['loopback-connector-rest']).to.exist;
       done();
     });
@@ -85,14 +84,14 @@ describe('loopback:datasource generator', function() {
     helpers.mockPrompt(modelGen, {
       name: 'test-custom',
       customConnector: 'lodash',
-      connector: 'other'
+      connector: 'other',
     });
 
     modelGen.run(function() {
       var pkg = fs.readFileSync(
         path.join(SANDBOX, 'package.json'), 'UTF-8');
       pkg = JSON.parse(pkg);
-      /* jshint -W030 */
+      // eslint-disable-next-line no-unused-expressions
       expect(pkg.dependencies.lodash).to.exist;
       done();
     });
@@ -102,8 +101,8 @@ describe('loopback:datasource generator', function() {
     var restOptions = {
       headers: {
         accept: 'application/json',
-        'content-type': 'application/json'
-      }
+        'content-type': 'application/json',
+      },
     };
     var modelGen = givenDataSourceGenerator();
     helpers.mockPrompt(modelGen, {
@@ -113,7 +112,7 @@ describe('loopback:datasource generator', function() {
       connector: 'rest',
       options: JSON.stringify(restOptions),
       operations: '[]',
-      installConnector: false
+      installConnector: false,
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));

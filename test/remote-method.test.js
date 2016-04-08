@@ -27,7 +27,7 @@ describe('loopback:remote-method generator', function() {
     wsModels.ModelDefinition.create(
       {
         name: 'Car',
-        facetName: 'common'
+        facetName: 'common',
       },
       function(err, model) {
         test.Model = model;
@@ -44,7 +44,7 @@ describe('loopback:remote-method generator', function() {
       desription: 'This is my first remote method',
       httpPath: '',
       acceptsArg: '',
-      returnsArg: ''
+      returnsArg: '',
     });
 
     methodGenerator.run(function() {
@@ -55,7 +55,7 @@ describe('loopback:remote-method generator', function() {
         isStatic: true,
         accepts: [],
         returns: [],
-        http: []
+        http: [],
       });
       done();
     });
@@ -70,7 +70,7 @@ describe('loopback:remote-method generator', function() {
       desription: 'This is my first remote method',
       httpPath: '',
       acceptsArg: '',
-      returnsArg: ''
+      returnsArg: '',
     });
 
     methodGenerator.run(function() {
@@ -82,7 +82,7 @@ describe('loopback:remote-method generator', function() {
         isStatic: false,
         accepts: [],
         returns: [],
-        http: []
+        http: [],
       });
       done();
     });

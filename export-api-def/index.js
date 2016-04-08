@@ -21,7 +21,7 @@ module.exports = yeoman.Base.extend({
       type: String,
       alias: 'o',
       desc: 'Name/Full path to the output file.',
-      defaults: ''
+      defaults: '',
     });
   },
 
@@ -31,7 +31,7 @@ module.exports = yeoman.Base.extend({
 
   generate: function() {
     var filePath = this.options.output;
-    var options = { format: this.format, output: filePath };
+    var options = {format: this.format, output: filePath};
     var app = require(this.destinationRoot());
     var apiDef = apiGenerator.getApiDef(app, options);
 
@@ -42,5 +42,5 @@ module.exports = yeoman.Base.extend({
     } else {
       process.stdout.write(apiDef);
     }
-  }
+  },
 });

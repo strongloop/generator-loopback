@@ -23,7 +23,7 @@ function toNumberedList(items) {
     }
     return {
       name: name,
-      value: item
+      value: item,
     };
   });
 }
@@ -44,7 +44,7 @@ module.exports = yeoman.Base.extend({
     this.argument('name', {
       desc: 'Name of the middleware to create.',
       required: false,
-      type: String
+      type: String,
     });
   },
 
@@ -73,14 +73,13 @@ module.exports = yeoman.Base.extend({
         name: 'name',
         message: 'Enter the middleware name:',
         default: this.name,
-        validate: validateRequiredName
-      }
+        validate: validateRequiredName,
+      },
     ];
 
     return this.prompt(prompts).then(function(props) {
       this.name = props.name;
     }.bind(this));
-
   },
 
   askForPhase: function() {
@@ -92,7 +91,7 @@ module.exports = yeoman.Base.extend({
         message: 'Select the phase for ' + displayName + ':',
         type: 'list',
         default: 'routes',
-        choices: toNumberedList(this.phases.concat([OTHER_PHASE]))
+        choices: toNumberedList(this.phases.concat([OTHER_PHASE])),
       },
       {
         name: 'customPhase',
@@ -100,7 +99,7 @@ module.exports = yeoman.Base.extend({
         validate: validateRequiredName,
         when: function(answers) {
           return answers.phase === OTHER_PHASE;
-        }
+        },
       },
       {
         name: 'nextPhase',
@@ -110,7 +109,7 @@ module.exports = yeoman.Base.extend({
         choices: toNumberedList(this.phases.concat([LAST_PHASE])),
         when: function(answers) {
           return answers.phase === OTHER_PHASE;
-        }
+        },
       },
       {
         name: 'subPhase',
@@ -120,8 +119,8 @@ module.exports = yeoman.Base.extend({
         choices: [
           {name: '1. before', value: 'before'},
           {name: '2. regular', value: ''},
-          {name: '3. after', value: 'after'}
-        ]
+          {name: '3. after', value: 'after'},
+        ],
       },
     ];
 
@@ -155,8 +154,8 @@ module.exports = yeoman.Base.extend({
           } else {
             return true;
           }
-        }
-      }
+        },
+      },
     ];
     return this.prompt(prompts).then(function(answers) {
       if (answers.path == null || answers.path === '') {
@@ -187,8 +186,8 @@ module.exports = yeoman.Base.extend({
           } else {
             return true;
           }
-        }
-      }
+        },
+      },
     ];
     return this.prompt(prompts).then(function(answers) {
       this.params = JSON.parse(answers.params);
@@ -203,7 +202,7 @@ module.exports = yeoman.Base.extend({
       subPhase: this.subPhase,
       paths: this.paths,
       params: this.params || {},
-      facetName: 'server' // hard-coded for now
+      facetName: 'server', // hard-coded for now
     };
 
     var self = this;
@@ -227,5 +226,5 @@ module.exports = yeoman.Base.extend({
     });
   },
 
-  saveProject: actions.saveProject
+  saveProject: actions.saveProject,
 });

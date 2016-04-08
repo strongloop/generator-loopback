@@ -14,8 +14,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "pretest": "jshint .",
-    "test": "mocha -R spec --timeout 60000"
+    "test": "mocha -R spec --timeout 60000",
+    "posttest": "eslint --ignore-path .gitignore ."
   },
   "keywords": [
     "yeoman-generator",
@@ -39,8 +39,9 @@
   "devDependencies": {
     "bluebird": "^3.1.1",
     "chai": "^3.2.0",
+    "eslint": "^2.7.0",
+    "eslint-config-loopback": "^4.0.0",
     "fs-extra": "^0.23.1",
-    "jshint": "^2.8.0",
     "mocha": "^2.2.5",
     "semver": "^5.1.0",
     "strong-cached-install": "^2.0.0",

@@ -25,7 +25,7 @@ module.exports = yeoman.Base.extend({
     this.argument('name', {
       desc: 'Name of the model to create.',
       required: false,
-      type: String
+      type: String,
     });
 
     // Prevent "warning: possible EventEmitter memory leak detected"
@@ -50,7 +50,7 @@ module.exports = yeoman.Base.extend({
   loadModels: actions.loadModels,
 
   addNullDataSourceItem: actions.addNullDataSourceItem,
-  
+
   checkForDatasource: function() {
     if (!this.hasDatasources) {
       var warning = chalk.red('Warning: Found no data sources to attach ' +
@@ -67,15 +67,14 @@ module.exports = yeoman.Base.extend({
         name: 'name',
         message: 'Enter the model name:',
         default: this.name,
-        validate: validateRequiredName
-      }
+        validate: validateRequiredName,
+      },
     ];
 
     return this.prompt(prompts).then(function(props) {
       this.name = props.name;
       this.displayName = chalk.yellow(this.name);
     }.bind(this));
-
   },
 
   askForDataSource: function() {
@@ -85,13 +84,13 @@ module.exports = yeoman.Base.extend({
     }
 
     var prompts = [{
-        name: 'dataSource',
-        message: 'Select the data-source to attach ' +
+      name: 'dataSource',
+      message: 'Select the data-source to attach ' +
         this.displayName + ' to:',
-        type: 'list',
-        default: this.defaultDataSource,
-        choices: this.dataSources
-      }];
+      type: 'list',
+      default: this.defaultDataSource,
+      choices: this.dataSources,
+    }];
 
     return this.prompt(prompts).then(function(props) {
       if (this.hasDatasources) {
@@ -123,7 +122,7 @@ module.exports = yeoman.Base.extend({
       .concat(this.modelNames)
       .concat([{
         name: '(custom)',
-        value: null
+        value: null,
       }]);
 
     var prompts = [
@@ -132,7 +131,7 @@ module.exports = yeoman.Base.extend({
         message: 'Select model\'s base class',
         type: 'list',
         default: this.baseModel,
-        choices: baseModelChoices
+        choices: baseModelChoices,
       },
       {
         name: 'customBase',
@@ -141,27 +140,27 @@ module.exports = yeoman.Base.extend({
         validate: validateRequiredName,
         when: function(answers) {
           return answers.base === null;
-        }
+        },
       },
       {
         name: 'public',
         message: 'Expose ' + this.displayName + ' via the REST API?',
-        type: 'confirm'
+        type: 'confirm',
       },
       {
         name: 'plural',
         message: 'Custom plural form (used to build REST URL):',
         when: function(answers) {
           return answers.public;
-        }
+        },
       },
       {
         name: 'facetName',
         message: 'Common model or server only?',
         type: 'list',
         default: 'common',
-        choices: ['common', 'server']
-      }
+        choices: ['common', 'server'],
+      },
     ];
 
     return  this.prompt(prompts).then(function(props) {
@@ -178,7 +177,7 @@ module.exports = yeoman.Base.extend({
       name: this.name,
       plural: this.plural,
       base: this.base,
-      facetName: this.facetName
+      facetName: this.facetName,
     };
 
     wsModels.ModelDefinition.create(config, function(err) {
@@ -193,7 +192,7 @@ module.exports = yeoman.Base.extend({
       name: this.name,
       facetName: 'server', // hard-coded for now
       dataSource: this.dataSource,
-      public: this.public
+      public: this.public,
     };
 
     wsModels.ModelConfig.create(config, function(err) {
@@ -213,8 +212,8 @@ module.exports = yeoman.Base.extend({
       {
         name: 'propertyName',
         message: 'Property name:',
-        validate: validateOptionalName
-      }
+        validate: validateOptionalName,
+      },
     ];
     return this.prompt(prompts).then(function(answers) {
       if (answers.propertyName == null || answers.propertyName === '') {
@@ -229,8 +228,8 @@ module.exports = yeoman.Base.extend({
             projectDir: this.projectDir,
             project: this.project,
             modelName: this.name,
-            propertyName: answers.propertyName
-          }
+            propertyName: answers.propertyName,
+          },
         },
         function(err) {
           if (err) {
@@ -242,5 +241,5 @@ module.exports = yeoman.Base.extend({
     }.bind(this));
   },
 
-  saveProject: actions.saveProject
+  saveProject: actions.saveProject,
 });

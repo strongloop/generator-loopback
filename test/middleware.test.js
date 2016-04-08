@@ -28,7 +28,7 @@ describe('loopback:middleware generator', function() {
       name: 'my-middleware-1',
       phase: 'my-phase',
       paths: ['/x', '/y'],
-      params: '{"z": 1}'
+      params: '{"z": 1}',
     });
 
     var builtinSources = Object.keys(readMiddlewaresJsonSync('server'));
@@ -48,7 +48,7 @@ describe('loopback:middleware generator', function() {
       customPhase: 'my-phase-2',
       nextPhase: 'routes',
       paths: ['/x', '/y'],
-      params: '{"z": 1}'
+      params: '{"z": 1}',
     });
 
     modelGen.run(function() {
@@ -67,7 +67,7 @@ describe('loopback:middleware generator', function() {
         name: 'my-middleware-3',
         phase: 'routes',
         paths: ['/x', '/y'],
-        params: '{"z": 1}'
+        params: '{"z": 1}',
       });
 
       var builtinSources = Object.keys(
@@ -81,25 +81,25 @@ describe('loopback:middleware generator', function() {
     });
 
   it('supports sub-phase', function(done) {
-      var modelGen = givenMiddlewareGenerator();
-      helpers.mockPrompt(modelGen, {
-        name: 'my-middleware-4',
-        phase: 'routes',
-        subPhase: 'after',
-        paths: ['/x', '/y'],
-        params: '{"z": 1}'
-      });
-
-      var builtinSources = Object.keys(
-        readMiddlewaresJsonSync('server')['routes:after'] || {});
-      modelGen.run(function() {
-        var newSources = Object.keys(
-          readMiddlewaresJsonSync('server')['routes:after']);
-        var expectedSources = builtinSources.concat(['my-middleware-4']);
-        expect(newSources).to.have.members(expectedSources);
-        done();
-      });
+    var modelGen = givenMiddlewareGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'my-middleware-4',
+      phase: 'routes',
+      subPhase: 'after',
+      paths: ['/x', '/y'],
+      params: '{"z": 1}',
     });
+
+    var builtinSources = Object.keys(
+        readMiddlewaresJsonSync('server')['routes:after'] || {});
+    modelGen.run(function() {
+      var newSources = Object.keys(
+          readMiddlewaresJsonSync('server')['routes:after']);
+      var expectedSources = builtinSources.concat(['my-middleware-4']);
+      expect(newSources).to.have.members(expectedSources);
+      done();
+    });
+  });
 
   function givenMiddlewareGenerator(dsArgs) {
     var path = '../../middleware';
