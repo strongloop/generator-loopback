@@ -14,7 +14,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "pretest": "jshint .",
+    "posttest": "eslint .",
     "test": "mocha -R spec --timeout 60000"
   },
   "keywords": [
@@ -38,9 +38,10 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
+    "eslint": "^2.7.0",
+    "eslint-config-loopback": "^1.0.0",
     "fs-extra": "^0.23.1",
     "glob": "^6.0.1",
-    "jshint": "^2.8.0",
     "mocha": "^2.2.5",
     "strong-cached-install": "^2.0.0"
   }
