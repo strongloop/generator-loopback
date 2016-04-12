@@ -5,7 +5,8 @@ var wsModels = require('loopback-workspace').models;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
-var validateName = helpers.validateName;
+var validateRequiredName = helpers.validateRequiredName;
+var validateOptionalName = helpers.validateOptionalName;
 
 module.exports = yeoman.generators.Base.extend({
   // NOTE(bajtos)
@@ -53,7 +54,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'name',
         message: 'Enter the model name:',
         default: this.name,
-        validate: validateName
+        validate: validateRequiredName
       }
     ];
 
@@ -128,7 +129,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'customBase',
         message: 'Enter the base model name:',
         required: true,
-        validate: validateName,
+        validate: validateRequiredName,
         when: function(answers) {
           return answers.base === null;
         }
@@ -205,13 +206,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'propertyName',
         message: 'Property name:',
-        validate: function (input) {
-          if (input) {
-            return validateName(input);
-          } else {
-            return true;
-          }
-        }
+        validate: validateOptionalName
       }
     ];
     this.prompt(prompts, function(answers) {

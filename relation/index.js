@@ -8,7 +8,8 @@ var ModelRelation = workspace.models.ModelRelation;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
-var validateName = helpers.validateName;
+var validateOptionalName = helpers.validateOptionalName;
+var validateRequiredName = helpers.validateRequiredName;
 var checkRelationName = helpers.checkRelationName;
 var checkPropertyName = helpers.checkPropertyName;
 
@@ -92,7 +93,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'customToModel',
         message: 'Enter the model name:',
         required: true,
-        validate: validateName,
+        validate: validateRequiredName,
         when: function(answers) {
           return answers.toModel === null;
         }
@@ -120,9 +121,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'foreignKey',
         message: 'Optionally enter a custom foreign key:',
-        validate: function(value) {
-          return value === undefined || value === '' || validateName(value);
-        }
+        validate: validateOptionalName
       },
       {
         name: 'through',
@@ -146,7 +145,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'customThroughModel',
         message: 'Enter the model name:',
         required: true,
-        validate: validateName,
+        validate: validateRequiredName,
         when: function(answers) {
           return answers.through && answers.throughModel === null;
         }

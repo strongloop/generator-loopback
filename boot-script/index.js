@@ -3,6 +3,8 @@ var helpers = require('../lib/helpers');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 
+var validateRequiredName = helpers.validateRequiredName;
+
 module.exports = yeoman.generators.Base.extend({
   constructor: function() {
     yeoman.generators.Base.apply(this, arguments);
@@ -28,7 +30,7 @@ module.exports = yeoman.generators.Base.extend({
       name: 'name',
       message: 'Enter the script name (without `.js`):',
       default: this.name,
-      validate: helpers.validateName
+      validate: validateRequiredName
     };
 
     this.prompt(question, function(answer) {

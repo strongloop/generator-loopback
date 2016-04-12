@@ -4,7 +4,7 @@ var chalk = require('chalk');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
-var validateName = helpers.validateName;
+var validateRequiredName = helpers.validateRequiredName;
 var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
 
@@ -79,7 +79,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'customType',
         message: 'Enter the type:',
         required: true,
-        validate: validateName,
+        validate: validateRequiredName,
         when: function(answers) {
           return answers.type === null;
         }
@@ -96,7 +96,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'customItemType',
         message: 'Enter the item type:',
-        validate: validateName,
+        validate: validateRequiredName,
         when: function(answers) {
           return answers.type === 'array' && answers.itemType === null;
         }

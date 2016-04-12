@@ -6,7 +6,7 @@ var wsModels = require('loopback-workspace').models;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
-var validateName = helpers.validateName;
+var validateRequiredName = helpers.validateRequiredName;
 
 function toNumberedList(items) {
   var lastIndex = items.length - 1;
@@ -70,9 +70,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'name',
         message: 'Enter the middleware name:',
         default: this.name,
-        validate: function(name) {
-          return name && validateName(name);
-        }
+        validate: validateRequiredName
       }
     ];
 
@@ -99,7 +97,7 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'customPhase',
         message: 'Enter the phase name:',
-        validate: validateName,
+        validate: validateRequiredName,
         when: function(answers) {
           return answers.phase === OTHER_PHASE;
         }

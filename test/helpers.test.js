@@ -2,7 +2,8 @@
 'use strict';
 var helpers = require('../lib/helpers');
 var validateAppName = helpers.validateAppName;
-var validateName = helpers.validateName;
+var validateOptionalName = helpers.validateOptionalName;
+var validateRequiredName = helpers.validateRequiredName;
 var checkRelationName = helpers.checkRelationName;
 require('chai').should();
 var expect = require('chai').expect;
@@ -40,26 +41,32 @@ describe('helpers', function() {
 
   });
 
-  describe('validateName()', function() {
+  describe('validateRequiredName()', function() {
     it('should accept good names', function() {
-      testValidationAcceptsValue(validateName, 'prop');
-      testValidationAcceptsValue(validateName, 'prop1');
-      testValidationAcceptsValue(validateName, 'my_prop');
-      testValidationAcceptsValue(validateName, 'my-prop');
+      testValidationAcceptsValue(validateRequiredName, 'prop');
+      testValidationAcceptsValue(validateRequiredName, 'prop1');
+      testValidationAcceptsValue(validateRequiredName, 'my_prop');
+      testValidationAcceptsValue(validateRequiredName, 'my-prop');
     });
 
     it('should report errors for a name containing special chars', function() {
-      testValidationRejectsValue(validateName, 'my prop');
-      testValidationRejectsValue(validateName, 'my/prop');
-      testValidationRejectsValue(validateName, 'my@prop');
-      testValidationRejectsValue(validateName, 'my+prop');
-      testValidationRejectsValue(validateName, 'my%prop');
-      testValidationRejectsValue(validateName, 'my:prop');
-      testValidationRejectsValue(validateName, 'm.prop');
+      testValidationRejectsValue(validateRequiredName, 'my prop');
+      testValidationRejectsValue(validateRequiredName, 'my/prop');
+      testValidationRejectsValue(validateRequiredName, 'my@prop');
+      testValidationRejectsValue(validateRequiredName, 'my+prop');
+      testValidationRejectsValue(validateRequiredName, 'my%prop');
+      testValidationRejectsValue(validateRequiredName, 'my:prop');
+      testValidationRejectsValue(validateRequiredName, 'm.prop');
     });
 
     it('should report errors for an empty name', function() {
-      testValidationRejectsValue(validateName, '');
+      testValidationRejectsValue(validateRequiredName, '');
+    });
+  });
+
+  describe('validateOptionalName()', function() {
+    it('should accept empty name', function() {
+      testValidationAcceptsValue(validateOptionalName, '');
     });
   });
 
