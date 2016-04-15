@@ -6,7 +6,8 @@ var path = require('path');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
-var validateName = helpers.validateName;
+var validateRequiredName = helpers.validateRequiredName;
+var validateOptionalName = helpers.validateOptionalName;
 var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
 var ModelDefinition = require('loopback-workspace').models.ModelDefinition;
@@ -146,7 +147,7 @@ module.exports = yeoman.generators.Base.extend({
           name: 'customHttpVerb',
           message:
           'Enter the custom http verb',
-          validate: validateName,
+          validate: validateRequiredName,
           when: function(answers) {
             return answers.httpVerb === null;
           }
@@ -180,7 +181,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'acceptsArg',
         message: 'Enter name for accept argument:',
         required: true,
-        validate: validateName
+        validate: validateOptionalName
       }
     ];
     this.prompt(prompts, function(answers) {
@@ -270,7 +271,7 @@ module.exports = yeoman.generators.Base.extend({
         name: 'returnsArg',
         message: 'Enter name for return argument:',
         required: true,
-        validate: validateName
+        validate: validateOptionalName
       }
     ];
     this.prompt(prompts, function(answers) {
