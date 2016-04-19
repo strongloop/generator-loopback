@@ -1,3 +1,9 @@
+2016-04-19, Version 1.20.6
+==========================
+
+ * Fix accept and return to end with empty input (juehou)
+
+
 2016-04-05, Version 1.20.5
 ==========================
 
