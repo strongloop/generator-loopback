@@ -45,6 +45,16 @@ module.exports = yeoman.generators.Base.extend({
   loadModels: actions.loadModels,
 
   addNullDataSourceItem: actions.addNullDataSourceItem,
+  
+  checkForDatasource: function() {
+    if (!this.hasDatasources) {
+      var warning = chalk.red('Warning: Found no data sources to attach ' +
+        'model. There will be no data-access methods available until ' +
+        'datasources are attached.');
+      this.log(warning);
+      return;
+    }
+  },
 
   askForName: function() {
     var done = this.async();
