@@ -198,6 +198,7 @@ module.exports = yeoman.generators.Base.extend({
 
   installConnector: function() {
     var connector = this.availableConnectors[this.connector];
+    if (!connector) return;
     var pkg = connector.package;
     if (!pkg) return;
 
