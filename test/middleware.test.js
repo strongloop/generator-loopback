@@ -11,6 +11,7 @@ var SANDBOX = path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:middleware generator', function() {
   beforeEach(common.resetWorkspace);
@@ -24,7 +25,7 @@ describe('loopback:middleware generator', function() {
 
   it('adds a new phase to server/middleware.json', function(done) {
     var modelGen = givenMiddlewareGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'my-middleware-1',
       phase: 'my-phase',
       paths: ['/x', '/y'],
@@ -42,7 +43,7 @@ describe('loopback:middleware generator', function() {
 
   it('adds a new phase next to a selected one', function(done) {
     var modelGen = givenMiddlewareGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'my-middleware-2',
       phase: '(custom phase)',
       customPhase: 'my-phase-2',
@@ -63,7 +64,7 @@ describe('loopback:middleware generator', function() {
   it('adds a new entry to an existing phase in server/middleware.json',
     function(done) {
       var modelGen = givenMiddlewareGenerator();
-      helpers.mockPrompt(modelGen, {
+      testhelpers.mockPrompt(modelGen, {
         name: 'my-middleware-3',
         phase: 'routes',
         paths: ['/x', '/y'],
@@ -82,7 +83,7 @@ describe('loopback:middleware generator', function() {
 
   it('supports sub-phase', function(done) {
       var modelGen = givenMiddlewareGenerator();
-      helpers.mockPrompt(modelGen, {
+      testhelpers.mockPrompt(modelGen, {
         name: 'my-middleware-4',
         phase: 'routes',
         subPhase: 'after',
@@ -101,10 +102,10 @@ describe('loopback:middleware generator', function() {
       });
     });
 
-  function givenMiddlewareGenerator(dsArgs) {
+  function givenMiddlewareGenerator() {
     var path = '../../middleware';
     var name = 'loopback:middleware';
-    var gen = common.createGenerator(name, path, [], dsArgs, {});
+    var gen = common.createGenerator(name, path);
     return gen;
   }
 

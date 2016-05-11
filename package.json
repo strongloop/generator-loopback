@@ -42,6 +42,7 @@
     "glob": "^6.0.1",
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
-    "strong-cached-install": "^2.0.0"
+    "strong-cached-install": "^2.0.0",
+    "yeoman-test": "^1.4.0"
   }
 }

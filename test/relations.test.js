@@ -11,6 +11,7 @@ var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var expect = require('chai').expect;
 var common = require('./common');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:relation generator', function() {
   beforeEach(common.resetWorkspace);
@@ -37,7 +38,7 @@ describe('loopback:relation generator', function() {
 
   it('adds an entry to common/models/{name}.json', function(done) {
     var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
+    testhelpers.mockPrompt(relationGenerator, {
       model: 'Car',
       toModel: 'Part',
       asPropertyName: 'parts',
@@ -60,7 +61,7 @@ describe('loopback:relation generator', function() {
 
   it('asks for custom model name', function(done) {
     var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
+    testhelpers.mockPrompt(relationGenerator, {
       model: 'Car',
       toModel: null,
       customToModel: 'Part',
@@ -84,7 +85,7 @@ describe('loopback:relation generator', function() {
 
   it('asks for through model name', function(done) {
     var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
+    testhelpers.mockPrompt(relationGenerator, {
       model: 'Car',
       toModel: 'Part',
       asPropertyName: 'parts',
@@ -110,7 +111,7 @@ describe('loopback:relation generator', function() {
 
   it('asks for custom through model name', function(done) {
     var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
+    testhelpers.mockPrompt(relationGenerator, {
       model: 'Car',
       toModel: 'Part',
       asPropertyName: 'parts',
@@ -139,7 +140,7 @@ describe('loopback:relation generator', function() {
   it('provides default property name based on target model for belongsTo',
     function(done) {
       var relationGenerator = givenRelationGenerator();
-      helpers.mockPrompt(relationGenerator, {
+      testhelpers.mockPrompt(relationGenerator, {
         model: 'Car',
         toModel: 'Part',
         type: 'belongsTo'
@@ -157,7 +158,7 @@ describe('loopback:relation generator', function() {
   it('provides default property name based on target model for hasMany',
     function(done) {
       var relationGenerator = givenRelationGenerator();
-      helpers.mockPrompt(relationGenerator, {
+      testhelpers.mockPrompt(relationGenerator, {
         model: 'Car',
         toModel: 'Part',
         type: 'hasMany'

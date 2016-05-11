@@ -11,6 +11,7 @@ var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var expect = require('chai').expect;
 var common = require('./common');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:remote-method generator', function() {
   beforeEach(common.resetWorkspace);
@@ -37,7 +38,7 @@ describe('loopback:remote-method generator', function() {
 
   it('adds an entry to common/models/{name}.json', function(done) {
     var methodGenerator = givenMethodGenerator();
-    helpers.mockPrompt(methodGenerator, {
+    testhelpers.mockPrompt(methodGenerator, {
       model: 'Car',
       methodName: 'myRemote',
       isStatic: 'true',

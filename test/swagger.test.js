@@ -12,6 +12,7 @@ var path = require('path');
 var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:swagger generator', function () {
   beforeEach(common.resetWorkspace);
@@ -27,7 +28,7 @@ describe('loopback:swagger generator', function () {
   it('creates and configures server only Pet model from swagger 2.0 spec',
     function (done) {
       var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
+      testhelpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/pet-store-2.0.json'),
         modelSelections:
           ['swagger_v2_petstore', 'Category',
@@ -58,7 +59,7 @@ describe('loopback:swagger generator', function () {
   it('creates and configures server only Pet model from swagger 2.0 spec yml',
     function (done) {
       var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
+      testhelpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/pet-store-2.0.yml'),
         modelSelections:
           ['swagger_v2_petstore', 'Category',
@@ -89,7 +90,7 @@ describe('loopback:swagger generator', function () {
   it('creates and configures server only note model from swagger 2.0 spec yaml',
     function (done) {
       var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
+      testhelpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/demo4.yaml'),
         modelSelections:
           ['swagger_api', 'note'],
@@ -119,7 +120,7 @@ describe('loopback:swagger generator', function () {
   it('creates and configures server only Pet model from swagger 1.2 spec',
     function (done) {
       var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
+      testhelpers.mockPrompt(modelGen, {
         url: path.join(__dirname, 'swagger/pet-store-1.2.json'),
         modelSelections: ['swagger_pet', 'Category', 'Pet', 'Tag'],
         dataSource: 'db'
@@ -145,11 +146,10 @@ describe('loopback:swagger generator', function () {
       });
     });
 
-  function givenModelGenerator(modelArgs) {
+  function givenModelGenerator() {
     var path = '../../swagger';
     var name = 'loopback:swagger';
-    var deps = [];
-    var gen = common.createGenerator(name, path, deps, modelArgs, {});
+    var gen = common.createGenerator(name, path);
     return gen;
   }
 

@@ -48,7 +48,7 @@ describe('loopback generator help', function () {
   function givenGenerator(name, modelArgs) {
     var fullName = 'loopback:' + name;
     var path = '../../' + name;
-    var gen = common.createGenerator(fullName, path, [], modelArgs, {});
+    var gen = common.createGenerator(fullName, path, modelArgs);
     return gen;
   }
 });

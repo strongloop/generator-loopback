@@ -102,10 +102,10 @@ describe('loopback:export-api-def generator', function() {
     });
   });
 
-  function givenGenerator(args) {
+  function givenGenerator() {
     var path = '../../export-api-def';
     var name = 'loopback:export-api-def';
-    var gen = common.createGenerator(name, path, [], args);
+    var gen = common.createGenerator(name, path);
     gen.options['skip-install'] = false;
     return gen;
   }

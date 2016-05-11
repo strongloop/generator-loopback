@@ -11,6 +11,7 @@ var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:datasource generator', function() {
   beforeEach(common.resetWorkspace);
@@ -25,7 +26,7 @@ describe('loopback:datasource generator', function() {
 
   it('adds an entry to server/datasources.json', function(done) {
     var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'crm',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
@@ -44,7 +45,7 @@ describe('loopback:datasource generator', function() {
 
   it('allow connector without settings', function(done) {
     var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'kafka1',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
@@ -63,7 +64,7 @@ describe('loopback:datasource generator', function() {
 
   it('should install connector module on demand', function(done) {
     var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'rest0',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
@@ -88,7 +89,7 @@ describe('loopback:datasource generator', function() {
       }
     };
     var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'rest1',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
@@ -110,10 +111,10 @@ describe('loopback:datasource generator', function() {
     });
   });
 
-  function givenDataSourceGenerator(dsArgs) {
+  function givenDataSourceGenerator() {
     var path = '../../datasource';
     var name = 'loopback:datasource';
-    var gen = common.createGenerator(name, path, [], dsArgs, {});
+    var gen = common.createGenerator(name, path);
     return gen;
   }
 
