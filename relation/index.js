@@ -120,7 +120,10 @@ module.exports = yeoman.generators.Base.extend({
         validate: function(value) {
           var isValid = checkPropertyName(value);
           if (isValid !== true) return isValid;
-          return checkRelationName(modelDef, value, this.async());
+          isValid = checkRelationName(modelDef, value).then(function(result){
+            return result;
+          });
+          return isValid;
         }
       },
       {
