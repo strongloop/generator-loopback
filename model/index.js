@@ -13,14 +13,14 @@ var helpers = require('../lib/helpers');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the model to create.',

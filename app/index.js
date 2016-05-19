@@ -19,9 +19,9 @@ var helpers = require('../lib/helpers');
 var validateAppName = helpers.validateAppName;
 var pkg = require('../package.json');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the application to scaffold.',

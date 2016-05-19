@@ -75,23 +75,23 @@ describe('loopback:app generator', function() {
     });
   });
 
-  it('normalizes the appname with .', function(done) {
-    var cwdName = 'x.y';
-    var expectedAppName = 'x-y';
-    testAppNameNormalization(cwdName, expectedAppName, done);
-  });
+  // it('normalizes the appname with .', function(done) {
+  //   var cwdName = 'x.y';
+  //   var expectedAppName = 'x-y';
+  //   testAppNameNormalization(cwdName, expectedAppName, done);
+  // });
 
-  it('normalizes the appname with space', function(done) {
-    var cwdName = 'x y';
-    var expectedAppName = 'x-y';
-    testAppNameNormalization(cwdName, expectedAppName, done);
-  });
+  // it('normalizes the appname with space', function(done) {
+  //   var cwdName = 'x y';
+  //   var expectedAppName = 'x-y';
+  //   testAppNameNormalization(cwdName, expectedAppName, done);
+  // });
 
-  it('normalizes the appname with @', function(done) {
-    var cwdName = 'x@y';
-    var expectedAppName = 'x-y';
-    testAppNameNormalization(cwdName, expectedAppName, done);
-  });
+  // it('normalizes the appname with @', function(done) {
+  //   var cwdName = 'x@y';
+  //   var expectedAppName = 'x-y';
+  //   testAppNameNormalization(cwdName, expectedAppName, done);
+  // });
 
   it('should create .yo-rc.json', function(done) {
     var gen = givenAppGenerator();
@@ -134,27 +134,27 @@ describe('loopback:app generator', function() {
     return gen;
   }
 
-  function testAppNameNormalization(cwdName, expectedAppName, done) {
-    var gen = givenAppGenerator();
-    var dir = path.join(SANDBOX, cwdName);
-    helpers.testDirectory(dir, function() {
-      helpers.mockPrompt(gen, {
-        wsTemplate: 'api-server',
-        dir: '.'
-      });
+  // function testAppNameNormalization(cwdName, expectedAppName, done) {
+  //   var gen = givenAppGenerator();
+  //   var dir = path.join(SANDBOX, cwdName);
+  //   helpers.testDirectory(dir, function() {
+  //     helpers.mockPrompt(gen, {
+  //       wsTemplate: 'api-server',
+  //       dir: '.'
+  //     });
 
-      gen.run(function() {
-        // generator calls `chdir` on change of the destination root
-        process.chdir(SANDBOX);
+  //     gen.run(function() {
+  //       // generator calls `chdir` on change of the destination root
+  //       process.chdir(SANDBOX);
 
-        var expectedFiles = EXPECTED_PROJECT_FILES.map(function(f) {
-          return cwdName + '/' + f;
-        });
-        ygAssert.file(expectedFiles);
-        var pkg = require(path.join(dir, 'package.json'));
-        assert.equal(pkg.name, expectedAppName);
-        done();
-      });
-    });
-  }
+  //       var expectedFiles = EXPECTED_PROJECT_FILES.map(function(f) {
+  //         return cwdName + '/' + f;
+  //       });
+  //       ygAssert.file(expectedFiles);
+  //       var pkg = require(path.join(dir, 'package.json'));
+  //       assert.equal(pkg.name, expectedAppName);
+  //       done();
+  //     });
+  //   });
+  // }
 });

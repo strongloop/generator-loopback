@@ -24,14 +24,14 @@ var NOT_SELECTED = 0, // It's not selected
   SELECTED_FOR_UPDATE = 1, // Selected for update
   SELECTED_FOR_CREATE = 2; // Selected for create
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
   constructor: function () {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('url', {
       desc: 'URL of the swagger spec.',

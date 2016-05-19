@@ -11,10 +11,10 @@ var helpers = require('../lib/helpers');
 var apiGenerator = require('loopback-api-definition');
 var mkdirp = require('mkdirp');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
 
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
     var format = this.options.json;
     this.format = format ? 'json' : 'yaml';
     this.option('output', {

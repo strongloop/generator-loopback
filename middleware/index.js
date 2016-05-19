@@ -31,7 +31,7 @@ function toNumberedList(items) {
 var OTHER_PHASE = '(custom phase)';
 var LAST_PHASE = '(last phase)';
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
@@ -39,7 +39,7 @@ module.exports = yeoman.generators.Base.extend({
   loadProject: actions.loadProject,
 
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the middleware to create.',

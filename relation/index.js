@@ -18,7 +18,7 @@ var validateRequiredName = helpers.validateRequiredName;
 var checkRelationName = helpers.checkRelationName;
 var checkPropertyName = helpers.checkPropertyName;
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
 
   help: function() {
     return helpers.customHelp(this);

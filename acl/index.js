@@ -13,7 +13,7 @@ var ModelAccessControl = wsModels.ModelAccessControl;
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when

@@ -13,7 +13,7 @@ var validateRequiredName = helpers.validateRequiredName;
 var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when

@@ -17,7 +17,7 @@ var objectValidator = helpers.objectValidator;
 var path = require('path');
 var fs = require('fs');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
@@ -26,7 +26,7 @@ module.exports = yeoman.generators.Base.extend({
   loadProject: actions.loadProject,
 
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the data-source to create.',

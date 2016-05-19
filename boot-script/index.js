@@ -10,9 +10,9 @@ var yeoman = require('yeoman-generator');
 
 var validateRequiredName = helpers.validateRequiredName;
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the boot script to create.',
