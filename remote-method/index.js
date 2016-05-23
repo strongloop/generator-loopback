@@ -124,13 +124,16 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   delimEndpoints: function() {
-    this.log('Let\'s add some HTTP Endpoints now.\n');
+    this.log();
+    this.log('Let\'s configure where to expose your new method ' +
+      'in the public REST API.');
+    this.log('You can provide multiple HTTP endpoints, enter an empty path ' +
+      'when you are done.');
     this.http = [];
   },
 
   askForEndpoints: function() {
     var done = this.async();
-    this.log('Enter an empty path when done.');
 
     var prompts = [
       {
@@ -171,25 +174,29 @@ module.exports = yeoman.generators.Base.extend({
           path: httpPath,
           verb: answers.httpVerb || answers.customHttpVerb
         });
-        this.log('\nLet\'s add another endpoint.');
+        this.log(
+          '\nLet\'s add another endpoint, enter an empty name when done.');
         this.askForEndpoints();
       }.bind(this));
     }.bind(this));
   },
 
   delimAccepts: function() {
-    this.log('Let\'s add some Accept Arguments now.\n');
+    this.log();
+    this.log('Describe the input ("accepts") arguments of your remote method.');
+    this.log('You can define multiple input arguments.');
+    this.log('Enter an empty name when you\'ve defined all input arguments.');
+
     this.accepts = [];
   },
 
   askForAccepts: function() {
     var done = this.async();
-    this.log('Enter an empty name when done.');
 
     var prompts = [
       {
         name: 'acceptsArg',
-        message: 'Enter name for accept argument:',
+        message: 'What is the name of this argument?',
         required: true,
         validate: validateOptionalName
       }
@@ -201,24 +208,24 @@ module.exports = yeoman.generators.Base.extend({
       var subprompts = [
         {
           name: 'acceptsType',
-          message: 'The type of accept argument:',
+          message: 'Select argument\'s type:',
           type: 'list',
           choices: typeChoices
         },
         {
           name: 'acceptsRequired',
-          message: 'Required?',
+          message: 'Is this argument required?',
           type: 'confirm',
           default: false
         },
         {
           name: 'acceptsDes',
-          message: 'Description of accept argument:',
+          message: 'Please describe the argument:',
           required: true
         },
         {
           name: 'httpSource',
-          message: 'Mapping to http source:',
+          message: 'Where to get the value from?',
           type: 'list',
           choices: [
             {
@@ -261,25 +268,29 @@ module.exports = yeoman.generators.Base.extend({
           entry.http = { source: answers.httpSource };
         }
         this.accepts.push(entry);
-        this.log('\nLet\'s add another accept argument.');
+        this.log('\nLet\'s add another accept argument, ' +
+          'enter an empty name when done.');
         this.askForAccepts();
       }.bind(this));
     }.bind(this));
   },
 
   delimReturns: function() {
-    this.log('Let\'s add some Return Arguments now.\n');
+    this.log();
+    this.log('Describe the output ("returns") arguments ' +
+     'to the remote method\'s callback function.');
+    this.log('You can define multiple output arguments.');
+    this.log('Enter an empty name when you\'ve defined all output arguments.');
     this.returns = [];
   },
 
   askForReturns: function() {
     var done = this.async();
-    this.log('Enter an empty name when done.');
 
     var prompts = [
       {
         name: 'returnsArg',
-        message: 'Enter name for return argument:',
+        message: 'What is the name of this argument?',
         required: true,
         validate: validateOptionalName
       }
@@ -291,19 +302,19 @@ module.exports = yeoman.generators.Base.extend({
       var subprompts = [
         {
           name: 'returnsType',
-          message: 'The type of return argument:',
+          message: 'Select argument\'s type:',
           type: 'list',
           choices: typeChoices
         },
         {
           name: 'returnsRoot',
-          message: 'Is it root',
+          message: 'Is this argument a full response body (root)?',
           type: 'confirm',
           default: false
         },
         {
           name: 'returnsDes',
-          message: 'Description of return argument:',
+          message: 'Please describe the argument:',
           required: true
         }
       ];
@@ -317,7 +328,8 @@ module.exports = yeoman.generators.Base.extend({
           root: answers.returnsRoot,
           description: answers.returnsDes
         });
-        this.log('\nLet\'s add another return argument.');
+        this.log(
+          '\nLet\'s add another return argument. Enter empty name when done.');
         this.askForReturns();
       }.bind(this));
     }.bind(this));
@@ -341,12 +353,16 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   printSampleRemoteMethodSource: function() {
+    // print an empty line as a visual delimiter
+    this.log();
+
     var text = [
       buildIntroduction(this),
       buildJsdoc(this),
       buildMethodSource(this)
     ].join('\n\n');
     this.log(text);
+
     // print an empty line as a visual delimiter
     this.log();
   },
@@ -365,14 +381,14 @@ function buildIntroduction(def) {
 
   var tip = [
     util.format(
-      'We have added strong-remoting metadata for your new method to %s',
+      'We added strong-remoting metadata for your new method to %s.',
       jsonFilePath
     ),
     util.format(
-      'Now it\'s up to you to provide implementation in %s',
+      'You must implement the method in %s. For example:',
       jsFilePath
     ),
-    'Here is a sample code to get you started:'
+    'Here is sample code to get you started:'
   ].join('\n');
 
   return tip;
