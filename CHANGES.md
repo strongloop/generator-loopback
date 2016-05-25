@@ -1,3 +1,15 @@
+2016-05-25, Version 1.20.7
+==========================
+
+ * fix/update-to-promise-support (jannyHou)
+
+ * remove glob devDep (Eddie Monge)
+
+ * update copyright notices and license (Ryan Graham)
+
+ * Add warning when no datasource available (Candy)
+
+
 2016-04-19, Version 1.20.6
 ==========================
 
