@@ -2,6 +2,7 @@
 
 [Yeoman](http://yeoman.io) generator that scaffolds out
 a [loopback](http://loopback.io/) application.
+Trigger CI. will be deleted later.
 
 ## Getting Started
 
