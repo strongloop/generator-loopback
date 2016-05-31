@@ -11,6 +11,7 @@ var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var expect = require('chai').expect;
 var common = require('./common');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:property generator', function() {
   beforeEach(common.resetWorkspace);
@@ -37,7 +38,7 @@ describe('loopback:property generator', function() {
 
   it('adds an entry to common/models/{name}.json', function(done) {
     var propertyGenerator = givenPropertyGenerator();
-    helpers.mockPrompt(propertyGenerator, {
+    testhelpers.mockPrompt(propertyGenerator, {
       model: 'Car',
       name: 'isPreferred',
       customType: '', // temporary workaround for
@@ -64,7 +65,7 @@ describe('loopback:property generator', function() {
 
   it('creates a typed array', function(done) {
     var propertyGenerator = givenPropertyGenerator();
-    helpers.mockPrompt(propertyGenerator, {
+    testhelpers.mockPrompt(propertyGenerator, {
       model: 'Car',
       name: 'list',
       type: 'array',
@@ -85,7 +86,7 @@ describe('loopback:property generator', function() {
   
   it('creates a defaultFn: "now" on date fields if specified', function(done) {
     var propertyGenerator = givenPropertyGenerator();
-    helpers.mockPrompt(propertyGenerator, {
+    testhelpers.mockPrompt(propertyGenerator, {
       model: 'Car',
       name: 'created',
       type: 'date',
@@ -106,7 +107,7 @@ describe('loopback:property generator', function() {
 
   it('creates a defaultFn: "guid" on date fields if specified', function(done) {
     var propertyGenerator = givenPropertyGenerator();
-    helpers.mockPrompt(propertyGenerator, {
+    testhelpers.mockPrompt(propertyGenerator, {
       model: 'Car',
       name: 'uniqueId',
       type: 'string',

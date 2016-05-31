@@ -14,6 +14,7 @@ var wsModels = require('loopback-workspace').models;
 var common = require('./common');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
+var testhelpers = require('yeoman-test');
 
 describe('loopback:model generator', function() {
   beforeEach(common.resetWorkspace);
@@ -36,7 +37,7 @@ describe('loopback:model generator', function() {
 
   it('creates common/models/{name}.json', function(done) {
     var modelGen = givenModelGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'Product',
       plural: 'pds',
       dataSource: 'db'
@@ -53,7 +54,7 @@ describe('loopback:model generator', function() {
 
   it('adds an entry to server/models.json', function(done) {
     var modelGen = givenModelGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'Product',
       dataSource: 'db',
       public: false,
@@ -76,7 +77,7 @@ describe('loopback:model generator', function() {
 
   it('sets `base` option from the list', function(done) {
     var modelGen = givenModelGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'Product',
       dataSource: 'db',
       base: 'PersistedModel'
@@ -91,7 +92,7 @@ describe('loopback:model generator', function() {
 
   it('sets `dataSource` option to db by default', function(done) {
     var modelGen = givenModelGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'Product'
     });
 
@@ -106,7 +107,7 @@ describe('loopback:model generator', function() {
 
   it('sets custom `base` option', function(done) {
     var modelGen = givenModelGenerator();
-    helpers.mockPrompt(modelGen, {
+    testhelpers.mockPrompt(modelGen, {
       name: 'Product',
       dataSource: 'rest',
       base: null,
@@ -132,7 +133,7 @@ describe('loopback:model generator', function() {
 
     it('should set dataSource to null', function(done) {
       var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
+      testhelpers.mockPrompt(modelGen, {
         name: 'Product',
         plural: 'pds'
       });
@@ -154,7 +155,7 @@ describe('loopback:model generator', function() {
       }, function(err) {
         if (err) return done(err);
         var modelGen = givenModelGenerator();
-        helpers.mockPrompt(modelGen, {
+        testhelpers.mockPrompt(modelGen, {
           name: 'Review',
           plural: 'Reviews'
         });
@@ -179,7 +180,7 @@ describe('loopback:model generator', function() {
       }], function(err) {
         if (err) return done(err);
         var modelGen = givenModelGenerator();
-        helpers.mockPrompt(modelGen, {
+        testhelpers.mockPrompt(modelGen, {
           name: 'Review',
           plural: 'Reviews'
         });
@@ -194,11 +195,11 @@ describe('loopback:model generator', function() {
 
   });
 
-  function givenModelGenerator(modelArgs) {
-    var path = '../../model';
+  function givenModelGenerator() {
+    var path = ['../../model',
+      [testhelpers.createDummyGenerator(), 'loopback:property']];
     var name = 'loopback:model';
-    var deps = [ ['../../property', 'loopback:property'] ];
-    var gen = common.createGenerator(name, path, deps, modelArgs, {});
+    var gen = common.createGenerator(name, path);
     return gen;
   }
 

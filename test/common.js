@@ -8,24 +8,15 @@ var async = require('async');
 var fs = require('fs');
 var path = require('path');
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
-var generators = require('yeoman-generator');
+var helpers = require('yeoman-test');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
 exports.createGenerator = createGenerator;
 
-function createGenerator(name, path, deps, args, opts) {
-  var env = generators();
-
-  deps = deps || [];
-  deps.forEach(function(d) {
-    d = Array.isArray(d) ? d : [d];
-    env.register.apply(env, d);
-  });
-
-  env.register(path, name);
-
-  return env.create(name, { arguments: args || [], options: opts || {} });
+function createGenerator(name, path, args, opts) {
+  path = Array.isArray(path) ? path : [path];
+  return helpers.createGenerator(name, path, args, opts);
 }
 
 exports.createDummyProject = function(dir, name, done) {
@@ -55,18 +46,6 @@ exports.findAllGeneratorsExcept = function(except) {
     .map(function(name) {
       return ['../../' + name, 'loopback:' + name];
     });
-};
-
-exports.createExampleGenerator = function() {
-  var name = 'example';
-  var path = '../../example';
-  var deps = exports.findAllGeneratorsExcept('example');
-  var args = [];
-  var options = {
-    'skip-install': true
-  };
-
-  return exports.createGenerator(name, path, deps, args, options);
 };
 
 exports.readJsonSync = function(relativePath, defaultValue) {

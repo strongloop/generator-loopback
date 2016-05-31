@@ -14,6 +14,7 @@ var common = require('./common');
 var assert = require('assert');
 var expect = require('chai').expect;
 var fs = require('fs');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:app generator', function() {
   beforeEach(common.resetWorkspace);
@@ -41,7 +42,7 @@ describe('loopback:app generator', function() {
 
     var gen = givenAppGenerator();
 
-    helpers.mockPrompt(gen, {
+    testhelpers.mockPrompt(gen, {
       name: 'test-app',
       template: 'api-server'
     });
@@ -56,7 +57,7 @@ describe('loopback:app generator', function() {
   it('creates the project in a subdirectory if asked to', function(done) {
     var gen = givenAppGenerator();
 
-    helpers.mockPrompt(gen, {
+    testhelpers.mockPrompt(gen, {
       appname: 'test-app',
       template: 'api-server',
       dir: 'test-dir',
@@ -95,7 +96,7 @@ describe('loopback:app generator', function() {
 
   it('should create .yo-rc.json', function(done) {
     var gen = givenAppGenerator();
-    helpers.mockPrompt(gen, {dir: '.'});
+    testhelpers.mockPrompt(gen, {dir: '.'});
     gen.run(function() {
       var yoRcPath = path.resolve(SANDBOX, '.yo-rc.json');
       assert(fs.existsSync(yoRcPath), 'file exists');
@@ -105,7 +106,7 @@ describe('loopback:app generator', function() {
 
   it('includes explorer by default', function(done) {
     var gen = givenAppGenerator();
-    helpers.mockPrompt(gen, {dir: '.'});
+    testhelpers.mockPrompt(gen, {dir: '.'});
     gen.run(function() {
       var compConfig = common.readJsonSync('server/component-config.json', {});
       expect(Object.keys(compConfig))
@@ -117,7 +118,7 @@ describe('loopback:app generator', function() {
   it('excludes explorer with --no-explorer', function(done) {
     var gen = givenAppGenerator();
     gen.options.explorer = false;
-    helpers.mockPrompt(gen, {dir: '.'});
+    testhelpers.mockPrompt(gen, {dir: '.'});
     gen.run(function() {
       var compConfig = common.readJsonSync('server/component-config.json', {});
       expect(Object.keys(compConfig))
@@ -126,10 +127,10 @@ describe('loopback:app generator', function() {
     });
   });
 
-  function givenAppGenerator(modelArgs) {
+  function givenAppGenerator() {
     var name = 'loopback:app';
     var path = '../../app';
-    var gen = common.createGenerator(name, path, [], modelArgs, {});
+    var gen = common.createGenerator(name, path);
     gen.options['skip-install'] = true;
     return gen;
   }
@@ -138,7 +139,7 @@ describe('loopback:app generator', function() {
     var gen = givenAppGenerator();
     var dir = path.join(SANDBOX, cwdName);
     helpers.testDirectory(dir, function() {
-      helpers.mockPrompt(gen, {
+      testhelpers.mockPrompt(gen, {
         wsTemplate: 'api-server',
         dir: '.'
       });

@@ -11,6 +11,7 @@ var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:boot-script generator', function() {
   beforeEach(common.resetWorkspace);
@@ -25,7 +26,7 @@ describe('loopback:boot-script generator', function() {
 
   it('generates an async boot script properly', function(done) {
     var bootGen = givenBootScriptGenerator();
-    helpers.mockPrompt(bootGen, {
+    testhelpers.mockPrompt(bootGen, {
       name: 'async-boot-script',
       type: 'async'
     });
@@ -45,7 +46,7 @@ describe('loopback:boot-script generator', function() {
 
   it('generates a sync boot script properly', function(done) {
     var bootGen = givenBootScriptGenerator();
-    helpers.mockPrompt(bootGen, {
+    testhelpers.mockPrompt(bootGen, {
       name: 'sync-boot-script',
       type: 'sync'
     });
@@ -63,10 +64,10 @@ describe('loopback:boot-script generator', function() {
     });
   });
 
-  function givenBootScriptGenerator(bsArgs) {
+  function givenBootScriptGenerator() {
     var path = '../../boot-script';
     var name = 'loopback:boot-script';
-    var gen = common.createGenerator(name, path, [], bsArgs, {});
+    var gen = common.createGenerator(name, path);
     return gen;
   }
 });

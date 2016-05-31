@@ -11,6 +11,7 @@ var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var expect = require('chai').expect;
 var common = require('./common');
+var testhelpers = require('yeoman-test');
 
 describe('loopback:acl generator', function() {
   beforeEach(function createSandbox(done) {
@@ -46,7 +47,7 @@ describe('loopback:acl generator', function() {
 
   it('adds an entry to models.json', function(done) {
     var aclGen = givenAclGenerator();
-    helpers.mockPrompt(aclGen, {
+    testhelpers.mockPrompt(aclGen, {
       model: 'Car',
       scope: 'all',
       accessType: '*',
@@ -70,7 +71,7 @@ describe('loopback:acl generator', function() {
 
   it('skips accessType is the scope is method', function(done) {
     var aclGen = givenAclGenerator();
-    helpers.mockPrompt(aclGen, {
+    testhelpers.mockPrompt(aclGen, {
       model: 'Car',
       scope: 'method',
       property: 'find',
@@ -95,7 +96,7 @@ describe('loopback:acl generator', function() {
 
   it('adds an entry to models.json for custom role', function(done) {
     var aclGen = givenAclGenerator();
-    helpers.mockPrompt(aclGen, {
+    testhelpers.mockPrompt(aclGen, {
       model: 'Car',
       scope: 'all',
       accessType: '*',
@@ -120,7 +121,7 @@ describe('loopback:acl generator', function() {
 
   it('adds an entry to all models.json', function(done) {
     var aclGen = givenAclGenerator();
-    helpers.mockPrompt(aclGen, {
+    testhelpers.mockPrompt(aclGen, {
       scope: 'all',
       accessType: '*',
       role: '$owner',
