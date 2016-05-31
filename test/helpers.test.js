@@ -12,7 +12,6 @@ var validateRequiredName = helpers.validateRequiredName;
 var checkRelationName = helpers.checkRelationName;
 require('chai').should();
 var expect = require('chai').expect;
-var promise = require('bluebird');
 
 describe('helpers', function() {
   describe('validateAppName()', function() {
@@ -114,9 +113,7 @@ function testRelationRejectsValue(modelDefinition, value) {
 
 function ModelDefinition(propertyList) {
   this.propertyList = propertyList;
-  this.properties = {
-    getAsync: function() {
-      return promise.resolve(propertyList);
-    }
+  this.properties = function(callback) {
+    callback(null, this.propertyList);
   };
 }
