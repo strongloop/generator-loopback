@@ -13,7 +13,7 @@ var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
-var checkPropertyName = helpers.checkPropertyName;
+var validateRemoteMethodName = helpers.validateRemoteMethodName;
 var typeChoices = helpers.getTypeChoices();
 var ModelDefinition = require('loopback-workspace').models.ModelDefinition;
 
@@ -96,14 +96,16 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Enter the remote method name:',
         required: true,
         default: name,
-        validate: checkPropertyName
+        validate: validateRemoteMethodName
       },
       {
         name: 'isStatic',
         message: 'Is Static?',
-        required:true,
+        required: false,
         type: 'confirm',
-        default: true
+        default: function(answers) {
+          return !answers.methodName.match(/^prototype\.(.*)$/);
+        }
       },
       {
         name: 'description',
@@ -111,7 +113,10 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
     this.prompt(prompts, function(answers) {
-      this.methodName = answers.methodName;
+      var m = answers.methodName.match(/^prototype\.(.*)$/);
+      var isStatic = !m;
+      var baseName = isStatic ? answers.methodName : m[1];
+      this.methodName = baseName;
       this.isStatic = answers.isStatic;
       this.description = answers.description;
       done();

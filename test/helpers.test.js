@@ -10,6 +10,7 @@ var validateAppName = helpers.validateAppName;
 var validateOptionalName = helpers.validateOptionalName;
 var validateRequiredName = helpers.validateRequiredName;
 var checkRelationName = helpers.checkRelationName;
+var validateRemoteMethodName = helpers.validateRemoteMethodName;
 require('chai').should();
 var expect = require('chai').expect;
 var promise = require('bluebird');
@@ -73,6 +74,36 @@ describe('helpers', function() {
   describe('validateOptionalName()', function() {
     it('should accept empty name', function() {
       testValidationAcceptsValue(validateOptionalName, '');
+    });
+  });
+
+  // test validateRemoteMethodName()
+  describe('validateRemoteMethodName()', function() {
+    it('should accept good names', function() {
+      testValidationAcceptsValue(validateRemoteMethodName, 'prop');
+      testValidationAcceptsValue(validateRemoteMethodName, 'prop1');
+      testValidationAcceptsValue(validateRemoteMethodName, 'my_prop');
+      testValidationAcceptsValue(validateRemoteMethodName, 'my-prop');
+      testValidationAcceptsValue(validateRemoteMethodName, 'prototype.method');
+    });
+
+    it('should report errors for a name containing special chars', function() {
+      testValidationRejectsValue(validateRemoteMethodName, 'my prop');
+      testValidationRejectsValue(validateRemoteMethodName, 'my/prop');
+      testValidationRejectsValue(validateRemoteMethodName, 'my@prop');
+      testValidationRejectsValue(validateRemoteMethodName, 'my+prop');
+      testValidationRejectsValue(validateRemoteMethodName, 'my%prop');
+      testValidationRejectsValue(validateRemoteMethodName, 'my:prop');
+      testValidationRejectsValue(validateRemoteMethodName, 'm.prop');
+    });
+
+    it('should accept empty name', function() {
+      testValidationAcceptsValue(validateOptionalName, '');
+    });
+
+    it('should not accept name with . after `prototype.`', function() {
+      testValidationRejectsValue(validateRemoteMethodName,
+        'prototype.dotted.method');
     });
   });
 

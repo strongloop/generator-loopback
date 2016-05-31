@@ -61,6 +61,33 @@ describe('loopback:remote-method generator', function() {
     });
   });
 
+  it('method name with `prototype.` should be removed', function(done) {
+    var methodGenerator = givenMethodGenerator();
+    helpers.mockPrompt(methodGenerator, {
+      model: 'Car',
+      methodName: 'prototype.myRemote',
+      isStatic: 'false',
+      desription: 'This is my first remote method',
+      httpPath: '',
+      acceptsArg: '',
+      returnsArg: ''
+    });
+
+    methodGenerator.run(function() {
+      var definition = common.readJsonSync('common/models/car.json');
+      var methods = definition.methods || {};
+      expect(methods).to.have.property('myRemote');
+      expect(methods).to.not.have.property('prototype.myRemote');
+      expect(methods.myRemote).to.eql({
+        isStatic: false,
+        accepts: [],
+        returns: [],
+        http: []
+      });
+      done();
+    });
+  });
+
   function givenMethodGenerator() {
     var name = 'loopback:remote-method';
     var path = '../../remote-method';
