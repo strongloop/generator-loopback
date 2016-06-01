@@ -1,3 +1,15 @@
+2016-06-01, Version 1.21.0
+==========================
+
+ * Allow defining remote method without isStatic flag (Candy)
+
+ * Revert "fix failing relation name test" (jannyHou)
+
+ * Revert "fix/update-to-promise-support" (jannyHou)
+
+ * fix failing relation name test (Eddie Monge)
+
+
 2016-05-25, Version 1.20.7
 ==========================
 
