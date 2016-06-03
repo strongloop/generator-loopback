@@ -198,7 +198,9 @@ module.exports = yeoman.generators.Base.extend({
         name: 'acceptsArg',
         message: 'What is the name of this argument?',
         required: true,
-        validate: validateOptionalName
+        validate: function(value){
+          return validateOptionalName(value);
+        }
       }
     ];
     this.prompt(prompts, function(answers) {
@@ -292,7 +294,9 @@ module.exports = yeoman.generators.Base.extend({
         name: 'returnsArg',
         message: 'What is the name of this argument?',
         required: true,
-        validate: validateOptionalName
+        validate: function(value){
+          return validateOptionalName(value);
+        }
       }
     ];
     this.prompt(prompts, function(answers) {

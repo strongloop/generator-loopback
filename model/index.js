@@ -221,7 +221,9 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'propertyName',
         message: 'Property name:',
-        validate: validateOptionalName
+        validate: function(value){
+          return validateOptionalName(value);
+        }
       }
     ];
     this.prompt(prompts, function(answers) {
