@@ -1,3 +1,11 @@
+2016-06-03, Version 1.21.1
+==========================
+
+ * Fix generator prompt validate error (Candy)
+
+ * remote-method: make prompts more descriptive (Miroslav Bajtoš)
+
+
 2016-06-01, Version 1.21.0
 ==========================
 
