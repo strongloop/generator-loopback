@@ -126,7 +126,9 @@ module.exports = yeoman.generators.Base.extend({
       {
         name: 'foreignKey',
         message: 'Optionally enter a custom foreign key:',
-        validate: validateOptionalName
+         validate: function(value){
+          return validateOptionalName(value);
+        }
       },
       {
         name: 'through',

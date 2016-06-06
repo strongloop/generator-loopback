@@ -153,6 +153,23 @@ module.exports = yeoman.generators.Base.extend({
     });
   },
 
+  askForLBVersion: function() {
+    var cb = this.async();
+    var prompts = [{
+      name: 'loopbackVersion',
+      message: 'Which version of loopback do you use?',
+      type: 'list',
+      default: '2.x',
+      choices: ['2.x', '3.x']
+    }];
+
+    var self = this;
+    this.prompt(prompts, function(answers) {
+      self.options.loopbackVersion = answers.loopbackVersion;
+      cb();
+    });
+  },
+
   initWorkspace: actions.initWorkspace,
 
   detectExistingProject: function() {
@@ -168,11 +185,13 @@ module.exports = yeoman.generators.Base.extend({
 
   project: function() {
     var done = this.async();
-
+    var self = this;
+    this.log(self.options.loopbackVersion);
     Workspace.createFromTemplate(
       this.wsTemplate,
       this.appname,
       {
+        'loopbackVersion': this.options.loopbackVersion,
         'loopback-component-explorer': this.options.explorer !== false,
       },
       done
