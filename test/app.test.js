@@ -7,6 +7,7 @@
 'use strict';
 var path = require('path');
 var yg = require('yeoman-generator');
+var semver = require('semver');
 var ygAssert = yg.assert;
 var helpers = yg.test;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
@@ -122,6 +123,38 @@ describe('loopback:app generator', function() {
       var compConfig = common.readJsonSync('server/component-config.json', {});
       expect(Object.keys(compConfig))
         .to.not.contain('loopback-component-explorer');
+      done();
+    });
+  });
+
+  it('scaffolds 3.x app when option.loopbackVersion is 3.x',
+    function(done) {
+    var gen = givenAppGenerator();
+
+    helpers.mockPrompt(gen, {
+      name: 'test-app',
+      template: 'api-server',
+      loopbackVersion: '3.x'
+    });
+    gen.run(function () {
+      var pkg = common.readJsonSync('package.json', {});
+      expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(false);
+      done();
+    });
+  });
+
+  it('scaffolds 2.x app when option.loopbackVersion is 2.x',
+    function(done) {
+    var gen = givenAppGenerator();
+
+    helpers.mockPrompt(gen, {
+      name: 'test-app',
+      template: 'api-server',
+      loopbackVersion: '2.x'
+    });
+    gen.run(function () {
+      var pkg = common.readJsonSync('package.json', {});
+      expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(true);
       done();
     });
   });
