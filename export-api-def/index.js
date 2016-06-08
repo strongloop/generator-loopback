@@ -4,8 +4,12 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
-var fs = require('fs');
+
 var path = require('path');
+var SG = require('strong-globalize');
+var g = SG();
+
+var fs = require('fs');
 var yeoman = require('yeoman-generator');
 var helpers = require('../lib/helpers');
 var apiGenerator = require('loopback-api-definition');
@@ -20,7 +24,7 @@ module.exports = yeoman.Base.extend({
     this.option('output', {
       type: String,
       alias: 'o',
-      desc: 'Name/Full path to the output file.',
+      desc: g.f('Name/Full path to the output file.'),
       defaults: '',
     });
   },

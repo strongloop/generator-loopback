@@ -4,10 +4,14 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
+
+var path = require('path');
+var SG = require('strong-globalize');
+var g = SG();
+
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var util = require('util');
-var path = require('path');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
@@ -25,13 +29,13 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('modelName', {
-      desc: 'Name of the model',
+      desc: g.f('Name of the model'),
       required: false,
       type: String,
     });
 
     this.argument('methodName', {
-      desc: 'Name of the remote method',
+      desc: g.f('Name of the remote method'),
       required: false,
       type: String,
     });
@@ -52,8 +56,8 @@ module.exports = yeoman.Base.extend({
       }.bind(this))[0];
 
       if (!this.modelDefinition) {
-        var msg = 'Model not found: ' + this.modelName +
-                  '. Please choose from Model List:';
+        var msg = g.f('Model not found: %s' +
+                  '. Please choose from Model List:', this.modelName);
         this.log(chalk.red(msg));
       }
     }
@@ -62,7 +66,7 @@ module.exports = yeoman.Base.extend({
       var prompts = [
         {
           name: 'model',
-          message: 'Select the model:',
+          message: g.f('Select the model:'),
           type: 'list',
           choices: this.editableModelNames,
         },
@@ -79,7 +83,7 @@ module.exports = yeoman.Base.extend({
     }.bind(this))[0];
 
     if (!this.modelDefinition) {
-      var msg = 'Model not found: ' + this.modelName;
+      var msg = g.f('Model not found: %s', this.modelName);
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
     }
@@ -90,14 +94,14 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'methodName',
-        message: 'Enter the remote method name:',
+        message: g.f('Enter the remote method name:'),
         required: true,
         default: name,
         validate: validateRemoteMethodName,
       },
       {
         name: 'isStatic',
-        message: 'Is Static?',
+        message: g.f('Is Static?'),
         required: false,
         type: 'confirm',
         default: function(answers) {
@@ -106,7 +110,7 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'description',
-        message: 'Description for method:',
+        message: g.f('Description for method:'),
       },
     ];
     return this.prompt(prompts).then(function(answers) {
@@ -121,10 +125,10 @@ module.exports = yeoman.Base.extend({
 
   delimEndpoints: function() {
     this.log();
-    this.log('Let\'s configure where to expose your new method ' +
-      'in the public REST API.');
-    this.log('You can provide multiple HTTP endpoints, enter an empty path ' +
-      'when you are done.');
+    this.log(g.f('Let\'s configure where to expose your new method ' +
+      'in the public REST API.'));
+    this.log(g.f('You can provide multiple HTTP endpoints, enter an empty ' +
+      'path when you are done.'));
     this.http = [];
   },
 
@@ -134,7 +138,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'httpPath',
-        message: 'Enter the path of this endpoint:',
+        message: g.f('Enter the path of this endpoint:'),
         required: true,
       },
     ];
@@ -145,17 +149,20 @@ module.exports = yeoman.Base.extend({
       var subprompts = [
         {
           name: 'httpVerb',
-          message: 'HTTP verb:',
+          message: g.f('HTTP verb:'),
           type: 'list',
-          choices: ['post', 'put', 'delete', 'get', {
-            name: '(other)',
-            value: null,
-          }],
+          choices: [
+            {name: g.f('post'), value: 'post'},
+            {name: g.f('put'), value: 'put'},
+            {name: g.f('delete'), value: 'delete'},
+            {name: g.f('get'), value: 'get'},
+            {name: g.f('(other)'), value: null},
+          ],
         },
         {
           name: 'customHttpVerb',
           message:
-          'Enter the custom http verb',
+          g.f('Enter the custom http verb'),
           validate: validateRequiredName,
           when: function(answers) {
             return answers.httpVerb === null;
@@ -170,8 +177,8 @@ module.exports = yeoman.Base.extend({
           path: httpPath,
           verb: answers.httpVerb || answers.customHttpVerb,
         });
-        this.log(
-          '\nLet\'s add another endpoint, enter an empty name when done.');
+        this.log(g.f(
+          '\nLet\'s add another endpoint, enter an empty name when done.'));
         this.askForEndpoints();
       }.bind(this));
     }.bind(this));
@@ -179,9 +186,11 @@ module.exports = yeoman.Base.extend({
 
   delimAccepts: function() {
     this.log();
-    this.log('Describe the input ("accepts") arguments of your remote method.');
-    this.log('You can define multiple input arguments.');
-    this.log('Enter an empty name when you\'ve defined all input arguments.');
+    this.log(g.f('Describe the input ("accepts") arguments of your remote ' +
+      'method.'));
+    this.log(g.f('You can define multiple input arguments.'));
+    this.log(g.f('Enter an empty name when you\'ve defined all input ' +
+      'arguments.'));
 
     this.accepts = [];
   },
@@ -192,7 +201,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'acceptsArg',
-        message: 'What is the name of this argument?',
+        message: g.f('What is the name of this argument?'),
         required: true,
         validate: validateOptionalName,
       },
@@ -204,47 +213,56 @@ module.exports = yeoman.Base.extend({
       var subprompts = [
         {
           name: 'acceptsType',
-          message: 'Select argument\'s type:',
+          message: g.f('Select argument\'s type:'),
           type: 'list',
           choices: typeChoices,
         },
         {
           name: 'acceptsRequired',
-          message: 'Is this argument required?',
+          message: g.f('Is this argument required?'),
           type: 'confirm',
           default: false,
         },
         {
           name: 'acceptsDes',
-          message: 'Please describe the argument:',
+          message: g.f('Please describe the argument:'),
           required: true,
         },
         {
           name: 'httpSource',
-          message: 'Where to get the value from?',
+          message: g.f('Where to get the value from?'),
           type: 'list',
           choices: [
             {
-              name: '(auto)',
+              name: g.f('(auto)'),
               value: null,
             },
-            'form',
-            'path',
-            'query',
             {
-              name: 'store the whole request body',
+              name: g.f('form'),
+              value: 'form',
+            },
+            {
+              name: g.f('path'),
+              value: 'path',
+            },
+            {
+              name: g.f('query'),
+              value: 'query',
+            },
+            {
+              name: g.f('store the whole request body'),
               value: 'body',
             },
             {
-              name: 'store the full request object',
+              name: g.f('store the full request object'),
               value: 'req',
             },
             {
-              name: 'store the full response object',
+              name: g.f('store the full response object'),
               value: 'res',
             },
             {
-              name: 'store the whole context object',
+              name: g.f('store the whole context object'),
               value: 'context',
             },
           ],
@@ -264,8 +282,8 @@ module.exports = yeoman.Base.extend({
           entry.http = {source: answers.httpSource};
         }
         this.accepts.push(entry);
-        this.log('\nLet\'s add another accept argument, ' +
-          'enter an empty name when done.');
+        this.log(g.f('\nLet\'s add another accept argument, ' +
+          'enter an empty name when done.'));
         this.askForAccepts();
       }.bind(this));
     }.bind(this));
@@ -273,10 +291,11 @@ module.exports = yeoman.Base.extend({
 
   delimReturns: function() {
     this.log();
-    this.log('Describe the output ("returns") arguments ' +
-     'to the remote method\'s callback function.');
-    this.log('You can define multiple output arguments.');
-    this.log('Enter an empty name when you\'ve defined all output arguments.');
+    this.log(g.f('Describe the output ("returns") arguments ' +
+     'to the remote method\'s callback function.'));
+    this.log(g.f('You can define multiple output arguments.'));
+    this.log(g.f('Enter an empty name when you\'ve defined all output ' +
+      'arguments.'));
     this.returns = [];
   },
 
@@ -286,7 +305,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'returnsArg',
-        message: 'What is the name of this argument?',
+        message: g.f('What is the name of this argument?'),
         required: true,
         validate: validateOptionalName,
       },
@@ -298,19 +317,19 @@ module.exports = yeoman.Base.extend({
       var subprompts = [
         {
           name: 'returnsType',
-          message: 'Select argument\'s type:',
+          message: g.f('Select argument\'s type:'),
           type: 'list',
           choices: typeChoices,
         },
         {
           name: 'returnsRoot',
-          message: 'Is this argument a full response body (root)?',
+          message: g.f('Is this argument a full response body (root)?'),
           type: 'confirm',
           default: false,
         },
         {
           name: 'returnsDes',
-          message: 'Please describe the argument:',
+          message: g.f('Please describe the argument:'),
           required: true,
         },
       ];
@@ -324,8 +343,8 @@ module.exports = yeoman.Base.extend({
           root: answers.returnsRoot,
           description: answers.returnsDes,
         });
-        this.log(
-          '\nLet\'s add another return argument. Enter empty name when done.');
+        this.log(g.f(
+          '\nLet\'s add another return argument. Enter empty name when done.'));
         this.askForReturns();
       }.bind(this));
     }.bind(this));
@@ -376,15 +395,15 @@ function buildIntroduction(def) {
   jsonFilePath = chalk.yellow(jsonFilePath);
 
   var tip = [
-    util.format(
-      'We added strong-remoting metadata for your new method to %s.',
+    g.f(
+      'We added {{strong-remoting}} metadata for your new method to %s.',
       jsonFilePath
     ),
-    util.format(
+    g.f(
       'You must implement the method in %s. For example:',
       jsFilePath
     ),
-    'Here is sample code to get you started:',
+    g.f('Here is sample code to get you started:'),
   ].join('\n');
 
   return tip;

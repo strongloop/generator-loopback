@@ -4,6 +4,10 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
+
+var SG = require('strong-globalize');
+var g = SG();
+
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var inflection = require('inflection');
@@ -37,7 +41,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'model',
-        message: 'Select the model to create the relationship from:',
+        message: g.f('Select the model to create the relationship from:'),
         type: 'list',
         choices: this.editableModelNames,
       },
@@ -54,7 +58,7 @@ module.exports = yeoman.Base.extend({
     }.bind(this))[0];
 
     if (!this.modelDefinition) {
-      var msg = 'Model not found: ' + this.modelName;
+      var msg = g.f('Model not found: %s', this.modelName);
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
     }
@@ -74,26 +78,26 @@ module.exports = yeoman.Base.extend({
     var modelDef = this.modelDefinition;
 
     var modelChoices = this.editableModelNames.concat({
-      name: '(other)',
+      name: g.f('(other)'),
       value: null,
     });
 
     var prompts = [
       {
         name: 'type',
-        message: 'Relation type:',
+        message: g.f('Relation type:'),
         type: 'list',
         choices: this.availableTypes,
       },
       {
         name: 'toModel',
-        message: 'Choose a model to create a relationship with:',
+        message: g.f('Choose a model to create a relationship with:'),
         type: 'list',
         choices: modelChoices,
       },
       {
         name: 'customToModel',
-        message: 'Enter the model name:',
+        message: g.f('Enter the model name:'),
         required: true,
         validate: validateRequiredName,
         when: function(answers) {
@@ -102,7 +106,7 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'asPropertyName',
-        message: 'Enter the property name for the relation:',
+        message: g.f('Enter the property name for the relation:'),
         required: true,
         default: function(answers) {
           var m = answers.customToModel || answers.toModel;
@@ -122,12 +126,12 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'foreignKey',
-        message: 'Optionally enter a custom foreign key:',
+        message: g.f('Optionally enter a custom foreign key:'),
         validate: validateOptionalName,
       },
       {
         name: 'through',
-        message: 'Require a through model?',
+        message: g.f('Require a through model?'),
         type: 'confirm',
         default: false,
         when: function(answers) {
@@ -136,7 +140,7 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'throughModel',
-        message: 'Choose a through model:',
+        message: g.f('Choose a through model:'),
         type: 'list',
         choices: modelChoices,
         when: function(answers) {
@@ -145,7 +149,7 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'customThroughModel',
-        message: 'Enter the model name:',
+        message: g.f('Enter the model name:'),
         required: true,
         validate: validateRequiredName,
         when: function(answers) {

@@ -4,6 +4,10 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
+
+var SG = require('strong-globalize');
+var g = SG();
+
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
@@ -37,7 +41,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'model',
-        message: 'Select the model:',
+        message: g.f('Select the model:'),
         type: 'list',
         choices: this.editableModelNames,
       },
@@ -54,7 +58,7 @@ module.exports = yeoman.Base.extend({
     }.bind(this))[0];
 
     if (!this.modelDefinition) {
-      var msg = 'Model not found: ' + this.modelName;
+      var msg = g.f('Model not found: %s', this.modelName);
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
     }
@@ -66,7 +70,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'name',
-        message: 'Enter the property name:',
+        message: g.f('Enter the property name:'),
         validate: checkPropertyName,
         default: this.propDefinition && this.propDefinition.name,
         when: function() {
@@ -75,7 +79,7 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'type',
-        message: 'Property type:',
+        message: g.f('Property type:'),
         type: 'list',
         default: this.propDefinition &&
           (Array.isArray(this.propDefinition.type) ?
@@ -84,7 +88,7 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'customType',
-        message: 'Enter the type:',
+        message: g.f('Enter the type:'),
         required: true,
         validate: validateRequiredName,
         when: function(answers) {
@@ -93,7 +97,7 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'itemType',
-        message: 'The type of array items:',
+        message: g.f('The type of array items:'),
         type: 'list',
         default: this.propDefinition &&
           this.propDefinition.type &&
@@ -106,7 +110,7 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'customItemType',
-        message: 'Enter the item type:',
+        message: g.f('Enter the item type:'),
         validate: validateRequiredName,
         when: function(answers) {
           return answers.type === 'array' && answers.itemType === null;
@@ -114,13 +118,13 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'required',
-        message: 'Required?',
+        message: g.f('Required?'),
         type: 'confirm',
         default: false,
       },
       {
         name: 'defaultValue',
-        message: 'Default value[leave blank for none]:',
+        message: g.f('Default value[leave blank for none]:'),
         default: null,
         when: function(answers) {
           return answers.type !== null &&

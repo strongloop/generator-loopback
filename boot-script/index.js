@@ -4,6 +4,10 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
+
+var SG = require('strong-globalize');
+var g = SG();
+
 var helpers = require('../lib/helpers');
 var path = require('path');
 var yeoman = require('yeoman-generator');
@@ -15,7 +19,7 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
-      desc: 'Name of the boot script to create.',
+      desc: g.f('Name of the boot script to create.'),
       required: false,
       optional: true,
       type: String,
@@ -33,7 +37,7 @@ module.exports = yeoman.Base.extend({
 
     var question = {
       name: 'name',
-      message: 'Enter the script name (without `.js`):',
+      message: g.f('Enter the script name (without {{`.js`}}):'),
       default: this.name,
       validate: validateRequiredName,
     };
@@ -47,9 +51,11 @@ module.exports = yeoman.Base.extend({
   askForType: function() {
     var question = {
       name: 'type',
-      message: 'What type of boot script do you want to generate?',
+      message: g.f('What type of boot script do you want to generate?'),
       type: 'list',
-      choices: ['async', 'sync'],
+      choices: [
+        {name: g.f('async'), value: 'async'},
+        {name: g.f('sync'), value: 'sync'}],
       default: 'async',
     };
 
