@@ -75,6 +75,7 @@ module.exports = yeoman.generators.Base.extend({
 
     this.prompt(prompts, function(props) {
       this.name = props.name;
+      this.displayName = chalk.yellow(this.name);
       done();
     }.bind(this));
 
