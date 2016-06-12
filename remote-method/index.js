@@ -17,12 +17,12 @@ var validateRemoteMethodName = helpers.validateRemoteMethodName;
 var typeChoices = helpers.getTypeChoices();
 var ModelDefinition = require('loopback-workspace').models.ModelDefinition;
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('modelName', {
       desc: 'Name of the model',
