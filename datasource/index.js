@@ -198,10 +198,13 @@ module.exports = yeoman.generators.Base.extend({
 
   installConnector: function() {
     var connector = this.availableConnectors[this.connector];
-    var pkg = connector.package;
-    if (!pkg) return;
-
-    var npmModule = pkg.name;
+    var pkg = {};
+    if (connector) {
+      pkg = connector.package;
+      if (!pkg) return;
+    }
+    
+    var npmModule = pkg.name || this.connector;
     if (pkg.version) {
       npmModule += '@' + pkg.version;
     }
@@ -244,6 +247,17 @@ module.exports = yeoman.generators.Base.extend({
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
+  },
+
+  printAddConfigForCustomConnector: function() {
+    var connector = this.connector;
+    if (!this.availableConnectors[connector]) {
+      this.log('Please manually add config for your custom connector ' +
+        connector +
+        ' in server/datasources.json');
+    } else {
+      return;
+    }
   },
 
   saveProject: actions.saveProject

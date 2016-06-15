@@ -80,6 +80,24 @@ describe('loopback:datasource generator', function() {
     });
   });
 
+  it('should support custom connector', function(done) {
+    var modelGen = givenDataSourceGenerator();
+    helpers.mockPrompt(modelGen, {
+      name: 'test-custom',
+      customConnector: 'lodash',
+      connector: 'other'
+    });
+
+    modelGen.run(function() {
+      var pkg = fs.readFileSync(
+        path.join(SANDBOX, 'package.json'), 'UTF-8');
+      pkg = JSON.parse(pkg);
+      /* jshint -W030 */
+      expect(pkg.dependencies.lodash).to.exist;
+      done();
+    });
+  });
+
   it('should support object/array settings', function(done) {
     var restOptions = {
       headers: {
