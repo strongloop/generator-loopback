@@ -5,7 +5,7 @@
 
 'use strict';
 var path = require('path');
-var helpers = require('yeoman-generator').test;
+var helpers = require('yeoman-test');
 var fs = require('fs');
 var expect = require('chai').expect;
 var wsModels = require('loopback-workspace').models;

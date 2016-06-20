@@ -19,9 +19,9 @@ var helpers = require('../lib/helpers');
 var validateAppName = helpers.validateAppName;
 var pkg = require('../package.json');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the application to scaffold.',
@@ -109,8 +109,6 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    var done = this.async();
-
     // https://github.com/strongloop/generator-loopback/issues/38
     // yeoman-generator normalize the appname with ' '
     this.appname =
@@ -127,16 +125,14 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       this.appname = props.appname || this.appname;
-      done();
     }.bind(this));
   },
 
   configureDestinationDir: actions.configureDestinationDir,
 
   askForTemplate: function() {
-    var cb = this.async();
     var prompts = [{
       name: 'wsTemplate',
       message: 'What kind of application do you have in mind?',
@@ -146,15 +142,13 @@ module.exports = yeoman.generators.Base.extend({
     }];
 
     var self = this;
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       // Do NOT use name template as it's a method in the base class
       self.wsTemplate = answers.wsTemplate;
-      cb();
-    });
+    }.bind(this));
   },
 
   askForLBVersion: function() {
-    var cb = this.async();
     var prompts = [{
       name: 'loopbackVersion',
       message: 'Which version of LoopBack would you like to use?',
@@ -164,10 +158,9 @@ module.exports = yeoman.generators.Base.extend({
     }];
 
     var self = this;
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       self.options.loopbackVersion = answers.loopbackVersion;
-      cb();
-    });
+    }.bind(this));
   },
 
   initWorkspace: actions.initWorkspace,

@@ -13,7 +13,7 @@ var validateRequiredName = helpers.validateRequiredName;
 var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
@@ -33,7 +33,6 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    var done = this.async();
     var prompts = [
       {
         name: 'model',
@@ -43,9 +42,8 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       this.modelName = answers.model;
-      done();
     }.bind(this));
   },
 
@@ -62,7 +60,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForParameters: function() {
-    var done = this.async();
     this.name = this.options.propertyName;
 
     var prompts = [
@@ -118,7 +115,7 @@ module.exports = yeoman.generators.Base.extend({
          default: null
       }
     ];
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       this.name = answers.name || this.name;
       if (answers.type === 'array') {
         var itemType =  answers.customItemType || answers.itemType;
@@ -128,7 +125,6 @@ module.exports = yeoman.generators.Base.extend({
       }
       this.required = answers.required;
       this.defaultValue = answers.defaultValue;
-      done();
     }.bind(this));
   },
 

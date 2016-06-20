@@ -33,7 +33,7 @@
     "loopback-workspace": "^3.28.0",
     "mkdirp": "^0.5.1",
     "request": "^2.60.0",
-    "yeoman-generator": "^0.21.1",
+    "yeoman-generator": "^0.23.1",
     "yosay": "^1.0.5"
   },
   "devDependencies": {
@@ -42,6 +42,8 @@
     "jshint": "^2.8.0",
     "mocha": "^2.2.5",
     "semver": "^5.1.0",
-    "strong-cached-install": "^2.0.0"
+    "strong-cached-install": "^2.0.0",
+    "yeoman-assert": "^2.2.1",
+    "yeoman-test": "^1.4.0"
   }
 }

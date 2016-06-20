@@ -31,7 +31,7 @@ function toNumberedList(items) {
 var OTHER_PHASE = '(custom phase)';
 var LAST_PHASE = '(last phase)';
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
@@ -39,7 +39,7 @@ module.exports = yeoman.generators.Base.extend({
   loadProject: actions.loadProject,
 
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the middleware to create.',
@@ -68,8 +68,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForName: function() {
-    var done = this.async();
-
     var prompts = [
       {
         name: 'name',
@@ -79,16 +77,13 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       this.name = props.name;
-      done();
     }.bind(this));
 
   },
 
   askForPhase: function() {
-    var done = this.async();
-
     var displayName = chalk.yellow(this.name);
 
     var prompts = [
@@ -130,12 +125,11 @@ module.exports = yeoman.generators.Base.extend({
       },
     ];
 
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       this.phase = props.customPhase || props.phase;
       this.customPhase = props.customPhase;
       this.nextPhase = props.nextPhase;
       this.subPhase = props.subPhase;
-      done();
     }.bind(this));
   },
 
@@ -164,7 +158,7 @@ module.exports = yeoman.generators.Base.extend({
         }
       }
     ];
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       if (answers.path == null || answers.path === '') {
         return done();
       }
@@ -177,7 +171,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForParams: function() {
-    var done = this.async();
     var prompts = [
       {
         name: 'params',
@@ -197,9 +190,8 @@ module.exports = yeoman.generators.Base.extend({
         }
       }
     ];
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       this.params = JSON.parse(answers.params);
-      done();
     }.bind(this));
   },
 

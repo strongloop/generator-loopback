@@ -13,7 +13,7 @@ var ModelAccessControl = wsModels.ModelAccessControl;
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
@@ -52,8 +52,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForModel: function() {
-    var done = this.async();
-
     var modelChoices =
       [{ name: '(all existing models)', value: null }]
       .concat(this.editableModelNames);
@@ -68,21 +66,17 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       this.modelName = answers.model;
       if (this.modelName) {
         this.modelDefinition = this.projectModels.filter(function(m) {
           return m.name === answers.model;
         })[0];
       }
-      done();
     }.bind(this));
-
   },
 
   askForParameters: function() {
-    var done = this.async();
-
     var prompts = [
       {
         name: 'scope',
@@ -143,7 +137,8 @@ module.exports = yeoman.generators.Base.extend({
         choices: this.permissionValues,
       }
     ];
-    this.prompt(prompts, function(answers) {
+
+    return this.prompt(prompts).then(function(answers) {
       var accessType = answers.accessType;
       if (answers.scope === 'method') {
         accessType = 'EXECUTE';
@@ -155,7 +150,6 @@ module.exports = yeoman.generators.Base.extend({
         principalId: answers.customRole || answers.role,
         permission: answers.permission
       };
-      done();
     }.bind(this));
   },
 
