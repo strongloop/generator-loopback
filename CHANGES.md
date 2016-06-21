@@ -1,3 +1,13 @@
+2016-06-21, Version 1.22.0
+==========================
+
+ * Support custom connector (jannyHou)
+
+ * Add prompt for lbVersion (jannyHou)
+
+ * Fix "undefined" model name (Mickael Burguet)
+
+
 2016-06-03, Version 1.21.1
 ==========================
 
