@@ -148,13 +148,29 @@ module.exports = yeoman.Base.extend({
     }.bind(this));
   },
 
+  fetchLoopBackVersions: function() {
+    var done = this.async();
+    var self = this;
+    Workspace.getAvailableLBVersions(function(err, versionsMap) {
+      if (err) return done(err);
+      var versionNames = Object.keys(versionsMap);
+      self.availableLBVersions = versionNames.map(function(version) {
+        return {
+          name: version + ' (' + versionsMap[version].description + ')',
+          value: version,
+        };
+      });
+      done();
+    });
+  },
+
   askForLBVersion: function() {
     var prompts = [{
       name: 'loopbackVersion',
       message: 'Which version of LoopBack would you like to use?',
       type: 'list',
       default: '2.x',
-      choices: ['2.x', '3.x'],
+      choices: this.availableLBVersions,
     }];
 
     var self = this;
