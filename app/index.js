@@ -135,6 +135,25 @@ module.exports = yeoman.generators.Base.extend({
 
   configureDestinationDir: actions.configureDestinationDir,
 
+  askForLBVersion: function() {
+    var cb = this.async();
+    var prompts = [{
+      name: 'loopbackVersion',
+      message: 'Which version of LoopBack would you like to use?',
+      type: 'list',
+      default: '2.x',
+      choices: ['2.x', '3.x']
+    }];
+
+    var self = this;
+    this.prompt(prompts, function(answers) {
+      self.options.loopbackVersion = answers.loopbackVersion;
+      cb();
+    });
+  },
+  
+  applyTemplateFilter: actions.templateFilter,
+
   askForTemplate: function() {
     var cb = this.async();
     var prompts = [{
@@ -149,23 +168,6 @@ module.exports = yeoman.generators.Base.extend({
     this.prompt(prompts, function(answers) {
       // Do NOT use name template as it's a method in the base class
       self.wsTemplate = answers.wsTemplate;
-      cb();
-    });
-  },
-
-  askForLBVersion: function() {
-    var cb = this.async();
-    var prompts = [{
-      name: 'loopbackVersion',
-      message: 'Which version of LoopBack would you like to use?',
-      type: 'list',
-      default: '2.x',
-      choices: ['2.x', '3.x']
-    }];
-
-    var self = this;
-    this.prompt(prompts, function(answers) {
-      self.options.loopbackVersion = answers.loopbackVersion;
       cb();
     });
   },
