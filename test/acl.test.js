@@ -6,7 +6,7 @@
 /*global describe, beforeEach, afterEach, it */
 'use strict';
 var path = require('path');
-var helpers = require('yeoman-generator').test;
+var helpers = require('yeoman-test');
 var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var expect = require('chai').expect;

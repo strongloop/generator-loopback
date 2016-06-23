@@ -10,9 +10,9 @@ var yeoman = require('yeoman-generator');
 
 var validateRequiredName = helpers.validateRequiredName;
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the boot script to create.',
@@ -38,15 +38,13 @@ module.exports = yeoman.generators.Base.extend({
       validate: validateRequiredName
     };
 
-    this.prompt(question, function(answer) {
+    return this.prompt(question).then(function(answer) {
       this.name = answer.name;
       done();
     }.bind(this));
   },
 
   askForType: function() {
-    var done = this.async();
-
     var question = {
       name: 'type',
       message: 'What type of boot script do you want to generate?',
@@ -55,9 +53,8 @@ module.exports = yeoman.generators.Base.extend({
       default: 'async'
     };
 
-    this.prompt(question, function(answer) {
+    return this.prompt(question).then(function(answer) {
       this.type = answer.type;
-      done();
     }.bind(this));
   },
 

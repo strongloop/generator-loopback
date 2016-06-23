@@ -6,10 +6,9 @@
 /*global describe, beforeEach, it */
 'use strict';
 var path = require('path');
-var yg = require('yeoman-generator');
 var semver = require('semver');
-var ygAssert = yg.assert;
-var helpers = yg.test;
+var ygAssert = require('yeoman-assert');
+var helpers = require('yeoman-test');
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var common = require('./common');
 var assert = require('assert');
@@ -173,7 +172,7 @@ describe('loopback:app generator', function() {
     helpers.testDirectory(dir, function() {
       helpers.mockPrompt(gen, {
         wsTemplate: 'api-server',
-        dir: '.'
+        dir: cwdName
       });
 
       gen.run(function() {

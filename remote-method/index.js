@@ -17,12 +17,12 @@ var validateRemoteMethodName = helpers.validateRemoteMethodName;
 var typeChoices = helpers.getTypeChoices();
 var ModelDefinition = require('loopback-workspace').models.ModelDefinition;
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('modelName', {
       desc: 'Name of the model',
@@ -59,7 +59,6 @@ module.exports = yeoman.generators.Base.extend({
     }
 
     if (!this.modelDefinition) {
-      var done = this.async();
       var prompts = [
         {
           name: 'model',
@@ -68,9 +67,8 @@ module.exports = yeoman.generators.Base.extend({
           choices: this.editableModelNames
         }
       ];
-      this.prompt(prompts, function(answers) {
+     return  this.prompt(prompts).then(function(answers) {
         this.modelName = answers.model;
-        done();
       }.bind(this));
     }
   },
@@ -88,7 +86,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForParameters: function() {
-    var done = this.async();
     var name = this.methodName;
     var prompts = [
       {
@@ -112,14 +109,13 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Description for method:'
       }
     ];
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       var m = answers.methodName.match(/^prototype\.(.*)$/);
       var isStatic = !m;
       var baseName = isStatic ? answers.methodName : m[1];
       this.methodName = baseName;
       this.isStatic = answers.isStatic;
       this.description = answers.description;
-      done();
     }.bind(this));
   },
 
@@ -142,7 +138,7 @@ module.exports = yeoman.generators.Base.extend({
         required: true
       }
     ];
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       if (answers.httpPath == null || answers.httpPath === '') {
         return done();
       }
@@ -201,7 +197,7 @@ module.exports = yeoman.generators.Base.extend({
         validate: validateOptionalName
       }
     ];
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       if (answers.acceptsArg == null || answers.acceptsArg === '') {
         return done();
       }
@@ -257,7 +253,7 @@ module.exports = yeoman.generators.Base.extend({
 
       var argName = answers.acceptsArg;
 
-      this.prompt(subprompts, function(answers) {
+      return this.prompt(subprompts).then(function(answers) {
         var entry = {
           arg: argName,
           type: answers.acceptsType,
@@ -295,7 +291,7 @@ module.exports = yeoman.generators.Base.extend({
         validate: validateOptionalName
       }
     ];
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       if (answers.returnsArg == null || answers.returnsArg === '') {
         return done();
       }
@@ -321,7 +317,7 @@ module.exports = yeoman.generators.Base.extend({
 
       var argName = answers.returnsArg;
 
-      this.prompt(subprompts, function(answers) {
+      return this.prompt(subprompts).then(function(answers) {
         this.returns.push({
           arg: argName,
           type: answers.returnsType,

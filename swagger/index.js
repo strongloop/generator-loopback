@@ -24,14 +24,14 @@ var NOT_SELECTED = 0, // It's not selected
   SELECTED_FOR_UPDATE = 1, // Selected for update
   SELECTED_FOR_CREATE = 2; // Selected for create
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
   constructor: function () {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('url', {
       desc: 'URL of the swagger spec.',
@@ -50,8 +50,6 @@ module.exports = yeoman.generators.Base.extend({
   addNullDataSourceItem: actions.addNullDataSourceItem,
 
   askForSpecUrlOrPath: function () {
-    var done = this.async();
-
     var prompts = [
       {
         name: 'url',
@@ -60,9 +58,8 @@ module.exports = yeoman.generators.Base.extend({
         validate: validateUrlOrFile
       }
     ];
-    this.prompt(prompts, function (answers) {
+    return this.prompt(prompts).then(function (answers) {
       this.url = answers.url.trim();
-      done();
     }.bind(this));
   },
 
@@ -194,7 +191,7 @@ module.exports = yeoman.generators.Base.extend({
             choices: self.dataSources
           }
         ];
-        self.prompt(prompts, function(answers) {
+        return self.prompt(prompts).then(function(answers) {
           self.dataSource = answers.dataSource;
           answers.modelSelections.forEach(function(m) {
             for (var i = 0, n = choices.length; i < n; i++) {

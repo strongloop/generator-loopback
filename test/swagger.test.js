@@ -6,9 +6,8 @@
 /*global describe, beforeEach, it */
 'use strict';
 var path = require('path');
-var helpers = require('yeoman-generator').test;
+var helpers = require('yeoman-test');
 var SANDBOX = path.resolve(__dirname, 'sandbox');
-var path = require('path');
 var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');

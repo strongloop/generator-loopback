@@ -17,7 +17,7 @@ var objectValidator = helpers.objectValidator;
 var path = require('path');
 var fs = require('fs');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
@@ -26,7 +26,7 @@ module.exports = yeoman.generators.Base.extend({
   loadProject: actions.loadProject,
 
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the data-source to create.',
@@ -71,8 +71,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForName: function() {
-    var done = this.async();
-
     var prompts = [
       {
         name: 'name',
@@ -82,16 +80,13 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       this.name = props.name;
-      done();
     }.bind(this));
 
   },
 
   askForParameters: function() {
-    var done = this.async();
-
     var displayName = chalk.yellow(this.name);
 
     var connectorChoices = this.listOfAvailableConnectors.concat(['other']);
@@ -115,9 +110,8 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       this.connector = props.customConnector || props.connector;
-      done();
     }.bind(this));
   },
 
@@ -176,8 +170,7 @@ module.exports = yeoman.generators.Base.extend({
     this.log('Connector-specific configuration:');
     if (!prompts.length) return reportWarnings();
 
-    var done = this.async();
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       for (var key in settings) {
         var propType = settings[key].type;
         if (propType === 'number') {
@@ -192,7 +185,6 @@ module.exports = yeoman.generators.Base.extend({
       }
       this.settings = props || {};
       reportWarnings();
-      done();
     }.bind(this));
   },
 
@@ -225,7 +217,7 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       if (props.installConnector) {
         this.npmInstall([npmModule], {'save': true});
         done();

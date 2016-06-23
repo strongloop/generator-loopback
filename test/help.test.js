@@ -8,7 +8,7 @@
 var path = require('path');
 var assert = require('assert');
 var common = require('./common');
-var helpers = require('yeoman-generator').test;
+var helpers = require('yeoman-test');
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 
 describe('loopback generator help', function () {

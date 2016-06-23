@@ -18,7 +18,7 @@ var validateRequiredName = helpers.validateRequiredName;
 var checkRelationName = helpers.checkRelationName;
 var checkPropertyName = helpers.checkPropertyName;
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
 
   help: function() {
     return helpers.customHelp(this);
@@ -34,7 +34,6 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
 
-    var done = this.async();
     var prompts = [
       {
         name: 'model',
@@ -44,9 +43,8 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       this.modelName = answers.model;
-      done();
     }.bind(this));
   },
 
@@ -74,7 +72,6 @@ module.exports = yeoman.generators.Base.extend({
 
   askForParameters: function() {
     var modelDef = this.modelDefinition;
-    var done = this.async();
 
     var modelChoices = this.editableModelNames.concat({
       name: '(other)',
@@ -156,7 +153,8 @@ module.exports = yeoman.generators.Base.extend({
         }
       },
     ];
-    this.prompt(prompts, function(answers) {
+
+    return this.prompt(prompts).then(function(answers) {
       this.type = answers.type;
       this.toModel = answers.customToModel || answers.toModel;
       this.asPropertyName = answers.asPropertyName;
@@ -164,7 +162,6 @@ module.exports = yeoman.generators.Base.extend({
       if (answers.through) {
         this.throughModel = answers.customThroughModel || answers.throughModel;
       }
-      done();
     }.bind(this));
   },
 

@@ -13,14 +13,14 @@ var helpers = require('../lib/helpers');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
       desc: 'Name of the model to create.',
@@ -62,8 +62,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForName: function() {
-    var done = this.async();
-
     var prompts = [
       {
         name: 'name',
@@ -73,10 +71,9 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       this.name = props.name;
       this.displayName = chalk.yellow(this.name);
-      done();
     }.bind(this));
 
   },
@@ -86,7 +83,6 @@ module.exports = yeoman.generators.Base.extend({
       this.dataSource = null;
       return;
     }
-    var done = this.async();
 
     var prompts = [{
         name: 'dataSource',
@@ -97,13 +93,12 @@ module.exports = yeoman.generators.Base.extend({
         choices: this.dataSources
       }];
 
-    this.prompt(prompts, function(props) {
+    return this.prompt(prompts).then(function(props) {
       if (this.hasDatasources) {
         this.dataSource = props.dataSource;
       } else {
         this.dataSource = null;
       }
-      done();
     }.bind(this));
   },
 
@@ -122,8 +117,6 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   askForParameters: function() {
-    var done = this.async();
-
     this.displayName = chalk.yellow(this.name);
 
     var baseModelChoices = ['Model', 'PersistedModel']
@@ -171,13 +164,11 @@ module.exports = yeoman.generators.Base.extend({
       }
     ];
 
-    this.prompt(prompts, function(props) {
+    return  this.prompt(prompts).then(function(props) {
       this.public = props.public;
       this.plural = props.plural || undefined;
       this.base = props.customBase || props.base;
       this.facetName = props.facetName;
-
-      done();
     }.bind(this));
   },
 
@@ -225,7 +216,7 @@ module.exports = yeoman.generators.Base.extend({
         validate: validateOptionalName
       }
     ];
-    this.prompt(prompts, function(answers) {
+    return this.prompt(prompts).then(function(answers) {
       if (answers.propertyName == null || answers.propertyName === '') {
         return done();
       }
