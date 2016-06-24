@@ -132,6 +132,32 @@ module.exports = yeoman.Base.extend({
 
   configureDestinationDir: actions.configureDestinationDir,
 
+  askForLBVersion: function() {
+    var availableLBVersions = Object.keys(Workspace.getAvailableLBVersions());
+    var prompts = [{
+      name: 'loopbackVersion',
+      message: 'Which version of LoopBack would you like to use?',
+      type: 'list',
+      default: '2.x',
+      choices: availableLBVersions
+    }];
+
+    var self = this;
+    return this.prompt(prompts).then(function(answers) {
+      self.options.loopbackVersion = answers.loopbackVersion;
+    }.bind(this));
+  },
+
+  applyFilterOnTemplate: function() {
+    var LBVersion = this.options.loopbackVersion;
+    for(var template in this.templates) {
+      if (this.templates[template].supportedLBVersions
+        .indexOf(LBVersion) === -1) {
+        delete this.templates[template];
+      }
+    }
+  },
+
   askForTemplate: function() {
     var prompts = [{
       name: 'wsTemplate',
@@ -145,21 +171,6 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(answers) {
       // Do NOT use name template as it's a method in the base class
       self.wsTemplate = answers.wsTemplate;
-    }.bind(this));
-  },
-
-  askForLBVersion: function() {
-    var prompts = [{
-      name: 'loopbackVersion',
-      message: 'Which version of LoopBack would you like to use?',
-      type: 'list',
-      default: '2.x',
-      choices: ['2.x', '3.x']
-    }];
-
-    var self = this;
-    return this.prompt(prompts).then(function(answers) {
-      self.options.loopbackVersion = answers.loopbackVersion;
     }.bind(this));
   },
 
