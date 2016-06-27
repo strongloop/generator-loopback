@@ -133,7 +133,17 @@ module.exports = yeoman.Base.extend({
   configureDestinationDir: actions.configureDestinationDir,
 
   askForLBVersion: function() {
-    var availableLBVersions = Object.keys(Workspace.getAvailableLBVersions());
+    var cb = this.async();
+
+    var availableLBVersions;
+    Workspace.getAvailableLBVersions(function(err, LBVersions) {
+      if (err) {
+        return cb(err);
+      } else {
+        availableLBVersions = Object.keys(LBVersions);
+      }
+    });
+
     var prompts = [{
       name: 'loopbackVersion',
       message: 'Which version of LoopBack would you like to use?',
