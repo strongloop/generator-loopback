@@ -117,7 +117,7 @@ module.exports = yeoman.Base.extend({
         validate: function(value) {
           var isValid = checkPropertyName(value);
           if (isValid !== true) return isValid;
-          return checkRelationName(modelDef, value, this.async());
+          return checkRelationName(modelDef, value);
         }
       },
       {
