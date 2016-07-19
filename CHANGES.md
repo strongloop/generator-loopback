@@ -1,3 +1,17 @@
+2016-07-19, Version 1.23.0
+==========================
+
+ * Replace-callback-with-promise (jannyHou)
+
+ * Update URLs in CONTRIBUTING.md (#211) (Ryan Graham)
+
+ * validate model property default value type (Alex Pitigoi)
+
+ * test: remove workarounds no longer needed (Miroslav Bajtoš)
+
+ * Update generator-loopback to yeoman 0.23 (Candy)
+
+
 2016-06-21, Version 1.22.0
 ==========================
 
