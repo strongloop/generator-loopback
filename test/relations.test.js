@@ -27,7 +27,7 @@ describe('loopback:relation generator', function() {
     wsModels.ModelDefinition.create(
       {
         name: 'Car',
-        facetName: 'common'
+        facetName: 'common',
       },
       function(err, model) {
         test.Model = model;
@@ -42,7 +42,7 @@ describe('loopback:relation generator', function() {
       toModel: 'Part',
       asPropertyName: 'parts',
       foreignKey: 'customKey',
-      type: 'hasMany'
+      type: 'hasMany',
     });
 
     relationGenerator.run(function() {
@@ -52,7 +52,7 @@ describe('loopback:relation generator', function() {
       expect(relations.parts).to.eql({
         type: 'hasMany',
         foreignKey: 'customKey',
-        model: 'Part'
+        model: 'Part',
       });
       done();
     });
@@ -66,7 +66,7 @@ describe('loopback:relation generator', function() {
       customToModel: 'Part',
       asPropertyName: 'parts',
       foreignKey: 'customKey',
-      type: 'hasMany'
+      type: 'hasMany',
     });
 
     relationGenerator.run(function() {
@@ -76,7 +76,7 @@ describe('loopback:relation generator', function() {
       expect(relations.parts).to.eql({
         type: 'hasMany',
         foreignKey: 'customKey',
-        model: 'Part'
+        model: 'Part',
       });
       done();
     });
@@ -91,7 +91,7 @@ describe('loopback:relation generator', function() {
       foreignKey: 'customKey',
       type: 'hasMany',
       through: true,
-      throughModel: 'CarPart'
+      throughModel: 'CarPart',
     });
 
     relationGenerator.run(function() {
@@ -102,7 +102,7 @@ describe('loopback:relation generator', function() {
         type: 'hasMany',
         foreignKey: 'customKey',
         model: 'Part',
-        through: 'CarPart'
+        through: 'CarPart',
       });
       done();
     });
@@ -118,7 +118,7 @@ describe('loopback:relation generator', function() {
       type: 'hasMany',
       through: true,
       throughModel: null,
-      customThroughModel: 'CarPart'
+      customThroughModel: 'CarPart',
     });
 
     relationGenerator.run(function() {
@@ -129,7 +129,7 @@ describe('loopback:relation generator', function() {
         type: 'hasMany',
         foreignKey: 'customKey',
         model: 'Part',
-        through: 'CarPart'
+        through: 'CarPart',
       });
       done();
     });
@@ -142,7 +142,7 @@ describe('loopback:relation generator', function() {
       helpers.mockPrompt(relationGenerator, {
         model: 'Car',
         toModel: 'Part',
-        type: 'belongsTo'
+        type: 'belongsTo',
       });
       relationGenerator.run(function() {
         var definition = common.readJsonSync('common/models/car.json');
@@ -160,7 +160,7 @@ describe('loopback:relation generator', function() {
       helpers.mockPrompt(relationGenerator, {
         model: 'Car',
         toModel: 'Part',
-        type: 'hasMany'
+        type: 'hasMany',
       });
       relationGenerator.run(function() {
         var definition = common.readJsonSync('common/models/car.json');

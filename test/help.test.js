@@ -11,14 +11,14 @@ var common = require('./common');
 var helpers = require('yeoman-test');
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 
-describe('loopback generator help', function () {
+describe('loopback generator help', function() {
   this.timeout(300000); // 5 minutes
 
   beforeEach(function createSandbox(done) {
     helpers.testDirectory(SANDBOX, done);
   });
 
-  it('print help message with yo by default', function () {
+  it('print help message with yo by default', function() {
     var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation'];
     names.forEach(function(name) {
       var gen = givenGenerator(name, ['--help']);
@@ -28,17 +28,17 @@ describe('loopback generator help', function () {
     });
   });
 
-  it('print help message with slc if invoked from slc', function () {
+  it('print help message with slc if invoked from slc', function() {
     process.env.SLC_COMMAND = 'loopback --help';
     var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation'];
     try {
-      names.forEach(function (name) {
+      names.forEach(function(name) {
         var gen = givenGenerator(name, ['--help']);
         var helpText = gen.help();
         assert(helpText.indexOf(' slc ') !== -1);
         assert(helpText.indexOf(' yo ') === -1);
       });
-    } catch(err) {
+    } catch (err) {
       process.env.SLC_COMMAND = undefined;
       throw err;
     }

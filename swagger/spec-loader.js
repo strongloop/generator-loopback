@@ -39,10 +39,10 @@ function loadSpec(specUrlStr, log, cb) {
     var options = {
       url: url.format(specUrl),
       headers: {
-        'Accept': 'application/json'
-      }
+        'Accept': 'application/json',
+      },
     };
-    request.get(options, function (err, res, body) {
+    request.get(options, function(err, res, body) {
       if (err) {
         return cb(err);
       }
@@ -55,8 +55,7 @@ function loadSpec(specUrlStr, log, cb) {
           } else {
             spec = body;
           }
-        }
-        catch (err) {
+        } catch (err) {
           return cb(err);
         }
         cb(null, spec);
@@ -76,7 +75,7 @@ function loadSpec(specUrlStr, log, cb) {
         cb(err);
       }
     } else {
-      fs.readFile(specUrl.href, 'UTF-8', function (err, body) {
+      fs.readFile(specUrl.href, 'UTF-8', function(err, body) {
         if (err) {
           return cb(err);
         }
@@ -88,7 +87,6 @@ function loadSpec(specUrlStr, log, cb) {
         }
       });
     }
-
   }
 }
 
@@ -102,28 +100,28 @@ function parseSpec(base, spec, log, cb) {
   if (spec.swaggerVersion === '1.2') {
     if (Array.isArray(spec.apis)) {
       if (spec.apis[0] && spec.apis[0].operations) {
-        process.nextTick(function () {
+        process.nextTick(function() {
           cb(null, [spec]);
         });
         return;
       }
       var specs = [];
-      async.each(spec.apis, function (api, done) {
+      async.each(spec.apis, function(api, done) {
         var apiUrl = buildUrl(base, api.path);
-        loadSpec(apiUrl, log, function (err, spec) {
+        loadSpec(apiUrl, log, function(err, spec) {
           specs.push(spec);
           done(err);
         });
-      }, function (err) {
+      }, function(err) {
         cb(err, specs);
       });
     }
   } else if (spec.swagger === '2.0') {
-    process.nextTick(function () {
+    process.nextTick(function() {
       cb(null, [spec]);
     });
   } else {
-    process.nextTick(function () {
+    process.nextTick(function() {
       var err = new Error('Invalid/unsupported swagger spec');
       cb(err);
     });
@@ -137,26 +135,26 @@ function parseSpec(base, spec, log, cb) {
  */
 function generate(specUrl, log, cb) {
   var apis = [];
-  loadSpec(specUrl, log, function (err, spec) {
+  loadSpec(specUrl, log, function(err, spec) {
     if (err) {
       return cb(err);
     }
-    parseSpec(specUrl, spec, log, function (err, apiSpecs) {
+    parseSpec(specUrl, spec, log, function(err, apiSpecs) {
       if (err) {
         return cb(err);
       }
-      async.each(apiSpecs, function (apiSpec, done) {
+      async.each(apiSpecs, function(apiSpec, done) {
         var code = generator.generateRemoteMethods(apiSpec,
           {modelName: 'SwaggerApi'});
         var models = generator.generateModels(apiSpec);
         var api = {
           code: code,
           models: models,
-          spec: apiSpec
+          spec: apiSpec,
         };
         apis.push(api);
         done(null);
-      }, function (err) {
+      }, function(err) {
         cb(err, apis);
       });
     });

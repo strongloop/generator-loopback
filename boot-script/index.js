@@ -18,7 +18,7 @@ module.exports = yeoman.Base.extend({
       desc: 'Name of the boot script to create.',
       required: false,
       optional: true,
-      type: String
+      type: String,
     });
   },
 
@@ -35,7 +35,7 @@ module.exports = yeoman.Base.extend({
       name: 'name',
       message: 'Enter the script name (without `.js`):',
       default: this.name,
-      validate: validateRequiredName
+      validate: validateRequiredName,
     };
 
     return this.prompt(question).then(function(answer) {
@@ -50,7 +50,7 @@ module.exports = yeoman.Base.extend({
       message: 'What type of boot script do you want to generate?',
       type: 'list',
       choices: ['async', 'sync'],
-      default: 'async'
+      default: 'async',
     };
 
     return this.prompt(question).then(function(answer) {
@@ -66,5 +66,5 @@ module.exports = yeoman.Base.extend({
     var target = this.destinationPath(targetPath);
 
     this.copy(source, target);
-  }
+  },
 });

@@ -31,7 +31,7 @@ module.exports = yeoman.Base.extend({
     this.argument('name', {
       desc: 'Name of the data-source to create.',
       required: false,
-      type: String
+      type: String,
     });
   },
 
@@ -52,7 +52,7 @@ module.exports = yeoman.Base.extend({
           ' (provided by community)';
         return {
           name: c.description + support,
-          value: c.name
+          value: c.name,
         };
       });
 
@@ -76,14 +76,13 @@ module.exports = yeoman.Base.extend({
         name: 'name',
         message: 'Enter the data-source name:',
         default: this.name,
-        validate: validateRequiredName
-      }
+        validate: validateRequiredName,
+      },
     ];
 
     return this.prompt(prompts).then(function(props) {
       this.name = props.name;
     }.bind(this));
-
   },
 
   askForParameters: function() {
@@ -97,7 +96,7 @@ module.exports = yeoman.Base.extend({
         message: 'Select the connector for ' + displayName + ':',
         type: 'list',
         default: 'memory',
-        choices: connectorChoices
+        choices: connectorChoices,
       },
       {
         name: 'customConnector',
@@ -106,8 +105,8 @@ module.exports = yeoman.Base.extend({
         validate: validateRequiredName,
         when: function(answers) {
           return answers.connector === 'other';
-        }
-      }
+        },
+      },
     ];
 
     return this.prompt(prompts).then(function(props) {
@@ -195,7 +194,7 @@ module.exports = yeoman.Base.extend({
       pkg = connector.package;
       if (!pkg) return;
     }
-    
+
     var npmModule = pkg.name || this.connector;
     if (pkg.version) {
       npmModule += '@' + pkg.version;
@@ -213,8 +212,8 @@ module.exports = yeoman.Base.extend({
         name: 'installConnector',
         message: 'Install ' + npmModule,
         type: 'confirm',
-        default: true
-      }
+        default: true,
+      },
     ];
 
     return this.prompt(prompts).then(function(props) {
@@ -232,7 +231,7 @@ module.exports = yeoman.Base.extend({
     var config = extend(this.settings, {
       name: this.name,
       connector: this.connector,
-      facetName: 'server' // hard-coded for now
+      facetName: 'server', // hard-coded for now
     });
 
     wsModels.DataSourceDefinition.create(config, function(err) {
@@ -252,5 +251,5 @@ module.exports = yeoman.Base.extend({
     }
   },
 
-  saveProject: actions.saveProject
+  saveProject: actions.saveProject,
 });

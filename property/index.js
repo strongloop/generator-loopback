@@ -39,8 +39,8 @@ module.exports = yeoman.Base.extend({
         name: 'model',
         message: 'Select the model:',
         type: 'list',
-        choices: this.editableModelNames
-      }
+        choices: this.editableModelNames,
+      },
     ];
 
     return this.prompt(prompts).then(function(answers) {
@@ -71,16 +71,16 @@ module.exports = yeoman.Base.extend({
         default: this.propDefinition && this.propDefinition.name,
         when: function() {
           return !this.name && this.name !== 0;
-        }.bind(this)
+        }.bind(this),
       },
       {
         name: 'type',
         message: 'Property type:',
         type: 'list',
-        default: this.propDefinition && 
-          (Array.isArray(this.propDefinition.type) ? 
+        default: this.propDefinition &&
+          (Array.isArray(this.propDefinition.type) ?
             'array' : this.propDefinition.type),
-        choices: typeChoices
+        choices: typeChoices,
       },
       {
         name: 'customType',
@@ -89,20 +89,20 @@ module.exports = yeoman.Base.extend({
         validate: validateRequiredName,
         when: function(answers) {
           return answers.type === null;
-        }
+        },
       },
       {
         name: 'itemType',
         message: 'The type of array items:',
         type: 'list',
-        default: this.propDefinition && 
+        default: this.propDefinition &&
           this.propDefinition.type &&
           Array.isArray(this.propDefinition.type) &&
           this.propDefinition.type[0],
         choices: typeChoices.filter(function(t) { return t !== 'array'; }),
         when: function(answers) {
           return answers.type === 'array';
-        }
+        },
       },
       {
         name: 'customItemType',
@@ -110,25 +110,25 @@ module.exports = yeoman.Base.extend({
         validate: validateRequiredName,
         when: function(answers) {
           return answers.type === 'array' && answers.itemType === null;
-        }
+        },
       },
       {
         name: 'required',
         message: 'Required?',
         type: 'confirm',
-        default: false
+        default: false,
       },
       {
-         name: 'defaultValue',
-         message: 'Default value[leave blank for none]:',
-         default: null,
-         when: function(answers) {
-          return answers.type !== null && 
+        name: 'defaultValue',
+        message: 'Default value[leave blank for none]:',
+        default: null,
+        when: function(answers) {
+          return answers.type !== null &&
             answers.type !== 'buffer' &&
             answers.type !== 'any' &&
             typeChoices.indexOf(answers.type) !== -1;
-        }
-      }
+        },
+      },
     ];
     return this.prompt(prompts).then(function(answers) {
       debug('answers: %j', answers);
@@ -149,11 +149,11 @@ module.exports = yeoman.Base.extend({
       }
 
       if (answers.defaultValue === '') {
-          this.log('Warning: please enter the ' + this.name +
+        this.log('Warning: please enter the ' + this.name +
             ' property again. The default value provided "' +
-            answers.defaultValue + 
+            answers.defaultValue +
             '" is not valid for type: ' + this.type);
-          return this.askForParameters();
+        return this.askForParameters();
       }
 
       try {
@@ -164,7 +164,7 @@ module.exports = yeoman.Base.extend({
         debug('Failed to coerce property default value: ', err);
         this.log('Warning: please enter the ' + this.name +
           ' property again. The default value provided "' +
-          answers.defaultValue + 
+          answers.defaultValue +
           '" is not valid for the selected type: ' + this.type);
         return this.askForParameters();
       }
@@ -178,7 +178,7 @@ module.exports = yeoman.Base.extend({
       return done(err);
     }.bind(this));
   },
-  saveProject: actions.saveProject
+  saveProject: actions.saveProject,
 });
 
 function coerceDefaultValue(propDef, value) {
@@ -190,7 +190,7 @@ function coerceDefaultValue(propDef, value) {
 
   switch (propDef.type) {
     case 'string':
-      if (value === 'uuid' || value === 'guid'){
+      if (value === 'uuid' || value === 'guid') {
         propDef.defaultFn = value;
       } else {
         propDef.default = value;
@@ -203,7 +203,7 @@ function coerceDefaultValue(propDef, value) {
       propDef.default = castToBoolean(value);
       break;
     case 'date':
-      if (value.toLowerCase() === 'now'){
+      if (value.toLowerCase() === 'now') {
         propDef.defaultFn = 'now';
       } else {
         propDef.default = castToDate(value);
@@ -258,14 +258,14 @@ function castToDate(value) {
 function castToNumber(value) {
   var numberValue = Number(value);
   if (isNaN(numberValue)) {
-    throw Error('Invalid default number value: '+ value);
+    throw Error('Invalid default number value: ' + value);
   }
   return numberValue;
 }
 
 function castToBoolean(value) {
   if (['true', '1', 't', 'false', '0', 'f'].indexOf(value) === -1) {
-    throw Error('Invalid default boolean value "'+ value +
+    throw Error('Invalid default boolean value "' + value +
       '". Expected default values: true|false, 1|0, t|f');
   }
   return (['true', '1', 't'].indexOf(value) !== -1) ? true : false;

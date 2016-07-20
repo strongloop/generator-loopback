@@ -27,7 +27,7 @@ describe('loopback:boot-script generator', function() {
     var bootGen = givenBootScriptGenerator();
     helpers.mockPrompt(bootGen, {
       name: 'async-boot-script',
-      type: 'async'
+      type: 'async',
     });
 
     bootGen.run(function() {
@@ -47,7 +47,7 @@ describe('loopback:boot-script generator', function() {
     var bootGen = givenBootScriptGenerator();
     helpers.mockPrompt(bootGen, {
       name: 'sync-boot-script',
-      type: 'sync'
+      type: 'sync',
     });
 
     bootGen.run(function() {

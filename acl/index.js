@@ -53,7 +53,7 @@ module.exports = yeoman.Base.extend({
 
   askForModel: function() {
     var modelChoices =
-      [{ name: '(all existing models)', value: null }]
+      [{name: '(all existing models)', value: null}]
       .concat(this.editableModelNames);
 
     var prompts = [
@@ -62,8 +62,8 @@ module.exports = yeoman.Base.extend({
         message: 'Select the model to apply the ACL entry to:',
         type: 'list',
         default: 0,
-        choices: modelChoices
-      }
+        choices: modelChoices,
+      },
     ];
 
     return this.prompt(prompts).then(function(answers) {
@@ -84,26 +84,26 @@ module.exports = yeoman.Base.extend({
         type: 'list',
         default: 'all',
         choices: [
-          { name: 'All methods and properties', value: 'all' },
-          { name: 'A single method', value: 'method' },
+          {name: 'All methods and properties', value: 'all'},
+          {name: 'A single method', value: 'method'},
           /* not supported by loopback yet
           { name: 'A single property', value: 'property' }
           */
-        ]
+        ],
       },
       {
         name: 'property',
         message: 'Enter the method name',
         when: function(answers) {
           return answers.scope === 'method';
-        }
+        },
       },
       {
         name: 'property',
         message: 'Enter the property name',
         when: function(answers) {
           return answers.scope === 'property';
-        }
+        },
       },
       {
         name: 'accessType',
@@ -128,14 +128,14 @@ module.exports = yeoman.Base.extend({
           'Enter the role name:',
         when: function(answers) {
           return answers.role === 'other';
-        }
+        },
       },
       {
         name: 'permission',
         message: 'Select the permission to apply',
         type: 'list',
         choices: this.permissionValues,
-      }
+      },
     ];
 
     return this.prompt(prompts).then(function(answers) {
@@ -148,7 +148,7 @@ module.exports = yeoman.Base.extend({
         accessType: accessType,
         principalType: 'ROLE', // TODO(bajtos) support all principal types
         principalId: answers.customRole || answers.role,
-        permission: answers.permission
+        permission: answers.permission,
       };
     }.bind(this));
   },
@@ -158,8 +158,8 @@ module.exports = yeoman.Base.extend({
 
     var aclDef = this.aclDef;
     var filter = this.modelName ?
-      { where: { name: this.modelName }, limit: 1 } :
-    {} /* all models, force refresh */;
+      {where: {name: this.modelName}, limit: 1} :
+    {};
 
     wsModels.ModelDefinition.find(filter, function(err, models) {
       if (err) {
@@ -179,5 +179,5 @@ module.exports = yeoman.Base.extend({
     });
   },
 
-  saveProject: actions.saveProject
+  saveProject: actions.saveProject,
 });

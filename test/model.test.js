@@ -30,7 +30,7 @@ describe('loopback:model generator', function() {
     wsModels.DataSourceDefinition.create({
       name: 'rest',
       connector: 'rest',
-      facetName: 'server'
+      facetName: 'server',
     }, done);
   });
 
@@ -39,7 +39,7 @@ describe('loopback:model generator', function() {
     helpers.mockPrompt(modelGen, {
       name: 'Product',
       plural: 'pds',
-      dataSource: 'db'
+      dataSource: 'db',
     });
 
     modelGen.run(function() {
@@ -57,7 +57,7 @@ describe('loopback:model generator', function() {
       name: 'Product',
       dataSource: 'db',
       public: false,
-      propertyName: ''
+      propertyName: '',
     });
 
     var builtinModels = Object.keys(readModelsJsonSync('server'));
@@ -68,7 +68,7 @@ describe('loopback:model generator', function() {
       expect(newModels).to.have.members(expectedModels);
       expect(modelConfig.Product).to.eql({
         dataSource: 'db',
-        public: false
+        public: false,
       });
       done();
     });
@@ -79,7 +79,7 @@ describe('loopback:model generator', function() {
     helpers.mockPrompt(modelGen, {
       name: 'Product',
       dataSource: 'db',
-      base: 'PersistedModel'
+      base: 'PersistedModel',
     });
 
     modelGen.run(function() {
@@ -92,7 +92,7 @@ describe('loopback:model generator', function() {
   it('sets `dataSource` option to db by default', function(done) {
     var modelGen = givenModelGenerator();
     helpers.mockPrompt(modelGen, {
-      name: 'Product'
+      name: 'Product',
     });
 
     modelGen.run(function() {
@@ -110,7 +110,7 @@ describe('loopback:model generator', function() {
       name: 'Product',
       dataSource: 'rest',
       base: null,
-      customBase: 'CustomModel'
+      customBase: 'CustomModel',
     });
 
     modelGen.run(function() {
@@ -134,7 +134,7 @@ describe('loopback:model generator', function() {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
         name: 'Product',
-        plural: 'pds'
+        plural: 'pds',
       });
 
       modelGen.run(function() {
@@ -150,13 +150,13 @@ describe('loopback:model generator', function() {
       wsModels.DataSourceDefinition.create({
         name: 'db1',
         connector: 'memory',
-        facetName: 'server'
+        facetName: 'server',
       }, function(err) {
         if (err) return done(err);
         var modelGen = givenModelGenerator();
         helpers.mockPrompt(modelGen, {
           name: 'Review',
-          plural: 'Reviews'
+          plural: 'Reviews',
         });
 
         modelGen.run(function() {
@@ -171,17 +171,17 @@ describe('loopback:model generator', function() {
       wsModels.DataSourceDefinition.create([{
         name: 'db1',
         connector: 'memory',
-        facetName: 'server'
+        facetName: 'server',
       }, {
         name: 'db',
         connector: 'memory',
-        facetName: 'server'
+        facetName: 'server',
       }], function(err) {
         if (err) return done(err);
         var modelGen = givenModelGenerator();
         helpers.mockPrompt(modelGen, {
           name: 'Review',
-          plural: 'Reviews'
+          plural: 'Reviews',
         });
 
         modelGen.run(function() {
@@ -191,13 +191,12 @@ describe('loopback:model generator', function() {
         });
       });
     });
-
   });
 
   function givenModelGenerator(modelArgs) {
     var path = '../../model';
     var name = 'loopback:model';
-    var deps = [ ['../../property', 'loopback:property'] ];
+    var deps = [['../../property', 'loopback:property']];
     var gen = common.createGenerator(name, path, deps, modelArgs, {});
     return gen;
   }

@@ -26,22 +26,22 @@ module.exports = yeoman.Base.extend({
     this.argument('name', {
       desc: 'Name of the application to scaffold.',
       required: false,
-      type: String
+      type: String,
     });
 
     this.option('skip-install', {
       desc: 'Do not install npm dependencies.',
-      type: Boolean
+      type: Boolean,
     });
 
     this.option('skip-next-steps', {
       desc: 'Do not print "next steps" info',
-      type: Boolean
+      type: Boolean,
     });
 
     this.option('explorer', {
       desc: 'Add Loopback Explorer to the project (true by default)',
-      type: Boolean
+      type: Boolean,
     });
   },
 
@@ -53,7 +53,7 @@ module.exports = yeoman.Base.extend({
     var msgs = [helpers.customHelp(this)];
     msgs.push('Available generators: \n\n  ');
     msgs.push(Object.keys(this.options.env.getGeneratorsMeta())
-      .filter(function (name) {
+      .filter(function(name) {
         return name.indexOf('loopback:') !== -1;
       }).join('\n  '));
     return msgs.join('');
@@ -65,9 +65,9 @@ module.exports = yeoman.Base.extend({
       var isDir = fs.statSync(src).isDirectory();
       if (isDir) {
         this.directory(src, dest);
-      }
-      else
+      } else {
         this.copy(src, dest);
+      }
       process.nextTick(cb);
     }.bind(this);
 
@@ -85,7 +85,7 @@ module.exports = yeoman.Base.extend({
       this.templates = list.map(function(t) {
         return {
           name: util.format('%s (%s)', t.name, t.description),
-          value: t.name
+          value: t.name,
         };
       });
 
@@ -93,7 +93,7 @@ module.exports = yeoman.Base.extend({
       // See also https://github.com/strongloop/generator-loopback/issues/139
       if (helpers.getCommandName() === 'apic') {
         this.defaultTemplate = 'hello-world';
-        this.templates = this.templates.filter(function (t) {
+        this.templates = this.templates.filter(function(t) {
           return t.value !== 'api-server';
         });
       } else {
@@ -121,8 +121,8 @@ module.exports = yeoman.Base.extend({
         name: 'appname',
         message: 'What\'s the name of your application?',
         default: name,
-        validate: validateAppName
-      }
+        validate: validateAppName,
+      },
     ];
 
     return this.prompt(prompts).then(function(props) {
@@ -138,7 +138,7 @@ module.exports = yeoman.Base.extend({
       message: 'What kind of application do you have in mind?',
       type: 'list',
       default: this.defaultTemplate,
-      choices: this.templates
+      choices: this.templates,
     }];
 
     var self = this;
@@ -154,7 +154,7 @@ module.exports = yeoman.Base.extend({
       message: 'Which version of LoopBack would you like to use?',
       type: 'list',
       default: '2.x',
-      choices: ['2.x', '3.x']
+      choices: ['2.x', '3.x'],
     }];
 
     var self = this;
@@ -234,7 +234,7 @@ module.exports = yeoman.Base.extend({
       this.log(chalk.green('    $ node .'));
       this.log();
     }
-  }
+  },
 });
 
 // Export it for strong-cli to use

@@ -28,10 +28,10 @@ describe('loopback:acl generator', function() {
     wsModels.ModelDefinition.create(
       {
         name: 'Car',
-        facetName: 'common'
+        facetName: 'common',
       },
       function(err, model) {
-        if(err) {
+        if (err) {
           return done(err);
         }
         test.Model = model;
@@ -39,7 +39,7 @@ describe('loopback:acl generator', function() {
         wsModels.ModelDefinition.create(
           {
             name: 'Location',
-            facetName: 'common'
+            facetName: 'common',
           }, done);
       });
   });
@@ -51,7 +51,7 @@ describe('loopback:acl generator', function() {
       scope: 'all',
       accessType: '*',
       role: '$everyone',
-      permission: 'AUDIT'
+      permission: 'AUDIT',
     });
 
     aclGen.run(function() {
@@ -62,7 +62,7 @@ describe('loopback:acl generator', function() {
         accessType: '*',
         permission: 'AUDIT',
         principalType: 'ROLE',
-        principalId: '$everyone'
+        principalId: '$everyone',
       }]);
       done();
     });
@@ -75,7 +75,7 @@ describe('loopback:acl generator', function() {
       scope: 'method',
       property: 'find',
       role: '$everyone',
-      permission: 'AUDIT'
+      permission: 'AUDIT',
     });
 
     aclGen.run(function() {
@@ -87,7 +87,7 @@ describe('loopback:acl generator', function() {
         property: 'find',
         permission: 'AUDIT',
         principalType: 'ROLE',
-        principalId: '$everyone'
+        principalId: '$everyone',
       }]);
       done();
     });
@@ -101,7 +101,7 @@ describe('loopback:acl generator', function() {
       accessType: '*',
       role: 'other',
       customRole: 'myRole',
-      permission: 'DENY'
+      permission: 'DENY',
     });
 
     aclGen.run(function() {
@@ -112,7 +112,7 @@ describe('loopback:acl generator', function() {
         accessType: '*',
         permission: 'DENY',
         principalType: 'ROLE',
-        principalId: 'myRole'
+        principalId: 'myRole',
       }]);
       done();
     });
@@ -124,7 +124,7 @@ describe('loopback:acl generator', function() {
       scope: 'all',
       accessType: '*',
       role: '$owner',
-      permission: 'ALLOW'
+      permission: 'ALLOW',
     });
 
     aclGen.run(function() {
@@ -135,7 +135,7 @@ describe('loopback:acl generator', function() {
         accessType: '*',
         permission: 'ALLOW',
         principalType: 'ROLE',
-        principalId: '$owner'
+        principalId: '$owner',
       }]);
 
       def = common.readJsonSync('common/models/location.json');
@@ -145,7 +145,7 @@ describe('loopback:acl generator', function() {
         accessType: '*',
         permission: 'ALLOW',
         principalType: 'ROLE',
-        principalId: '$owner'
+        principalId: '$owner',
       }]);
 
       done();

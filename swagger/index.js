@@ -19,10 +19,10 @@ var fs = require('fs');
 var async = require('async');
 
 // A list of flags to control whether a model should be generated
-var NOT_SELECTED = 0, // It's not selected
-  CONFLICT_DETECTED = -1, // A model with the same name exists
-  SELECTED_FOR_UPDATE = 1, // Selected for update
-  SELECTED_FOR_CREATE = 2; // Selected for create
+var NOT_SELECTED = 0; // It's not selected
+var CONFLICT_DETECTED = -1; // A model with the same name exists
+var SELECTED_FOR_UPDATE = 1; // Selected for update
+var SELECTED_FOR_CREATE = 2; // Selected for create
 
 module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
@@ -30,17 +30,17 @@ module.exports = yeoman.Base.extend({
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
-  constructor: function () {
+  constructor: function() {
     yeoman.Base.apply(this, arguments);
 
     this.argument('url', {
       desc: 'URL of the swagger spec.',
       required: false,
-      type: String
+      type: String,
     });
   },
 
-  help: function () {
+  help: function() {
     return helpers.customHelp(this);
   },
 
@@ -49,24 +49,24 @@ module.exports = yeoman.Base.extend({
   loadDataSources: actions.loadDataSources,
   addNullDataSourceItem: actions.addNullDataSourceItem,
 
-  askForSpecUrlOrPath: function () {
+  askForSpecUrlOrPath: function() {
     var prompts = [
       {
         name: 'url',
         message: 'Enter the swagger spec url or file path:',
         default: this.url,
-        validate: validateUrlOrFile
-      }
+        validate: validateUrlOrFile,
+      },
     ];
-    return this.prompt(prompts).then(function (answers) {
+    return this.prompt(prompts).then(function(answers) {
       this.url = answers.url.trim();
     }.bind(this));
   },
 
-  swagger: function () {
+  swagger: function() {
     var self = this;
     var done = this.async();
-    loadSwaggerSpecs(this.url, this.log, function (err, apis) {
+    loadSwaggerSpecs(this.url, this.log, function(err, apis) {
       if (err) {
         done(err);
       } else {
@@ -76,7 +76,7 @@ module.exports = yeoman.Base.extend({
     });
   },
 
-  checkModels: function () {
+  checkModels: function() {
     var self = this;
     var done = this.async();
 
@@ -97,11 +97,11 @@ module.exports = yeoman.Base.extend({
       var modelDef = {
         name: swaggerModel,
         http: {
-          path: basePath
+          path: basePath,
         },
         base: 'Model',
         facetName: 'server', // hard-coded for now
-        properties: {}
+        properties: {},
       };
       api.modelDefinition = modelDef;
       self.modelDefs.push(modelDef);
@@ -109,13 +109,15 @@ module.exports = yeoman.Base.extend({
         name: swaggerModel,
         facetName: 'server', // hard-coded for now
         dataSource: null,
-        public: true
+        public: true,
       });
     }
 
+    // eslint-disable-next-line one-var
+    var m;
     for (i = 0, n = self.apis.length; i < n; i++) {
       api = self.apis[i];
-      for (var m in api.models) {
+      for (m in api.models) {
         var model = api.models[m];
         if (model.type && model.type !== 'object') {
           // Only handle model of object type (not array or simple types)
@@ -127,52 +129,52 @@ module.exports = yeoman.Base.extend({
           plural: model.plural,
           base: model.base || 'PersistedModel',
           facetName: 'server', // hard-coded for now
-          properties: model.properties
+          properties: model.properties,
         });
         self.modelConfigs.push({
           name: model.name,
           facetName: 'server', // hard-coded for now
-          public: true
+          public: true,
         });
       }
     }
 
     this.selectedModels = {};
-    this.modelNames.forEach(function (m) {
+    this.modelNames.forEach(function(m) {
       self.selectedModels[m] = NOT_SELECTED;
     });
 
     async.parallel([
-        function (done) {
+      function(done) {
           // Find existing model definitions
-          wsModels.ModelDefinition.find(
+        wsModels.ModelDefinition.find(
             {where: {name: {inq: self.modelNames}}}, done);
-        },
-        function (done) {
-          wsModels.ModelConfig.find(
+      },
+      function(done) {
+        wsModels.ModelConfig.find(
             {where: {name: {inq: self.modelNames}}}, done);
-        }],
-      function (err, objs) {
+      }],
+      function(err, objs) {
         if (err) {
           helpers.reportValidationError(err, self.log);
           return done(err);
         }
 
-        objs[0].forEach(function (d) {
+        objs[0].forEach(function(d) {
           self.selectedModels[d.name] = CONFLICT_DETECTED;
         });
 
-        objs[1].forEach(function (c) {
+        objs[1].forEach(function(c) {
           self.selectedModels[c.name] = CONFLICT_DETECTED;
         });
 
-        var choices = Object.keys(self.selectedModels).map(function (m) {
+        var choices = Object.keys(self.selectedModels).map(function(m) {
           var flag = self.selectedModels[m];
           return {
             name: m + ((flag === CONFLICT_DETECTED) ? ' (!)' : ''),
             modelName: m,
             flag: flag,
-            checked: flag !== CONFLICT_DETECTED // force users to decide
+            checked: flag !== CONFLICT_DETECTED, // force users to decide
           };
         });
 
@@ -181,15 +183,15 @@ module.exports = yeoman.Base.extend({
             name: 'modelSelections',
             message: 'Select models to be generated:',
             type: 'checkbox',
-            choices: choices
+            choices: choices,
           },
           {
             name: 'dataSource',
             message: 'Select the data-source to attach models to:',
             type: 'list',
             default: self.defaultDataSource,
-            choices: self.dataSources
-          }
+            choices: self.dataSources,
+          },
         ];
         return self.prompt(prompts).then(function(answers) {
           self.dataSource = answers.dataSource;
@@ -209,7 +211,7 @@ module.exports = yeoman.Base.extend({
       });
   },
 
-  generateApis: function () {
+  generateApis: function() {
     var self = this;
     var found = false;
     for (var m in this.selectedModels) {
@@ -234,21 +236,21 @@ module.exports = yeoman.Base.extend({
         }
         var propertyNames = Object.keys(modelDef.properties);
         if (propertyNames.length > 0) {
-          result.properties.destroyAll(function (err) {
+          result.properties.destroyAll(function(err) {
             if (err) {
               return cb(err);
             }
             // 2. Create model properties one by one
             async.eachSeries(propertyNames,
-              function (m, done) {
+              function(m, done) {
                 modelDef.properties[m].name = m;
                 // FIXME: [rfeng] Can we automate the inheritance of facetName?
                 modelDef.properties[m].facetName = result.facetName;
                 result.properties.create(modelDef.properties[m],
-                  function (err) {
+                  function(err) {
                     return done(err);
                   });
-              }, function (err) {
+              }, function(err) {
                 if (!err) {
                   self.log(chalk.green('Model definition created/updated for ' +
                     modelDef.name + '.'));
@@ -287,7 +289,7 @@ module.exports = yeoman.Base.extend({
         self.log(chalk.green('Updating model config for ' +
           config.name + '...'));
         config.id = wsModels.ModelDefinition.getUniqueId(config);
-        wsModels.ModelConfig.upsert(config, function (err) {
+        wsModels.ModelConfig.upsert(config, function(err) {
           if (!err) {
             self.log(chalk.green('Model config updated for ' +
               config.name + '.'));
@@ -297,7 +299,7 @@ module.exports = yeoman.Base.extend({
       } else if (self.selectedModels[config.name] === SELECTED_FOR_CREATE) {
         self.log(chalk.green('Creating model config for ' +
           config.name + '...'));
-        wsModels.ModelConfig.create(config, function (err) {
+        wsModels.ModelConfig.create(config, function(err) {
           if (!err) {
             self.log(chalk.green('Model config created for ' +
               config.name + '.'));
@@ -312,7 +314,7 @@ module.exports = yeoman.Base.extend({
 
     function generateRemoteMethods(self, cb) {
       var apis = self.apis;
-      async.eachSeries(apis, function (api, done) {
+      async.eachSeries(apis, function(api, done) {
         var modelDef = api.modelDefinition;
         if (!modelDef) {
           return done();
@@ -325,24 +327,24 @@ module.exports = yeoman.Base.extend({
     function generateApis(self, cb) {
       async.series([
         // Create model definitions
-        function (done) {
-          async.each(self.modelDefs, function (def, cb) {
+        function(done) {
+          async.each(self.modelDefs, function(def, cb) {
             createModel(self, def, cb);
           }, done);
         },
         // Create model configurations
-        function (done) {
-          async.each(self.modelConfigs, function (config, cb) {
+        function(done) {
+          async.each(self.modelConfigs, function(config, cb) {
             createModelConfig(self, config, cb);
           }, done);
         },
-        function (done) {
+        function(done) {
           generateRemoteMethods(self, done);
-        }
+        },
       ], cb);
     }
 
-    generateApis(self, function (err) {
+    generateApis(self, function(err) {
       if (!err) {
         self.log(
           chalk.green('Models are successfully generated from swagger spec.'));
@@ -352,7 +354,7 @@ module.exports = yeoman.Base.extend({
     });
   },
 
-  saveProject: actions.saveProject
+  saveProject: actions.saveProject,
 });
 
 function validateUrlOrFile(specUrlStr) {

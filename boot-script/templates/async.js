@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app, cb) {
   /*
    * The `app` object provides access to a variety of LoopBack resources such as

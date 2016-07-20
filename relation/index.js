@@ -39,8 +39,8 @@ module.exports = yeoman.Base.extend({
         name: 'model',
         message: 'Select the model to create the relationship from:',
         type: 'list',
-        choices: this.editableModelNames
-      }
+        choices: this.editableModelNames,
+      },
     ];
 
     return this.prompt(prompts).then(function(answers) {
@@ -64,7 +64,7 @@ module.exports = yeoman.Base.extend({
     var self = this;
     var done = this.async();
     ModelRelation.getValidTypes(function(err, availableTypes) {
-      if(err) return done(err);
+      if (err) return done(err);
       self.availableTypes = availableTypes;
       done();
     });
@@ -75,7 +75,7 @@ module.exports = yeoman.Base.extend({
 
     var modelChoices = this.editableModelNames.concat({
       name: '(other)',
-      value: null
+      value: null,
     });
 
     var prompts = [
@@ -83,13 +83,13 @@ module.exports = yeoman.Base.extend({
         name: 'type',
         message: 'Relation type:',
         type: 'list',
-        choices: this.availableTypes
+        choices: this.availableTypes,
       },
       {
         name: 'toModel',
         message: 'Choose a model to create a relationship with:',
         type: 'list',
-        choices: modelChoices
+        choices: modelChoices,
       },
       {
         name: 'customToModel',
@@ -98,7 +98,7 @@ module.exports = yeoman.Base.extend({
         validate: validateRequiredName,
         when: function(answers) {
           return answers.toModel === null;
-        }
+        },
       },
       {
         name: 'asPropertyName',
@@ -118,12 +118,12 @@ module.exports = yeoman.Base.extend({
           var isValid = checkPropertyName(value);
           if (isValid !== true) return isValid;
           return checkRelationName(modelDef, value);
-        }
+        },
       },
       {
         name: 'foreignKey',
         message: 'Optionally enter a custom foreign key:',
-        validate: validateOptionalName
+        validate: validateOptionalName,
       },
       {
         name: 'through',
@@ -132,7 +132,7 @@ module.exports = yeoman.Base.extend({
         default: false,
         when: function(answers) {
           return answers.type === 'hasMany';
-        }
+        },
       },
       {
         name: 'throughModel',
@@ -141,7 +141,7 @@ module.exports = yeoman.Base.extend({
         choices: modelChoices,
         when: function(answers) {
           return answers.through;
-        }
+        },
       },
       {
         name: 'customThroughModel',
@@ -150,7 +150,7 @@ module.exports = yeoman.Base.extend({
         validate: validateRequiredName,
         when: function(answers) {
           return answers.through && answers.throughModel === null;
-        }
+        },
       },
     ];
 
@@ -171,7 +171,7 @@ module.exports = yeoman.Base.extend({
       type: this.type,
       model: this.toModel,
       foreignKey: this.foreignKey,
-      name: this.asPropertyName
+      name: this.asPropertyName,
     };
     if (this.throughModel) {
       def.through = this.throughModel;
@@ -182,5 +182,5 @@ module.exports = yeoman.Base.extend({
     }.bind(this));
   },
 
-  saveProject: actions.saveProject
+  saveProject: actions.saveProject,
 });
