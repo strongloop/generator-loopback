@@ -35,6 +35,28 @@ describe('loopback:property generator', function() {
       });
   });
 
+  it('creates model with non required default', function(done) {
+    var propertyGenerator = givenPropertyGenerator();
+    helpers.mockPrompt(propertyGenerator, {
+      model: 'Car',
+      name: 'model',
+      type: 'string',
+      required: undefined,
+      defaultValue: '',
+    });
+
+    propertyGenerator.run(function() {
+      var definition = common.readJsonSync('common/models/car.json');
+      var props = definition.properties || {};
+      expect(props).to.have.property('model');
+      expect(props.model).to.eql({
+        type: 'string',
+        default: null,
+      });
+      done();
+    });
+  });
+
   it('creates number type property from large number', function(done) {
     var propertyGenerator = givenPropertyGenerator();
     helpers.mockPrompt(propertyGenerator, {
