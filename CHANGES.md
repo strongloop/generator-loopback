@@ -1,3 +1,11 @@
+2016-07-22, Version 1.23.1
+==========================
+
+ * Allow non required null defaults (Alex Pitigoi)
+
+ * Add eslint infrastructure (juehou)
+
+
 2016-07-19, Version 1.23.0
 ==========================
 
