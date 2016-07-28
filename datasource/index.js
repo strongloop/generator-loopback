@@ -4,6 +4,10 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
+
+var SG = require('strong-globalize');
+var g = SG();
+
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 var extend = require('util')._extend;
@@ -29,7 +33,7 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
-      desc: 'Name of the data-source to create.',
+      desc: g.f('Name of the data-source to create.'),
       required: false,
       type: String,
     });
@@ -48,8 +52,8 @@ module.exports = yeoman.Base.extend({
 
       this.listOfAvailableConnectors = list.map(function(c) {
         var support = c.supportedByStrongLoop ?
-          ' (supported by StrongLoop)' :
-          ' (provided by community)';
+          g.f(' (supported by StrongLoop)') :
+          g.f(' (provided by community)');
         return {
           name: c.description + support,
           value: c.name,
@@ -74,7 +78,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'name',
-        message: 'Enter the data-source name:',
+        message: g.f('Enter the data-source name:'),
         default: this.name,
         validate: validateRequiredName,
       },
@@ -93,7 +97,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'connector',
-        message: 'Select the connector for ' + displayName + ':',
+        message: g.f('Select the connector for %s:', displayName),
         type: 'list',
         default: 'memory',
         choices: connectorChoices,
@@ -101,7 +105,8 @@ module.exports = yeoman.Base.extend({
       {
         name: 'customConnector',
         message:
-          'Enter the connector name without the loopback-connector- prefix:',
+          g.f('Enter the connector name without the ' +
+            '{{loopback-connector-}} prefix:'),
         validate: validateRequiredName,
         when: function(answers) {
           return answers.connector === 'other';
@@ -166,7 +171,7 @@ module.exports = yeoman.Base.extend({
     if (!prompts.length && !warnings.length)
       return;
 
-    this.log('Connector-specific configuration:');
+    this.log(g.f('Connector-specific configuration:'));
     if (!prompts.length) return reportWarnings();
 
     return this.prompt(prompts).then(function(props) {
@@ -210,7 +215,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'installConnector',
-        message: 'Install ' + npmModule,
+        message: g.f('Install %s', npmModule),
         type: 'confirm',
         default: true,
       },

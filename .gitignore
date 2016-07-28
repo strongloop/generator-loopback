@@ -28,3 +28,6 @@ temp/
 test/sandbox
 test/.pkgcache/
 .pkgcache/
+!intl/
+intl/*
+!intl/en/

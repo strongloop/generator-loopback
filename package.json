@@ -34,6 +34,7 @@
     "mkdirp": "^0.5.1",
     "request": "^2.60.0",
     "yeoman-generator": "^0.23.1",
+    "strong-globalize": "^2.5.8",
     "yosay": "^1.0.5"
   },
   "devDependencies": {

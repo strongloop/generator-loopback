@@ -4,6 +4,10 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
+
+var SG = require('strong-globalize');
+var g = SG();
+
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 
@@ -42,7 +46,7 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
-      desc: 'Name of the middleware to create.',
+      desc: g.f('Name of the middleware to create.'),
       required: false,
       type: String,
     });
@@ -71,7 +75,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'name',
-        message: 'Enter the middleware name:',
+        message: g.f('Enter the middleware name:'),
         default: this.name,
         validate: validateRequiredName,
       },
@@ -88,14 +92,14 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'phase',
-        message: 'Select the phase for ' + displayName + ':',
+        message: g.f('Select the phase for %s:', displayName),
         type: 'list',
         default: 'routes',
         choices: toNumberedList(this.phases.concat([OTHER_PHASE])),
       },
       {
         name: 'customPhase',
-        message: 'Enter the phase name:',
+        message: g.f('Enter the phase name:'),
         validate: validateRequiredName,
         when: function(answers) {
           return answers.phase === OTHER_PHASE;
@@ -103,7 +107,8 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'nextPhase',
-        message: 'Select the phase before which the new one will be inserted:',
+        message: g.f('Select the phase before which the new one will ' +
+          'be inserted:'),
         type: 'list',
         default: 'routes',
         choices: toNumberedList(this.phases.concat([LAST_PHASE])),
@@ -113,13 +118,13 @@ module.exports = yeoman.Base.extend({
       },
       {
         name: 'subPhase',
-        message: 'Select the sub phase for ' + displayName + ':',
+        message: g.f('Select the sub phase for %s:', displayName),
         type: 'list',
         default: '',
         choices: [
-          {name: '1. before', value: 'before'},
-          {name: '2. regular', value: ''},
-          {name: '3. after', value: 'after'},
+          {name: g.f('1. before'), value: 'before'},
+          {name: g.f('2. regular'), value: ''},
+          {name: g.f('3. after'), value: 'after'},
         ],
       },
     ];
@@ -134,20 +139,20 @@ module.exports = yeoman.Base.extend({
 
   promptForPaths: function() {
     var displayName = chalk.yellow(this.name);
-    this.log('Specify paths for ' + displayName + ':');
+    this.log(g.f('Specify paths for %s:', displayName));
   },
 
   askForPaths: function() {
     var done = this.async();
-    this.log('Enter an empty path name when done.');
+    this.log(g.f('Enter an empty path name when done.'));
     var prompts = [
       {
         name: 'path',
-        message: 'Path uri:',
+        message: g.f('Path uri:'),
         validate: function(input) {
           if (input) {
             if (input.indexOf('/') !== 0) {
-              return 'Path must start with /';
+              return g.f('Path must start with /');
             } else {
               return true;
             }
@@ -164,7 +169,7 @@ module.exports = yeoman.Base.extend({
 
       this.paths = this.paths || [];
       this.paths.push(answers.path);
-      this.log('Let\'s add another path.');
+      this.log(g.f('Let\'s add another path.'));
       this.askForPaths();
     }.bind(this));
   },
@@ -173,7 +178,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'params',
-        message: 'Configuration parameters in JSON format:',
+        message: g.f('Configuration parameters in {{JSON}} format:'),
         default: '{}',
         validate: function(input) {
           if (input) {
@@ -219,8 +224,8 @@ module.exports = yeoman.Base.extend({
     wsModels.Middleware.addMiddleware(config, function(err, inst) {
       helpers.reportValidationError(err, self.log);
       if (!err && inst) {
-        self.log(
-          'Middleware %s is added to phase %s.', inst.name, inst.phase);
+        self.log(g.f(
+          'Middleware %s is added to phase %s.', inst.name, inst.phase));
       }
       return done(err);
     });

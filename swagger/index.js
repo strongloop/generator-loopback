@@ -4,6 +4,10 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
+
+var SG = require('strong-globalize');
+var g = SG();
+
 var url = require('url');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
@@ -34,7 +38,7 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('url', {
-      desc: 'URL of the swagger spec.',
+      desc: g.f('URL of the swagger spec.'),
       required: false,
       type: String,
     });
@@ -53,7 +57,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'url',
-        message: 'Enter the swagger spec url or file path:',
+        message: g.f('Enter the swagger spec url or file path:'),
         default: this.url,
         validate: validateUrlOrFile,
       },
@@ -181,13 +185,13 @@ module.exports = yeoman.Base.extend({
         var prompts = [
           {
             name: 'modelSelections',
-            message: 'Select models to be generated:',
+            message: g.f('Select models to be generated:'),
             type: 'checkbox',
             choices: choices,
           },
           {
             name: 'dataSource',
-            message: 'Select the data-source to attach models to:',
+            message: g.f('Select the data-source to attach models to:'),
             type: 'list',
             default: self.defaultDataSource,
             choices: self.dataSources,
@@ -252,28 +256,28 @@ module.exports = yeoman.Base.extend({
                   });
               }, function(err) {
                 if (!err) {
-                  self.log(chalk.green('Model definition created/updated for ' +
-                    modelDef.name + '.'));
+                  self.log(chalk.green(g.f('Model definition created/updated ' +
+                  'for %s.', modelDef.name)));
                 }
                 cb(err);
               });
           });
         } else {
-          self.log(chalk.green('Model definition created/updated for ' +
-            modelDef.name + '.'));
+          self.log(chalk.green(g.f('Model definition created/updated for %s.',
+            modelDef.name)));
           cb();
         }
       }
 
       if (self.selectedModels[modelDef.name] === SELECTED_FOR_UPDATE) {
-        self.log(chalk.green('Updating model definition for ' +
-          modelDef.name + '...'));
+        self.log(chalk.green(g.f('Updating model definition for %s...',
+          modelDef.name)));
         modelDef.id = wsModels.ModelDefinition.getUniqueId(modelDef);
         // update the model definition
         wsModels.ModelDefinition.upsert(modelDef, processResult);
       } else if (self.selectedModels[modelDef.name] === SELECTED_FOR_CREATE) {
-        self.log(chalk.green('Creating model definition for ' +
-          modelDef.name + '...'));
+        self.log(chalk.green(g.f('Creating model definition for %s...',
+          modelDef.name)));
         wsModels.ModelDefinition.create(modelDef, processResult);
       } else {
         // Skip
@@ -286,23 +290,23 @@ module.exports = yeoman.Base.extend({
         config.dataSource = self.dataSource;
       }
       if (self.selectedModels[config.name] === SELECTED_FOR_UPDATE) {
-        self.log(chalk.green('Updating model config for ' +
-          config.name + '...'));
+        self.log(chalk.green(g.f('Updating model config for %s...',
+          config.name)));
         config.id = wsModels.ModelDefinition.getUniqueId(config);
         wsModels.ModelConfig.upsert(config, function(err) {
           if (!err) {
-            self.log(chalk.green('Model config updated for ' +
-              config.name + '.'));
+            self.log(chalk.green(g.f('Model config updated for %s.',
+              config.name)));
           }
           return cb(err);
         });
       } else if (self.selectedModels[config.name] === SELECTED_FOR_CREATE) {
-        self.log(chalk.green('Creating model config for ' +
-          config.name + '...'));
+        self.log(chalk.green(g.f('Creating model config for %s...',
+          config.name)));
         wsModels.ModelConfig.create(config, function(err) {
           if (!err) {
-            self.log(chalk.green('Model config created for ' +
-              config.name + '.'));
+            self.log(chalk.green(g.f('Model config created for %s.',
+              config.name)));
           }
           return cb(err);
         });
@@ -319,7 +323,7 @@ module.exports = yeoman.Base.extend({
         if (!modelDef) {
           return done();
         }
-        self.log(chalk.green('Generating ' + modelDef.scriptPath));
+        self.log(chalk.green(g.f('Generating %s', modelDef.scriptPath)));
         fs.writeFile(modelDef.scriptPath, api.code, done);
       }, cb);
     }
@@ -347,7 +351,8 @@ module.exports = yeoman.Base.extend({
     generateApis(self, function(err) {
       if (!err) {
         self.log(
-          chalk.green('Models are successfully generated from swagger spec.'));
+          chalk.green(g.f('Models are successfully generated from ' +
+            '{{swagger spec}}.')));
       }
       helpers.reportValidationError(err, self.log);
       done(err);
@@ -359,7 +364,7 @@ module.exports = yeoman.Base.extend({
 
 function validateUrlOrFile(specUrlStr) {
   if (!specUrlStr) {
-    return 'spec url or file path is required';
+    return g.f('spec url or file path is required');
   }
   var specUrl = url.parse(specUrlStr);
   if (specUrl.protocol === 'http:' || specUrl.protocol === 'https:') {
@@ -369,7 +374,7 @@ function validateUrlOrFile(specUrlStr) {
     if (stat && stat.isFile()) {
       return true;
     } else {
-      return 'file path ' + specUrlStr + ' is not a file.';
+      return g.f('file path %s is not a file.', specUrlStr);
     }
   }
 }

@@ -4,6 +4,12 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
+
+var path = require('path');
+var SG = require('strong-globalize');
+SG.SetRootDir(path.join(__dirname, '..'));
+var g = SG();
+
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
@@ -11,8 +17,6 @@ var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
 var fs = require('fs');
-var path = require('path');
-var util = require('util');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
@@ -24,34 +28,35 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('name', {
-      desc: 'Name of the application to scaffold.',
+      desc: g.f('Name of the application to scaffold.'),
       required: false,
       type: String,
     });
 
     this.option('skip-install', {
-      desc: 'Do not install npm dependencies.',
+      desc: g.f('Do not install npm dependencies.'),
       type: Boolean,
     });
 
     this.option('skip-next-steps', {
-      desc: 'Do not print "next steps" info',
+      desc: g.f('Do not print "next steps" info'),
       type: Boolean,
     });
 
     this.option('explorer', {
-      desc: 'Add Loopback Explorer to the project (true by default)',
+      desc: g.f('Add {{Loopback Explorer }}to the project ({{true}} ' +
+        'by default)'),
       type: Boolean,
     });
   },
 
   greet: function() {
-    this.log(yosay('Let\'s create a LoopBack application!'));
+    this.log(yosay(g.f('Let\'s create a {{LoopBack}} application!')));
   },
 
   help: function() {
     var msgs = [helpers.customHelp(this)];
-    msgs.push('Available generators: \n\n  ');
+    msgs.push(g.f('Available generators: \n\n  '));
     msgs.push(Object.keys(this.options.env.getGeneratorsMeta())
       .filter(function(name) {
         return name.indexOf('loopback:') !== -1;
@@ -84,7 +89,7 @@ module.exports = yeoman.Base.extend({
       if (err) return done(err);
       this.templates = list.map(function(t) {
         return {
-          name: util.format('%s (%s)', t.name, t.description),
+          name: g.f('%s (%s)', t.name, t.description),
           value: t.name,
         };
       });
@@ -119,7 +124,7 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         name: 'appname',
-        message: 'What\'s the name of your application?',
+        message: g.f('What\'s the name of your application?'),
         default: name,
         validate: validateAppName,
       },
@@ -135,7 +140,7 @@ module.exports = yeoman.Base.extend({
   askForTemplate: function() {
     var prompts = [{
       name: 'wsTemplate',
-      message: 'What kind of application do you have in mind?',
+      message: g.f('What kind of application do you have in mind?'),
       type: 'list',
       default: this.defaultTemplate,
       choices: this.templates,
@@ -167,7 +172,7 @@ module.exports = yeoman.Base.extend({
   askForLBVersion: function() {
     var prompts = [{
       name: 'loopbackVersion',
-      message: 'Which version of LoopBack would you like to use?',
+      message: 'Which version of {{LoopBack}} would you like to use?',
       type: 'list',
       default: '2.x',
       choices: this.availableLBVersions,
@@ -187,7 +192,7 @@ module.exports = yeoman.Base.extend({
       if (err) {
         cb();
       } else {
-        cb(new Error('The generator must be run in an empty directory.'));
+        cb(new Error(g.f('The generator must be run in an empty directory.')));
       }
     });
   },
@@ -211,7 +216,7 @@ module.exports = yeoman.Base.extend({
   },
 
   generateYoRc: function() {
-    this.log('Generating .yo-rc.json');
+    this.log(g.f('Generating {{.yo-rc.json}}'));
     this.config.save();
   },
 
@@ -226,27 +231,27 @@ module.exports = yeoman.Base.extend({
       this.log();
     }
 
-    this.log('Next steps:');
+    this.log(g.f('Next steps:'));
     this.log();
     if (this.dir && this.dir !== '.') {
-      this.log('  Change directory to your app');
+      this.log(g.f('  Change directory to your app'));
       this.log(chalk.green('    $ cd ' + this.dir));
       this.log();
     }
     if (cmd === 'apic') {
-      this.log('  Run API Designer to create, test, and publish your' +
-        ' application');
+      this.log(g.f('  Run {{API Designer}} to create, test, and publish your' +
+        ' application'));
       this.log(chalk.green('    $ apic edit'));
       this.log();
     } else {
-      this.log('  Create a model in your app');
+      this.log(g.f('  Create a model in your app'));
       this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
       this.log();
-      this.log(
-        '  Compose your API, run, deploy, profile, and monitor it with Arc');
+      this.log(g.f(
+        '  Compose your API, run, deploy, profile, and monitor it with Arc'));
       this.log(chalk.green('    $ slc arc'));
       this.log();
-      this.log('  Run the app');
+      this.log(g.f('  Run the app'));
       this.log(chalk.green('    $ node .'));
       this.log();
     }
