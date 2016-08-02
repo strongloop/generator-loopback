@@ -152,11 +152,9 @@ module.exports = yeoman.Base.extend({
         this.propDefinition.required = Boolean(answers.required);
       }
 
-      if (this.propDefinition.required && answers.defaultValue === '') {
-        this.log(g.f('Warning: please enter the %s property again. ' +
-            'The default value provided "%s" is not valid for type: %s',
-            this.name, answers.defaultValue, this.type));
-        return this.askForParameters();
+      if (answers.defaultValue === '') {
+        answers.defaultValue = null;
+        return;
       }
 
       try {
