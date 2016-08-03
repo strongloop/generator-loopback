@@ -248,9 +248,8 @@ module.exports = yeoman.Base.extend({
   printAddConfigForCustomConnector: function() {
     var connector = this.connector;
     if (!this.availableConnectors[connector]) {
-      this.log('Please manually add config for your custom connector ' +
-        connector +
-        ' in server/datasources.json');
+      this.log(g.f('Please manually add config for your custom connector %s' +
+        ' in {{server/datasources.json}}', connector));
     } else {
       return;
     }

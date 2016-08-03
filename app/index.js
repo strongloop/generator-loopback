@@ -7,7 +7,7 @@
 
 var path = require('path');
 var SG = require('strong-globalize');
-SG.SetRootDir(path.join(__dirname, '..'));
+SG.SetRootDir(path.join(__dirname, '..'), {autonomousMsgLoading: 'all'});
 var g = SG();
 
 var yeoman = require('yeoman-generator');
@@ -44,7 +44,7 @@ module.exports = yeoman.Base.extend({
     });
 
     this.option('explorer', {
-      desc: g.f('Add {{Loopback Explorer }}to the project ({{true}} ' +
+      desc: g.f('Add {{Loopback Explorer}} to the project ({{true}} ' +
         'by default)'),
       type: Boolean,
     });
