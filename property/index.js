@@ -153,10 +153,9 @@ module.exports = yeoman.Base.extend({
       }
 
       if (this.propDefinition.required && answers.defaultValue === '') {
-        this.log('Warning: please enter the ' + this.name +
-            ' property again. The default value provided "' +
-            answers.defaultValue +
-            '" is not valid for type: ' + this.type);
+        this.log(g.f('Warning: please enter the %s property again. ' +
+            'The default value provided "%s" is not valid for type: %s',
+            this.name, answers.defaultValue, this.type));
         return this.askForParameters();
       }
 
@@ -166,10 +165,9 @@ module.exports = yeoman.Base.extend({
         debug('property coercion output: %j', this.propDefinition);
       } catch (err) {
         debug('Failed to coerce property default value: ', err);
-        this.log('Warning: please enter the ' + this.name +
-          ' property again. The default value provided "' +
-          answers.defaultValue +
-          '" is not valid for the selected type: ' + this.type);
+        this.log(g.f('Warning: please enter the %s property again. The ' +
+          'default value provided "%s" is not valid for the selected type: %s',
+          this.name, answers.defaultValue, this.type));
         return this.askForParameters();
       }
     }.bind(this));
