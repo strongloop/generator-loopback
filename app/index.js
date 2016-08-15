@@ -91,6 +91,7 @@ module.exports = yeoman.Base.extend({
         return {
           name: g.f('%s (%s)', t.name, t.description),
           value: t.name,
+          supportedLBVersions: t.supportedLBVersions,
         };
       });
 
@@ -137,22 +138,6 @@ module.exports = yeoman.Base.extend({
 
   configureDestinationDir: actions.configureDestinationDir,
 
-  askForTemplate: function() {
-    var prompts = [{
-      name: 'wsTemplate',
-      message: g.f('What kind of application do you have in mind?'),
-      type: 'list',
-      default: this.defaultTemplate,
-      choices: this.templates,
-    }];
-
-    var self = this;
-    return this.prompt(prompts).then(function(answers) {
-      // Do NOT use name template as it's a method in the base class
-      self.wsTemplate = answers.wsTemplate;
-    }.bind(this));
-  },
-
   fetchLoopBackVersions: function() {
     var done = this.async();
     var self = this;
@@ -172,7 +157,7 @@ module.exports = yeoman.Base.extend({
   askForLBVersion: function() {
     var prompts = [{
       name: 'loopbackVersion',
-      message: 'Which version of {{LoopBack}} would you like to use?',
+      message: g.f('Which version of {{LoopBack}} would you like to use?'),
       type: 'list',
       default: '2.x',
       choices: this.availableLBVersions,
@@ -181,6 +166,31 @@ module.exports = yeoman.Base.extend({
     var self = this;
     return this.prompt(prompts).then(function(answers) {
       self.options.loopbackVersion = answers.loopbackVersion;
+    }.bind(this));
+  },
+
+  applyFilterOnTemplate: function() {
+    var LBVersion = this.options.loopbackVersion;
+    var templates = this.templates;
+
+    this.templates = templates.filter(function(t) {
+      return t.supportedLBVersions.indexOf(LBVersion) !== -1;
+    });
+  },
+
+  askForTemplate: function() {
+    var prompts = [{
+      name: 'wsTemplate',
+      message: g.f('What kind of application do you have in mind?'),
+      type: 'list',
+      default: this.defaultTemplate,
+      choices: this.templates,
+    }];
+
+    var self = this;
+    return this.prompt(prompts).then(function(answers) {
+      // Do NOT use name template as it's a method in the base class
+      self.wsTemplate = answers.wsTemplate;
     }.bind(this));
   },
 
