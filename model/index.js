@@ -57,10 +57,10 @@ module.exports = yeoman.Base.extend({
 
   checkForDatasource: function() {
     if (!this.hasDatasources) {
-      var warning = chalk.red('Warning: Found no data sources to attach ' +
+      var warning = chalk.red(g.f('Warning: Found no data sources to attach ' +
         'model. There will be no data-access methods available until ' +
-        'datasources are attached.');
-      this.log(g.f(warning));
+        'datasources are attached.'));
+      this.log(warning);
       return;
     }
   },
