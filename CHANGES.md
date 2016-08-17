@@ -1,3 +1,22 @@
+2016-08-17, Version 1.24.0
+==========================
+
+ * Call g.f with literal before passing to chalk (Tetsuo Seto)
+
+ * Add filter (jannyHou)
+
+ * Always allow properties with no default value (Miroslav Bajtoš)
+
+ * Missed globalizing some warnings (Candy)
+
+ * Add globalization (Candy)
+
+ * app: describe stability of 2.x/3.x versions (Miroslav Bajtoš)
+
+
+2016-07-26, Version 1.23.2
+==========================
+
 
 
 2016-07-22, Version 1.23.1
