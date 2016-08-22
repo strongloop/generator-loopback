@@ -9,7 +9,6 @@ var path = require('path');
 var SG = require('strong-globalize');
 SG.SetRootDir(path.join(__dirname, '..'), {autonomousMsgLoading: 'all'});
 var g = SG();
-
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
