@@ -5,15 +5,11 @@
 
 'use strict';
 
-var SG = require('strong-globalize');
-var g = SG();
-
+var g = require('strong-globalize')();
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 var extend = require('util')._extend;
-
 var wsModels = require('loopback-workspace').models;
-
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var validateRequiredName = helpers.validateRequiredName;

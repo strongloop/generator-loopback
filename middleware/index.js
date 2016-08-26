@@ -5,9 +5,7 @@
 
 'use strict';
 
-var SG = require('strong-globalize');
-var g = SG();
-
+var g = require('strong-globalize')();
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 

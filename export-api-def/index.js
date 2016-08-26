@@ -6,9 +6,7 @@
 'use strict';
 
 var path = require('path');
-var SG = require('strong-globalize');
-var g = SG();
-
+var g = require('strong-globalize')();
 var fs = require('fs');
 var yeoman = require('yeoman-generator');
 var helpers = require('../lib/helpers');
