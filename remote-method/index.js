@@ -170,7 +170,7 @@ module.exports = yeoman.Base.extend({
 
       var httpPath = answers.httpPath;
 
-      this.prompt(subprompts, function(answers) {
+      return this.prompt(subprompts).then(function(answers) {
         this.http.push({
           path: httpPath,
           verb: answers.httpVerb || answers.customHttpVerb,
