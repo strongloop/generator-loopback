@@ -1,3 +1,11 @@
+2016-09-05, Version 1.24.1
+==========================
+
+ * Fix generator not add remote-method to json file (Candy)
+
+ * Update strong-globalize require to 1 line (Candy)
+
+
 2016-08-17, Version 1.24.0
 ==========================
 
