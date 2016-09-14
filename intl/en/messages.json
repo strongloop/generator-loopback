@@ -162,5 +162,6 @@
   "c0483dd8d23458307540203286e78c54": "Select models to be generated:",
   "d81c3f76c041316e683d0d286e98eefd": "Creating model definition for {0}...",
   "e2f5703e707131e5d51136a8ebc19730": "Updating model definition for {0}...",
-  "e6404ed6a215776c8f58a16fd5d03146": "Select the data-source to attach models to:"
+  "e6404ed6a215776c8f58a16fd5d03146": "Select the data-source to attach models to:",
+  "52c74c58f38c73d2cfc2ac977f3301f9": "Invalid default Date value: {0}"
 }
