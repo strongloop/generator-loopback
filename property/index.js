@@ -250,6 +250,9 @@ function castToDate(value) {
   } else {
     dateValue = new Date(value);
   }
+  if (isNaN(dateValue.getTime())) {
+    throw Error(g.f('Invalid default Date value: %s', value));
+  }
   return dateValue;
 }
 
