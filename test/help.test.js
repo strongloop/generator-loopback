@@ -5,6 +5,7 @@
 
 /*global describe, beforeEach, it */
 'use strict';
+var fs = require('fs');
 var path = require('path');
 var assert = require('assert');
 var common = require('./common');
@@ -18,7 +19,7 @@ describe('loopback generator help', function() {
     helpers.testDirectory(SANDBOX, done);
   });
 
-  it('print help message with yo by default', function() {
+  it('prints help message with yo by default', function() {
     var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation'];
     names.forEach(function(name) {
       var gen = givenGenerator(name, ['--help']);
@@ -28,7 +29,7 @@ describe('loopback generator help', function() {
     });
   });
 
-  it('print help message with slc if invoked from slc', function() {
+  it('prints help message with slc if invoked from slc', function() {
     process.env.SLC_COMMAND = 'loopback --help';
     var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation'];
     try {
@@ -43,6 +44,28 @@ describe('loopback generator help', function() {
       throw err;
     }
     process.env.SLC_COMMAND = undefined;
+  });
+
+  describe('prints right help message for each generator', function() {
+    var CMD_NAMES = ['acl', 'app', 'boot-script', 'datasource',
+    'export-api-def', 'middleware', 'model', 'property', 'relation',
+    'remote-method', 'swagger'];
+
+    CMD_NAMES.forEach(function(name) {
+      it('prints right help message for generator ' + name, function() {
+        process.env.SLC_COMMAND = 'slc';
+        var gen = givenGenerator(name, ['--help']);
+        var helpText = gen.help();
+        var helpFileName = 'loopback_' + name + '_help.txt';
+        var helpFilePath = '../fixtures/help-texts/' + helpFileName;
+        var output = fs.readFileSync(helpFilePath, 'utf8');
+        assert.equal(output, helpText);
+      });
+    });
+
+    afterEach(function resetSLCCommand() {
+      process.env.SLC_COMMAND = undefined;
+    });
   });
 
   function givenGenerator(name, modelArgs) {

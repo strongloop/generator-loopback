@@ -6,9 +6,7 @@
 'use strict';
 
 var path = require('path');
-var SG = require('strong-globalize');
-SG.SetRootDir(path.join(__dirname, '..'), {autonomousMsgLoading: 'all'});
-var g = SG();
+var g = require('../lib/globalize');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var chalk = require('chalk');
@@ -19,6 +17,7 @@ var fs = require('fs');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
+var helpText = require('../lib/help');
 var validateAppName = helpers.validateAppName;
 var pkg = require('../package.json');
 
@@ -54,7 +53,7 @@ module.exports = yeoman.Base.extend({
   },
 
   help: function() {
-    var msgs = [helpers.customHelp(this)];
+    var msgs = [helpText.customHelp(this, 'loopback_app_usage.txt')];
     msgs.push(g.f('Available generators: \n\n  '));
     msgs.push(Object.keys(this.options.env.getGeneratorsMeta())
       .filter(function(name) {

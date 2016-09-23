@@ -5,8 +5,10 @@
 
 'use strict';
 
-var g = require('strong-globalize')();
+var g = require('../lib/globalize');
 var helpers = require('../lib/helpers');
+var helpText = require('../lib/help');
+
 var path = require('path');
 var yeoman = require('yeoman-generator');
 
@@ -25,7 +27,7 @@ module.exports = yeoman.Base.extend({
   },
 
   help: function() {
-    return helpers.customHelp(this);
+    return helpText.customHelp(this, 'loopback_boot-script_usage.txt');
   },
 
   askForName: function() {

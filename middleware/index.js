@@ -5,7 +5,7 @@
 
 'use strict';
 
-var g = require('strong-globalize')();
+var g = require('../lib/globalize');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 
@@ -13,6 +13,7 @@ var wsModels = require('loopback-workspace').models;
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
+var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
 
 function toNumberedList(items) {
@@ -51,7 +52,7 @@ module.exports = yeoman.Base.extend({
   },
 
   help: function() {
-    return helpers.customHelp(this);
+    return helpText.customHelp(this, 'loopback_middleware_usage.txt');
   },
 
   loadPhases: function() {

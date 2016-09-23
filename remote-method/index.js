@@ -6,13 +6,14 @@
 'use strict';
 
 var path = require('path');
-var g = require('strong-globalize')();
+var g = require('../lib/globalize');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var util = require('util');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
+var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
 var validateRemoteMethodName = helpers.validateRemoteMethodName;
@@ -40,7 +41,7 @@ module.exports = yeoman.Base.extend({
   },
 
   help: function() {
-    return helpers.customHelp(this);
+    return helpText.customHelp(this, 'loopback_remote-method_usage.txt');
   },
 
   loadProject: actions.loadProject,

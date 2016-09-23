@@ -3,4 +3,4 @@ Description:
 
 Example:
 
-  slc loopback:property
+  {{slc loopback:property}}

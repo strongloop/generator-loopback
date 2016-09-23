@@ -6,6 +6,8 @@
 /*global describe, beforeEach, afterEach, it */
 'use strict';
 var path = require('path');
+require('../lib/globalize');
+
 var helpers = require('yeoman-test');
 var wsModels = require('loopback-workspace').models;
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
