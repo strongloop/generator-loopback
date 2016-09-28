@@ -54,7 +54,7 @@
   "a536c732f00c081f81f02b71cc00a302": "Il nome dell'applicazione non può iniziare con .: {0}",
   "b4f006796d7777d45ff0ea3a8b757fc9": "Il nome dell'applicazione non può essere {{favicon.ico}}",
   "b780b3c5e00fb3123b0a270faa7b272f": "Il valore deve essere un {0} stringa",
-  "ccaea3203c18e2c6e40c6ae48d304897": "Il nome non può contenere caratteri \".\" eccetto il punto nel prefisso {{ prototype \".\"}} ",
+  "ccaea3203c18e2c6e40c6ae48d304897": "Il nome non può contenere caratteri \".\" eccetto il punto nel prefisso {{ prototype \".\"}}",
   "d573518b403438db34229685ee6b9c7f": "Il nome dell'applicazione non può contenere caratteri speciali con escape di encodeURIComponent: {0}",
   "ff0f4960555ff95b5cdacd4468cea37f": "Il nome è obbligatorio",
   "05313f81a9657aed47182f6275284e82": "Middleware {0} aggiunto alla fase {1}.",
