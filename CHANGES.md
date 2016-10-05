@@ -1,3 +1,13 @@
+2016-10-05, Version 1.24.2
+==========================
+
+ * Update translation files - round#2 (Candy)
+
+ * Add translation strings (Candy)
+
+ * property: Avoid casting invalid date into `null` (David Cheung)
+
+
 2016-09-05, Version 1.24.1
 ==========================
 
