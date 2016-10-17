@@ -5,12 +5,13 @@
 
 'use strict';
 
-var g = require('strong-globalize')();
+var g = require('../lib/globalize');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
+var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
 var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
@@ -23,7 +24,7 @@ module.exports = yeoman.Base.extend({
   // saving project changes.
 
   help: function() {
-    return helpers.customHelp(this);
+    return helpText.customHelp(this, 'loopback_property_usage.txt');
   },
 
   loadProject: actions.loadProject,

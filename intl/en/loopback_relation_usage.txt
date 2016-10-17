@@ -3,4 +3,4 @@ Description:
 
 Example:
 
-  slc loopback:relation
+  {{slc loopback:relation}}
