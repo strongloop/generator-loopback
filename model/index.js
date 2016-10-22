@@ -207,11 +207,18 @@ module.exports = yeoman.Base.extend({
   },
 
   delim: function() {
+    if (this.base === 'KeyValueModel')
+      return;
+
     this.log(g.f('Let\'s add some %s properties now.\n', this.displayName));
   },
 
   property: function() {
     var done = this.async();
+
+    if (this.base === 'KeyValueModel')
+      return;
+
     this.log(g.f('Enter an empty property name when done.'));
     var prompts = [
       {
