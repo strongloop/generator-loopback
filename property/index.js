@@ -64,6 +64,13 @@ module.exports = yeoman.Base.extend({
   },
 
   askForParameters: function() {
+    if (this.modelDefinition.base === 'KeyValueModel') {
+      var msg = g.f('KeyValueModel does not support model definition ' +
+        'properties');
+      this.log(chalk.red(msg));
+      return this.async(new Error(msg));
+    }
+
     this.name = this.options.propertyName;
 
     var prompts = [
