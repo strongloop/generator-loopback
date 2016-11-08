@@ -1,5 +1,5 @@
 Usage:
- slc loopback:relation [options] 
+  slc loopback:relation [options] 
 
 Options:
   -h,   --help          # Print the generator's options and usage

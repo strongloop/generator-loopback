@@ -1,5 +1,5 @@
 Usage:
- slc loopback:datasource [options] [<name>]
+  slc loopback:datasource [options] [<name>]
 
 Options:
   -h,   --help          # Print the generator's options and usage
