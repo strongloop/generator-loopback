@@ -102,8 +102,7 @@ module.exports = yeoman.Base.extend({
       {
         name: 'customConnector',
         message:
-          g.f('Enter the connector name without the ' +
-            '{{loopback-connector-}} prefix:'),
+          g.f('Enter the connector\'s module name'),
         validate: validateRequiredName,
         when: function(answers) {
           return answers.connector === 'other';
