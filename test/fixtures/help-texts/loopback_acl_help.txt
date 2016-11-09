@@ -1,5 +1,5 @@
 Usage:
- slc loopback:acl [options] 
+  slc loopback:acl [options] 
 
 Options:
   -h,   --help          # Print the generator's options and usage

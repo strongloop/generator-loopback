@@ -1,5 +1,5 @@
 Usage:
- slc loopback:swagger [options] [<url>]
+  slc loopback:swagger [options] [<url>]
 
 Options:
   -h,   --help          # Print the generator's options and usage

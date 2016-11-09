@@ -1,5 +1,5 @@
 Usage:
- slc loopback:remote-method [options] [<modelName>] [<methodName>]
+  slc loopback:remote-method [options] [<modelName>] [<methodName>]
 
 Options:
   -h,   --help          # Print the generator's options and usage

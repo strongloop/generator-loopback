@@ -1,5 +1,5 @@
 Usage:
- slc loopback:boot-script [options] [<name>]
+  slc loopback:boot-script [options] [<name>]
 
 Options:
   -h,   --help          # Print the generator's options and usage

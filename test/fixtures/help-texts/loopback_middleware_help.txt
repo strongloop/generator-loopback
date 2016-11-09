@@ -1,5 +1,5 @@
 Usage:
- slc loopback:middleware [options] [<name>]
+  slc loopback:middleware [options] [<name>]
 
 Options:
   -h,   --help          # Print the generator's options and usage
