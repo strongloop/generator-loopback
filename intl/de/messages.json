@@ -91,6 +91,7 @@
   "d8197b719413005b3fe2827062e3fbb0": "Modellnamen eingeben:",
   "09e0feb631bfbb61cf495118e2bf97ff": "Typ eingeben:",
   "0bdbd3b54fafac45934b27100f82883e": "Elementtyp eingeben:",
+  "52c74c58f38c73d2cfc2ac977f3301f9": "Ungültiger Datumsstandardwert: {0}",
   "5a05088e776399aeafd79511a151fda6": "Warnung: Geben Sie die {0}-Eigenschaft erneut ein. Der angegebene Standardwert \"{1}\" ist für den ausgewählten Typ nicht gültig: {2}",
   "6e18e908568ef24580d93bfd3e0f40d7": "Erforderlich?",
   "80a32e80cbed65eba2103201a7c94710": "Modell nicht gefunden: {0}",

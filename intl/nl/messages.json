@@ -91,6 +91,7 @@
   "d8197b719413005b3fe2827062e3fbb0": "Geef de modelnaam op:",
   "09e0feb631bfbb61cf495118e2bf97ff": "Geef het type op:",
   "0bdbd3b54fafac45934b27100f82883e": "Geef het itemtype op:",
+  "52c74c58f38c73d2cfc2ac977f3301f9": "Ongedlige waarde voor standaarddatum: {0}",
   "5a05088e776399aeafd79511a151fda6": "Waarschuwing: geef de eigenschap {0} nogmaals op. De opgegeven standaardwaarde \"{1}\" is niet geldig voor het geselecteerde type: {2}",
   "6e18e908568ef24580d93bfd3e0f40d7": "Verplicht?",
   "80a32e80cbed65eba2103201a7c94710": "Model is niet gevonden: {0}",
