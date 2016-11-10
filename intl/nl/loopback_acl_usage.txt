@@ -1,0 +1,9 @@
+Beschrijving:
+  Een nieuw ACL-item toevoegen aan de toepassing LoopBack.
+
+Bijvoorbeeld:
+
+  {{slc loopback:acl}}
+
+  Hiermee worden er verschillende vragen gesteld om ACL-opties te bepalen.
+  Daarna wordt er een item toegevoegd aan het overeenkomende model {{json}}.

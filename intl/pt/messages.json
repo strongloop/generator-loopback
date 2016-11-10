@@ -91,6 +91,7 @@
   "d8197b719413005b3fe2827062e3fbb0": "Enter the model name:",
   "09e0feb631bfbb61cf495118e2bf97ff": "Insira o tipo:",
   "0bdbd3b54fafac45934b27100f82883e": "Insira o tipo de item:",
+  "52c74c58f38c73d2cfc2ac977f3301f9": "Valor de Data padrão inválido: {0}",
   "5a05088e776399aeafd79511a151fda6": "Aviso: insira a propriedade {0} novamente. O valor padrão fornecido \"{1}\" não é válido para o tipo selecionado: {2}",
   "6e18e908568ef24580d93bfd3e0f40d7": "Necessário?",
   "80a32e80cbed65eba2103201a7c94710": "Modelo não localizado: {0}",
