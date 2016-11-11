@@ -1,3 +1,19 @@
+2016-11-11, Version 1.24.5
+==========================
+
+ * Add translation files (Candy)
+
+ * Reword message for custom connector (jannyHou)
+
+ * Add missing space (jannyHou)
+
+ * Disable slc loopback:property for KeyValueModel (Simon Ho)
+
+ * Do not prompt for properties for KeyValueModel (Simon Ho)
+
+ * Globalize helpText (jannyHou)
+
+
 2016-10-12, Version 1.24.4
 ==========================
 
