@@ -10,4 +10,4 @@ Ejemplo:
 
   {{slc loopback:export-api-def [--o outputFile]}}
 
-  Esto generará las definiciones de api en la ubicación especificada. En función de la extensión de archivo, se imprimirá en formato {{yaml}} o {{json}}. 
+  Esto generará las definiciones de api en la ubicación especificada. En función de la extensión de archivo, se imprimirá en formato {{yaml}} o {{json}}.
