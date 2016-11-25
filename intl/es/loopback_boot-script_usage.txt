@@ -1,5 +1,5 @@
 Descripción:
-  Crea un script de arranque en la aplicación LoopBack. 
+  Crea un script de arranque en la aplicación LoopBack.
 
 Ejemplo:
 
