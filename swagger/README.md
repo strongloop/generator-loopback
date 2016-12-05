@@ -101,7 +101,7 @@ To run the application:
 node .
 ```
 
-Open your browser and points to http://localhost:3000/explorer.
+Open your browser and points to http://localhost:<port>/explorer.
 
 ![explorer api](images/explorer-api.png)
 
