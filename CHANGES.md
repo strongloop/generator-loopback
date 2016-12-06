@@ -1,3 +1,11 @@
+2016-12-06, Version 1.25.0
+==========================
+
+ * Remove 'slc arc' from post install log (Joe Sepi)
+
+ * Update translation files (Candy)
+
+
 2016-11-11, Version 1.24.5
 ==========================
 
