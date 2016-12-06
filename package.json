@@ -1,6 +1,9 @@
 {
   "name": "generator-loopback",
   "version": "1.25.0",
+  "publishConfig": {
+    "tag": "lts"
+  },
   "description": "Yeoman generator for LoopBack",
   "license": "MIT",
   "main": "app/index.js",
