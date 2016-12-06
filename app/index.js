@@ -255,10 +255,6 @@ module.exports = yeoman.Base.extend({
       this.log(g.f('  Create a model in your app'));
       this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
       this.log();
-      this.log(g.f(
-        '  Compose your API, run, deploy, profile, and monitor it with Arc'));
-      this.log(chalk.green('    $ slc arc'));
-      this.log();
       this.log(g.f('  Run the app'));
       this.log(chalk.green('    $ node .'));
       this.log();
