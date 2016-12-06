@@ -1,7 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - '0.10'
+  - '0.12'
+  - 4
+  - 6
 before_install:
   - currentfolder=${PWD##*/}
   - if [ "$currentfolder" != 'generator-loopback' ]; then cd .. && eval "mv $currentfolder generator-loopback" && cd generator-loopback; fi
