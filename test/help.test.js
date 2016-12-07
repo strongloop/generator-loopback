@@ -48,8 +48,8 @@ describe('loopback generator help', function() {
 
   describe('prints right help message for each generator', function() {
     var CMD_NAMES = ['acl', 'app', 'boot-script', 'datasource',
-    'export-api-def', 'middleware', 'model', 'property', 'relation',
-    'remote-method', 'swagger'];
+      'export-api-def', 'middleware', 'model', 'property', 'relation',
+      'remote-method', 'swagger'];
 
     CMD_NAMES.forEach(function(name) {
       it('prints right help message for generator ' + name, function() {
