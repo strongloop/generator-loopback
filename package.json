@@ -1,6 +1,6 @@
 {
   "name": "generator-loopback",
-  "version": "1.25.0",
+  "version": "2.0.0-alpha.1",
   "description": "Yeoman generator for LoopBack",
   "license": "MIT",
   "main": "app/index.js",
@@ -11,7 +11,7 @@
     "url": "http://strongloop.com/"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "mocha -R spec --timeout 60000",
