@@ -1,5 +1,5 @@
 Beschrijving:
-  Een nieuwe gegevensbron maken in de toepassing LoopBack.
+  Een nieuwe gegevensbron maken in de LoopBack-toepassing .
 
 Bijvoorbeeld:
 
