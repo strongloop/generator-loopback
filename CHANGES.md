@@ -1,3 +1,15 @@
+2016-12-07, Version 2.0.0
+=========================
+
+ * Update to latest eslint and loopback config (Miroslav Bajtoš)
+
+ * Update .travis.yml (Miroslav Bajtoš)
+
+ * Drop support for Node v0.10 and v0.12 (Miroslav Bajtoš)
+
+ * Start the development of the next major version (Miroslav Bajtoš)
+
+
 2016-12-06, Version 1.25.0
 ==========================
 
