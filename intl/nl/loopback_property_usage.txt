@@ -1,5 +1,5 @@
 Beschrijving:
-  Een nieuwe modeleigenschap maken in de toepassing LoopBack.
+  Een nieuwe modeleigenschap maken in de LoopBack-toepassing .
 
 Bijvoorbeeld:
 

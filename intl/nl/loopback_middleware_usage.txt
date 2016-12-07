@@ -1,5 +1,5 @@
 Beschrijving:
-  Nieuw middleware maken in de toepassing LoopBack.
+  Nieuw middleware maken in de LoopBack-toepassing .
 
 Bijvoorbeeld:
 

@@ -1,5 +1,5 @@
 Beschrijving:
-  Een nieuw opstartscript maken in de toepassing LoopBack.
+  Een nieuw opstartscript maken in de LoopBack-toepassing .
 
 Bijvoorbeeld:
 

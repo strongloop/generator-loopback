@@ -1,5 +1,5 @@
 Beschrijving:
-  Een nieuw ACL-item toevoegen aan de toepassing LoopBack.
+  Een nieuw ACL-item toevoegen aan de LoopBack-toepassing .
 
 Bijvoorbeeld:
 
