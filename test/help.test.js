@@ -5,6 +5,7 @@
 
 /*global describe, beforeEach, it */
 'use strict';
+var debug = require('debug')('test');
 var fs = require('fs');
 var path = require('path');
 var assert = require('assert');
@@ -44,6 +45,24 @@ describe('loopback generator help', function() {
       throw err;
     }
     process.env.SLC_COMMAND = undefined;
+  });
+
+  it('prints help message with lb if invoked from loopback-cli', function() {
+    process.env.SLC_COMMAND = 'loopback-cli';
+    var gen = givenGenerator('app', ['--help']);
+    var helpText = gen.help();
+    debug('--HELP TEXT--\n', helpText);
+    assert(helpText.indexOf(' lb ') !== -1,
+      '"lb" should be used');
+    assert(helpText.indexOf('Available commands') !== -1,
+      '"Available commands" should be used');
+
+    assert(helpText.indexOf(' slc ') === -1,
+      '"slc" should not be present');
+    assert(helpText.indexOf(' yo ') === -1,
+      '"yo" should not be present');
+    assert(helpText.indexOf('Available generators') === -1,
+      '"Available generators" should not be present');
   });
 
   describe('prints right help message for each generator', function() {

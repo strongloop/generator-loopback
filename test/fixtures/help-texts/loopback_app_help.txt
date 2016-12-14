@@ -29,6 +29,7 @@ Example:
     server/config.json: Machine-editable app configuration.
     server/datasources.json: Definition of data sources.
     server/model-config.json: Model configuration.
-Available generators: 
+
+Available generators:
 
   loopback:app
