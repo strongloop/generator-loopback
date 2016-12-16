@@ -54,12 +54,20 @@ module.exports = yeoman.Base.extend({
 
   help: function() {
     var msgs = [helpText.customHelp(this, 'loopback_app_usage.txt')];
-    msgs.push(g.f('Available generators: \n\n  '));
-    msgs.push(Object.keys(this.options.env.getGeneratorsMeta())
+
+    var list = Object.keys(this.options.env.getGeneratorsMeta())
       .filter(function(name) {
         return name.indexOf('loopback:') !== -1;
-      }).join('\n  '));
-    return msgs.join('');
+      });
+    if (helpers.getCommandName() === 'loopback-cli') {
+      list = list.map(name => name.replace(/^loopback:/, 'lb '));
+      msgs.push(g.f('\nAvailable commands:\n\n'));
+    } else {
+      msgs.push(g.f('\nAvailable generators:\n\n'));
+    }
+
+    msgs.push(list.map(it => '  ' + it).join('\n'));
+    return msgs.join('') + '\n';
   },
 
   injectWorkspaceCopyRecursive: function() {
@@ -253,7 +261,10 @@ module.exports = yeoman.Base.extend({
       this.log();
     } else {
       this.log(g.f('  Create a model in your app'));
-      this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
+      if (cmd === 'loopback-cli')
+        this.log(chalk.green('    $ lb model'));
+      else
+        this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
       this.log();
       this.log(g.f('  Run the app'));
       this.log(chalk.green('    $ node .'));
