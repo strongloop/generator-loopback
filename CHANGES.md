@@ -1,3 +1,17 @@
+2016-12-16, Version 2.1.0
+=========================
+
+ * Remove trailing whitespaces from help texts (Miroslav Bajtoš)
+
+ * Add support for SLC_COMMAND="loopback-cli" (Miroslav Bajtoš)
+
+ * Always require lib/globalize in tests (Miroslav Bajtoš)
+
+ * Update paid support URL (Siddhi Pai)
+
+ * Update translation files (Candy)
+
+
 2016-12-07, Version 2.0.0
 =========================
 
