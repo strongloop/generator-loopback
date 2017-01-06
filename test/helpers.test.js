@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-/*global describe, it */
+/* global describe, it */
 'use strict';
 var helpers = require('../lib/helpers');
 var validateAppName = helpers.validateAppName;
