@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-/*global describe, beforeEach, afterEach, it */
+/* global describe, beforeEach, afterEach, it */
 'use strict';
 var path = require('path');
 

@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-/*global describe, beforeEach, it */
+/* global describe, beforeEach, it */
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-test');
