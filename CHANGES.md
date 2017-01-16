@@ -1,3 +1,15 @@
+2017-01-16, Version 2.2.0
+=========================
+
+ * Add IBM branding to loopback-cli (Miroslav Bajtoš)
+
+ * Upgrade eslint-config to 7.x (Miroslav Bajtoš)
+
+ * Extract strings to translate. (Candy)
+
+ * Update dependencies to the latest version (Miroslav Bajtoš)
+
+
 2016-12-16, Version 2.1.0
 =========================
 
