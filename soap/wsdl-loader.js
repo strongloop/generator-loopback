@@ -14,8 +14,7 @@ var soap = require('strong-soap').soap;
 var WSDL = soap.WSDL;
 var path = require('path');
 
-
-//loads remote WSDL or local WSDL using strong-soap module APIs
+// loads remote WSDL or local WSDL using strong-soap module APIs
 function loadWsdl(wsdlUrl, log, cb) {
   log(chalk.blue('Loading ' + wsdlUrl + '...'));
   WSDL.open(wsdlUrl, {}, function(err, wsdl) {
@@ -25,14 +24,14 @@ function loadWsdl(wsdlUrl, log, cb) {
     cb(null, wsdl);
   });
 }
-//currently it just loads the WSDL and prints out services defined in the WSDL
+// currently it just loads the WSDL and prints out services defined in the WSDL
 function generate(wsdlUrl, log, cb) {
   loadWsdl(wsdlUrl, log, function(err, wsdl) {
     if (err) {
       return cb(err);
     }
     var services = wsdl.services;
-    for(var s in services) {
+    for (var s in services) {
       var service = services[s];
       log(chalk.blue('Service Name: ' + service.$name));
     }

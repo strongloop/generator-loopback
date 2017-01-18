@@ -27,10 +27,10 @@ describe('loopback:soap', function() {
     function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
-        url: path.join(__dirname, 'soap/stockquote.wsdl')
+        url: path.join(__dirname, 'soap/stockquote.wsdl'),
       });
 
-      //this runs command  loopback:soap command with mock up /test/soap/stockquote.wsdl as input from command prompt
+      // this runs command  loopback:soap command with mock up /test/soap/stockquote.wsdl as input from command prompt
       modelGen.run(function() {
         done();
       });
@@ -43,5 +43,4 @@ describe('loopback:soap', function() {
     var gen = common.createGenerator(name, path, deps, modelArgs, {});
     return gen;
   }
-
 });

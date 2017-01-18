@@ -31,7 +31,7 @@ module.exports = yeoman.Base.extend({
   },
 
   help: function() {
-    return helpText.customHelp(this, 'loopback_soap_usage.txt'); //TODO (rashmihunt)  add this .txt
+    return helpText.customHelp(this, 'loopback_soap_usage.txt'); // TODO (rashmihunt) add this .txt
   },
 
   loadProject: actions.loadProject,
@@ -50,7 +50,7 @@ module.exports = yeoman.Base.extend({
     }.bind(this));
   },
 
-  //command ->  slc loopback:soap
+  // command ->  slc loopback:soap
   soap: function() {
     var self = this;
     var done = this.async();
