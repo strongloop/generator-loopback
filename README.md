@@ -1,4 +1,3 @@
-# generator-loopback
 
 [Yeoman](http://yeoman.io) generator that scaffolds out
 a [loopback](http://loopback.io/) application.
