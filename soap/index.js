@@ -24,7 +24,7 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.argument('url', {
-      desc: g.f('URL of the WSDL'),
+      desc: g.f('URL or file path of the WSDL'),
       required: false,
       type: String,
     });
