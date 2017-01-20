@@ -238,48 +238,56 @@ module.exports = yeoman.Base.extend({
 
   installing: actions.installDeps,
 
-  end: function() {
-    if (this.options.skipNextSteps) return;
+  end: {
+    printNextSteps: function() {
+      if (this.options.skipNextSteps) return;
 
-    var cmd = helpers.getCommandName();
-    if (!this._skipInstall) {
-      this.log();
-      this.log();
-    }
-
-    this.log(g.f('Next steps:'));
-    this.log();
-    if (this.dir && this.dir !== '.') {
-      this.log(g.f('  Change directory to your app'));
-      this.log(chalk.green('    $ cd ' + this.dir));
-      this.log();
-    }
-    if (cmd === 'apic') {
-      this.log(g.f('  Run {{API Designer}} to create, test, and publish your' +
-        ' application'));
-      this.log(chalk.green('    $ apic edit'));
-      this.log();
-    } else {
-      this.log(g.f('  Create a model in your app'));
-      if (cmd === 'loopback-cli')
-        this.log(chalk.green('    $ lb model'));
-      else
-        this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
-      this.log();
-      this.log(g.f('  Run the app'));
-      this.log(chalk.green('    $ node .'));
-      this.log();
-
-      if (cmd === 'loopback-cli') {
-        this.log(chalk.blue(g.f(
-          'The API Connect team at IBM happily continues to develop,\n' +
-            'support and maintain LoopBack, which is at the core of\n' +
-            'API Connect. When your APIs need robust management and\n' +
-            'security options, please check out %s',
-          'http://ibm.biz/tryAPIC')));
+      var cmd = helpers.getCommandName();
+      if (!this._skipInstall) {
+        this.log();
         this.log();
       }
-    }
+
+      this.log(g.f('Next steps:'));
+      this.log();
+      if (this.dir && this.dir !== '.') {
+        this.log(g.f('  Change directory to your app'));
+        this.log(chalk.green('    $ cd ' + this.dir));
+        this.log();
+      }
+      if (cmd === 'apic') {
+        this.log(g.f('  Run {{API Designer}} to create, test, ' +
+          ' and publish your application'));
+        this.log(chalk.green('    $ apic edit'));
+        this.log();
+      } else {
+        this.log(g.f('  Create a model in your app'));
+        if (cmd === 'loopback-cli')
+          this.log(chalk.green('    $ lb model'));
+        else
+          this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
+        this.log();
+        this.log(g.f('  Run the app'));
+        this.log(chalk.green('    $ node .'));
+        this.log();
+      }
+    },
+
+    promotion: function() {
+      var cmd = helpers.getCommandName();
+      if (cmd !== 'loopback-cli') return;
+      if (this.options.skipNextSteps) {
+        this.log();
+      }
+
+      this.log(chalk.blue(g.f(
+        'The API Connect team at IBM happily continues to develop,\n' +
+          'support and maintain LoopBack, which is at the core of\n' +
+          'API Connect. When your APIs need robust management and\n' +
+          'security options, please check out %s',
+        'http://ibm.biz/tryAPIC')));
+      this.log();
+    },
   },
 });
 
