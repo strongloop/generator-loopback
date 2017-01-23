@@ -1,3 +1,9 @@
+2017-01-23, Version 2.2.1
+=========================
+
+ * Print IBM promotion even with --skip-next-steps (Miroslav Bajtoš)
+
+
 2017-01-16, Version 2.2.0
 =========================
 
