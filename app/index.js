@@ -165,7 +165,7 @@ module.exports = yeoman.Base.extend({
       name: 'loopbackVersion',
       message: g.f('Which version of {{LoopBack}} would you like to use?'),
       type: 'list',
-      default: '2.x',
+      default: '3.x',
       choices: this.availableLBVersions,
     }];
 
