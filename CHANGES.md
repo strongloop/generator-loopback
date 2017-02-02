@@ -1,3 +1,11 @@
+2017-02-02, Version 2.3.0
+=========================
+
+ * Update default version to 3.x (Joe Sepi)
+
+ * Upgrade eslint-config, fix new violations (Miroslav Bajtoš)
+
+
 2017-01-23, Version 2.2.1
 =========================
 
