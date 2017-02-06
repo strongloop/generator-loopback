@@ -9,8 +9,7 @@ a [loopback](http://loopback.io/) application.
  * Run `yo loopback`
  * Run `node .` to start the scaffolded server
 
-See the official
-[documentation](http://docs.strongloop.com/display/LB)
+See the [documentation](https://loopback.io/doc/en/lb3/Application-generator.html)
 for more information.
 
 ## Mailing List
@@ -20,4 +19,4 @@ Discuss features and ask questions on
 
 ## License
 
-Dual MIT/StrongLoop
+[MIT](LICENSE).
