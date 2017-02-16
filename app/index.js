@@ -79,7 +79,7 @@ module.exports = yeoman.Base.extend({
       } else {
         this.copy(src, dest);
       }
-      process.nextTick(cb);
+      return cb && process.nextTick(cb);
     }.bind(this);
 
     // Restore the original method when done
