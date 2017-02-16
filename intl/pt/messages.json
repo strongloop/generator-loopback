@@ -33,7 +33,7 @@
   "7e5f3d368b2aeb6ebb98c2b84661f025": "Nome do script de inicialização a ser criado.",
   "db0dfbbe4381009aed0f7561c863f1f3": "Qual tipo de script de inicialização você deseja gerar?",
   "16c8ced7a9c4bd04374d3df9c81f7a20": "Selecione o conector para {0}:",
-  "1bbf613949db6bb84080fbe821651586": "Enter the data-source name:",
+  "1bbf613949db6bb84080fbe821651586": "Enter the datasource name:",
   "1e1478b64d03a05f66bed0f2aa09ad22": "Nome da origem de dados a ser criada.",
   "3d2068b48137123655eb25b57ee5adb9": "Inclua manualmente a configuração para o seu conector customizado {0} em {{server/datasources.json}}",
   "676158c25e031668140d9d771b3f6b97": "Insira o nome do conector sem o prefixo {{loopback-connector-}}:",

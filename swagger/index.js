@@ -174,7 +174,7 @@ module.exports = yeoman.Base.extend({
           },
           {
             name: 'dataSource',
-            message: g.f('Select the data-source to attach models to:'),
+            message: g.f('Select the datasource to attach models to:'),
             type: 'list',
             default: self.defaultDataSource,
             choices: self.dataSources,

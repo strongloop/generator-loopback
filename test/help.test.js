@@ -21,7 +21,8 @@ describe('loopback generator help', function() {
   });
 
   it('prints help message with yo by default', function() {
-    var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation'];
+    var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation',
+      'bluemix'];
     names.forEach(function(name) {
       var gen = givenGenerator(name, ['--help']);
       var helpText = gen.help();
@@ -32,7 +33,8 @@ describe('loopback generator help', function() {
 
   it('prints help message with slc if invoked from slc', function() {
     process.env.SLC_COMMAND = 'loopback --help';
-    var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation'];
+    var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation',
+      'bluemix'];
     try {
       names.forEach(function(name) {
         var gen = givenGenerator(name, ['--help']);
@@ -68,7 +70,7 @@ describe('loopback generator help', function() {
   describe('prints right help message for each generator', function() {
     var CMD_NAMES = ['acl', 'app', 'boot-script', 'datasource',
       'export-api-def', 'middleware', 'model', 'property', 'relation',
-      'remote-method', 'swagger'];
+      'remote-method', 'swagger', 'bluemix'];
 
     CMD_NAMES.forEach(function(name) {
       it('prints right help message for generator ' + name, function() {

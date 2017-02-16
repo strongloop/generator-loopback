@@ -37,6 +37,31 @@ describe('loopback:app generator', function() {
     'client/README.md',
   ];
 
+  var EXPECTED_BLUEMIX_FILES = [
+    '.bluemix/datasources-config.json',
+    '.bluemix/deploy.json',
+    '.bluemix/pipeline.yml',
+    '.bluemix/toolchain.yml',
+
+    'server/datasources.bluemix.js',
+
+    '.cfignore',
+    '.dockerignore',
+    'Dockerfile',
+    'manifest.yml',
+  ];
+
+  var DOCKER_FILES = [
+    '.dockerignore',
+    'Dockerfile',
+  ];
+
+  var TOOLCHAIN_FILES = [
+    '.bluemix/deploy.json',
+    '.bluemix/pipeline.yml',
+    '.bluemix/toolchain.yml',
+  ];
+
   it('creates expected files', function(done) {
     var gen = givenAppGenerator();
 
@@ -161,6 +186,88 @@ describe('loopback:app generator', function() {
     const mainProps = Object.assign({}, require('../'));
     expect(mainProps).to.have.property('workspaceVersion',
       require('loopback-workspace/package.json').version);
+  });
+
+  describe('Bluemix integration', function() {
+    it('should create all Bluemix files', function(done) {
+      var gen = givenAppGenerator();
+
+      helpers.mockPrompt(gen, {
+        appname: 'cool-app',
+        template: 'api-server',
+        appMemory: '1024M',
+        appInstances: 5,
+        appDomain: 'my.bluemix.net',
+        appHost: 'cool-app',
+        appDiskQuota: '1280M',
+        enableDocker: true,
+        enableToolchain: true,
+        enableAutoScaling: true,
+        enableAppMetrics: true,
+      });
+
+      gen.options['skip-install'] = true;
+      gen.options['bluemix'] = true;
+
+      gen.run(function() {
+        ygAssert.file(EXPECTED_PROJECT_FILES.concat(EXPECTED_BLUEMIX_FILES));
+        ygAssert.fileContent('./manifest.yml', fs.readFileSync(path.join(__dirname, 'fixtures', 'manifest.yml'), 'utf8'));
+        done();
+      });
+    });
+
+    it('should ommit Docker files', function(done) {
+      var gen = givenAppGenerator();
+
+      helpers.mockPrompt(gen, {
+        appname: 'test-app',
+        template: 'api-server',
+        appMemory: '512M',
+        appInstances: 1,
+        appDomain: 'mybluemix.net',
+        appHost: 'test-app',
+        appDiskQuota: '1024M',
+        enableDocker: false,
+        enableToolchain: true,
+        enableAutoScaling: true,
+        enableAppMetrics: true,
+      });
+
+      gen.options['skip-install'] = true;
+      gen.options['bluemix'] = true;
+
+      gen.run(function() {
+        ygAssert.noFile(DOCKER_FILES);
+        done();
+      });
+    });
+
+    it('should ommit Toolchain files', function(done) {
+      var gen = givenAppGenerator();
+
+      helpers.mockPrompt(gen, {
+        appname: 'test-app',
+        template: 'api-server',
+        appMemory: '512M',
+        appInstances: 1,
+        appDomain: 'mybluemix.net',
+        appHost: 'test-app',
+        appDiskQuota: '1024M',
+        enableDocker: false,
+        enableToolchain: false,
+        enableAutoScaling: true,
+        enableAppMetrics: true,
+      });
+
+      gen.options['skip-install'] = true;
+      gen.options['bluemix'] = true;
+
+      gen.run(function() {
+        ygAssert.file('.bluemix/datasources-config.json');
+        ygAssert.noFile(TOOLCHAIN_FILES);
+        done();
+      });
+    });
   });
 
   function givenAppGenerator(modelArgs) {

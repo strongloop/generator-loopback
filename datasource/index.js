@@ -17,6 +17,8 @@ var validateRequiredName = helpers.validateRequiredName;
 var objectValidator = helpers.objectValidator;
 var path = require('path');
 var fs = require('fs');
+var jsonfileUpdater = require('jsonfile-updater');
+var ds = require('loopback-bluemix').ds;
 
 module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
@@ -29,8 +31,12 @@ module.exports = yeoman.Base.extend({
   constructor: function() {
     yeoman.Base.apply(this, arguments);
 
+    this.option('bluemix', {
+      desc: g.f('Add a datasource from Bluemix'),
+    });
+
     this.argument('name', {
-      desc: g.f('Name of the data-source to create.'),
+      desc: g.f('Name of the datasource to create.'),
       required: false,
       type: String,
     });
@@ -38,6 +44,13 @@ module.exports = yeoman.Base.extend({
 
   help: function() {
     return helpText.customHelp(this, 'loopback_datasource_usage.txt');
+  },
+
+  setAppName: function() {
+    // https://github.com/strongloop/generator-loopback/issues/38
+    // yeoman-generator normalize the appname with ' '
+    this.appName =
+      path.basename(process.cwd()).replace(/[\/@\s\+%:\.]+?/g, '-');
   },
 
   loadConnectors: function() {
@@ -72,47 +85,74 @@ module.exports = yeoman.Base.extend({
   },
 
   askForName: function() {
-    var prompts = [
-      {
-        name: 'name',
-        message: g.f('Enter the data-source name:'),
-        default: this.name,
-        validate: validateRequiredName,
-      },
-    ];
-
-    return this.prompt(prompts).then(function(props) {
-      this.name = props.name;
-    }.bind(this));
+    if (!this.options.bluemix) {
+      var prompts = [
+        {
+          name: 'name',
+          message: g.f('Enter the datasource name:'),
+          default: this.name,
+          validate: validateRequiredName,
+        },
+      ];
+      return this.prompt(prompts).then(function(props) {
+        this.name = props.name;
+      }.bind(this));
+    }
   },
 
   askForParameters: function() {
-    var displayName = chalk.yellow(this.name);
-
-    var connectorChoices = this.listOfAvailableConnectors.concat(['other']);
-
-    var prompts = [
-      {
-        name: 'connector',
-        message: g.f('Select the connector for %s:', displayName),
-        type: 'list',
-        default: 'memory',
-        choices: connectorChoices,
-      },
-      {
-        name: 'customConnector',
-        message:
-          g.f('Enter the connector\'s module name'),
-        validate: validateRequiredName,
-        when: function(answers) {
-          return answers.connector === 'other';
+    if (!this.options.bluemix) {
+      var displayName = chalk.yellow(this.name);
+      var connectorChoices = this.listOfAvailableConnectors.concat(['other']);
+      var prompts = [
+        {
+          name: 'connector',
+          message: g.f('Select the connector for %s:', displayName),
+          type: 'list',
+          default: 'memory',
+          choices: connectorChoices,
         },
-      },
-    ];
+        {
+          name: 'customConnector',
+          message:
+            g.f('Enter the connector\'s module name'),
+          validate: validateRequiredName,
+          when: function(answers) {
+            return answers.connector === 'other';
+          },
+        },
+      ];
 
-    return this.prompt(prompts).then(function(props) {
-      this.connector = props.customConnector || props.connector;
-    }.bind(this));
+      return this.prompt(prompts).then(function(props) {
+        this.connector = props.customConnector || props.connector;
+      }.bind(this));
+    }
+  },
+
+  selectBluemixDatasource: function() {
+    if (this.options.bluemix) { ds.selectBluemixDatasource(this, g); }
+  },
+
+  promptServiceName: function() {
+    if (this.provisionNewService) { ds.promptServiceName(this, g); }
+  },
+
+  getServicePlans: function() {
+    if (this.provisionNewService) { ds.getServicePlans(this); }
+  },
+
+  promptServicePlan: function() {
+    if (this.provisionNewService) { ds.promptServicePlan(this, g); }
+  },
+
+  provisionService: function() {
+    if (this.provisionNewService) { ds.provisionService(this, g); }
+  },
+
+  bindServiceToApp: function() {
+    if (this.provisionNewService || this.options.bluemix) {
+      ds.bindServiceToApp(this);
+    }
   },
 
   askForConfig: function() {
@@ -132,6 +172,10 @@ module.exports = yeoman.Base.extend({
 
     var prompts = [];
     for (var key in settings) {
+      if (this.options.bluemix &&
+        ['database', 'db', 'modelIndex'].indexOf(key) < 0) {
+        continue;
+      }
       var prop = settings[key];
       var question = {
         name: key,
@@ -167,7 +211,6 @@ module.exports = yeoman.Base.extend({
     if (!prompts.length && !warnings.length)
       return;
 
-    this.log(g.f('Connector-specific configuration:'));
     if (!prompts.length) return reportWarnings();
 
     return this.prompt(prompts).then(function(props) {
@@ -222,7 +265,12 @@ module.exports = yeoman.Base.extend({
         this.npmInstall([npmModule], {'save': true});
         done();
       } else {
-        done();
+        var moduleVersion = npmModule.split('@');
+        var dependency = {};
+        dependency[moduleVersion[0]] = moduleVersion[1];
+        jsonfileUpdater(path.join(this.projectDir, 'package.json')).append(
+          'dependencies', dependency, done
+        );
       }
     }.bind(this));
   },
@@ -234,11 +282,18 @@ module.exports = yeoman.Base.extend({
       connector: this.connector,
       facetName: 'server', // hard-coded for now
     });
+    if (this.options.bluemix) {
+      ds.addDatasource(this, config);
+    } else {
+      wsModels.DataSourceDefinition.create(config, function(err) {
+        helpers.reportValidationError(err, this.log);
+        return done(err);
+      }.bind(this));
+    }
+  },
 
-    wsModels.DataSourceDefinition.create(config, function(err) {
-      helpers.reportValidationError(err, this.log);
-      return done(err);
-    }.bind(this));
+  updatePipeline: function() {
+    if (this.options.bluemix) { ds.updatePipeline(this); }
   },
 
   printAddConfigForCustomConnector: function() {
