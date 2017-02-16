@@ -231,6 +231,14 @@ module.exports = yeoman.Base.extend({
     this.directory('.', '.');
   },
 
+  createBluemixFiles: function() {
+    var options = {
+      bluemix: this.options.bluemix,
+      destDir: this.destinationRoot(),
+    };
+    Workspace.createBluemixFiles(options);
+  },
+
   generateYoRc: function() {
     this.log(g.f('Generating {{.yo-rc.json}}'));
     this.config.save();
