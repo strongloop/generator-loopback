@@ -263,6 +263,18 @@ module.exports = yeoman.Base.extend({
         default: 1024,
         validate: helpers.validateAppDiskQuota,
       },
+      {
+        name: 'enableAutoScaling',
+        message: g.f('Do you want to enable autoscaling?'),
+        default: 'no',
+        validate: helpers.validateYesNo,
+      },
+      {
+        name: 'enableAppMetrics',
+        message: g.f('Do you want to enable appmetrics?'),
+        default: 'no',
+        validate: helpers.validateYesNo,
+      },
     ];
 
     var self = this;
@@ -273,6 +285,8 @@ module.exports = yeoman.Base.extend({
       self.appDomain = answers.appDomain;
       self.appHost = answers.appHost;
       self.appDiskQuota = answers.appDiskQuota;
+      self.enableAutoScaling = answers.enableAutoScaling;
+      self.enableAppMetrics = answers.enableAppMetrics;
     }.bind(this));
   },
 
