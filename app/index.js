@@ -263,6 +263,29 @@ module.exports = yeoman.Base.extend({
         default: 1024,
         validate: helpers.validateAppDiskQuota,
       },
+    ];
+
+    var self = this;
+    return this.prompt(prompts).then(function(answers) {
+      self.appName = this.appname;
+      self.appMemory = answers.appMemory;
+      self.appInstances = answers.appInstances;
+      self.appDomain = answers.appDomain;
+      self.appHost = answers.appHost;
+      self.appDiskQuota = answers.appDiskQuota;
+    }.bind(this));
+  },
+
+  generateBluemixFiles: function() {
+    var options = {
+      bluemix: this.options.bluemix,
+      destDir: this.destinationRoot(),
+    };
+    Workspace.generateBluemixFiles(options);
+  },
+
+  promptDefaultServices: function() {
+    var prompts = [
       {
         name: 'enableAutoScaling',
         message: g.f('Do you want to enable autoscaling?'),
@@ -279,23 +302,9 @@ module.exports = yeoman.Base.extend({
 
     var self = this;
     return this.prompt(prompts).then(function(answers) {
-      self.appName = this.appname;
-      self.appMemory = answers.appMemory;
-      self.appInstances = answers.appInstances;
-      self.appDomain = answers.appDomain;
-      self.appHost = answers.appHost;
-      self.appDiskQuota = answers.appDiskQuota;
       self.enableAutoScaling = answers.enableAutoScaling;
       self.enableAppMetrics = answers.enableAppMetrics;
     }.bind(this));
-  },
-
-  generateBluemixFiles: function() {
-    var options = {
-      bluemix: this.options.bluemix,
-      destDir: this.destinationRoot(),
-    };
-    Workspace.generateBluemixFiles(options);
   },
 
   generateYoRc: function() {
@@ -306,6 +315,15 @@ module.exports = yeoman.Base.extend({
   installing: actions.installDeps,
 
   end: {
+    addDefaultServices: function() {
+      var options = {
+        bluemix: this.options.bluemix,
+        enableAutoScaling: this.enableAutoScaling,
+        enableAppMetrics: this.enableAppMetrics,
+        destDir: this.destinationRoot(),
+      };
+      Workspace.addDefaultServices(options);
+    },
     printNextSteps: function() {
       if (this.options.skipNextSteps) return;
 
