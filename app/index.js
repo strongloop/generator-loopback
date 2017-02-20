@@ -231,12 +231,57 @@ module.exports = yeoman.Base.extend({
     this.directory('.', '.');
   },
 
-  createBluemixFiles: function() {
+  promptBluemixSettings: function() {
+    var prompts = [
+      {
+        name: 'appMemory',
+        message: g.f('How much memory to allocate for the app?'),
+        default: 256,
+        validate: helpers.validateAppMemory,
+      },
+      {
+        name: 'appInstances',
+        message: g.f('How many instances of app to run?'),
+        default: 1,
+        validate: helpers.validateAppInstances,
+      },
+      {
+        name: 'appDomain',
+        message: g.f('What is the domain name of the app?'),
+        default: 'mybluemix.net',
+        validate: helpers.validateAppDomain,
+      },
+      {
+        name: 'appHost',
+        message: g.f('What is the subdomain of the app?'),
+        default: this.appname,
+        validate: helpers.validateAppHost,
+      },
+      {
+        name: 'appDiskQuota',
+        message: g.f('How much disk space to allocate for the app?'),
+        default: 1024,
+        validate: helpers.validateAppDiskQuota,
+      },
+    ];
+
+    var self = this;
+    return this.prompt(prompts).then(function(answers) {
+      self.appName = this.appname;
+      self.appMemory = answers.appMemory;
+      self.appInstances = answers.appInstances;
+      self.appDomain = answers.appDomain;
+      self.appHost = answers.appHost;
+      self.appDiskQuota = answers.appDiskQuota;
+    }.bind(this));
+  },
+
+  generateBluemixFiles: function() {
     var options = {
       bluemix: this.options.bluemix,
       destDir: this.destinationRoot(),
     };
-    Workspace.createBluemixFiles(options);
+    Workspace.generateBluemixFiles(options);
   },
 
   generateYoRc: function() {
