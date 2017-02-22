@@ -289,13 +289,13 @@ module.exports = yeoman.Base.extend({
       {
         name: 'enableAutoScaling',
         message: g.f('Do you want to enable autoscaling?'),
-        default: 'no',
+        default: 'yes',
         validate: helpers.validateYesNo,
       },
       {
         name: 'enableAppMetrics',
         message: g.f('Do you want to enable appmetrics?'),
-        default: 'no',
+        default: 'yes',
         validate: helpers.validateYesNo,
       },
     ];
