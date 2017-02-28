@@ -23,7 +23,7 @@ describe('loopback:swagger generator', function() {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-  it('creates and configures server only Pet model from swagger 2.0 spec',
+  it('creates and configures Pet model from swagger 2.0 spec',
     function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
@@ -48,13 +48,13 @@ describe('loopback:swagger generator', function() {
 
         var modelConfig = readModelConfigSync('server');
         expect(modelConfig).to.have.property('Pet');
-        expect(modelConfig.Pet).to.have.property('public', true);
+        expect(modelConfig.Pet).to.have.property('public', false);
         expect(modelConfig.Pet).to.have.property('dataSource', 'db');
         done();
       });
     });
 
-  it('creates and configures server only Pet model from swagger 2.0 spec yml',
+  it('creates and configures Pet model from swagger 2.0 spec yml',
     function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
@@ -79,13 +79,13 @@ describe('loopback:swagger generator', function() {
 
         var modelConfig = readModelConfigSync('server');
         expect(modelConfig).to.have.property('Pet');
-        expect(modelConfig.Pet).to.have.property('public', true);
+        expect(modelConfig.Pet).to.have.property('public', false);
         expect(modelConfig.Pet).to.have.property('dataSource', 'db');
         done();
       });
     });
 
-  it('creates and configures server only note model from swagger 2.0 spec yaml',
+  it('creates and configures note model from swagger 2.0 spec yaml',
     function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
@@ -115,7 +115,7 @@ describe('loopback:swagger generator', function() {
       });
     });
 
-  it('creates and configures server only Pet model from swagger 1.2 spec',
+  it('creates and configures Pet model from swagger 1.2 spec',
     function(done) {
       var modelGen = givenModelGenerator();
       helpers.mockPrompt(modelGen, {
@@ -138,7 +138,7 @@ describe('loopback:swagger generator', function() {
 
         var modelConfig = readModelConfigSync('server');
         expect(modelConfig).to.have.property('Pet');
-        expect(modelConfig.Pet).to.have.property('public', true);
+        expect(modelConfig.Pet).to.have.property('public', false);
         expect(modelConfig.Pet).to.have.property('dataSource', 'db');
         done();
       });
@@ -152,8 +152,9 @@ describe('loopback:swagger generator', function() {
     return gen;
   }
 
-  function readModelJsonSync(name) {
-    var petJson = path.resolve(SANDBOX, 'server/models/' + name + '.json');
+  function readModelJsonSync(name, facet) {
+    facet = facet || 'common';
+    var petJson = path.resolve(SANDBOX, facet + '/models/' + name + '.json');
     expect(fs.existsSync(petJson), 'file exists');
     return JSON.parse(fs.readFileSync(petJson));
   }

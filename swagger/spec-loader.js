@@ -144,15 +144,18 @@ function generate(specUrl, log, cb) {
         return cb(err);
       }
       async.each(apiSpecs, function(apiSpec, done) {
-        var code = generator.generateRemoteMethods(apiSpec,
-          {modelName: 'SwaggerApi'});
+        generator.getGenerator(apiSpec).mapTagsToModels(apiSpec);
         var models = generator.generateModels(apiSpec);
+        var code = generator.generateRemoteMethods(apiSpec,
+          {modelName: 'SwaggerModel'});
+
         var api = {
           code: code,
           models: models,
           spec: apiSpec,
         };
         apis.push(api);
+
         done(null);
       }, function(err) {
         cb(err, apis);

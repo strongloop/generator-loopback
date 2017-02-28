@@ -1,6 +1,6 @@
 {
   "name": "generator-loopback",
-  "version": "2.3.0",
+  "version": "3.0.0-alpha.1",
   "description": "Yeoman generator for LoopBack",
   "license": "MIT",
   "main": "app/index.js",
@@ -31,7 +31,7 @@
     "js-yaml": "^3.4.2",
     "lodash": "^4.16.1",
     "loopback-api-definition": "^3.0.0",
-    "loopback-swagger": "^3.0.0",
+    "loopback-swagger": "^4.0.0",
     "loopback-workspace": "^3.28.0",
     "mkdirp": "^0.5.1",
     "request": "^2.60.0",
