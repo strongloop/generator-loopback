@@ -17,6 +17,12 @@ var validateRequiredName = helpers.validateRequiredName;
 var objectValidator = helpers.objectValidator;
 var path = require('path');
 var fs = require('fs');
+var datasourcesConfigPath = path.join('loopback-workspace',
+                            'templates', 'bluemix', 'bluemix',
+                            'datasources-config.json');
+var datasourcesConfig = require(datasourcesConfigPath);
+var bluemixSupportedServices = datasourcesConfig.supportedServices;
+var jsonfileUpdater = require('jsonfile-updater');
 
 module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
@@ -89,7 +95,18 @@ module.exports = yeoman.Base.extend({
   askForParameters: function() {
     var displayName = chalk.yellow(this.name);
 
-    var connectorChoices = this.listOfAvailableConnectors.concat(['other']);
+    var _connectorChoices = this.listOfAvailableConnectors.concat(['other']);
+    var connectorChoices = [];
+    if (this.options.bluemix) {
+      var bluemixSupportedServiceNames = Object.keys(bluemixSupportedServices);
+      _connectorChoices.forEach(function(c) {
+        if (bluemixSupportedServiceNames.indexOf(c.value) >= 0) {
+          connectorChoices.push(c);
+        }
+      });
+    } else {
+      connectorChoices = _connectorChoices;
+    }
 
     var prompts = [
       {
@@ -132,6 +149,10 @@ module.exports = yeoman.Base.extend({
 
     var prompts = [];
     for (var key in settings) {
+      if (this.options.bluemix &&
+        ['database', 'db', 'modelIndex'].indexOf(key) < 0) {
+        continue;
+      }
       var prop = settings[key];
       var question = {
         name: key,
@@ -234,11 +255,32 @@ module.exports = yeoman.Base.extend({
       connector: this.connector,
       facetName: 'server', // hard-coded for now
     });
-
-    wsModels.DataSourceDefinition.create(config, function(err) {
-      helpers.reportValidationError(err, this.log);
-      return done(err);
-    }.bind(this));
+    if (this.options.bluemix) {
+      var datasourcesConfigFilePath = path.join(process.cwd(), '.bluemix',
+                                      'datasources-config.json');
+      var bluemixConnectorConfig = {
+        name: config.name,
+        connector: config.connector,
+      };
+      if ('database' in config) {
+        bluemixConnectorConfig.database = config.database;
+      } else if ('db' in config) {
+        bluemixConnectorConfig.database = config.db;
+      }
+      if ('modelIndex' in config) {
+        bluemixConnectorConfig.modelIndex = config.modelIndex;
+      }
+      var datasourceName = 'datasources.' + bluemixConnectorConfig.name;
+      jsonfileUpdater(datasourcesConfigFilePath)
+      .add(datasourceName, bluemixConnectorConfig, function(err) {
+        if (err) console.log(err);
+      });
+    } else {
+      wsModels.DataSourceDefinition.create(config, function(err) {
+        helpers.reportValidationError(err, this.log);
+        return done(err);
+      }.bind(this));
+    }
   },
 
   printAddConfigForCustomConnector: function() {

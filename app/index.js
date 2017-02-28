@@ -232,6 +232,7 @@ module.exports = yeoman.Base.extend({
   },
 
   promptBluemixSettings: function() {
+    this.log(g.f('\n  Bluemix configurations:\n'));
     var prompts = [
       {
         name: 'appMemory',
@@ -289,13 +290,13 @@ module.exports = yeoman.Base.extend({
       {
         name: 'enableAutoScaling',
         message: g.f('Do you want to enable autoscaling?'),
-        default: 'yes',
+        default: 'no',
         validate: helpers.validateYesNo,
       },
       {
         name: 'enableAppMetrics',
         message: g.f('Do you want to enable appmetrics?'),
-        default: 'yes',
+        default: 'no',
         validate: helpers.validateYesNo,
       },
     ];
