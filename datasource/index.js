@@ -188,7 +188,7 @@ module.exports = yeoman.Base.extend({
     if (!prompts.length && !warnings.length)
       return;
 
-    this.log(g.f('Connector-specific configuration:'));
+    this.log(g.f('\n Connector-specific configuration:\n'));
     if (!prompts.length) return reportWarnings();
 
     return this.prompt(prompts).then(function(props) {
@@ -243,7 +243,12 @@ module.exports = yeoman.Base.extend({
         this.npmInstall([npmModule], {'save': true});
         done();
       } else {
-        done();
+        var moduleVersion = npmModule.split('@');
+        var dependency = {};
+        dependency[moduleVersion[0]] = moduleVersion[1];
+        jsonfileUpdater(path.join(this.projectDir, 'package.json')).update(
+          'dependencies', dependency, done
+        );
       }
     }.bind(this));
   },
