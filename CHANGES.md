@@ -1,3 +1,15 @@
+2017-03-02, Version 3.0.0
+=========================
+
+ * Bump version to use loopback-swagger@4.0.0 (Raymond Feng)
+
+ * Replicate new issue_template from loopback (Siddhi Pai)
+
+ * Replicate issue_template from loopback repo (Siddhi Pai)
+
+ * Update README.md (Rand McKinney)
+
+
 2017-02-02, Version 2.3.0
 =========================
 
