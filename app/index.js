@@ -232,80 +232,86 @@ module.exports = yeoman.Base.extend({
   },
 
   promptBluemixSettings: function() {
-    this.log(g.f('\n  Bluemix configurations:\n'));
-    var prompts = [
-      {
-        name: 'appMemory',
-        message: g.f('How much memory to allocate for the app?'),
-        default: 256,
-        validate: helpers.validateAppMemory,
-      },
-      {
-        name: 'appInstances',
-        message: g.f('How many instances of app to run?'),
-        default: 1,
-        validate: helpers.validateAppInstances,
-      },
-      {
-        name: 'appDomain',
-        message: g.f('What is the domain name of the app?'),
-        default: 'mybluemix.net',
-        validate: helpers.validateAppDomain,
-      },
-      {
-        name: 'appHost',
-        message: g.f('What is the subdomain of the app?'),
-        default: this.appname,
-        validate: helpers.validateAppHost,
-      },
-      {
-        name: 'appDiskQuota',
-        message: g.f('How much disk space to allocate for the app?'),
-        default: 1024,
-        validate: helpers.validateAppDiskQuota,
-      },
-    ];
+    if (this.options.bluemix) {
+      this.log(g.f('\n  Bluemix configurations:\n'));
+      var prompts = [
+        {
+          name: 'appMemory',
+          message: g.f('How much memory to allocate for the app?'),
+          default: 256,
+          validate: helpers.validateAppMemory,
+        },
+        {
+          name: 'appInstances',
+          message: g.f('How many instances of app to run?'),
+          default: 1,
+          validate: helpers.validateAppInstances,
+        },
+        {
+          name: 'appDomain',
+          message: g.f('What is the domain name of the app?'),
+          default: 'mybluemix.net',
+          validate: helpers.validateAppDomain,
+        },
+        {
+          name: 'appHost',
+          message: g.f('What is the subdomain of the app?'),
+          default: this.appname,
+          validate: helpers.validateAppHost,
+        },
+        {
+          name: 'appDiskQuota',
+          message: g.f('How much disk space to allocate for the app?'),
+          default: 1024,
+          validate: helpers.validateAppDiskQuota,
+        },
+      ];
 
-    var self = this;
-    return this.prompt(prompts).then(function(answers) {
-      self.appName = this.appname;
-      self.appMemory = answers.appMemory;
-      self.appInstances = answers.appInstances;
-      self.appDomain = answers.appDomain;
-      self.appHost = answers.appHost;
-      self.appDiskQuota = answers.appDiskQuota;
-    }.bind(this));
+      var self = this;
+      return this.prompt(prompts).then(function(answers) {
+        self.appName = this.appname;
+        self.appMemory = answers.appMemory;
+        self.appInstances = answers.appInstances;
+        self.appDomain = answers.appDomain;
+        self.appHost = answers.appHost;
+        self.appDiskQuota = answers.appDiskQuota;
+      }.bind(this));
+    }
   },
 
   generateBluemixFiles: function() {
-    var options = {
-      bluemix: this.options.bluemix,
-      destDir: this.destinationRoot(),
-    };
-    Workspace.generateBluemixFiles(options);
+    if (this.options.bluemix) {
+      var options = {
+        bluemix: true,
+        destDir: this.destinationRoot(),
+      };
+      Workspace.generateBluemixFiles(options);
+    }
   },
 
   promptDefaultServices: function() {
-    var prompts = [
-      {
-        name: 'enableAutoScaling',
-        message: g.f('Do you want to enable autoscaling?'),
-        default: 'no',
-        validate: helpers.validateYesNo,
-      },
-      {
-        name: 'enableAppMetrics',
-        message: g.f('Do you want to enable appmetrics?'),
-        default: 'no',
-        validate: helpers.validateYesNo,
-      },
-    ];
+    if (this.options.bluemix) {
+      var prompts = [
+        {
+          name: 'enableAutoScaling',
+          message: g.f('Do you want to enable autoscaling?'),
+          default: 'no',
+          validate: helpers.validateYesNo,
+        },
+        {
+          name: 'enableAppMetrics',
+          message: g.f('Do you want to enable appmetrics?'),
+          default: 'no',
+          validate: helpers.validateYesNo,
+        },
+      ];
 
-    var self = this;
-    return this.prompt(prompts).then(function(answers) {
-      self.enableAutoScaling = answers.enableAutoScaling;
-      self.enableAppMetrics = answers.enableAppMetrics;
-    }.bind(this));
+      var self = this;
+      return this.prompt(prompts).then(function(answers) {
+        self.enableAutoScaling = answers.enableAutoScaling;
+        self.enableAppMetrics = answers.enableAppMetrics;
+      }.bind(this));
+    }
   },
 
   generateYoRc: function() {
@@ -317,13 +323,15 @@ module.exports = yeoman.Base.extend({
 
   end: {
     addDefaultServices: function() {
-      var options = {
-        bluemix: this.options.bluemix,
-        enableAutoScaling: this.enableAutoScaling,
-        enableAppMetrics: this.enableAppMetrics,
-        destDir: this.destinationRoot(),
-      };
-      Workspace.addDefaultServices(options);
+      if (this.options.bluemix) {
+        var options = {
+          bluemix: true,
+          enableAutoScaling: this.enableAutoScaling,
+          enableAppMetrics: this.enableAppMetrics,
+          destDir: this.destinationRoot(),
+        };
+        Workspace.addDefaultServices(options);
+      }
     },
     printNextSteps: function() {
       if (this.options.skipNextSteps) return;
