@@ -8,7 +8,6 @@
 var path = require('path');
 var g = require('../lib/globalize');
 var yeoman = require('yeoman-generator');
-var yosay = require('yosay');
 var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
@@ -46,10 +45,6 @@ module.exports = yeoman.Base.extend({
         'by default)'),
       type: Boolean,
     });
-  },
-
-  greet: function() {
-    this.log(yosay(g.f('Let\'s create a {{LoopBack}} application!')));
   },
 
   help: function() {
