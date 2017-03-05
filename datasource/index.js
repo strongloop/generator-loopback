@@ -246,7 +246,7 @@ module.exports = yeoman.Base.extend({
         var moduleVersion = npmModule.split('@');
         var dependency = {};
         dependency[moduleVersion[0]] = moduleVersion[1];
-        jsonfileUpdater(path.join(this.projectDir, 'package.json')).update(
+        jsonfileUpdater(path.join(this.projectDir, 'package.json')).append(
           'dependencies', dependency, done
         );
       }
