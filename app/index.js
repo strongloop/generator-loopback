@@ -395,6 +395,8 @@ module.exports = yeoman.Base.extend({
           destDir: this.destinationRoot(),
         };
         Workspace.addDefaultServices(options);
+      } else {
+        Workspace.removeDefaultServices(this.destinationRoot());
       }
     },
     printNextSteps: function() {
