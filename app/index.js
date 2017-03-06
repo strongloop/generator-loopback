@@ -80,6 +80,16 @@ module.exports = yeoman.Base.extend({
     return msgs.join('') + '\n';
   },
 
+  validateLoopBackDir: function() {
+    if (this.options.initBluemix) {
+      if (!fs.existsSync(path.join(process.cwd(), 'package.json')) ||
+          !fs.existsSync(path.join(process.cwd(), 'server', 'server.js'))) {
+        console.log(chalk.red(' Invalid LoopBack directory\n'));
+        process.exit();
+      }
+    }
+  },
+
   injectWorkspaceCopyRecursive: function() {
     if (!this.options.initBluemix) {
       var originalMethod = Workspace.copyRecursive;
