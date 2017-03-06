@@ -286,6 +286,12 @@ module.exports = yeoman.Base.extend({
       if (!this.options.initBluemix) {
         this.log(g.f('\n  Bluemix configurations:\n'));
       }
+
+      // https://github.com/strongloop/generator-loopback/issues/38
+      // yeoman-generator normalize the appname with ' '
+      this.appname =
+        path.basename(process.cwd()).replace(/[\/@\s\+%:\.]+?/g, '-');
+
       var prompts = [
         {
           name: 'appMemory',
