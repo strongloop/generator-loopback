@@ -5,6 +5,7 @@
 
 'use strict';
 
+var path = require('path');
 var g = require('../lib/globalize');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
@@ -15,6 +16,9 @@ var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
+var datasourcesConfig = require(path.resolve(process.cwd(),
+                        '.bluemix', 'datasources-config.json'));
+var bluemixDataSourcesList = datasourcesConfig.datasources;
 
 module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
@@ -86,14 +90,32 @@ module.exports = yeoman.Base.extend({
       return;
     }
 
-    var prompts = [{
+    var promptObject = {
       name: 'dataSource',
       message: g.f('Select the data-source to attach %s' +
         ' to:', this.displayName),
       type: 'list',
-      default: this.defaultDataSource,
-      choices: this.dataSources,
-    }];
+    };
+
+    if (this.options.bluemix) {
+      var bluemixDataSources = [];
+      Object.keys(bluemixDataSourcesList).forEach(function(datasourceName) {
+        var datasource = bluemixDataSourcesList[datasourceName];
+        var bluemixDataSource = {
+          name: datasourceName + '(' + datasource.connector + ')',
+          value: datasourceName,
+          _connector: datasource.connector,
+        };
+        bluemixDataSources.push(bluemixDataSource);
+      });
+      promptObject.default = null;
+      promptObject.choices = bluemixDataSources;
+    } else {
+      promptObject.default = this.defaultDataSource;
+      promptObject.choices = this.dataSources;
+    }
+
+    var prompts = [promptObject];
 
     return this.prompt(prompts).then(function(props) {
       if (this.hasDatasources) {
