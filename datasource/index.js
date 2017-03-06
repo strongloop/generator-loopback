@@ -78,15 +78,18 @@ module.exports = yeoman.Base.extend({
   },
 
   askForName: function() {
-    var prompts = [
-      {
-        name: 'name',
-        message: g.f('Enter the data-source name:'),
-        default: this.name,
-        validate: validateRequiredName,
-      },
-    ];
-
+    var prompts = [];
+    var promptObject = {
+      name: 'name',
+      default: this.name,
+      validate: validateRequiredName,
+    };
+    if (this.options.bluemix) {
+      promptObject.message = g.f('Name of the provisioned data-source service:');
+    } else {
+      promptObject.message = g.f('Enter the data-source name:');
+    }
+    prompts.push(promptObject);
     return this.prompt(prompts).then(function(props) {
       this.name = props.name;
     }.bind(this));

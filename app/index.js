@@ -296,7 +296,7 @@ module.exports = yeoman.Base.extend({
         {
           name: 'appMemory',
           message: g.f('How much memory to allocate for the app?'),
-          default: 512,
+          default: 256,
           validate: helpers.validateAppMemory,
         },
         {
@@ -314,7 +314,7 @@ module.exports = yeoman.Base.extend({
         {
           name: 'appHost',
           message: g.f('What is the subdomain of the app?'),
-          default: this.appname,
+          default: this.appName,
           validate: helpers.validateAppHost,
         },
         {
