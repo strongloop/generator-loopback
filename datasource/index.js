@@ -278,13 +278,34 @@ module.exports = yeoman.Base.extend({
       var datasourceName = 'datasources.' + bluemixConnectorConfig.name;
       jsonfileUpdater(datasourcesConfigFilePath)
       .add(datasourceName, bluemixConnectorConfig, function(err) {
-        if (err) console.log(err);
+        return done(err);
       });
     } else {
       wsModels.DataSourceDefinition.create(config, function(err) {
         helpers.reportValidationError(err, this.log);
         return done(err);
       }.bind(this));
+    }
+  },
+
+  updatePipeline: function() {
+    var pipeLineFilePath = path.join(process.cwd(), '.bluemix',
+                                      'pipeline.yml');
+    var content = fs.readFileSync(pipeLineFilePath, 'utf8');
+    var lines = content.split('#!/bin/bash')[1].split('\n').map(function(line) {
+      return line.trim();
+    });
+
+    // https://github.com/strongloop/generator-loopback/issues/38
+    // yeoman-generator normalize the appname with ' '
+    this.appName =
+      path.basename(process.cwd()).replace(/[\/@\s\+%:\.]+?/g, '-');
+
+    var bindServiceCommand = 'cf bind-service ' +
+                              this.appName + ' ' + this.name;
+    if (lines.indexOf(bindServiceCommand) < 0) {
+      var appendStr = '      ' + bindServiceCommand + '\n';
+      fs.appendFileSync(pipeLineFilePath, appendStr);
     }
   },
 

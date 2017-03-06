@@ -289,7 +289,7 @@ module.exports = yeoman.Base.extend({
 
       // https://github.com/strongloop/generator-loopback/issues/38
       // yeoman-generator normalize the appname with ' '
-      this.appname =
+      this.appName =
         path.basename(process.cwd()).replace(/[\/@\s\+%:\.]+?/g, '-');
 
       var prompts = [
@@ -327,7 +327,6 @@ module.exports = yeoman.Base.extend({
 
       var self = this;
       return this.prompt(prompts).then(function(answers) {
-        self.appName = this.appname;
         self.appMemory = answers.appMemory;
         self.appInstances = answers.appInstances;
         self.appDomain = answers.appDomain;
