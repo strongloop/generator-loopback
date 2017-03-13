@@ -337,9 +337,44 @@ module.exports = yeoman.Base.extend({
             return done();
           }
           self.log(chalk.green(g.f('Generating %s', modelDef.scriptPath)));
-          fs.writeFile(modelDef.scriptPath, code, done);
+          if (yargs.wireImplementation) {
+            fs.writeFile(modelDef.scriptPath, replaceImplCode(code, m), done);
+          } else {
+            fs.writeFile(modelDef.scriptPath, code, done);
+          }
         }, done);
       }, cb);
+    }
+
+    function replaceImplCode (code, m) {
+      const implClassName = m + 'Impl';
+      const implFileName = m.replace(/(?:^|\.?)([A-Z])/g, function (x,y){return "-" + y.toLowerCase()}).replace(/^-/, "") + '-impl';
+
+      var implRequire = 'const ' + implClassName + ' = require(\'../services/' + implFileName + '\'); \n';
+      var implCall = '= ' + implClassName + '().';
+
+      var result = implRequire;
+      var lines = code.split('\n');
+      var lookingForEnd = false;
+      lines.forEach(function (line) {
+        if (lookingForEnd) {
+          if (line.search(/^(\})/gm) > -1) {
+            lookingForEnd = false;
+          }
+        } else {
+          if (line.search(/module.exports/) < 0  && line.search(/.*\s*\=\s*function/) > -1) {
+            lookingForEnd = true;
+            var functionDefinition = line.split('=')[0];
+            var functionName = functionDefinition.split('.')[1];
+            functionDefinition += implCall + functionName + ';';
+            result += functionDefinition;
+          } else {
+            result += line + '\n';
+          }
+        }
+      });
+
+      return result;
     }
 
     function generateApis(self, cb) {
