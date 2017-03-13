@@ -13,7 +13,7 @@ var loadSwaggerSpecs = require('./spec-loader');
 
 var workspace = require('loopback-workspace');
 var wsModels = workspace.models;
-
+var yargs = require('yargs').argv;
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
@@ -61,9 +61,15 @@ module.exports = yeoman.Base.extend({
         validate: validateUrlOrFile,
       },
     ];
-    return this.prompt(prompts).then(function(answers) {
-      this.url = answers.url.trim();
-    }.bind(this));
+
+    if(yargs.url) {
+      this.url = yargs.url;
+      return;
+    } else {
+      return this.prompt(prompts).then(function(answers) {
+        this.url = answers.url.trim();
+      }.bind(this));
+    }
   },
 
   swagger: function() {
@@ -111,7 +117,7 @@ module.exports = yeoman.Base.extend({
           name: model.name,
           plural: model.plural,
           base: model.base || 'PersistedModel',
-          facetName: 'common', // hard-coded for now
+          facetName: 'server', // hard-coded for now
           properties: model.properties,
         });
         var tags = api.spec.tags || [];
@@ -180,6 +186,19 @@ module.exports = yeoman.Base.extend({
             choices: self.dataSources,
           },
         ];
+
+        if (yargs.all) {
+          return self.prompt([]).then(function() {
+            self.dataSource = null;
+            choices.forEach(function (c) {
+              self.selectedModels[c.modelName] =
+                (c.flag === CONFLICT_DETECTED ?
+                  SELECTED_FOR_UPDATE : SELECTED_FOR_CREATE);
+            });
+            done();
+          });
+        }
+
         return self.prompt(prompts).then(function(answers) {
           self.dataSource = answers.dataSource;
           answers.modelSelections.forEach(function(m) {
