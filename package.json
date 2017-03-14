@@ -31,12 +31,8 @@
     "js-yaml": "^3.4.2",
     "lodash": "^4.16.1",
     "loopback-api-definition": "^3.0.0",
-<<<<<<< e4424da52dee8ffc1960197221a2b7611a038f31
     "loopback-swagger": "^4.0.0",
-=======
-    "loopback-swagger": "^3.0.0",
-    "loopback-soap": "^3.0.0",
->>>>>>> create remote methods. models
+    "loopback-soap": "^1.0.0",
     "loopback-workspace": "^3.28.0",
     "mkdirp": "^0.5.1",
     "request": "^2.60.0",
