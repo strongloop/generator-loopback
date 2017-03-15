@@ -271,6 +271,10 @@ module.exports = yeoman.Base.extend({
         }
       }
 
+      if (modelDef.name === 'SwaggerModel') {
+        modelDef.http = { path: '/'};
+      }
+
       if (self.selectedModels[modelDef.name] === SELECTED_FOR_UPDATE) {
         self.log(chalk.green(g.f('Updating model definition for %s...',
           modelDef.name)));

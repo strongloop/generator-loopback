@@ -1,5 +1,5 @@
 {
-  "name": "generator-loopback",
+  "name": "chtr-generator-loopback",
   "version": "3.0.0",
   "description": "Yeoman generator for LoopBack",
   "license": "MIT",
