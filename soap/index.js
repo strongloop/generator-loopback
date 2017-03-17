@@ -137,7 +137,6 @@ module.exports = yeoman.Base.extend({
     self.apis = generator.generateAPICode(this.operations);
 
     // eslint-disable-next-line one-var
-    var api, i, n;
     for (i = 0, n = self.apis.length; i < n; i++) {
       api = self.apis[i];
       // TODO [rashmi] use binding name for now

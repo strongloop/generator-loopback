@@ -41,13 +41,13 @@ describe('loopback:soap', function() {
         expect(content.properties.symbol.type).to.eql('string');
         expect(content.properties.globals.type).to.eql('Globals');
 
-        var content = readModelJsonSync('globals');
+        content = readModelJsonSync('globals');
         expect(content).to.not.have.property('public');
         expect(content).to.have.property('properties');
         expect(content.properties.Promise.type).to.eql('boolean');
         expect(content.properties.Promise.type).to.eql('boolean');
 
-        var content = readModelJsonSync('get-quote-response');
+        content = readModelJsonSync('get-quote-response');
         expect(content).to.not.have.property('public');
         expect(content).to.have.property('properties');
         expect(content.properties.GetQuoteResult.type).to.eql('string');
@@ -76,15 +76,15 @@ describe('loopback:soap', function() {
         expect(content).to.have.property('properties');
         expect(content.properties.ElementName.type).to.eql('string');
 
-        var content = readModelJsonSync('get-atomic-weight-response');
+        content = readModelJsonSync('get-atomic-weight-response');
         expect(content.properties.GetAtomicWeightResult.type).to.eql('string');
 
-        var content = readModelJsonSync('get-atomic-number');
+        content = readModelJsonSync('get-atomic-number');
         expect(content).to.not.have.property('public');
         expect(content).to.have.property('properties');
         expect(content.properties.ElementName.type).to.eql('string');
 
-        var content = readModelJsonSync('get-atomic-number-response');
+        content = readModelJsonSync('get-atomic-number-response');
         expect(content.properties.GetAtomicNumberResult.type).to.eql('string');
 
         var modelConfig = readModelConfigSync('server');
