@@ -1,0 +1,17 @@
+Usage:
+  slc loopback:soap [options] [<url>]
+
+Options:
+  -h,   --help          # Print the generator's options and usage
+        --skip-cache    # Do not remember prompt answers             Default: false
+        --skip-install  # Do not automatically install dependencies  Default: false
+
+Arguments:
+  url  # URL or local file path of the SOAP Web Service WSDL.  Type: String  Required: false
+
+Description:
+  Generate models and remote methods for SOAP WSDL.
+
+Example:
+
+  slc loopback:soap
