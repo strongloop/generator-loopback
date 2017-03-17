@@ -132,8 +132,7 @@ module.exports = yeoman.Base.extend({
     this.modelConfigs = [];
     this.modelNames = [];
 
-
-    var api, i, n;
+    var api, i, n, m;
     self.operations = this.operations;
     self.apis = generator.generateAPICode(this.operations);
 
@@ -151,7 +150,7 @@ module.exports = yeoman.Base.extend({
           path: basePath,
         },
         base: 'Model',
-        forceId: 'false', //in case of soap, we don't need id generated in the model
+        forceId: 'false', // in case of soap, we don't need id generated in the model
         idInjection: 'false',
         facetName: 'server', // hard-coded for now
         properties: {},
@@ -166,7 +165,6 @@ module.exports = yeoman.Base.extend({
       });
     }
 
-    var m;
     for (i = 0, n = self.apis.length; i < n; i++) {
       var models = self.apis[i].models;
       for (m in models) {
@@ -180,7 +178,7 @@ module.exports = yeoman.Base.extend({
           name: model.name,
           plural: model.plural,
           base: model.base || 'Model',
-          forceId: 'false', //in case of soap, we don't need id generated in the model
+          forceId: 'false', // in case of soap, we don't need id generated in the model
           idInjection: 'false',
           facetName: 'server', // hard-coded for now
           properties: model.properties,
@@ -203,20 +201,20 @@ module.exports = yeoman.Base.extend({
         }
         var propertyNames = Object.keys(modelDef.properties);
         if (propertyNames.length > 0) {
-          result.properties.destroyAll(function (err) {
+          result.properties.destroyAll(function(err) {
             if (err) {
               return cb(err);
             }
             // 2. Create model properties one by one
             async.eachSeries(propertyNames,
-              function (m, done) {
+              function(m, done) {
                 modelDef.properties[m].name = m;
                 modelDef.properties[m].facetName = result.facetName;
                 result.properties.create(modelDef.properties[m],
-                  function (err) {
+                  function(err) {
                     return done(err);
                   });
-              }, function (err) {
+              }, function(err) {
                 if (!err) {
                   self.log(chalk.green(g.f('Model definition created/updated ' +
                     'for %s.', modelDef.name)));
@@ -240,12 +238,12 @@ module.exports = yeoman.Base.extend({
       }
       // TODO [rashmi] need to check if the modelconfig exists and create or update accordingly
       wsModels.ModelConfig.create(config, function(err) {
-          if (!err) {
-            self.log(chalk.green(g.f('Model config created for %s.',
+        if (!err) {
+          self.log(chalk.green(g.f('Model config created for %s.',
               config.name)));
-          }
-          return cb(err);
-        });
+        }
+        return cb(err);
+      });
     }
 
     function generateRemoteMethods(self, cb) {
@@ -293,7 +291,6 @@ module.exports = yeoman.Base.extend({
 
   saveProject: actions.saveProject,
 });
-
 
 function validateUrlOrFile(wsdlUrlStr) {
   if (!wsdlUrlStr) {

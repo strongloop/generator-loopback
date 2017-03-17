@@ -30,7 +30,7 @@ describe('loopback:soap', function() {
         url: path.join(__dirname, 'soap/stockquote.wsdl'),
         service: 'StockQuote',
         binding: 'StockQuoteSoap',
-        operations: ['GetQuote']
+        operations: ['GetQuote'],
       });
 
       // this runs command  loopback:soap command with mock up /test/soap/stockquote.wsdl as input from command prompt
@@ -66,7 +66,7 @@ describe('loopback:soap', function() {
         url: 'http://www.webservicex.net/periodictable.asmx?WSDL',
         service: 'periodictable',
         binding: 'periodictableSoap',
-        operations:[ 'GetAtomicNumber', 'GetAtomicWeight']
+        operations: ['GetAtomicNumber', 'GetAtomicWeight'],
       });
 
       // this runs command  loopback:soap command with mock up /test/soap/stockquote.wsdl as input from command prompt

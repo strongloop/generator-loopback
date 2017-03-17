@@ -25,7 +25,7 @@ function loadWsdl(wsdlUrl, log, cb) {
 }
 
 // get services defined in the wsdl
-exports.getServices = function getServices (wsdlUrl, log, cb) {
+exports.getServices = function getServices(wsdlUrl, log, cb) {
   loadWsdl(wsdlUrl, log, function(err, wsdl) {
     if (err) {
       return cb(err);
@@ -35,14 +35,14 @@ exports.getServices = function getServices (wsdlUrl, log, cb) {
     this.services = wsdl.services;
     return cb(null,  this.services);
   }.bind(this));
-}
+};
 
 // get bindings for the service
-exports.getBindings = function getBindings (serviceName) {
+exports.getBindings = function getBindings(serviceName) {
   this.selectedService =  this.services[serviceName];
   var ports = this.selectedService.ports;
   var bindingNames = [];
-  for(var name in ports) {
+  for (var name in ports) {
     var binding = ports[name].binding;
     bindingNames.push(binding.$name);
   }
@@ -54,7 +54,7 @@ exports.getBindings = function getBindings (serviceName) {
 exports.getOperations = function getOperations(bindingName) {
   this.selectedBinding =  this.wsdl.definitions.bindings[bindingName];
   var opNames = [];
-  for(var opName in this.selectedBinding.operations) {
+  for (var opName in this.selectedBinding.operations) {
     opNames.push(opName);
   }
   return opNames;
@@ -76,22 +76,19 @@ function getSelectedOperations(selectedBinding, operationNames) {
 exports.generateAPICode  = function generateAPICode(operationNames) {
   var apis = [];
   var apiData = {
-    "wsdl": this.wsdl,
-    "wsdlUrl": this.wsdlUrl,
-    "service": this.selectedService.$name,
-    "binding": this.selectedBinding.$name,
-    "operations": getSelectedOperations(this.selectedBinding, operationNames)
-  }
+    'wsdl': this.wsdl,
+    'wsdlUrl': this.wsdlUrl,
+    'service': this.selectedService.$name,
+    'binding': this.selectedBinding.$name,
+    'operations': getSelectedOperations(this.selectedBinding, operationNames),
+  };
   var code = soapGenerator.generateRemoteMethods(apiData);
   var models = soapGenerator.generateModels(apiData.wsdl, apiData.operations);
   var api = {
     code: code,
-    models: models
+    models: models,
   };
   apis.push(api);
   return apis;
 }.bind(this);
-
-
-
 
