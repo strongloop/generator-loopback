@@ -33,13 +33,17 @@ exports.getServices = function getServices(wsdlUrl, log, cb) {
     this.wsdl = wsdl;
     this.wsdlUrl = wsdlUrl;
     this.services = wsdl.services;
+    console.log("In wsdl-loader.loadWsdl %j", this.services);
     return cb(null,  this.services);
   }.bind(this));
 };
 
 // get bindings for the service
 exports.getBindings = function getBindings(serviceName) {
+  console.log("In wsdl-loader.getBindings %j", serviceName);
+  console.log("In wsdl-loader.loadWsdl %j", this.services);
   this.selectedService =  this.services[serviceName];
+  console.log("In wsdl-loader.getBindings this.selectedService %j", this.selectedService);
   var ports = this.selectedService.ports;
   var bindingNames = [];
   for (var name in ports) {

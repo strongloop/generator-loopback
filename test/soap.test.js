@@ -62,15 +62,17 @@ describe('loopback:soap', function() {
   it('periodic table wsdl',
     function(done) {
       var modelGen = givenModelGenerator();
+      console.log('periodic table wsdl  modelGen');
       helpers.mockPrompt(modelGen, {
         url: 'http://www.webservicex.net/periodictable.asmx?WSDL',
         service: 'periodictable',
         binding: 'periodictableSoap',
         operations: ['GetAtomicNumber', 'GetAtomicWeight'],
       });
-
+      console.log('periodic table wsdl after mockprompt');
       // this runs command  loopback:soap command with mock up /test/soap/stockquote.wsdl as input from command prompt
       modelGen.run(function() {
+        console.log('periodic table wsdl before checking results');
         var content = readModelJsonSync('get-atomic-weight');
         expect(content).to.not.have.property('public');
         expect(content).to.have.property('properties');
