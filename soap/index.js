@@ -73,7 +73,7 @@ module.exports = yeoman.Base.extend({
           serviceNames.push(services[s].$name);
         }
         self.serviceNames = serviceNames;
-        console.log("index.getServices %j", self.serviceNames);
+        console.log('index.getServices %j', self.serviceNames);
         done();
       }
     });
@@ -91,9 +91,9 @@ module.exports = yeoman.Base.extend({
 
     return this.prompt(prompts).then(function(answers) {
       this.servieName = answers.service;
-      console.log("index.getServices. before getBindings() %s", this.servieName);
+      console.log('askForService before getBindings() %s', this.servieName);
       this.bindingNames = generator.getBindings(this.servieName);
-      console.log("index.getServices. after getBindings() %j", this.bindingNames);
+      console.log('askForService after getBindings() %j', this.bindingNames);
     }.bind(this));
   },
 
