@@ -34,9 +34,9 @@ exports.getServices = function getServices(wsdlUrl, log, cb) {
       return cb(err);
     }
     this.wsdl = wsdl;
-    console.log('getServices this.wsdl %j', wsdl);
+    console.log('getServices this.wsdl %j', this.wsdl);
     this.wsdlUrl = wsdlUrl;
-    this.services = wsdl.services;
+    this.services = this.wsdl.services;
     console.log('getServices this.services  %j', this.services);
     return cb(null,  this.services);
   }.bind(this));
