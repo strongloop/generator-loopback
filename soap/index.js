@@ -68,6 +68,7 @@ module.exports = yeoman.Base.extend({
         done(err);
       } else {
         self.services = services;
+        console.log('index self.services %j', self.services);
         var serviceNames = [];
         for (var s in services) {
           serviceNames.push(services[s].$name);

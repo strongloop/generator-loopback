@@ -20,6 +20,7 @@ function loadWsdl(wsdlUrl, log, cb) {
     if (err) {
       return cb(err);
     }
+    console.log('loadWsdl loadWsdl %j', wsdl);
     cb(null, wsdl);
   });
 }
@@ -27,21 +28,24 @@ function loadWsdl(wsdlUrl, log, cb) {
 // get services defined in the wsdl
 exports.getServices = function getServices(wsdlUrl, log, cb) {
   loadWsdl(wsdlUrl, log, function(err, wsdl) {
+    console.log('getServices loadWsdl %j', wsdl);
+    console.log('getServices err %j', err);
     if (err) {
       return cb(err);
     }
     this.wsdl = wsdl;
+    console.log('getServices this.wsdl %j', wsdl);
     this.wsdlUrl = wsdlUrl;
     this.services = wsdl.services;
-    console.log('In wsdl-loader.loadWsdl %j', this.services);
+    console.log('getServices this.services  %j', this.services);
     return cb(null,  this.services);
   }.bind(this));
 };
 
 // get bindings for the service
 exports.getBindings = function getBindings(serviceName) {
-  console.log('In wsdl-loader.getBindings %j', serviceName);
-  console.log('In wsdl-loader.loadWsdl %j', this.services);
+  console.log('getBindings serviceName %j', serviceName);
+  console.log('getBindings this.services %j', this.services);
   this.selectedService =  this.services[serviceName];
   console.log('getBindings this.selectedService %j,', this.selectedService);
   var ports = this.selectedService.ports;
