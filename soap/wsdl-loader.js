@@ -14,7 +14,8 @@ var soap = require('strong-soap').soap;
 var WSDL = soap.WSDL;
 var path = require('path');
 
-var selectedWsdl, selectedWsdlUrl, wsdlServices, selectedService, selectedBinding;
+var selectedWsdl, selectedWsdlUrl, wsdlServices,
+  selectedService, selectedBinding;
 
 // loads remote WSDL or local WSDL using strong-soap module APIs.
 function loadWsdl(wsdlUrl, log, cb) {
