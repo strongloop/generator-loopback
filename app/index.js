@@ -31,6 +31,11 @@ module.exports = yeoman.Base.extend({
       type: String,
     });
 
+    this.option('skip-greet', {
+      desc: g.f('Do not show greet message.'),
+      type: Boolean,
+    });
+
     this.option('skip-install', {
       desc: g.f('Do not install npm dependencies.'),
       type: Boolean,
@@ -49,6 +54,7 @@ module.exports = yeoman.Base.extend({
   },
 
   greet: function() {
+    if (this.options.skipGreet) return;
     this.log(yosay(g.f('Let\'s create a {{LoopBack}} application!')));
   },
 
@@ -116,6 +122,8 @@ module.exports = yeoman.Base.extend({
   },
 
   askForProjectName: function() {
+    if (this.options.appname) return;
+
     if (this.options.nested && this.name) {
       this.appname = this.name;
       return;
@@ -161,6 +169,8 @@ module.exports = yeoman.Base.extend({
   },
 
   askForLBVersion: function() {
+    if (this.options.loopbackVersion) return;
+
     var prompts = [{
       name: 'loopbackVersion',
       message: g.f('Which version of {{LoopBack}} would you like to use?'),
@@ -185,6 +195,8 @@ module.exports = yeoman.Base.extend({
   },
 
   askForTemplate: function() {
+    if (this.options.wsTemplate) return;
+
     var prompts = [{
       name: 'wsTemplate',
       message: g.f('What kind of application do you have in mind?'),

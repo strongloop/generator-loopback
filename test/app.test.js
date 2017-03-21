@@ -141,9 +141,42 @@ describe('loopback:app generator', function() {
       });
     });
 
-  it('scaffolds 2.x app when option.loopbackVersion is 2.x',
+  it('scaffolds 3.x app when the supplied option loopbackVersion is 3.x',
     function(done) {
       var gen = givenAppGenerator();
+      gen.options.loopbackVersion = '3.x';
+
+      helpers.mockPrompt(gen, {
+        name: 'test-app',
+        template: 'api-server',
+      });
+      gen.run(function() {
+        var pkg = common.readJsonSync('package.json', {});
+        expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(false);
+        done();
+      });
+    });
+
+  it('scaffolds 2.x app when options.loopbackVersion is 2.x',
+    function(done) {
+      var gen = givenAppGenerator();
+      gen.options.loopbackVersion = '2.x';
+
+      helpers.mockPrompt(gen, {
+        name: 'test-app',
+        template: 'api-server',
+        loopbackVersion: '2.x',
+      });
+      gen.run(function() {
+        var pkg = common.readJsonSync('package.json', {});
+        expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(true);
+        done();
+      });
+    });
+
+  it('scaffolds 2.x app when the supplied option loopbackVersion is 2.x',
+    function(done) {
+      var gen = givenAppGenerator(null,{"loopbackVersion": "3.x"});
 
       helpers.mockPrompt(gen, {
         name: 'test-app',
