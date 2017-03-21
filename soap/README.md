@@ -23,5 +23,5 @@ $ npm install -g loopback-cli
  3. Run `lb soap` When prompted, enter WSDL URL or local wsdl file path.
  5. In the next prompts, select 'service', 'binding' and one or more WSDL operations to generate remote methods and models.
  4. Run `node .` to start the server.
- 5. Browse your REST API at http://0.0.0.0:3000/explorer and test the generated REST APIs.
+ 5. Browse your REST API at http://127.0.0.1/explorer and test the generated REST APIs.
 

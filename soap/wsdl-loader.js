@@ -14,13 +14,14 @@ var soap = require('strong-soap').soap;
 var WSDL = soap.WSDL;
 var path = require('path');
 
+var selectedWsdl, selectedWsdlUrl, wsdlServices, selectedService, selectedBinding;
+
 // loads remote WSDL or local WSDL using strong-soap module APIs.
 function loadWsdl(wsdlUrl, log, cb) {
   WSDL.open(wsdlUrl, {}, function(err, wsdl) {
     if (err) {
       return cb(err);
     }
-    console.log('loadWsdl loadWsdl %j', wsdl);
     cb(null, wsdl);
   });
 }
@@ -28,55 +29,45 @@ function loadWsdl(wsdlUrl, log, cb) {
 // get services defined in the wsdl
 exports.getServices = function getServices(wsdlUrl, log, cb) {
   loadWsdl(wsdlUrl, log, function(err, wsdl) {
-    console.log('getServices loadWsdl %j', wsdl);
-    console.log('getServices err %j', err);
     if (err) {
       return cb(err);
     }
-    this.wsdl = wsdl;
-    console.log('getServices this.wsdl %j', this.wsdl);
-    this.wsdlUrl = wsdlUrl;
-    this.services = this.wsdl.services;
-    console.log('getServices this.services  %j', this.services);
-    console.log('wsdl.definitions.services  %j', wsdl.definitions.services);
-    return cb(null,  this.services);
+    selectedWsdl = wsdl;
+    selectedWsdlUrl = wsdlUrl;
+    return cb(null,  selectedWsdl.services);
   }.bind(this));
 };
 
 // get bindings for the service
 exports.getBindings = function getBindings(serviceName) {
-  console.log('getBindings serviceName %j', serviceName);
-  console.log('getBindings this.services %j', this.services);
-  this.selectedService =  this.services[serviceName];
-  console.log('getBindings this.selectedService %j,', this.selectedService);
-  var ports = this.selectedService.ports;
+  selectedService =  selectedWsdl.services[serviceName];
+  var ports = selectedService.ports;
   var bindingNames = [];
   for (var name in ports) {
     var binding = ports[name].binding;
     bindingNames.push(binding.$name);
   }
-  this.bindingNames = bindingNames;
-  return this.bindingNames;
-}.bind(this);
+  return bindingNames;
+};
 
 // get operations for the binding
 exports.getOperations = function getOperations(bindingName) {
-  this.selectedBinding =  this.wsdl.definitions.bindings[bindingName];
+  selectedBinding =  selectedWsdl.definitions.bindings[bindingName];
   var opNames = [];
-  for (var opName in this.selectedBinding.operations) {
+  for (var opName in selectedBinding.operations) {
     opNames.push(opName);
   }
   return opNames;
-}.bind(this);
+};
 
 // get operation objects for list of selected operation names
-function getSelectedOperations(selectedBinding, operationNames) {
-  var bindingOperations = selectedBinding.operations;
+function getSelectedOperations(binding, operationNames) {
+  var ops = binding.operations;
   var operations = [];
   var opNames = [];
   for (var opName in operationNames) {
     var name = operationNames[opName];
-    operations.push(bindingOperations[name]);
+    operations.push(ops[name]);
   }
   return operations;
 }
@@ -85,11 +76,11 @@ function getSelectedOperations(selectedBinding, operationNames) {
 exports.generateAPICode  = function generateAPICode(operationNames) {
   var apis = [];
   var apiData = {
-    'wsdl': this.wsdl,
-    'wsdlUrl': this.wsdlUrl,
-    'service': this.selectedService.$name,
-    'binding': this.selectedBinding.$name,
-    'operations': getSelectedOperations(this.selectedBinding, operationNames),
+    'wsdl': selectedWsdl,
+    'wsdlUrl': selectedWsdlUrl,
+    'service': selectedService.$name,
+    'binding': selectedBinding.$name,
+    'operations': getSelectedOperations(selectedBinding, operationNames),
   };
   var code = soapGenerator.generateRemoteMethods(apiData);
   var models = soapGenerator.generateModels(apiData.wsdl, apiData.operations);
@@ -99,5 +90,5 @@ exports.generateAPICode  = function generateAPICode(operationNames) {
   };
   apis.push(api);
   return apis;
-}.bind(this);
+};
 

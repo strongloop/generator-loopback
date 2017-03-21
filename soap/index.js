@@ -68,13 +68,11 @@ module.exports = yeoman.Base.extend({
         done(err);
       } else {
         self.services = services;
-        console.log('index self.services %j', self.services);
         var serviceNames = [];
         for (var s in services) {
           serviceNames.push(services[s].$name);
         }
         self.serviceNames = serviceNames;
-        console.log('index.getServices %j', self.serviceNames);
         done();
       }
     });
@@ -92,9 +90,7 @@ module.exports = yeoman.Base.extend({
 
     return this.prompt(prompts).then(function(answers) {
       this.servieName = answers.service;
-      console.log('askForService before getBindings() %s', this.servieName);
       this.bindingNames = generator.getBindings(this.servieName);
-      console.log('askForService after getBindings() %j', this.bindingNames);
     }.bind(this));
   },
 
