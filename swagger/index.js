@@ -13,7 +13,7 @@ var loadSwaggerSpecs = require('./spec-loader');
 
 var workspace = require('loopback-workspace');
 var wsModels = workspace.models;
-
+var yargs = require('yargs').argv;
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
@@ -61,9 +61,15 @@ module.exports = yeoman.Base.extend({
         validate: validateUrlOrFile,
       },
     ];
-    return this.prompt(prompts).then(function(answers) {
-      this.url = answers.url.trim();
-    }.bind(this));
+
+    if(yargs.url) {
+      this.url = yargs.url;
+      return;
+    } else {
+      return this.prompt(prompts).then(function(answers) {
+        this.url = answers.url.trim();
+      }.bind(this));
+    }
   },
 
   swagger: function() {
@@ -111,7 +117,7 @@ module.exports = yeoman.Base.extend({
           name: model.name,
           plural: model.plural,
           base: model.base || 'PersistedModel',
-          facetName: 'common', // hard-coded for now
+          facetName: 'server', // hard-coded for now
           properties: model.properties,
         });
         var tags = api.spec.tags || [];
@@ -180,6 +186,19 @@ module.exports = yeoman.Base.extend({
             choices: self.dataSources,
           },
         ];
+
+        if (yargs.all) {
+          return self.prompt([]).then(function() {
+            self.dataSource = null;
+            choices.forEach(function (c) {
+              self.selectedModels[c.modelName] =
+                (c.flag === CONFLICT_DETECTED ?
+                  SELECTED_FOR_UPDATE : SELECTED_FOR_CREATE);
+            });
+            done();
+          });
+        }
+
         return self.prompt(prompts).then(function(answers) {
           self.dataSource = answers.dataSource;
           answers.modelSelections.forEach(function(m) {
@@ -252,6 +271,10 @@ module.exports = yeoman.Base.extend({
         }
       }
 
+      if (modelDef.name === 'SwaggerModel') {
+        modelDef.http = { path: '/'};
+      }
+
       if (self.selectedModels[modelDef.name] === SELECTED_FOR_UPDATE) {
         self.log(chalk.green(g.f('Updating model definition for %s...',
           modelDef.name)));
@@ -318,9 +341,44 @@ module.exports = yeoman.Base.extend({
             return done();
           }
           self.log(chalk.green(g.f('Generating %s', modelDef.scriptPath)));
-          fs.writeFile(modelDef.scriptPath, code, done);
+          if (yargs.wireImplementation) {
+            fs.writeFile(modelDef.scriptPath, replaceImplCode(code, m), done);
+          } else {
+            fs.writeFile(modelDef.scriptPath, code, done);
+          }
         }, done);
       }, cb);
+    }
+
+    function replaceImplCode (code, m) {
+      const implClassName = m + 'Impl';
+      const implFileName = m.replace(/(?:^|\.?)([A-Z])/g, function (x,y){return "-" + y.toLowerCase()}).replace(/^-/, "") + '-impl';
+
+      var implRequire = 'const ' + implClassName + ' = require(\'../services/' + implFileName + '\'); \n';
+      var implCall = '= ' + implClassName + '().';
+
+      var result = implRequire;
+      var lines = code.split('\n');
+      var lookingForEnd = false;
+      lines.forEach(function (line) {
+        if (lookingForEnd) {
+          if (line.search(/^(\})/gm) > -1) {
+            lookingForEnd = false;
+          }
+        } else {
+          if (line.search(/module.exports/) < 0  && line.search(/.*\s*\=\s*function/) > -1) {
+            lookingForEnd = true;
+            var functionDefinition = line.split('=')[0];
+            var functionName = functionDefinition.split('.')[1];
+            functionDefinition += implCall + functionName + ';';
+            result += functionDefinition;
+          } else {
+            result += line + '\n';
+          }
+        }
+      });
+
+      return result;
     }
 
     function generateApis(self, cb) {
