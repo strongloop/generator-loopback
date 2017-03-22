@@ -16,7 +16,3 @@ for more information.
 
 Discuss features and ask questions on
 [LoopBack Forum](https://groups.google.com/forum/#!forum/loopbackjs).
-
-## License
-
-[MIT](LICENSE).
