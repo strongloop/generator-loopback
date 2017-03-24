@@ -1,3 +1,35 @@
+2017-03-24, Version 3.1.0
+=========================
+
+ * Eslint fix and package.json version (rashmihunt)
+
+ * Use module variables in wsdl-loader (rashmihunt)
+
+ * change strong-soap version (rashmihunt)
+
+ * test debug (rashmihunt)
+
+ * test debug statements (rashmihunt)
+
+ * Eslint fixes (rashmihunt)
+
+ * Fix eslint issues (rashmihunt)
+
+ * add lb soap help text file (rashmihunt)
+
+ * add basic readme for lb soap command (rashmihunt)
+
+ * fix conflict (rashmihunt)
+
+ * re added test help files (rashmihunt)
+
+ * create remote methods. models (rashmihunt)
+
+ * fix the message (rashmihunt)
+
+ * basic framework to support loopback:soap (rashmihunt)
+
+
 2017-03-02, Version 3.0.0
 =========================
 
