@@ -32,10 +32,12 @@
     "lodash": "^4.16.1",
     "loopback-api-definition": "^3.0.0",
     "loopback-swagger": "^4.0.0",
+    "loopback-soap": "^1.0.0",
     "loopback-workspace": "^3.28.0",
     "mkdirp": "^0.5.1",
     "request": "^2.60.0",
     "strong-globalize": "^2.6.8",
+    "strong-soap": "^1.2.2",
     "text-table": "^0.2.0",
     "yeoman-generator": "^0.23.1",
     "yosay": "^1.0.5"
