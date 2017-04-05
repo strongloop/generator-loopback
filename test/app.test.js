@@ -157,6 +157,12 @@ describe('loopback:app generator', function() {
       });
     });
 
+  it('exports workspace version', () => {
+    const mainProps = Object.assign({}, require('../'));
+    expect(mainProps).to.have.property('workspaceVersion',
+      require('loopback-workspace/package.json').version);
+  });
+
   function givenAppGenerator(modelArgs) {
     var name = 'loopback:app';
     var path = '../../app';
