@@ -289,3 +289,5 @@ module.exports = yeoman.Base.extend({
 // Export it for strong-cli to use
 module.exports._package = pkg.name + ': ' + pkg.version;
 module.exports._yeoman = yeoman;
+module.exports.workspaceVersion =
+  require('loopback-workspace/package.json').version;
