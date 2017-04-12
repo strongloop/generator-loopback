@@ -45,17 +45,62 @@ module.exports = yeoman.Base.extend({
 
   loadProject: actions.loadProject,
 
-  askForWsdlUrlOrPath: function() {
-    var prompts = [
-      {
-        name: 'url',
-        message: g.f('Enter the WSDL url or file path:'),
-        default: this.url,
-        validate: validateUrlOrFile,
-      },
-    ];
+  loadDataSources: actions.loadDataSources,
+
+  addNullDataSourceItem: actions.addNullDataSourceItem,
+
+  loadModels: actions.loadModels,
+
+  existingModels: function() {
+    var self = this;
+    self.existingModels = this.modelNames;
+  },
+
+  checkForDatasource: function() {
+    var self = this;
+    var soapDataSourceNames = [];
+    var soapDataSources = [];
+    for (var i in this.dataSources) {
+      var datasource = this.dataSources[i];
+      if (datasource._connector === 'soap') {
+        soapDataSourceNames.push(datasource.data.name);
+        soapDataSources.push(datasource);
+      }
+    }
+    self.soapDataSourceNames = soapDataSourceNames;
+    self.soapDataSources = soapDataSources;
+    if (this.soapDataSourceNames.length == 0) {
+      var done = this.async();
+      var error = chalk.red(g.f('Error: Found no SOAP WebServices' +
+        ' data sources for SOAP discovery.' +
+        ' Create SOAP Web Service datasource first and try this' +
+        ' command again.'));
+      this.log(error);
+      return false;
+    }
+  },
+
+  askForDataSource: function() {
+    var self = this;
+    var prompts = [{
+      name: 'dataSource',
+      message: g.f('Select the datasource for SOAP' +
+        ' discovery'),
+      type: 'list',
+      choices: this.soapDataSourceNames,
+    }];
+
     return this.prompt(prompts).then(function(answers) {
-      this.url = answers.url.trim();
+      this.selectedDSName = answers.dataSource;
+      var selectedDS;
+      for (var i in this.soapDataSources) {
+        var datasource = this.soapDataSources[i];
+        if (datasource.data.name === this.selectedDSName) {
+          self.selectedDS = datasource;
+          break;
+        }
+      }
+      self.url = self.selectedDS.data.wsdl;
     }.bind(this));
   },
 
@@ -116,6 +161,8 @@ module.exports = yeoman.Base.extend({
         message: g.f('Select operations to be generated:'),
         type: 'checkbox',
         choices: this.operations,
+        default: this.operations,
+        validate: validateNoOperation
       },
     ];
 
@@ -134,7 +181,7 @@ module.exports = yeoman.Base.extend({
 
     var api, i, n, m;
     self.operations = this.operations;
-    self.apis = generator.generateAPICode(this.operations);
+    self.apis = generator.generateAPICode(this.selectedDS.data.name, this.operations); // eslint-disable-line max-len
 
     // eslint-disable-next-line one-var
     for (i = 0, n = self.apis.length; i < n; i++) {
@@ -185,6 +232,7 @@ module.exports = yeoman.Base.extend({
         self.modelConfigs.push({
           name: model.name,
           facetName: 'server', // hard-coded for now
+          dataSource: null,
           public: true,
         });
       }
@@ -227,22 +275,54 @@ module.exports = yeoman.Base.extend({
           cb();
         }
       }
-      // TODO [rashmi] need to check if the model exists and create or update accordingly
-      wsModels.ModelDefinition.create(modelDef, processResult);
+
+      var result = self.existingModels.find(function(obj) {
+        return obj === modelDef.name;
+      });
+
+      if (result != null) {
+        self.log(chalk.green(g.f('Updating model definition for %s...',
+          modelDef.name)));
+        modelDef.id = wsModels.ModelDefinition.getUniqueId(modelDef);
+        // update the model definition
+        wsModels.ModelDefinition.upsert(modelDef, processResult);
+      } else {
+        self.log(chalk.green(g.f('Creating model definition for %s...',
+          modelDef.name)));
+        wsModels.ModelDefinition.create(modelDef, processResult);
+      }
     }
 
     function createModelConfig(self, config, cb) {
       if (config.dataSource === undefined) {
         config.dataSource = self.dataSource;
       }
-      // TODO [rashmi] need to check if the modelconfig exists and create or update accordingly
-      wsModels.ModelConfig.create(config, function(err) {
-        if (!err) {
-          self.log(chalk.green(g.f('Model config created for %s.',
-              config.name)));
-        }
-        return cb(err);
+      var result = self.existingModels.find(function(obj) {
+        return obj === config.name;
       });
+
+      if (result != null) {
+        self.log(chalk.green(g.f('Updating model config for %s...',
+          config.name)));
+        config.id = wsModels.ModelDefinition.getUniqueId(config);
+        wsModels.ModelConfig.upsert(config, function(err) {
+          if (!err) {
+            self.log(chalk.green(g.f('Model config updated for %s.',
+              config.name)));
+          }
+          return cb(err);
+        });
+      } else {
+        wsModels.ModelConfig.create(config, function(err) {
+          self.log(chalk.green(g.f('Creating model config for %s...',
+            config.name)));
+          if (!err) {
+            self.log(chalk.green(g.f('Model config created for %s.',
+              config.name)));
+          }
+          return cb(err);
+        });
+      }
     }
 
     function generateRemoteMethods(self, cb) {
@@ -290,20 +370,11 @@ module.exports = yeoman.Base.extend({
 
   saveProject: actions.saveProject,
 });
-
-function validateUrlOrFile(wsdlUrlStr) {
-  if (!wsdlUrlStr) {
-    return g.f('wsdl url or file path is required');
-  }
-  var wsdlUrl = url.parse(wsdlUrlStr);
-  if (wsdlUrl.protocol === 'http:' || wsdlUrl.protocol === 'https:') {
-    return true;
+function validateNoOperation(operations) {
+  console.log("operations %j" + operations);
+  if (operations.length == 0) {
+    return g.f('Please select at least one operation.');
   } else {
-    var stat = fs.existsSync(wsdlUrlStr) && fs.statSync(wsdlUrlStr);
-    if (stat && stat.isFile()) {
-      return true;
-    } else {
-      return g.f('file path %s is not a file.', wsdlUrlStr);
-    }
+    return true;
   }
 }

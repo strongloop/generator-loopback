@@ -74,9 +74,10 @@ function getSelectedOperations(binding, operationNames) {
 }
 
 // generate remote method and models for list of operations
-exports.generateAPICode  = function generateAPICode(operationNames) {
+exports.generateAPICode  = function generateAPICode(selectedDS, operationNames) { // eslint-disable-line max-len
   var apis = [];
   var apiData = {
+    'datasource': selectedDS,
     'wsdl': selectedWsdl,
     'wsdlUrl': selectedWsdlUrl,
     'service': selectedService.$name,
