@@ -58,17 +58,17 @@ module.exports = yeoman.Base.extend({
 
   checkForDatasource: function() {
     var self = this;
+    self.soapDataSources = this.dataSources.filter(function(ds) {
+      return (ds._connector === 'soap') ||
+        (ds._connector === 'loopback-connector-soap');
+    });
+
     var soapDataSourceNames = [];
-    var soapDataSources = [];
-    for (var i in this.dataSources) {
-      var datasource = this.dataSources[i];
-      if (datasource._connector === 'soap') {
-        soapDataSourceNames.push(datasource.data.name);
-        soapDataSources.push(datasource);
-      }
-    }
+    self.soapDataSources.forEach(function(ds) {
+      soapDataSourceNames.push(ds.data.name);
+    });
+
     self.soapDataSourceNames = soapDataSourceNames;
-    self.soapDataSources = soapDataSources;
     if (this.soapDataSourceNames.length == 0) {
       var done = this.async();
       var error = chalk.red(g.f('Error: Found no SOAP WebServices' +
@@ -181,7 +181,8 @@ module.exports = yeoman.Base.extend({
 
     var api, i, n, m;
     self.operations = this.operations;
-    self.apis = generator.generateAPICode(this.selectedDS.data.name, this.operations); // eslint-disable-line max-len
+    self.apis = generator.generateAPICode(this.selectedDS.data.name,
+      this.operations);
 
     // eslint-disable-next-line one-var
     for (i = 0, n = self.apis.length; i < n; i++) {
