@@ -162,7 +162,7 @@ module.exports = yeoman.Base.extend({
         type: 'checkbox',
         choices: this.operations,
         default: this.operations,
-        validate: validateNoOperation
+        validate: validateNoOperation,
       },
     ];
 
@@ -371,7 +371,6 @@ module.exports = yeoman.Base.extend({
   saveProject: actions.saveProject,
 });
 function validateNoOperation(operations) {
-  console.log("operations %j" + operations);
   if (operations.length == 0) {
     return g.f('Please select at least one operation.');
   } else {
