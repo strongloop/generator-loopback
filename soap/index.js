@@ -101,7 +101,7 @@ module.exports = yeoman.Base.extend({
         }
       }
       self.url = self.selectedDS.data.wsdl;
-      self.log(chalk.green(g.f('WSDL for %s datasource: %s',
+      self.log(chalk.green(g.f('WSDL for datasource %s: %s',
         this.selectedDSName, self.url)));
     }.bind(this));
   },
