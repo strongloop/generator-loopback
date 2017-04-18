@@ -1,7 +1,27 @@
+2017-04-18, Version 3.3.0
+=========================
+
+ * Changed the wording of the message (rashmihunt)
+
+ * Print WSDL for the selected datasource (rashmihunt)
+
+ * PR review comment fixes (rashmihunt)
+
+ * Fix Eslint issues (rashmihunt)
+
+ * Integrate datasource with lb soap feature (rashmihunt)
+
+
 2017-04-06, Version 3.2.0
 =========================
 
  * Export the version of workspace we are using (Miroslav Bajtoš)
+
+ * remove yosay (Hage Yaapa)
+
+
+2017-03-24, Version 3.1.0
+=========================
 
  * Eslint fix and package.json version (rashmihunt)
 
@@ -30,8 +50,6 @@
  * fix the message (rashmihunt)
 
  * basic framework to support loopback:soap (rashmihunt)
-
- * remove yosay (Hage Yaapa)
 
 
 2017-03-02, Version 3.0.0
