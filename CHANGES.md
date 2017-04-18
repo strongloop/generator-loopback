@@ -1,3 +1,17 @@
+2017-04-18, Version 3.2.2
+=========================
+
+ * Changed the wording of the message (rashmihunt)
+
+ * Print WSDL for the selected datasource (rashmihunt)
+
+ * PR review comment fixes (rashmihunt)
+
+ * Fix Eslint issues (rashmihunt)
+
+ * Integrate datasource with lb soap feature (rashmihunt)
+
+
 2017-04-06, Version 3.2.0
 =========================
 
