@@ -5,9 +5,10 @@ Options:
   -h,   --help          # Print the generator's options and usage
         --skip-cache    # Do not remember prompt answers             Default: false
         --skip-install  # Do not automatically install dependencies  Default: false
+        --bluemix       # Add a datasource from Bluemix
 
 Arguments:
-  name  # Name of the data-source to create.  Type: String  Required: false
+  name  # Name of the datasource to create.  Type: String  Required: false
 
 Description:
   Creates a new DataSource in the LoopBack application.
@@ -16,4 +17,4 @@ Example:
 
   slc loopback:datasource crm
 
-  This adds an entry to `datasources.json` defining the data-source "crm".
+  This adds an entry to `datasources.json` defining the datasource "crm".

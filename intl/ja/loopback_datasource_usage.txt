@@ -5,4 +5,4 @@
 
   {{slc loopback:datasource crm}}
 
-  これにより、data-source "crm" を定義するエントリーが {{`datasources.json`}} に追加されます。
+  これにより、datasource "crm" を定義するエントリーが {{`datasources.json`}} に追加されます。

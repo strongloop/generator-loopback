@@ -29,8 +29,10 @@
     "debug": "^2.2.0",
     "inflection": "^1.7.1",
     "js-yaml": "^3.4.2",
+    "jsonfile-updater": "^2.1.0",
     "lodash": "^4.16.1",
     "loopback-api-definition": "^3.0.0",
+    "loopback-bluemix": "^1.1.0",
     "loopback-swagger": "^4.0.0",
     "loopback-soap": "^1.0.0",
     "loopback-workspace": "^3.28.0",
@@ -39,7 +41,9 @@
     "strong-globalize": "^2.6.8",
     "strong-soap": "^1.2.2",
     "text-table": "^0.2.0",
-    "yeoman-generator": "^0.23.1"
+    "yaml-js": "^0.1.4",
+    "yeoman-generator": "^0.23.1",
+    "yosay": "^1.0.5"
   },
   "devDependencies": {
     "bluebird": "^3.1.1",
@@ -48,8 +52,10 @@
     "eslint-config-loopback": "^8.0.0",
     "fs-extra": "^1.0.0",
     "mocha": "^3.2.0",
+    "rimraf": "^2.6.1",
     "semver": "^5.1.0",
     "strong-cached-install": "^2.0.0",
+    "yaml-js": "^0.1.4",
     "yeoman-assert": "^2.2.1",
     "yeoman-test": "^1.4.0"
   }

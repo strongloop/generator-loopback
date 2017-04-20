@@ -5,4 +5,4 @@ Example:
 
   {{slc loopback:datasource crm}}
 
-  This adds an entry to {{`datasources.json`}} defining the data-source "crm".
+  This adds an entry to {{`datasources.json`}} defining the datasource "crm".

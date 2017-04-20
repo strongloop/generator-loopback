@@ -5,6 +5,7 @@ Options:
   -h,   --help          # Print the generator's options and usage
         --skip-cache    # Do not remember prompt answers             Default: false
         --skip-install  # Do not automatically install dependencies  Default: false
+        --bluemix       # Bind to a Bluemix datasource
 
 Arguments:
   name  # Name of the model to create.  Type: String  Required: false

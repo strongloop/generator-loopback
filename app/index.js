@@ -11,9 +11,8 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
-
+var bluemix = require('../bluemix/helpers');
 var fs = require('fs');
-
 var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
@@ -45,6 +44,11 @@ module.exports = yeoman.Base.extend({
         'by default)'),
       type: Boolean,
     });
+
+    this.option('bluemix', {
+      desc: g.f('Set up as a Bluemix app'),
+      type: Boolean,
+    });
   },
 
   help: function() {
@@ -74,7 +78,7 @@ module.exports = yeoman.Base.extend({
       } else {
         this.copy(src, dest);
       }
-      process.nextTick(cb);
+      return cb && process.nextTick(cb);
     }.bind(this);
 
     // Restore the original method when done
@@ -203,7 +207,9 @@ module.exports = yeoman.Base.extend({
       if (err) {
         cb();
       } else {
-        cb(new Error(g.f('The generator must be run in an empty directory.')));
+        cb(new Error(
+          g.f('The generator must be run in an empty directory.'))
+        );
       }
     });
   },
@@ -226,45 +232,84 @@ module.exports = yeoman.Base.extend({
     this.directory('.', '.');
   },
 
-  generateYoRc: function() {
-    this.log(g.f('Generating {{.yo-rc.json}}'));
-    this.config.save();
+  configurePrompt: function() {
+    if (this.options.bluemix) {
+      return bluemix.configurePrompt.call(this);
+    }
   },
 
-  installing: actions.installDeps,
+  promptBluemixSettings: function() {
+    if (this.options.bluemix) {
+      return bluemix.promptSettings.call(this);
+    }
+  },
+
+  generateBluemixFiles: function() {
+    if (this.options.bluemix) {
+      return bluemix.generateFiles.call(this);
+    }
+  },
+
+  promptDefaultServices: function() {
+    if (this.options.bluemix) {
+      return bluemix.promptDefaultServices.call(this);
+    }
+  },
+
+  generateYoRc: function() {
+    if (!this.options.initBluemix) {
+      this.log(g.f('Generating {{.yo-rc.json}}'));
+      this.config.save();
+    }
+  },
+
+  installing: function() {
+    if (!this.options.initBluemix) {
+      actions.installDeps.call(this);
+    }
+  },
 
   end: {
+
+    addDefaultServices: function() {
+      if (this.options.bluemix) {
+        return bluemix.addDefaultServices.call(this);
+      }
+    },
+
     printNextSteps: function() {
-      if (this.options.skipNextSteps) return;
+      if (!this.options.initBluemix) {
+        if (this.options.skipNextSteps) return;
 
-      var cmd = helpers.getCommandName();
-      if (!this._skipInstall) {
-        this.log();
-        this.log();
-      }
+        var cmd = helpers.getCommandName();
+        if (!this._skipInstall) {
+          this.log();
+          this.log();
+        }
 
-      this.log(g.f('Next steps:'));
-      this.log();
-      if (this.dir && this.dir !== '.') {
-        this.log(g.f('  Change directory to your app'));
-        this.log(chalk.green('    $ cd ' + this.dir));
+        this.log(g.f('Next steps:'));
         this.log();
-      }
-      if (cmd === 'apic') {
-        this.log(g.f('  Run {{API Designer}} to create, test, ' +
-          ' and publish your application'));
-        this.log(chalk.green('    $ apic edit'));
-        this.log();
-      } else {
-        this.log(g.f('  Create a model in your app'));
-        if (cmd === 'loopback-cli')
-          this.log(chalk.green('    $ lb model'));
-        else
-          this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
-        this.log();
-        this.log(g.f('  Run the app'));
-        this.log(chalk.green('    $ node .'));
-        this.log();
+        if (this.dir && this.dir !== '.') {
+          this.log(g.f('  Change directory to your app'));
+          this.log(chalk.green('    $ cd ' + this.dir));
+          this.log();
+        }
+        if (cmd === 'apic') {
+          this.log(g.f('  Run {{API Designer}} to create, test, ' +
+            ' and publish your application'));
+          this.log(chalk.green('    $ apic edit'));
+          this.log();
+        } else {
+          this.log(g.f('  Create a model in your app'));
+          if (cmd === 'loopback-cli')
+            this.log(chalk.green('    $ lb model'));
+          else
+            this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
+          this.log();
+          this.log(g.f('  Run the app'));
+          this.log(chalk.green('    $ node .'));
+          this.log();
+        }
       }
     },
 

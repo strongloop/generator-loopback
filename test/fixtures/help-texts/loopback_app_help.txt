@@ -7,6 +7,7 @@ Options:
         --skip-install     # Do not automatically install dependencies               Default: false
         --skip-next-steps  # Do not print "next steps" info
         --explorer         # Add Loopback Explorer to the project (true by default)
+        --bluemix          # Set up as a Bluemix app
 
 Arguments:
   name  # Name of the application to scaffold.  Type: String  Required: false
