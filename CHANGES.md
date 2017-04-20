@@ -1,3 +1,9 @@
+2017-04-20, Version 3.4.0
+=========================
+
+ * Add `--bluemix` option and `bluemix` command (Hage Yaapa)
+
+
 2017-04-18, Version 3.3.0
 =========================
 
