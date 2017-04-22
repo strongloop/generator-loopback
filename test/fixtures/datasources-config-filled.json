@@ -1,0 +1,18 @@
+{
+  "datasources": {
+    "cloudant-demo-service": {
+      "name": "cloudant-demo-service",
+      "connector": "cloudant",
+      "database": "demo",
+      "modelIndex": "user"
+    }
+  },
+  "supportedServices": {
+    "cloudant": {
+      "label": "cloudantNoSQLDB"
+    },
+    "mongodb": {
+      "label": "compose-for-mongodb"
+    }
+  }
+}

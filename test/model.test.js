@@ -8,8 +8,10 @@
 var path = require('path');
 var helpers = require('yeoman-test');
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
-var fs = require('fs');
-var expect = require('chai').expect;
+var fs = require('fs-extra');
+var chai = require('chai');
+var expect = chai.expect;
+var assert = chai.assert;
 var wsModels = require('loopback-workspace').models;
 var common = require('./common');
 var workspace = require('loopback-workspace');
@@ -187,6 +189,48 @@ describe('loopback:model generator', function() {
         modelGen.run(function() {
           var modelConfig = readModelsJsonSync();
           expect(modelConfig.Review.dataSource).to.eql('db');
+          done();
+        });
+      });
+    });
+
+    describe('with --bluemix', function() {
+      it('should throw if no Bluemix datasource is found', function(done) {
+        var srcPath = path.join(__dirname, 'fixtures',
+                      'datasources-config-empty.json');
+        var destPath = path.join(SANDBOX, '.bluemix',
+                      'datasources-config.json');
+        fs.copySync(srcPath, destPath);
+
+        var modelGen = givenModelGenerator('--bluemix');
+        helpers.mockPrompt(modelGen, {
+          name: 'Product',
+        });
+
+        modelGen.run().on('error', function(e) {
+          assert.equal(e.message, 'No Bluemix datasource found');
+          done();
+        });
+      });
+
+      it('should use Bluemix datasource', function(done) {
+        var srcPath = path.join(__dirname, 'fixtures',
+                      'datasources-config-filled.json');
+        var destPath = path.join(SANDBOX, '.bluemix',
+                      'datasources-config.json');
+        fs.copySync(srcPath, destPath);
+
+        var modelGen = givenModelGenerator('--bluemix');
+        helpers.mockPrompt(modelGen, {
+          name: 'Product',
+          dataSource: 'cloudant-demo-service',
+        });
+
+        modelGen.run(function() {
+          assert('cloudant-demo-service' in modelGen.bluemixDataSourcesList);
+          var modelConfig = readModelsJsonSync();
+          expect(modelConfig.Product.dataSource).to
+          .eql('cloudant-demo-service');
           done();
         });
       });
