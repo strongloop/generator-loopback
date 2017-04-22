@@ -6,6 +6,8 @@ Options:
         --skip-cache    # Do not remember prompt answers             Default: false
         --skip-install  # Do not automatically install dependencies  Default: false
         --bluemix       # Add a datasource from Bluemix
+        --login         # Log into Bluemix                           Default: false
+        --sso           # Log into Bluemix with SSO
 
 Arguments:
   name  # Name of the datasource to create.  Type: String  Required: false

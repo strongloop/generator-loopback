@@ -6,6 +6,7 @@
 /* global describe, beforeEach, it */
 'use strict';
 var path = require('path');
+var os = require('os');
 var fs = require('fs-extra');
 var common = require('./common');
 var assert = require('assert');
@@ -49,8 +50,9 @@ describe('loopback:bluemix generator', function() {
   });
 
   it('should generate all Bluemix files', function(done) {
-    var gen = givenBluemixGenerator('--force');
+    var gen = givenBluemixGenerator('--force --bluemix');
     helpers.mockPrompt(gen, {
+      enableManifest: true,
       appMemory: '1024M',
       appInstances: 5,
       appDomain: 'my.bluemix.net',
@@ -69,8 +71,9 @@ describe('loopback:bluemix generator', function() {
   });
 
   it('should generate only basic Bluemix files', function(done) {
-    var gen = givenBluemixGenerator('--force');
+    var gen = givenBluemixGenerator('--force --bluemix');
     helpers.mockPrompt(gen, {
+      enableManifest: true,
       appMemory: '1GB',
       appInstances: 5,
       appDomain: 'my.bluemix.net',
@@ -83,6 +86,7 @@ describe('loopback:bluemix generator', function() {
     });
     gen.run(function() {
       ygAssert.file(BASIC_BLUEMIX_FILES);
+      ygAssert.file('manifest.yml');
       ygAssert.noFile(DOCKER_FILES);
       ygAssert.noFile(TOOLCHAIN_FILES);
       done();
@@ -131,6 +135,45 @@ describe('loopback:bluemix generator', function() {
       assert('my.blue.mix.net', appplication.domain);
       assert('cool.app', appplication.host);
       assert('512M', appplication.disk_quota);
+      done();
+    });
+  });
+
+  it('should login with user/password', function(done) {
+    if (!process.env.BLUEMIX_EMAIL || !process.env.BLUEMIX_PASSWORD) {
+      var msg = '    x Missing BLUEMIX_EMAIL and BLUEMIX_PASSWORD env vars';
+      console.error(msg);
+      return this.skip(); // Skip the test
+    }
+    var gen = givenBluemixGenerator('--force --login');
+    helpers.mockPrompt(gen, {
+      email: process.env.BLUEMIX_EMAIL,
+      password: process.env.BLUEMIX_PASSWORD,
+      rememberMe: true,
+      tryAgain: false,
+    });
+    gen.run(function() {
+      ygAssert.file([
+        path.join(os.homedir(), '.bluemix/.loopback/config.json')]);
+      done();
+    });
+  });
+
+  it('should login with SSO passcode', function(done) {
+    if (!process.env.BLUEMIX_PASSCODE) {
+      var msg = '    x Missing BLUEMIX_PASSCODE env var';
+      console.error(msg);
+      return this.skip();
+    }
+    var gen = givenBluemixGenerator('--force --sso');
+    helpers.mockPrompt(gen, {
+      password: process.env.BLUEMIX_PASSCODE,
+      rememberMe: true,
+      tryAgain: false,
+    });
+    gen.run(function() {
+      ygAssert.file([
+        path.join(os.homedir(), '.bluemix/.loopback/config.json')]);
       done();
     });
   });

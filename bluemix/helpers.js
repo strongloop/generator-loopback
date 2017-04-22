@@ -27,127 +27,139 @@ bluemix.configurePrompt = function() {
   this.appName = path.basename(process.cwd())
                 .replace(/[\/@\s\+%:\.]+?/g, '-');
 
-  var manifestFilePath = path.resolve('.', 'manifest.yml');
-  var manifest = {};
-  if (fs.existsSync(manifestFilePath)) {
-    manifest = yaml.load(fs.readFileSync(manifestFilePath)).applications[0];
+  // Generate .bluemix/...
+  this.enableBluemix = this.options.bluemix;
+  // Generate manifest.yml
+  this.enableManifest = this.options.manifest;
+  // Generate docker file
+  this.enableDocker = this.options.docker;
+  // Generate toolchain files
+  this.enableToolchain = this.options.toolchain;
+  this.bluemix = this.enableManifest || this.enableDocker ||
+    this.enableToolchain || this.options.login || this.options.sso;
+  // Add default services
+  this.enableDefaultServices = !this.bluemix;
+
+  if (this.bluemix) {
+    this.log(g.f('Bluemix-specific configuration:'));
   }
 
-  var appMemoryPrompt = {
-    name: 'appMemory',
-    message: g.f('How much memory to allocate for the app?'),
-    default: manifest.memory || '256M',
-    filter: helpers.normalizeSize,
-    validate: helpers.validateAppMemory,
-  };
-
-  var appInstancesPrompt = {
-    name: 'appInstances',
-    message: g.f('How many instances of app to run?'),
-    default: manifest.instances || 1,
-    validate: helpers.validateAppInstances,
-  };
-
-  var appDomainPrompt = {
-    name: 'appDomain',
-    message: g.f('What is the domain name of the app?'),
-    default: manifest.domain || 'mybluemix.net',
-    validate: helpers.validateAppDomain,
-  };
-
-  var appHostPrompt = {
-    name: 'appHost',
-    message: g.f('What is the subdomain of the app?'),
-    default: manifest.host || this.appName,
-    validate: helpers.validateAppHost,
-  };
-
-  var appDiskQuotaPrompt = {
-    name: 'appDiskQuota',
-    message: g.f('How much disk space to allocate for the app?'),
-    default: manifest.disk_quota || '1G',
-    filter: helpers.normalizeSize,
-    validate: helpers.validateAppDiskQuota,
-  };
-
-  var toolchainPrompt = {
-    name: 'enableToolchain',
-    message: g.f('Do you want to create toolchain files?'),
+  var manifestPrompt = {
+    name: 'enableManifest',
+    message: g.f('Do you want create manifest.yml?'),
     type: 'confirm',
+    default: true,
+    // Only prompt if no explicit option such as --manifest or --docker
+    // is not present
+    when: !this.bluemix,
   };
 
-  var dockerPrompt = {
-    name: 'enableDocker',
-    message: g.f('Do you want create Dockerfile?'),
-    type: 'confirm',
-  };
-
-  this.prompts = [];
-  if (this.options.bluemix) {
-    var allPrompts = [
-      appMemoryPrompt, appInstancesPrompt, appDomainPrompt, appHostPrompt,
-      appDiskQuotaPrompt, toolchainPrompt, dockerPrompt,
-    ];
-    this.prompts = allPrompts;
-    this.bluemixCommand = 'bluemix';
-  } else {
-    if (this.options.toolchain) {
-      this.bluemixCommand = 'toolchain';
-      this.prompts.push(toolchainPrompt);
-    } else if (this.options.docker) {
-      this.bluemixCommand = 'docker';
-    } else {
-      this.prompts.push(appMemoryPrompt);
-      this.prompts.push(appInstancesPrompt);
-      this.prompts.push(appDomainPrompt);
-      this.prompts.push(appHostPrompt);
-      this.prompts.push(appDiskQuotaPrompt);
-      if (this.options.manifest) {
-        this.bluemixCommand = 'manifest';
-      } else {
-        this.bluemixCommand = 'bluemix';
-        this.prompts.push(dockerPrompt);
-        this.prompts.push(toolchainPrompt);
+  var done = this.async();
+  this.prompt([manifestPrompt]).then(function(answers) {
+    this.enableManifest = answers.enableManifest || this.enableManifest;
+    var prompts = [];
+    if (this.enableManifest) {
+      var manifestFilePath = path.resolve('.', 'manifest.yml');
+      var manifest = {};
+      if (fs.existsSync(manifestFilePath)) {
+        manifest = yaml.load(fs.readFileSync(manifestFilePath)).applications[0];
       }
-    }
-  }
-};
 
-bluemix.promptSettings = function() {
-  if (this.bluemixCommand === 'bluemix' || this.bluemixCommand === 'manifest') {
-    if (this.options.bluemix) {
-      this.log(g.f('\n  Bluemix-specific configuration:\n'));
+      var appMemoryPrompt = {
+        name: 'appMemory',
+        message: g.f('How much memory to allocate for the app?'),
+        default: manifest.memory || '256M',
+        filter: helpers.normalizeSize,
+        validate: helpers.validateAppMemory,
+        when: this.enableManifest,
+      };
+
+      var appInstancesPrompt = {
+        name: 'appInstances',
+        message: g.f('How many instances of app to run?'),
+        default: manifest.instances || 1,
+        validate: helpers.validateAppInstances,
+        when: this.enableManifest,
+      };
+
+      var appDomainPrompt = {
+        name: 'appDomain',
+        message: g.f('What is the domain name of the app?'),
+        default: manifest.domain || 'mybluemix.net',
+        validate: helpers.validateAppDomain,
+        when: this.enableManifest,
+      };
+
+      var appHostPrompt = {
+        name: 'appHost',
+        message: g.f('What is the subdomain of the app?'),
+        default: manifest.host || this.appName,
+        validate: helpers.validateAppHost,
+        when: this.enableManifest,
+      };
+
+      var appDiskQuotaPrompt = {
+        name: 'appDiskQuota',
+        message: g.f('How much disk space to allocate for the app?'),
+        default: manifest.disk_quota || '1G',
+        filter: helpers.normalizeSize,
+        validate: helpers.validateAppDiskQuota,
+        when: this.enableManifest,
+      };
+
+      prompts.push(appMemoryPrompt, appInstancesPrompt, appDomainPrompt,
+        appHostPrompt, appDiskQuotaPrompt);
     }
-    return this.prompt(this.prompts).then(function(answers) {
+
+    var toolchainPrompt = {
+      name: 'enableToolchain',
+      message: g.f('Do you want to create toolchain files?'),
+      type: 'confirm',
+      default: true,
+      when: !this.bluemix,
+    };
+
+    var dockerPrompt = {
+      name: 'enableDocker',
+      message: g.f('Do you want create Dockerfile?'),
+      type: 'confirm',
+      default: true,
+      when: !this.bluemix,
+    };
+
+    prompts.push(toolchainPrompt, dockerPrompt);
+
+    this.prompt(prompts).then(function(answers) {
       this.appMemory = answers.appMemory;
       this.appInstances = answers.appInstances;
       this.appDomain = answers.appDomain;
       this.appHost = answers.appHost;
       this.appDiskQuota = answers.appDiskQuota;
-      this.enableDocker = answers.enableDocker;
-      this.enableToolchain = answers.enableToolchain;
+      this.enableDocker = answers.enableDocker || this.enableDocker;
+      this.enableToolchain = answers.enableToolchain || this.enableToolchain;
+      this.bluemix = this.enableManifest || this.enableDocker ||
+        this.enableToolchain;
+      done();
     }.bind(this));
-  }
+  }.bind(this));
 };
 
 bluemix.generateFiles = function() {
-  if (this.bluemixCommand === 'bluemix' || this.bluemixCommand === 'manifest' ||
-      this.bluemixCommand === 'toolchain' || this.bluemixCommand === 'docker') {
+  if (this.bluemix) {
     var bluemixOptions = {
       destDir: this.destinationRoot(),
-      bluemixCommand: this.bluemixCommand,
+      enableBluemix: this.enableBluemix,
+      enableManifest: this.enableManifest,
       enableDocker: this.enableDocker,
       enableToolchain: this.enableToolchain,
-      cmdOptions: this.options,
     };
     lbBm.generateBluemixFiles(bluemixOptions,
-                                  this.copy.bind(this),
-                                  this.directory.bind(this));
+      this.copy.bind(this), this.directory.bind(this));
   }
 };
 
 bluemix.promptDefaultServices = function() {
-  if (this.bluemixCommand === 'bluemix') {
+  if (this.enableDefaultServices) {
     var prompts = [
       {
         name: 'enableAutoScaling',
@@ -170,13 +182,16 @@ bluemix.promptDefaultServices = function() {
 };
 
 bluemix.addDefaultServices = function() {
-  if (this.bluemixCommand === 'bluemix' || this.options.bluemix) {
+  if (this.enableDefaultServices) {
+    var done = this.async();
     var options = {
       bluemix: true,
       enableAutoScaling: this.enableAutoScaling,
       enableAppMetrics: this.enableAppMetrics,
       destDir: this.destinationRoot(),
     };
-    lbBm.addDefaultServices(options);
+    lbBm.addDefaultServices(options, done);
   }
 };
+
+bluemix.login = require('./login');

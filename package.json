@@ -34,7 +34,7 @@
     "jsonfile-updater": "^2.1.0",
     "lodash": "^4.16.1",
     "loopback-api-definition": "^3.0.0",
-    "loopback-bluemix": "^1.1.0",
+    "loopback-bluemix": "^2.0.0",
     "loopback-soap": "^1.0.0",
     "loopback-swagger": "^4.0.0",
     "loopback-workspace": "^3.28.0",

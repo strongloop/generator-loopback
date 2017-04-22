@@ -8,6 +8,8 @@ Options:
         --docker        # Generate Dockerfile
         --manifest      # Generate Bluemix manifest file
         --toolchain     # Set up Bluemix toolchain
+        --login         # Log into Bluemix                           Default: false
+        --sso           # Log into Bluemix with SSO
 
 Description:
   `toolchain`, `manifest`, and `docker` are scaffold options. Not specifying any of them is interpreted as

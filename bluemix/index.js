@@ -37,6 +37,17 @@ module.exports = yeoman.Base.extend({
       desc: g.f('Set up Bluemix toolchain'),
       type: Boolean,
     });
+
+    this.option('login', {
+      desc: g.f('Log into Bluemix'),
+      type: Boolean,
+      default: false,
+    });
+
+    this.option('sso', {
+      desc: g.f('Log into Bluemix with SSO'),
+      type: Boolean,
+    });
   },
 
   help: function() {
@@ -44,11 +55,18 @@ module.exports = yeoman.Base.extend({
   },
 
   validateLoopBackDir: function() {
-    if (!fs.existsSync(path.join(process.cwd(), 'package.json')) ||
-      !fs.existsSync(path.join(process.cwd(), 'server', 'server.js'))) {
-      console.log(chalk.red('\n Invalid LoopBack directory\n'));
-      process.exit();
+    var root = this.destinationRoot();
+    if (!(this.options.login || this.options.sso)) {
+      if (!fs.existsSync(path.join(root, 'package.json')) ||
+        !fs.existsSync(path.join(root, 'server', 'server.js'))) {
+        this.log(chalk.red('\n Invalid LoopBack directory\n'));
+        process.exit();
+      }
     }
+  },
+
+  loginToBluemix: function() {
+    bluemix.login.apply(this);
   },
 
   configurePrompt: bluemix.configurePrompt,
