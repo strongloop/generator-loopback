@@ -1,0 +1,11 @@
+{
+  "datasources": {},
+  "supportedServices": {
+    "cloudant": {
+      "label": "cloudantNoSQLDB"
+    },
+    "mongodb": {
+      "label": "compose-for-mongodb"
+    }
+  }
+}

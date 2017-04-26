@@ -16,11 +16,7 @@ var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
-if (process.argv.indexOf('--bluemix') > 0) {
-  var datasourcesConfig = require(path.resolve(process.cwd(),
-                          '.bluemix', 'datasources-config.json'));
-  var bluemixDataSourcesList = datasourcesConfig.datasources;
-}
+var fs = require('fs');
 
 module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
@@ -64,13 +60,36 @@ module.exports = yeoman.Base.extend({
 
   addNullDataSourceItem: actions.addNullDataSourceItem,
 
+  setBluemixDatasourceState: function() {
+    if (this.options.bluemix) {
+      var configPath = this.destinationPath('.bluemix/datasources-config.json');
+      if (!fs.existsSync(configPath)) {
+        this.log('datasources-config.json not found');
+        process.exit();
+      }
+      var datasourcesConfig = JSON.parse(fs.readFileSync(configPath));
+      this.bluemixDataSourcesList = datasourcesConfig.datasources;
+      if (Object.keys(this.bluemixDataSourcesList).length) {
+        this.hasDatasources = true;
+      } else {
+        this.hasDatasources = false;
+      }
+    }
+  },
+
   checkForDatasource: function() {
     if (!this.hasDatasources) {
-      var warning = chalk.red(g.f('Warning: Found no data sources to attach ' +
-        'model. There will be no data-access methods available until ' +
+      if (this.options.bluemix) {
+        var msg = 'No Bluemix datasource found';
+        var done = this.async();
+        return done(new Error(msg));
+      } else {
+        var warning = chalk.red(g.f('Warning: Found no data sources to ' +
+        'attach model. There will be no data-access methods available until ' +
         'datasources are attached.'));
-      this.log(warning);
-      return;
+        this.log(warning);
+        return;
+      }
     }
   },
 
@@ -105,7 +124,9 @@ module.exports = yeoman.Base.extend({
 
     if (this.options.bluemix) {
       var bluemixDataSources = [];
-      Object.keys(bluemixDataSourcesList).forEach(function(datasourceName) {
+      var bluemixDataSourcesList = this.bluemixDataSourcesList;
+      Object.keys(bluemixDataSourcesList)
+      .forEach(function(datasourceName) {
         var datasource = bluemixDataSourcesList[datasourceName];
         var bluemixDataSource = {
           name: datasourceName + '(' + datasource.connector + ')',
