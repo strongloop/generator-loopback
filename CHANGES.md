@@ -1,3 +1,11 @@
+2017-04-28, Version 3.5.0
+=========================
+
+ * Add lb:oracle to help oracle connector install (Raymond Feng)
+
+ * exit if no Bluemix datasource is found (Hage Yaapa)
+
+
 2017-04-20, Version 3.4.0
 =========================
 
@@ -22,12 +30,6 @@
 =========================
 
  * Export the version of workspace we are using (Miroslav Bajtoš)
-
- * remove yosay (Hage Yaapa)
-
-
-2017-03-24, Version 3.1.0
-=========================
 
  * Eslint fix and package.json version (rashmihunt)
 
@@ -56,6 +58,8 @@
  * fix the message (rashmihunt)
 
  * basic framework to support loopback:soap (rashmihunt)
+
+ * remove yosay (Hage Yaapa)
 
 
 2017-03-02, Version 3.0.0
