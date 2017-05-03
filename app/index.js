@@ -232,30 +232,6 @@ module.exports = yeoman.Base.extend({
     this.directory('.', '.');
   },
 
-  configurePrompt: function() {
-    if (this.options.bluemix) {
-      return bluemix.configurePrompt.call(this);
-    }
-  },
-
-  promptBluemixSettings: function() {
-    if (this.options.bluemix) {
-      return bluemix.promptSettings.call(this);
-    }
-  },
-
-  generateBluemixFiles: function() {
-    if (this.options.bluemix) {
-      return bluemix.generateFiles.call(this);
-    }
-  },
-
-  promptDefaultServices: function() {
-    if (this.options.bluemix) {
-      return bluemix.promptDefaultServices.call(this);
-    }
-  },
-
   generateYoRc: function() {
     if (!this.options.initBluemix) {
       this.log(g.f('Generating {{.yo-rc.json}}'));
@@ -269,14 +245,18 @@ module.exports = yeoman.Base.extend({
     }
   },
 
-  end: {
-
-    addDefaultServices: function() {
+  install: {
+    bluemix: function() {
       if (this.options.bluemix) {
-        return bluemix.addDefaultServices.call(this);
+        this.log('\nBluemix configuration:');
+        this.composeWith(require.resolve('../bluemix'), {
+          options: this.options,
+        });
       }
     },
+  },
 
+  end: {
     printNextSteps: function() {
       if (!this.options.initBluemix) {
         if (this.options.skipNextSteps) return;

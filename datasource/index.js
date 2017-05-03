@@ -19,6 +19,7 @@ var path = require('path');
 var fs = require('fs');
 var jsonfileUpdater = require('jsonfile-updater');
 var ds = require('loopback-bluemix').ds;
+var bx = require('../bluemix/helpers');
 
 module.exports = yeoman.Base.extend({
   // NOTE(bajtos)
@@ -33,6 +34,17 @@ module.exports = yeoman.Base.extend({
 
     this.option('bluemix', {
       desc: g.f('Add a datasource from Bluemix'),
+    });
+
+    this.option('login', {
+      desc: g.f('Log into Bluemix'),
+      type: Boolean,
+      default: false,
+    });
+
+    this.option('sso', {
+      desc: g.f('Log into Bluemix with SSO'),
+      type: Boolean,
     });
 
     this.argument('name', {
@@ -128,6 +140,12 @@ module.exports = yeoman.Base.extend({
       }.bind(this));
     }
   },
+
+  loginToBluemix: function() {
+    if (this.options.bluemix) { bx.login.apply(this); }
+  },
+
+  generateBluemixFiles: bx.generateFiles,
 
   selectBluemixDatasource: function() {
     if (this.options.bluemix) { ds.selectBluemixDatasource(this, g); }
