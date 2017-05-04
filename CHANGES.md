@@ -1,3 +1,13 @@
+2017-05-04, Version 3.6.0
+=========================
+
+ * Fix messages and add them to g11n (Raymond Feng)
+
+ * Add on-demand bluemix login support (Raymond Feng)
+
+ * globalize lb soap, lb bluemix, lb oracle (rashmihunt)
+
+
 2017-04-28, Version 3.5.0
 =========================
 
