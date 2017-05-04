@@ -46,7 +46,7 @@ bluemix.configurePrompt = function() {
 
   var manifestPrompt = {
     name: 'enableManifest',
-    message: g.f('Do you want create manifest.yml?'),
+    message: g.f('Do you want to create manifest.yml?'),
     type: 'confirm',
     default: true,
     // Only prompt if no explicit option such as --manifest or --docker
@@ -121,7 +121,7 @@ bluemix.configurePrompt = function() {
 
     var dockerPrompt = {
       name: 'enableDocker',
-      message: g.f('Do you want create Dockerfile?'),
+      message: g.f('Do you want to create Dockerfile?'),
       type: 'confirm',
       default: true,
       when: !this.bluemix,
