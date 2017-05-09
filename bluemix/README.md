@@ -1,6 +1,4 @@
-The LoopBack CLI now has a new `--bluemix` option and a new `bluemix` command to help you seamlessly integrate your LoopBack app with Bluemix and Bluemix data services.
-
-Prerequisite: [Set up the CF command-line tool and authenticate](https://docs.cloudfoundry.org/cf-cli/install-go-cli.html).
+If you have installed the [`cf` command-line tool])(https://docs.cloudfoundry.org/cf-cli/) and authenticated, `generator-loopback` will use the authentication details from `cf` for making requests to Bluemix. If not, use the `--login` or `--sso` option with the `bluemix` command to authenticate.
 
 ## The --bluemix option
 
@@ -21,6 +19,8 @@ You can add data sources from Bluemix by specifying the `--bluemix` option.
 ```sh
 yo loopback:datasource --bluemix
 ```
+
+If you haven't authenticated, you will be prompted to authenticate when you try to add a datasource for the first time.
 
 You will be presented with the list of data services provisioned on your Bluemix account. If you haven't already added one, you can add the services as data sources for your app. At present, only Cloudant and MongoDB services are supported. Support for more services will be added in future.
 
@@ -51,3 +51,5 @@ You will be prompted for various options: respond according  to your requirement
 `--docker` - generate Docker related files.
 `--manifest` - generate or re-generate the `manifest.yml` file.
 `--toolchain` - generate the Bluemix tool chain files.
+`--login` - Log into Bluemix.
+`--sso` - Log into Bluemix with SSO.
