@@ -202,7 +202,7 @@ describe('loopback:model generator', function() {
                       'datasources-config.json');
         fs.copySync(srcPath, destPath);
 
-        var modelGen = givenModelGenerator('--bluemix');
+        var modelGen = givenModelGenerator('--bluemix --login=false');
         helpers.mockPrompt(modelGen, {
           name: 'Product',
         });
@@ -220,7 +220,7 @@ describe('loopback:model generator', function() {
                       'datasources-config.json');
         fs.copySync(srcPath, destPath);
 
-        var modelGen = givenModelGenerator('--bluemix');
+        var modelGen = givenModelGenerator('--bluemix --login=false');
         helpers.mockPrompt(modelGen, {
           name: 'Product',
           dataSource: 'cloudant-demo-service',

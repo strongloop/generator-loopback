@@ -18,9 +18,10 @@ function login() {
   if (config) {
     this.accessToken = config.accessToken;
   }
+  // Skip login if --login=false
+  if (this.options.login === false) return;
   // Skip login if --login or --sso is not present and accessToken is found
-  if (!(this.options.login || this.options.sso) && this.accessToken)
-    return;
+  if (!(this.options.login || this.options.sso) && this.accessToken) return;
   var done = this.async();
   this.log(g.f('Log into your Bluemix account:'));
   var prompts = [

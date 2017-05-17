@@ -34,6 +34,10 @@ var TOOLCHAIN_FILES = [
   '.bluemix/toolchain.yml',
 ];
 
+function itSkipIf(flag) {
+  return flag ? it.skip : it;
+}
+
 describe('loopback:bluemix generator', function() {
   beforeEach(common.resetWorkspace);
 
@@ -139,12 +143,8 @@ describe('loopback:bluemix generator', function() {
     });
   });
 
-  it('should login with user/password', function(done) {
-    if (!process.env.BLUEMIX_EMAIL || !process.env.BLUEMIX_PASSWORD) {
-      var msg = '    x Missing BLUEMIX_EMAIL and BLUEMIX_PASSWORD env vars';
-      console.error(msg);
-      return this.skip(); // Skip the test
-    }
+  itSkipIf(!process.env.BLUEMIX_EMAIL || !process.env.BLUEMIX_PASSWORD)(
+  'should login with user/password', function(done) {
     var gen = givenBluemixGenerator('--force --login');
     helpers.mockPrompt(gen, {
       email: process.env.BLUEMIX_EMAIL,
@@ -159,12 +159,8 @@ describe('loopback:bluemix generator', function() {
     });
   });
 
-  it('should login with SSO passcode', function(done) {
-    if (!process.env.BLUEMIX_PASSCODE) {
-      var msg = '    x Missing BLUEMIX_PASSCODE env var';
-      console.error(msg);
-      return this.skip();
-    }
+  itSkipIf(!process.env.BLUEMIX_EMAIL || !process.env.BLUEMIX_PASSWORD)(
+  'should login with SSO passcode', function(done) {
     var gen = givenBluemixGenerator('--force --sso');
     helpers.mockPrompt(gen, {
       password: process.env.BLUEMIX_PASSCODE,

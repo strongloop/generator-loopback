@@ -208,6 +208,7 @@ describe('loopback:app generator', function() {
 
       gen.options['skip-install'] = true;
       gen.options['bluemix'] = true;
+      gen.options['login'] = false;
 
       gen.run(function() {
         ygAssert.file(EXPECTED_PROJECT_FILES.concat(EXPECTED_BLUEMIX_FILES));
@@ -235,6 +236,7 @@ describe('loopback:app generator', function() {
 
       gen.options['skip-install'] = true;
       gen.options['bluemix'] = true;
+      gen.options['login'] = false;
 
       gen.run(function() {
         ygAssert.noFile(DOCKER_FILES);
@@ -261,6 +263,7 @@ describe('loopback:app generator', function() {
 
       gen.options['skip-install'] = true;
       gen.options['bluemix'] = true;
+      gen.options['login'] = false;
 
       gen.run(function() {
         ygAssert.file('.bluemix/datasources-config.json');
