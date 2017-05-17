@@ -201,7 +201,7 @@ module.exports = yeoman.Base.extend({
         base: 'Model',
         forceId: 'false',
         idInjection: 'false',
-        excludeBaseProperties: 'id', // for soap model, we need to exclude if generated in base 'Model'
+        excludeBaseProperties: ['id'], // for soap model, we need to exclude if generated in base 'Model'
         facetName: 'server', // hard-coded for now
         properties: {},
       };
@@ -230,7 +230,7 @@ module.exports = yeoman.Base.extend({
           base: model.base || 'Model',
           forceId: 'false',
           idInjection: 'false',
-          excludeBaseProperties: 'id', // for soap model, we need to exclude if generated in base 'Model'
+          excludeBaseProperties: ['id'], // for soap model, we need to exclude if generated in base 'Model'
           facetName: 'common', // hard-coded for now
           properties: model.properties,
         });

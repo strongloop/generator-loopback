@@ -152,7 +152,10 @@ describe('loopback:soap tests', function() {
           expect(content).to.not.have.property('public');
           expect(content).to.have.property('properties');
           expect(content.properties.ElementName.type).to.eql('string');
-          expect(content).to.have.property('excludeBaseProperties', 'id');
+          expect(content).to.have.property('excludeBaseProperties');
+          var expectedExcludeProps = ['id'];
+          expect(content.excludeBaseProperties).
+                      to.deep.equal(expectedExcludeProps);
 
           content = readModelJsonSync('get-atomic-weight-response');
           expect(content.properties.GetAtomicWeightResult.type).to.eql('string'); // eslint-disable-line max-len
