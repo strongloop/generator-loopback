@@ -1,0 +1,8 @@
+Açıklama:
+  LoopBack Oracle bağlayıcısının kurulmasına yardımcı olacak program.
+
+Örneğin:
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+Seçenekler olmadan komut, Oracle Instant Client kurulumunu saptamaya çalışır ve `loopback-connector-oracle` yüklenip yüklenmediğini denetler.

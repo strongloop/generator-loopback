@@ -1,0 +1,8 @@
+설명:
+  LoopBack Oracle 커넥터 설치에 도움이 되는 유틸리티입니다. 
+
+예: 
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+옵션이 없으면 명령은 Oracle 인스턴트 클라이언트의 설치를 발견하고 `loopback-connector-oracle`을 로드할 수 있는지 확인합니다. 

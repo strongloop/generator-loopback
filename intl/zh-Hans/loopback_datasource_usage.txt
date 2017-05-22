@@ -5,4 +5,4 @@
 
   {{slc loopback:datasource crm}}
 
-  这将向 {{`datasources.json`}} 添加一个定义数据源“crm”的条目。
+  这将向 {{`datasources.json`}} 添加一个条目用于定义数据源“crm”。

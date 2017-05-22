@@ -1,0 +1,8 @@
+說明：
+  用來協助安裝 LoopBack Oracle 連接器的公用程式。
+
+範例：
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+若沒有選項，此指令將嘗試偵測 Oracle 即時用戶端的安裝，並檢查是否可以載入 'loopback-connector-oracle'。

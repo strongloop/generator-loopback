@@ -1,0 +1,2 @@
+Açıklama:
+  `toolchain`, `manifest` ve `docker` yapı oluşturma seçenekleridir. Bunlardan birinin belirtilmemesi tümünün belirtilmesi olarak yorumlanır.

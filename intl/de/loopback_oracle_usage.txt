@@ -1,0 +1,8 @@
+Beschreibung:
+  Dienstprogramm zum Installieren des LoopBack-Oracle-Konnektors.
+
+Beispiel: 
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+Werden keine Optionen angegeben, sucht der Befehl nach der Installation von Oracle Instant Client und prüft, ob `loopback-connector-oracle` geladen werden kann.

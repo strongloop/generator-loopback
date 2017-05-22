@@ -1,0 +1,2 @@
+Descripción:
+`toolchain`, `manifest` y `docker` son opciones de andamiaje. No especificar ninguna de ellas se interpretará como especificarlas todas.

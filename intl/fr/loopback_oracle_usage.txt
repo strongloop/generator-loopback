@@ -1,0 +1,8 @@
+Description :
+  Utilitaire destiné à faciliter l'installation du connecteur Oracle LoopBack.
+
+Exemple :
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+Sans options, la commande tente de détecter l'installation du client instantané Oracle et vérifie si `loopback-connector-oracle` peut être chargé.
