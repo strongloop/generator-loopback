@@ -1,0 +1,2 @@
+說明：
+`toolchain`、`manifest` 和 `docker` 為暫時選項。未指定其中任何一個，會解譯為指定它們全部。

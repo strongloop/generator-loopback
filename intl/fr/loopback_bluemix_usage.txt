@@ -1,0 +1,2 @@
+Description :
+  `toolchain`, `manifest` et `docker` sont des options de type échafaudage. L'interprétation est la même que toutes ces options ou aucune d'entre elles soient spécifiées.

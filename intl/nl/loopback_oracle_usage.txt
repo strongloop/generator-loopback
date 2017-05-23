@@ -1,0 +1,8 @@
+Beschrijving:
+  Hulpprogramma dat helpt met de installatie van LoopBack Oracle-connector.
+
+Bijvoorbeeld:
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+Zonder opties wordt er geprobeerd om de installatie van Oracle Instant Client te detecteren en wordt er gecontroleerd of 'loopback-connector-oracle' kan worden geladen.

@@ -1,0 +1,3 @@
+Beschreibung:
+  `toolchain`, `manifest` und `docker` sind Scaffolding-Optionen. Wird keine der Optionen angegeben, wird das als Angabe
+  aller Optionen interpretiert.
