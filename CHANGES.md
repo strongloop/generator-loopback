@@ -1,3 +1,15 @@
+2017-05-24, Version 3.7.0
+=========================
+
+ * Add --login=false to avoid BM login for tests (Raymond Feng)
+
+ * PII Return Q2 2017 (Allen Boone)
+
+ * code review fix (rashmihunt)
+
+ * add excludeBaseProperties supports (rashmihunt)
+
+
 2017-05-04, Version 3.6.0
 =========================
 
