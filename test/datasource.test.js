@@ -11,6 +11,8 @@ var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
+var lbBM = require('loopback-bluemix');
+var cfConfig = lbBM.cf.getCfConfig();
 
 describe('loopback:datasource generator', function() {
   beforeEach(common.resetWorkspace);
@@ -126,6 +128,18 @@ describe('loopback:datasource generator', function() {
       done();
     });
   });
+
+  if (Object.keys(cfConfig).length) {
+    describe('with --bluemix', function() {
+      it('should not install connector in a non-Bluemix dir', function(done) {
+        var modelGen = givenDataSourceGenerator('--bluemix');
+        modelGen.run(function() {
+          expect(modelGen.abort).to.eql(true);
+          done();
+        });
+      });
+    });
+  }
 
   function givenDataSourceGenerator(dsArgs) {
     var path = '../../datasource';

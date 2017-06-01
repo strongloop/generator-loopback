@@ -31,7 +31,7 @@ module.exports = yeoman.Base.extend({
 
   constructor: function() {
     yeoman.Base.apply(this, arguments);
-
+    this.abort = false;
     this.option('bluemix', {
       desc: g.f('Add a datasource from Bluemix'),
     });
@@ -255,6 +255,9 @@ module.exports = yeoman.Base.extend({
     if (connector) {
       pkg = connector.package;
       if (!pkg) return;
+    } else if (this.options.bluemix) {
+      this.abort = true;
+      return;
     }
 
     var npmModule = pkg.name || this.connector;
@@ -294,6 +297,7 @@ module.exports = yeoman.Base.extend({
   },
 
   dataSource: function() {
+    if (this.abort) return;
     var done = this.async();
     var config = extend(this.settings, {
       name: this.name,
@@ -311,10 +315,12 @@ module.exports = yeoman.Base.extend({
   },
 
   updatePipeline: function() {
+    if (this.abort) return;
     if (this.options.bluemix) { ds.updatePipeline(this); }
   },
 
   printAddConfigForCustomConnector: function() {
+    if (this.abort) return;
     var connector = this.connector;
     if (!this.availableConnectors[connector]) {
       this.log(g.f('Please manually add config for your custom connector %s' +
