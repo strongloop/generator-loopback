@@ -25,8 +25,8 @@ describe('loopback:datasource generator', function() {
   });
 
   it('adds an entry to server/datasources.json', function(done) {
-    var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    var datasourceGen = givenDataSourceGenerator();
+    helpers.mockPrompt(datasourceGen, {
       name: 'crm',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
@@ -35,7 +35,7 @@ describe('loopback:datasource generator', function() {
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
-    modelGen.run(function() {
+    datasourceGen.run(function() {
       var newSources = Object.keys(readDataSourcesJsonSync('server'));
       var expectedSources = builtinSources.concat(['crm']);
       expect(newSources).to.have.members(expectedSources);
@@ -44,8 +44,8 @@ describe('loopback:datasource generator', function() {
   });
 
   it('allow connector without settings', function(done) {
-    var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    var datasourceGen = givenDataSourceGenerator();
+    helpers.mockPrompt(datasourceGen, {
       name: 'kafka1',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
@@ -54,7 +54,7 @@ describe('loopback:datasource generator', function() {
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
-    modelGen.run(function() {
+    datasourceGen.run(function() {
       var newSources = Object.keys(readDataSourcesJsonSync('server'));
       var expectedSources = builtinSources.concat(['kafka1']);
       expect(newSources).to.have.members(expectedSources);
@@ -63,15 +63,15 @@ describe('loopback:datasource generator', function() {
   });
 
   it('should install connector module on demand', function(done) {
-    var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    var datasourceGen = givenDataSourceGenerator();
+    helpers.mockPrompt(datasourceGen, {
       name: 'rest0',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
       connector: 'rest',
     });
 
-    modelGen.run(function() {
+    datasourceGen.run(function() {
       var pkg = fs.readFileSync(
         path.join(SANDBOX, 'package.json'), 'UTF-8');
       pkg = JSON.parse(pkg);
@@ -82,14 +82,14 @@ describe('loopback:datasource generator', function() {
   });
 
   it('should support custom connector', function(done) {
-    var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    var datasourceGen = givenDataSourceGenerator();
+    helpers.mockPrompt(datasourceGen, {
       name: 'test-custom',
       customConnector: 'lodash',
       connector: 'other',
     });
 
-    modelGen.run(function() {
+    datasourceGen.run(function() {
       var pkg = fs.readFileSync(
         path.join(SANDBOX, 'package.json'), 'UTF-8');
       pkg = JSON.parse(pkg);
@@ -106,8 +106,8 @@ describe('loopback:datasource generator', function() {
         'content-type': 'application/json',
       },
     };
-    var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
+    var datasourceGen = givenDataSourceGenerator();
+    helpers.mockPrompt(datasourceGen, {
       name: 'rest1',
       customConnector: '', // temporary workaround for
                            // https://github.com/yeoman/generator/issues/600
@@ -118,7 +118,7 @@ describe('loopback:datasource generator', function() {
     });
 
     var builtinSources = Object.keys(readDataSourcesJsonSync('server'));
-    modelGen.run(function() {
+    datasourceGen.run(function() {
       var json = readDataSourcesJsonSync('server');
       var newSources = Object.keys(json);
       var expectedSources = builtinSources.concat(['rest1']);
@@ -129,22 +129,102 @@ describe('loopback:datasource generator', function() {
     });
   });
 
+  it('should support IBM Object Storage ', function(done) {
+    var datasourceGen = givenDataSourceGenerator();
+    helpers.mockPrompt(datasourceGen, {
+      name: 'ds-object-storage',
+      connector: 'ibm-object-storage',
+      installConnector: false,
+    });
+
+    datasourceGen.run(function() {
+      var datasources = Object.keys(readDataSourcesJsonSync('server'));
+      expect(datasources).to.include('ds-object-storage');
+      var pkg = fs.readFileSync(
+        path.join(SANDBOX, 'package.json'), 'UTF-8');
+      pkg = JSON.parse(pkg);
+      // eslint-disable-next-line no-unused-expressions
+      expect(pkg.dependencies['loopback-component-storage']).to.exist;
+      done();
+    });
+  });
+
   if (Object.keys(cfConfig).length) {
     describe('with --bluemix', function() {
       it('should not install connector in a non-Bluemix dir', function(done) {
-        var modelGen = givenDataSourceGenerator('--bluemix');
-        modelGen.run(function() {
-          expect(modelGen.abort).to.eql(true);
+        var datasourceGen = givenDataSourceGenerator('--bluemix');
+        datasourceGen.run(function() {
+          expect(datasourceGen.abort).to.eql(true);
           done();
+        });
+      });
+
+      // this test requires an IBM Object Storage service named "My-Object-Storage" to be provisioned already
+      it('should support IBM Object Storage ', function(done) {
+        var appGen = givenAppGenerator();
+
+        helpers.mockPrompt(appGen, {
+          appname: 'test-app',
+          template: 'api-server',
+          appMemory: '512M',
+          appInstances: 1,
+          appDomain: 'mybluemix.net',
+          appHost: 'test-app',
+          appDiskQuota: '512M',
+          enableDocker: true,
+          enableToolchain: true,
+          enableAutoScaling: true,
+          enableAppMetrics: true,
+        });
+
+        appGen.options['skip-install'] = true;
+        appGen.options['bluemix'] = true;
+        appGen.options['login'] = false;
+
+        appGen.run(function() {
+          var datasourceGen = givenDataSourceGenerator('--bluemix', '../../../datasource');
+          helpers.mockPrompt(datasourceGen, {
+            serviceName: 'My-Object-Storage',
+            connector: 'loopback-component-storage',
+            installConnector: false,
+          });
+
+          datasourceGen.run(function() {
+            var datasources = Object.keys(readDataSourcesJsonSync('server'));
+            expect(datasources).to.not.include('ds-object-storage');
+            var pkg = fs.readFileSync(
+              path.join(SANDBOX, 'test-app', 'package.json'), 'UTF-8');
+            pkg = JSON.parse(pkg);
+            // eslint-disable-next-line no-unused-expressions
+            expect(pkg.dependencies['loopback-component-storage']).to.exist;
+            var dsConf = fs.readFileSync(path.join(SANDBOX, 'test-app',
+                        '.bluemix', 'datasources-config.json'), 'UTF-8');
+            dsConf = JSON.parse(dsConf);
+            // eslint-disable-next-line no-unused-expressions
+            expect(dsConf.datasources['My-Object-Storage']).to.exist;
+            expect(dsConf.datasources['My-Object-Storage'].name)
+                  .to.equal('My-Object-Storage');
+            expect(dsConf.datasources['My-Object-Storage'].connector)
+                  .to.equal('loopback-component-storage');
+            done();
+          });
         });
       });
     });
   }
 
-  function givenDataSourceGenerator(dsArgs) {
-    var path = '../../datasource';
+  function givenAppGenerator(args) {
+    var name = 'loopback:app';
+    var appPath = '../../app';
+    var gen = common.createGenerator(name, appPath, [], args, {});
+    gen.options['skip-install'] = true;
+    return gen;
+  }
+
+  function givenDataSourceGenerator(dsArgs, _dsPath) {
+    var dsPath = _dsPath || '../../datasource';
     var name = 'loopback:datasource';
-    var gen = common.createGenerator(name, path, [], dsArgs, {});
+    var gen = common.createGenerator(name, dsPath, [], dsArgs, {});
     return gen;
   }
 

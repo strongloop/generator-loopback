@@ -304,6 +304,9 @@ module.exports = yeoman.Base.extend({
       connector: this.connector,
       facetName: 'server', // hard-coded for now
     });
+    if (config.connector === 'ibm-object-storage') {
+      config.connector = 'loopback-component-storage';
+    }
     if (this.options.bluemix) {
       ds.addDatasource(this, config);
     } else {

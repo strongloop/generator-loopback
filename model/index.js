@@ -26,7 +26,7 @@ module.exports = yeoman.Base.extend({
 
   constructor: function() {
     yeoman.Base.apply(this, arguments);
-
+    this.databaseModel = true; // `false` if using ibm-object-store datasource
     this.option('bluemix', {
       desc: g.f('Bind to a Bluemix datasource'),
     });
@@ -115,6 +115,8 @@ module.exports = yeoman.Base.extend({
       return;
     }
 
+    var dsConnectorMap = {};
+
     var promptObject = {
       name: 'dataSource',
       message: g.f('Select the datasource to attach %s' +
@@ -129,7 +131,7 @@ module.exports = yeoman.Base.extend({
       .forEach(function(datasourceName) {
         var datasource = bluemixDataSourcesList[datasourceName];
         var bluemixDataSource = {
-          name: datasourceName + '(' + datasource.connector + ')',
+          name: datasourceName + ' (' + datasource.connector + ')',
           value: datasourceName,
           _connector: datasource.connector,
         };
@@ -142,11 +144,18 @@ module.exports = yeoman.Base.extend({
       promptObject.choices = this.dataSources;
     }
 
-    var prompts = [promptObject];
+    promptObject.choices.forEach(function(ds) {
+      dsConnectorMap[ds.value] = ds._connector;
+    });
 
+    var prompts = [promptObject];
+    var self = this;
     return this.prompt(prompts).then(function(props) {
       if (this.hasDatasources) {
         this.dataSource = props.dataSource;
+        if (dsConnectorMap[props.dataSource] === 'loopback-component-storage') {
+          self.databaseModel = false;
+        }
       } else {
         this.dataSource = null;
       }
@@ -177,51 +186,79 @@ module.exports = yeoman.Base.extend({
         value: null,
       }]);
 
-    var prompts = [
-      {
-        name: 'base',
-        message: g.f('Select model\'s base class'),
-        type: 'list',
-        default: this.baseModel,
-        choices: baseModelChoices,
-      },
-      {
-        name: 'customBase',
-        message: g.f('Enter the base model name:'),
-        required: true,
-        validate: validateRequiredName,
-        when: function(answers) {
-          return answers.base === null;
-        },
-      },
-      {
-        name: 'public',
-        message: g.f('Expose %s via the REST API?', this.displayName),
-        type: 'confirm',
-      },
-      {
-        name: 'plural',
-        message: g.f('Custom plural form (used to build REST URL):'),
-        when: function(answers) {
-          return answers.public;
-        },
-      },
-      {
-        name: 'facetName',
-        message: g.f('Common model or server only?'),
-        type: 'list',
-        default: 'common',
-        choices: [
-          {name: g.f('common'), value: 'common'},
-          {name: g.f('server'), value: 'server'}],
-      },
-    ];
+    var prompts;
 
+    if (this.databaseModel) {
+      prompts = [
+        {
+          name: 'base',
+          message: g.f('Select model\'s base class'),
+          type: 'list',
+          default: this.baseModel,
+          choices: baseModelChoices,
+        },
+        {
+          name: 'customBase',
+          message: g.f('Enter the base model name:'),
+          required: true,
+          validate: validateRequiredName,
+          when: function(answers) {
+            return answers.base === null;
+          },
+        },
+        {
+          name: 'public',
+          message: g.f('Expose %s via the REST API?', this.displayName),
+          type: 'confirm',
+        },
+        {
+          name: 'plural',
+          message: g.f('Custom plural form (used to build REST URL):'),
+          when: function(answers) {
+            return answers.public;
+          },
+        },
+        {
+          name: 'facetName',
+          message: g.f('Common model or server only?'),
+          type: 'list',
+          default: 'common',
+          choices: [
+            {name: g.f('common'), value: 'common'},
+            {name: g.f('server'), value: 'server'}],
+        },
+      ];
+    } else {
+      prompts = [
+        {
+          name: 'public',
+          message: g.f('Expose %s via the REST API?', this.displayName),
+          type: 'confirm',
+        },
+        {
+          name: 'plural',
+          message: g.f('Custom plural form (used to build REST URL):'),
+          when: function(answers) {
+            return answers.public;
+          },
+        },
+        {
+          name: 'facetName',
+          message: g.f('Common model or server only?'),
+          type: 'list',
+          default: 'common',
+          choices: [
+            {name: g.f('common'), value: 'common'},
+            {name: g.f('server'), value: 'server'}],
+        },
+      ];
+    }
     return  this.prompt(prompts).then(function(props) {
       this.public = props.public;
       this.plural = props.plural || undefined;
-      this.base = props.customBase || props.base;
       this.facetName = props.facetName;
+      if (this.databaseModel) this.base = props.customBase || props.base;
+      else this.base = 'Model';
     }.bind(this));
   },
 
@@ -256,50 +293,53 @@ module.exports = yeoman.Base.extend({
   },
 
   delim: function() {
-    if (this.base === 'KeyValueModel')
+    if (this.base === 'KeyValueModel' || !this.databaseModel)
       return;
 
     this.log(g.f('Let\'s add some %s properties now.\n', this.displayName));
   },
 
   property: function() {
-    var done = this.async();
+    if (this.databaseModel) {
+      var done = this.async();
 
-    if (this.base === 'KeyValueModel')
-      return;
+      if (this.base === 'KeyValueModel')
+        return;
 
-    this.log(g.f('Enter an empty property name when done.'));
-    var prompts = [
-      {
-        name: 'propertyName',
-        message: g.f('Property name:'),
-        validate: validateOptionalName,
-      },
-    ];
-    return this.prompt(prompts).then(function(answers) {
-      if (answers.propertyName == null || answers.propertyName === '') {
-        return done();
-      }
-
-      this.invoke(
-        'loopback:property',
+      this.log(g.f('Enter an empty property name when done.'));
+      var prompts = [
         {
-          options: {
-            nested: true,
-            projectDir: this.projectDir,
-            project: this.project,
-            modelName: this.name,
-            propertyName: answers.propertyName,
-          },
+          name: 'propertyName',
+          message: g.f('Property name:'),
+          validate: validateOptionalName,
         },
-        function(err) {
-          if (err) {
-            return done(err);
-          }
-          this.log(g.f('\nLet\'s add another %s property.', this.displayName));
-          this.property();
-        }.bind(this));
-    }.bind(this));
+      ];
+      return this.prompt(prompts).then(function(answers) {
+        if (answers.propertyName == null || answers.propertyName === '') {
+          return done();
+        }
+
+        this.invoke(
+          'loopback:property',
+          {
+            options: {
+              nested: true,
+              projectDir: this.projectDir,
+              project: this.project,
+              modelName: this.name,
+              propertyName: answers.propertyName,
+            },
+          },
+          function(err) {
+            if (err) {
+              return done(err);
+            }
+            this.log(g.f('\nLet\'s add another %s property.',
+                        this.displayName));
+            this.property();
+          }.bind(this));
+      }.bind(this));
+    }
   },
 
   saveProject: actions.saveProject,
