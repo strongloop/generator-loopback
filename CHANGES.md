@@ -1,3 +1,13 @@
+2017-06-22, Version 3.7.1
+=========================
+
+ * Authentication details (Hage Yaapa)
+
+ * Update Italian translated strings Q2 2017 (Allen Boone)
+
+ * Fix undefined connector installation attempt (Hage Yaapa)
+
+
 2017-05-24, Version 3.7.0
 =========================
 
