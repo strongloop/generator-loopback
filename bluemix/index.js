@@ -22,7 +22,7 @@ var pkg = require('../package.json');
 module.exports = yeoman.Base.extend({
   constructor: function() {
     yeoman.Base.apply(this, arguments);
-
+    this.done = false;
     this.option('docker', {
       desc: g.f('Generate Dockerfile'),
       type: Boolean,
@@ -48,6 +48,12 @@ module.exports = yeoman.Base.extend({
       desc: g.f('Log into Bluemix with SSO'),
       type: Boolean,
     });
+
+    this.option('provision', {
+      desc: g.f('Provision a Bluemix service'),
+      type: Boolean,
+      default: false,
+    });
   },
 
   help: function() {
@@ -68,6 +74,11 @@ module.exports = yeoman.Base.extend({
   loginToBluemix: function() {
     bluemix.login.apply(this);
   },
+
+  promptServiceName: bluemix.promptServiceName,
+  getServicePlans: bluemix.getServicePlans,
+  promptServicePlan: bluemix.promptServicePlan,
+  provisionService: bluemix.provisionService,
 
   configurePrompt: bluemix.configurePrompt,
   promptBluemixSettings: bluemix.promptSettings,

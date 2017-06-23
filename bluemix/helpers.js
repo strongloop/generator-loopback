@@ -12,16 +12,43 @@ var yaml = require('yaml-js');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var lbBm = require('loopback-bluemix');
+var provision = require('loopback-bluemix').provision;
 
 var bluemix = exports;
 
 // All actions defined in this file should be called with `this` pointing
 // to a generator instance
 
+bluemix.promptServiceName = function() {
+  if (!this.done && this.options.provision) {
+    provision.promptServiceName(this, g);
+  }
+};
+
+bluemix.getServicePlans = function() {
+  if (!this.done && this.options.provision) {
+    provision.getServicePlans(this);
+  }
+};
+
+bluemix.promptServicePlan = function() {
+  if (!this.done && this.options.provision) {
+    provision.promptServicePlan(this, g);
+  }
+};
+
+bluemix.provisionService = function() {
+  if (!this.done && this.options.provision) {
+    provision.provisionService(this, g);
+    this.done = true;
+  }
+};
+
 /**
  * Prepare prompts for bluemix options
  */
 bluemix.configurePrompt = function() {
+  if (this.done) return;
   // https://github.com/strongloop/generator-loopback/issues/38
   // yeoman-generator normalize the appname with ' '
   this.appName = path.basename(process.cwd())
@@ -145,6 +172,7 @@ bluemix.configurePrompt = function() {
 };
 
 bluemix.generateFiles = function() {
+  if (this.done) return;
   if (this.bluemix) {
     var bluemixOptions = {
       destDir: this.destinationRoot(),
@@ -159,6 +187,7 @@ bluemix.generateFiles = function() {
 };
 
 bluemix.promptDefaultServices = function() {
+  if (this.done) return;
   if (this.enableDefaultServices) {
     var prompts = [
       {
@@ -182,6 +211,7 @@ bluemix.promptDefaultServices = function() {
 };
 
 bluemix.addDefaultServices = function() {
+  if (this.done) return;
   if (this.enableDefaultServices) {
     var done = this.async();
     var options = {

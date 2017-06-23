@@ -151,24 +151,8 @@ module.exports = yeoman.Base.extend({
     if (this.options.bluemix) { ds.selectBluemixDatasource(this, g); }
   },
 
-  promptServiceName: function() {
-    if (this.provisionNewService) { ds.promptServiceName(this, g); }
-  },
-
-  getServicePlans: function() {
-    if (this.provisionNewService) { ds.getServicePlans(this); }
-  },
-
-  promptServicePlan: function() {
-    if (this.provisionNewService) { ds.promptServicePlan(this, g); }
-  },
-
-  provisionService: function() {
-    if (this.provisionNewService) { ds.provisionService(this, g); }
-  },
-
   bindServiceToApp: function() {
-    if (this.provisionNewService || this.options.bluemix) {
+    if (this.options.bluemix) {
       ds.bindServiceToApp(this);
     }
   },

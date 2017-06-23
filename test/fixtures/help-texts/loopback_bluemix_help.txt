@@ -10,7 +10,10 @@ Options:
         --toolchain     # Set up Bluemix toolchain
         --login         # Log into Bluemix                           Default: false
         --sso           # Log into Bluemix with SSO
+        --provision     # Provision a Bluemix service                Default: false
 
 Description:
   `toolchain`, `manifest`, and `docker` are scaffold options. Not specifying any of them is interpreted as
   specifying all of them.
+
+  Specify `provision` to provision a LoopBack-supported Bluemix data service.

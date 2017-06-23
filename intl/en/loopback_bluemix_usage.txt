@@ -1,3 +1,5 @@
 Description:
   `toolchain`, `manifest`, and `docker` are scaffold options. Not specifying any of them is interpreted as
   specifying all of them.
+
+  Specify `provision` to provision a LoopBack-supported Bluemix data service.
