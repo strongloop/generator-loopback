@@ -1,3 +1,9 @@
+2017-06-23, Version 3.8.0
+=========================
+
+ * Support for IBM Object Storage (Hage Yaapa)
+
+
 2017-06-22, Version 3.7.1
 =========================
 
