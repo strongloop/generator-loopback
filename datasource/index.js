@@ -290,6 +290,10 @@ module.exports = yeoman.Base.extend({
     });
     if (config.connector === 'ibm-object-storage') {
       config.connector = 'loopback-component-storage';
+      config.provider = 'openstack';
+      config.useServiceCatalog = true;
+      config.useInternal = false;
+      config.keystoneAuthVersion = 'v3';
     }
     if (this.options.bluemix) {
       ds.addDatasource(this, config);

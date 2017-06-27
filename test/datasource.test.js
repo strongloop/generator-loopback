@@ -132,14 +132,22 @@ describe('loopback:datasource generator', function() {
   it('should support IBM Object Storage ', function(done) {
     var datasourceGen = givenDataSourceGenerator();
     helpers.mockPrompt(datasourceGen, {
-      name: 'ds-object-storage',
+      name: 'My-Object-Storage',
       connector: 'ibm-object-storage',
       installConnector: false,
     });
 
     datasourceGen.run(function() {
-      var datasources = Object.keys(readDataSourcesJsonSync('server'));
-      expect(datasources).to.include('ds-object-storage');
+      var datasources = readDataSourcesJsonSync('server');
+      // eslint-disable-next-line no-unused-expressions
+      expect(datasources['My-Object-Storage']).to.exist;
+      var ds = datasources['My-Object-Storage'];
+      expect(ds.name).to.equal('My-Object-Storage');
+      expect(ds.connector).to.equal('loopback-component-storage');
+      expect(ds.provider).to.equal('openstack');
+      expect(ds.useServiceCatalog).to.equal(true);
+      expect(ds.useInternal).to.equal(false);
+      expect(ds.keystoneAuthVersion).to.equal('v3');
       var pkg = fs.readFileSync(
         path.join(SANDBOX, 'package.json'), 'UTF-8');
       pkg = JSON.parse(pkg);
