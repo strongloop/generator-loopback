@@ -1,3 +1,11 @@
+2017-06-27, Version 3.9.0
+=========================
+
+ * Add missing fields in datasources.js (Hage Yaapa)
+
+ * Separate command for service provisioning (Hage Yaapa)
+
+
 2017-06-23, Version 3.8.0
 =========================
 
