@@ -18,7 +18,6 @@ var SANDBOX =  path.resolve(__dirname, 'sandbox');
 
 var BASIC_BLUEMIX_FILES = [
   '.bluemix/datasources-config.json',
-  'server/datasources.bluemix.js',
   '.cfignore',
   'manifest.yml',
 ];
@@ -53,7 +52,18 @@ describe('loopback:bluemix generator', function() {
     rimraf(SANDBOX, done);
   });
 
-  it('should generate all Bluemix files', function(done) {
+  it('should generate datasources.bluemix.js', function(done) {
+    var gen = givenBluemixGenerator('--force --bluemix');
+    helpers.mockPrompt(gen, {
+      enableManifest: false,
+    });
+    gen.run(function() {
+      ygAssert.file('./server/datasources.bluemix.js');
+      done();
+    });
+  });
+
+  it('should generate all basic Bluemix files', function(done) {
     var gen = givenBluemixGenerator('--force --bluemix');
     helpers.mockPrompt(gen, {
       enableManifest: true,
