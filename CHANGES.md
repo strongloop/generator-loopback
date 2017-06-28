@@ -1,3 +1,9 @@
+2017-06-28, Version 3.9.1
+=========================
+
+ * Add test for datasources.bluemix.js (Hage Yaapa)
+
+
 2017-06-27, Version 3.9.0
 =========================
 
