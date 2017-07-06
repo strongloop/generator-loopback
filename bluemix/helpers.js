@@ -89,7 +89,7 @@ bluemix.configurePrompt = function() {
       var manifestFilePath = path.resolve('.', 'manifest.yml');
       var manifest = {};
       if (fs.existsSync(manifestFilePath)) {
-        manifest = yaml.load(fs.readFileSync(manifestFilePath)).applications[0];
+        manifest = yaml.load(fs.readFileSync(manifestFilePath));
       }
 
       var appMemoryPrompt = {

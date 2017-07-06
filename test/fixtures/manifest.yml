@@ -1,10 +1,9 @@
-applications:
-- path: .
-  memory: 1024M
-  instances: 5
-  domain: my.bluemix.net
-  name: cool-app
-  host: cool-app
-  disk_quota: 1280M
+path: .
+memory: 1024M
+instances: 5
+domain: my.bluemix.net
+name: cool-app
+host: cool-app
+disk_quota: 1280M
 env:
   NODE_ENV: bluemix
