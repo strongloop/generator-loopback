@@ -129,7 +129,47 @@ describe('loopback:datasource generator', function() {
     });
   });
 
-  it('should support IBM Object Storage ', function(done) {
+  it('should support MongoDB', function(done) {
+    var datasourceGen = givenDataSourceGenerator();
+    helpers.mockPrompt(datasourceGen, {
+      name: 'mongodb-datasource',
+      connector: 'mongodb',
+      installConnector: false,
+    });
+
+    datasourceGen.run(function() {
+      var datasources = readDataSourcesJsonSync('server');
+      expect(datasources['mongodb-datasource']).to.be.an('object');
+      var ds = datasources['mongodb-datasource'];
+      expect(ds.name).to.equal('mongodb-datasource');
+      expect(ds.connector).to.equal('mongodb');
+      var pkg = readPackageJson();
+      expect(pkg.dependencies['loopback-connector-mongodb']).to.be.a('string');
+      done();
+    });
+  });
+
+  it('should support Cloudant', function(done) {
+    var datasourceGen = givenDataSourceGenerator();
+    helpers.mockPrompt(datasourceGen, {
+      name: 'cloudant-datasource',
+      connector: 'cloudant',
+      installConnector: false,
+    });
+
+    datasourceGen.run(function() {
+      var datasources = readDataSourcesJsonSync('server');
+      expect(datasources['cloudant-datasource']).to.be.an('object');
+      var ds = datasources['cloudant-datasource'];
+      expect(ds.name).to.equal('cloudant-datasource');
+      expect(ds.connector).to.equal('cloudant');
+      var pkg = readPackageJson();
+      expect(pkg.dependencies['loopback-connector-cloudant']).to.be.a('string');
+      done();
+    });
+  });
+
+  it('should support IBM Object Storage', function(done) {
     var datasourceGen = givenDataSourceGenerator();
     helpers.mockPrompt(datasourceGen, {
       name: 'My-Object-Storage',
@@ -139,8 +179,7 @@ describe('loopback:datasource generator', function() {
 
     datasourceGen.run(function() {
       var datasources = readDataSourcesJsonSync('server');
-      // eslint-disable-next-line no-unused-expressions
-      expect(datasources['My-Object-Storage']).to.exist;
+      expect(datasources['My-Object-Storage']).to.be.an('object');
       var ds = datasources['My-Object-Storage'];
       expect(ds.name).to.equal('My-Object-Storage');
       expect(ds.connector).to.equal('loopback-component-storage');
@@ -148,11 +187,8 @@ describe('loopback:datasource generator', function() {
       expect(ds.useServiceCatalog).to.equal(true);
       expect(ds.useInternal).to.equal(false);
       expect(ds.keystoneAuthVersion).to.equal('v3');
-      var pkg = fs.readFileSync(
-        path.join(SANDBOX, 'package.json'), 'UTF-8');
-      pkg = JSON.parse(pkg);
-      // eslint-disable-next-line no-unused-expressions
-      expect(pkg.dependencies['loopback-component-storage']).to.exist;
+      var pkg = readPackageJson();
+      expect(pkg.dependencies['loopback-component-storage']).to.be.a('string');
       done();
     });
   });
@@ -240,5 +276,10 @@ describe('loopback:datasource generator', function() {
     var filepath = path.resolve(SANDBOX, facet || 'server', 'datasources.json');
     var content = fs.readFileSync(filepath, 'utf-8');
     return JSON.parse(content);
+  }
+
+  function readPackageJson() {
+    var pkg = fs.readFileSync(path.join(SANDBOX, 'package.json'), 'UTF-8');
+    return JSON.parse(pkg);
   }
 });
