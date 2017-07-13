@@ -190,8 +190,11 @@ module.exports = yeoman.Base.extend({
     for (i = 0, n = self.apis.length; i < n; i++) {
       api = self.apis[i];
       // TODO [rashmi] use binding name for now
-      var basePath = this.bindingName;
-      var soapModel = 'soap_' + basePath.replace(/\//g, '_');
+      // basePath is used as file name for generated API file and top level API model file.
+      // Replace special characters in binding name with _ since these characters are not
+      // allowed in filename.
+      var basePath = this.bindingName.replace(/[-.\/`~!@#%^&*()-+={}'";:<>,?/]/g, '_');
+      var soapModel = 'soap_' + basePath;
       self.modelNames.push(soapModel);
       var modelDef = {
         name: soapModel,

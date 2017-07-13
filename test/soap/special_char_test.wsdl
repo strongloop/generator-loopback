@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<!-- rpc/Literal example -->
+
+<wsdl:definitions name="StockQuoteRPCLiteral"
+                  targetNamespace="http://example.com/rpc_Literal_test.wsdl"
+                  xmlns:tns="http://example.com/rpc_literal_test.wsdl"
+                  xmlns:xsd1="http://example.com/rpc_literal_test.xsd"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2000/10/XMLSchema">
+
+    <wsdl:message name="myMethodRequest">
+        <wsdl:part name="x" type="xsd:int"/>
+        <wsdl:part name="y" type="xsd:float"/>
+    </wsdl:message>
+
+
+    <wsdl:portType name="RPCLiteralTest">
+        <wsdl:operation name="myMethod">
+            <wsdl:input message="tns:myMethodRequest"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+
+    <wsdl:binding name="RPCLiteralTest2.0Binding" type="tns:RPCLiteralTest">
+        <soap:binding style="rpc"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="myMethod">
+            <soap:operation soapAction="http://example.com/RPCLiteralTest"/>
+            <wsdl:input>
+                <soap:body/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="RPCLiteralService">
+        <wsdl:port name="RpcLiteralTestPort" binding="tns:RPCLiteralTest2.0Binding">
+            <soap:address location="http://localhost:15099/rpc_Literal_testing"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
+

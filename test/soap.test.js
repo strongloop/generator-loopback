@@ -73,41 +73,8 @@ describe('loopback:soap tests', function() {
           done();
         });
       });
-
-    function givenModelGenerator(modelArgs) {
-      var path = '../../soap';
-      var name = 'loopback:soap';
-      var deps = [];
-      var gen = common.createGenerator(name, path, deps, modelArgs, {});
-      return gen;
-    }
-
-    function readModelJsonSync(name) {
-      var soapJson = path.resolve(SANDBOX, 'common/models/' + name + '.json');
-      expect(fs.existsSync(soapJson), 'file exists');
-      return JSON.parse(fs.readFileSync(soapJson));
-    }
-
-    function givenDataSourceGenerator(dsArgs) {
-      var path = '../../datasource';
-      var name = 'loopback:datasource';
-      var gen = common.createGenerator(name, path, [], dsArgs, {});
-      return gen;
-    }
-
-    function readModelConfigSync(facet) {
-      facet = facet || 'server';
-      var filepath = path.resolve(SANDBOX, facet, 'model-config.json');
-      var content = fs.readFileSync(filepath, 'utf-8');
-      return JSON.parse(content);
-    }
-
-    function readDataSourcesJsonSync(facet) {
-      var filepath = path.resolve(SANDBOX, facet || 'server', 'datasources.json'); // eslint-disable-line max-len
-      var content = fs.readFileSync(filepath, 'utf-8');
-      return JSON.parse(content);
-    }
   });
+
   describe('periodic table wsdl', function() {
     beforeEach(common.resetWorkspace);
 
@@ -178,39 +145,89 @@ describe('loopback:soap tests', function() {
           done();
         });
       });
-
-    function givenModelGenerator(modelArgs) {
-      var path = '../../soap';
-      var name = 'loopback:soap';
-      var deps = [];
-      var gen = common.createGenerator(name, path, deps, modelArgs, {});
-      return gen;
-    }
-
-    function readModelJsonSync(name) {
-      var soapJson = path.resolve(SANDBOX, 'common/models/' + name + '.json');
-      expect(fs.existsSync(soapJson), 'file exists');
-      return JSON.parse(fs.readFileSync(soapJson));
-    }
-
-    function givenDataSourceGenerator(dsArgs) {
-      var path = '../../datasource';
-      var name = 'loopback:datasource';
-      var gen = common.createGenerator(name, path, [], dsArgs, {});
-      return gen;
-    }
-
-    function readModelConfigSync(facet) {
-      facet = facet || 'server';
-      var filepath = path.resolve(SANDBOX, facet, 'model-config.json');
-      var content = fs.readFileSync(filepath, 'utf-8');
-      return JSON.parse(content);
-    }
-
-    function readDataSourcesJsonSync(facet) {
-      var filepath = path.resolve(SANDBOX, facet || 'server', 'datasources.json'); // eslint-disable-line max-len
-      var content = fs.readFileSync(filepath, 'utf-8');
-      return JSON.parse(content);
-    }
   });
+
+  describe('binding with special character', function() {
+    beforeEach(common.resetWorkspace);
+    beforeEach(function createSandbox(done) {
+      helpers.testDirectory(SANDBOX, done);
+    });
+    beforeEach(function createProject(done) {
+      common.createDummyProject(SANDBOX, 'test-soapapp', done);
+    });
+    beforeEach(function createDataSource(done) {
+      var modelGen = givenDataSourceGenerator();
+      helpers.mockPrompt(modelGen, {
+        name: 'soapds',
+        customConnector: '', // temporary workaround for
+                             // https://github.com/yeoman/generator/issues/600
+        connector: 'soap',
+        url: 'http://localhost:15099/rpc_Literal_testing',
+        wsdl: path.join(__dirname, 'soap/special_char_test.wsdl'),
+        remotingEnabled: true,
+        installConnector: false,
+      });
+      modelGen.run(function() {
+        done();
+      });
+    });
+
+    it('API file name test',
+      function(done) {
+        var modelGen = givenModelGenerator();
+        helpers.mockPrompt(modelGen, {
+          dataSource: 'soapds',
+          service: 'RPCLiteralService',
+          binding: 'RPCLiteralTest2.0Binding',
+          operations: ['myMethod'],
+        });
+
+        // this runs command  loopback:soap command with mock up /test/soap/stockquote.wsdl as input from command prompt
+        modelGen.run(function() {
+          var content = readAPIFileSync('soap-rpc-literal-test-2-0-binding');
+          done();
+        });
+      });
+  });
+
+  function readAPIFileSync(name) {
+    var soapAPIJson = path.resolve(SANDBOX, 'server/models/' + name + '.json');
+    expect(fs.existsSync(soapAPIJson)).to.equal(true);
+    var soapAPIModel = path.resolve(SANDBOX, 'server/models/' + name + '.js');
+    expect(fs.existsSync(soapAPIModel)).to.equal(true);
+  }
+
+  function givenModelGenerator(modelArgs) {
+    var path = '../../soap';
+    var name = 'loopback:soap';
+    var deps = [];
+    var gen = common.createGenerator(name, path, deps, modelArgs, {});
+    return gen;
+  }
+
+  function readModelJsonSync(name) {
+    var soapJson = path.resolve(SANDBOX, 'common/models/' + name + '.json');
+    expect(fs.existsSync(soapJson)).to.equal(true);
+    return JSON.parse(fs.readFileSync(soapJson));
+  }
+
+  function givenDataSourceGenerator(dsArgs) {
+    var path = '../../datasource';
+    var name = 'loopback:datasource';
+    var gen = common.createGenerator(name, path, [], dsArgs, {});
+    return gen;
+  }
+
+  function readModelConfigSync(facet) {
+    facet = facet || 'server';
+    var filepath = path.resolve(SANDBOX, facet, 'model-config.json');
+    var content = fs.readFileSync(filepath, 'utf-8');
+    return JSON.parse(content);
+  }
+
+  function readDataSourcesJsonSync(facet) {
+    var filepath = path.resolve(SANDBOX, facet || 'server', 'datasources.json'); // eslint-disable-line max-len
+    var content = fs.readFileSync(filepath, 'utf-8');
+    return JSON.parse(content);
+  }
 });
