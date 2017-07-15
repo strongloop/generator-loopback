@@ -164,8 +164,17 @@ describe('loopback:bluemix generator', function() {
       tryAgain: false,
     });
     gen.run(function() {
-      ygAssert.file([
-        path.join(os.homedir(), '.bluemix/.loopback/config.json')]);
+      var configFile = path.join(os.homedir(), '.bluemix/.loopback/config.json');
+      ygAssert.file([configFile]);
+      var config = readJsonFile(configFile);
+      assert.equal('string', typeof config.apiURL);
+      assert.equal('string', typeof config.accessToken);
+      assert.equal('object', typeof config.organization);
+      assert.equal('string', typeof config.organization.guid);
+      assert.equal('string', typeof config.organization.name);
+      assert.equal('object', typeof config.space);
+      assert.equal('string', typeof config.space.guid);
+      assert.equal('string', typeof config.space.name);
       done();
     });
   });
@@ -179,8 +188,17 @@ describe('loopback:bluemix generator', function() {
       tryAgain: false,
     });
     gen.run(function() {
-      ygAssert.file([
-        path.join(os.homedir(), '.bluemix/.loopback/config.json')]);
+      var configFile = path.join(os.homedir(), '.bluemix/.loopback/config.json');
+      ygAssert.file([configFile]);
+      var config = readJsonFile(configFile);
+      assert.equal('string', typeof config.apiURL);
+      assert.equal('string', typeof config.accessToken);
+      assert.equal('object', typeof config.organization);
+      assert.equal('string', typeof config.organization.guid);
+      assert.equal('string', typeof config.organization.name);
+      assert.equal('object', typeof config.space);
+      assert.equal('string', typeof config.space.guid);
+      assert.equal('string', typeof config.space.name);
       done();
     });
   });
@@ -192,4 +210,9 @@ function givenBluemixGenerator(args) {
   var gen = common.createGenerator(name, genPath, [], args, {});
   gen.options['skip-install'] = true;
   return gen;
+}
+
+function readJsonFile(filePath) {
+  var fileContent = fs.readFileSync(filePath, 'utf8');
+  return JSON.parse(fileContent);
 }

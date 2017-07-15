@@ -5,6 +5,7 @@
 
 'use strict';
 
+var ora = require('ora');
 var g = require('../lib/globalize');
 var path = require('path');
 var os = require('os');
@@ -70,11 +71,11 @@ function login() {
       ];
     }
     this.prompt(prompts).then(function(answers) {
-      this.log(g.f('Logging into Bluemix...'));
+      var spinner = ora(g.f('Logging into Bluemix...')).start();
       cf.login(answers.email, answers.password, options, function(err, result) {
         if (err || 'error' in result) {
           var errMsg = err || result.error;
-          this.log(chalk.red(g.f('Login failed: ') + errMsg));
+          spinner.fail(g.f('Login failed: ') + errMsg);
           var prompts = [
             {
               name: 'tryAgain',
@@ -96,7 +97,7 @@ function login() {
         this.bluemixCredentials = result;
         this.accessToken = result['access_token'];
         this.refreshToken = result['refresh_token'];
-        this.log(g.f('Listing organizations from Bluemix...'));
+        spinner.text = g.f('Listing organizations from Bluemix...');
         cf.getOrganizations(this.accessToken, options, function(err, orgs) {
           if (err) return done(err);
           var choices = orgs.map(function(o) {
@@ -123,7 +124,7 @@ function login() {
             if ('organization' in answers) {
               this.organization = answers.organization;
             }
-            this.log(g.f('Listing spaces from Bluemix...'));
+            spinner.text = g.f('Listing spaces from Bluemix...');
             cf.getSpaces(this.organization, this.accessToken, options,
               function(err, spaces) {
                 if (err) return done(err);
@@ -153,6 +154,7 @@ function login() {
                     default: true,
                   },
                 ];
+                spinner.stop();
                 this.prompt(prompts).then(function(answers) {
                   if ('space' in answers) {
                     this.space = answers.space;
@@ -162,12 +164,12 @@ function login() {
                       apiURL: this.apiURL,
                       accessToken: this.accessToken,
                       organization: {
-                        guid: this.organization.guid,
-                        name: this.organization.name,
+                        guid: this.organization.metadata.guid,
+                        name: this.organization.entity.name,
                       },
                       space: {
-                        guid: this.space.guid,
-                        name: this.space.name,
+                        guid: this.space.metadata.guid,
+                        name: this.space.entity.name,
                       },
                     };
                     this.fs.writeJSON(path.join(os.homedir(),
