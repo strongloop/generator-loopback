@@ -1,3 +1,17 @@
+2017-07-15, Version 4.0.0
+=========================
+
+ * handle special char for filename (rashmihunt)
+
+ * deps: loopback-bluemix@3.0.0 (Hage Yaapa)
+
+ * Add org and space info to config file (Hage Yaapa)
+
+ * Add tests for MongoDB and Cloudant support (Hage Yaapa)
+
+ * Single app in manifest.xml (Hage Yaapa)
+
+
 2017-06-28, Version 3.9.1
 =========================
 
