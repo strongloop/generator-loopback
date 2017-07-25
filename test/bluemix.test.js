@@ -17,7 +17,6 @@ var yaml = require('yaml-js');
 var SANDBOX =  path.resolve(__dirname, 'sandbox');
 
 var BASIC_BLUEMIX_FILES = [
-  '.bluemix/datasources-config.json',
   '.cfignore',
   'manifest.yml',
 ];
@@ -59,6 +58,17 @@ describe('loopback:bluemix generator', function() {
     });
     gen.run(function() {
       ygAssert.file('./server/datasources.bluemix.js');
+      done();
+    });
+  });
+
+  it('should generate .bluemix/datasources-config.json', function(done) {
+    var gen = givenBluemixGenerator('--force --bluemix');
+    helpers.mockPrompt(gen, {
+      enableManifest: false,
+    });
+    gen.run(function() {
+      ygAssert.file('.bluemix/datasources-config.json');
       done();
     });
   });
