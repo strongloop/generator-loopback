@@ -204,6 +204,43 @@ describe('loopback:datasource generator', function() {
       });
 
       // this test requires an IBM Object Storage service named "My-Object-Storage" to be provisioned already
+      it('should not try to bind a service despite error', function(done) {
+        var appGen = givenAppGenerator();
+
+        helpers.mockPrompt(appGen, {
+          appname: 'test-app',
+          template: 'api-server',
+          appMemory: '512M',
+          appInstances: 1,
+          appDomain: 'mybluemix.net',
+          appHost: 'test-app',
+          appDiskQuota: '512M',
+          enableDocker: true,
+          enableToolchain: true,
+          enableAutoScaling: true,
+          enableAppMetrics: true,
+        });
+
+        appGen.options['skip-install'] = true;
+        appGen.options['bluemix'] = true;
+        appGen.options['login'] = false;
+
+        appGen.run(function() {
+          var datasourceGen = givenDataSourceGenerator('--bluemix', '../../../datasource');
+          datasourceGen.abort = true;
+          helpers.mockPrompt(datasourceGen, {
+            serviceName: 'My-Object-Storage',
+            connector: 'loopback-component-storage',
+            installConnector: false,
+          });
+          datasourceGen.run(function() {
+            expect(datasourceGen.serviceBindingStatus).to.equal('unbound');
+            done();
+          });
+        });
+      });
+
+      // this test requires an IBM Object Storage service named "My-Object-Storage" to be provisioned already
       it('should support IBM Object Storage ', function(done) {
         var appGen = givenAppGenerator();
 
