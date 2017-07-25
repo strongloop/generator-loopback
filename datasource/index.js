@@ -32,6 +32,7 @@ module.exports = yeoman.Base.extend({
   constructor: function() {
     yeoman.Base.apply(this, arguments);
     this.abort = false;
+    this.serviceBindingStatus = 'unbound';
     this.option('bluemix', {
       desc: g.f('Add a datasource from Bluemix'),
     });
@@ -152,8 +153,11 @@ module.exports = yeoman.Base.extend({
   },
 
   bindServiceToApp: function() {
+    if (this.abort) return;
     if (this.options.bluemix) {
+      this.serviceBindingStatus = 'binding';
       ds.bindServiceToApp(this);
+      this.serviceBindingStatus = 'bound';
     }
   },
 
