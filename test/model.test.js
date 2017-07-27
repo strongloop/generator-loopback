@@ -195,7 +195,8 @@ describe('loopback:model generator', function() {
     });
 
     describe('with --bluemix', function() {
-      it('should throw if no Bluemix datasource is found', function(done) {
+      it('should not throw if no Bluemix datasources are found',
+      function(done) {
         var srcPath = path.join(__dirname, 'fixtures',
                       'datasources-config-empty.json');
         var destPath = path.join(SANDBOX, '.bluemix',
@@ -207,8 +208,27 @@ describe('loopback:model generator', function() {
           name: 'Product',
         });
 
-        modelGen.run().on('error', function(e) {
-          assert.equal(e.message, 'No Bluemix datasource found');
+        modelGen.run(function() {
+          expect(modelGen.abort).to.eql(true);
+          done();
+        });
+      });
+
+      it('should not throw on parsing datasources-config.json', function(done) {
+        var srcPath = path.join(__dirname, 'fixtures',
+                      'datasources-config-empty.json');
+        var destPath = path.join(SANDBOX, '.bluemix',
+                      'datasources-config.json');
+        fs.copySync(srcPath, destPath);
+        fs.writeFileSync(destPath, '');
+
+        var modelGen = givenModelGenerator('--bluemix --login=false');
+        helpers.mockPrompt(modelGen, {
+          name: 'Product',
+        });
+
+        modelGen.run(function() {
+          expect(modelGen.abort).to.eql(true);
           done();
         });
       });

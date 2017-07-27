@@ -26,6 +26,7 @@ module.exports = yeoman.Base.extend({
 
   constructor: function() {
     yeoman.Base.apply(this, arguments);
+    this.abort = false;
     this.databaseModel = true; // `false` if using ibm-object-store datasource
     this.option('bluemix', {
       desc: g.f('Bind to a Bluemix datasource'),
@@ -61,28 +62,37 @@ module.exports = yeoman.Base.extend({
   addNullDataSourceItem: actions.addNullDataSourceItem,
 
   setBluemixDatasourceState: function() {
+    if (this.abort) return;
     if (this.options.bluemix) {
       var configPath = this.destinationPath('.bluemix/datasources-config.json');
       if (!fs.existsSync(configPath)) {
-        this.log('datasources-config.json not found');
-        process.exit();
-      }
-      var datasourcesConfig = JSON.parse(fs.readFileSync(configPath));
-      this.bluemixDataSourcesList = datasourcesConfig.datasources;
-      if (Object.keys(this.bluemixDataSourcesList).length) {
-        this.hasDatasources = true;
+        this.abort = true;
+        this.log('datasources-config.json not found.');
       } else {
-        this.hasDatasources = false;
+        try {
+          var datasourcesConfig = JSON.parse(fs.readFileSync(configPath));
+          this.bluemixDataSourcesList = datasourcesConfig.datasources;
+          if (Object.keys(this.bluemixDataSourcesList).length) {
+            this.hasDatasources = true;
+          } else {
+            this.hasDatasources = false;
+          }
+        } catch (err) {
+          this.abort = true;
+          this.log('Error parsing datasources-config.json.');
+        }
       }
     }
   },
 
   checkForDatasource: function() {
+    if (this.abort) return;
     if (!this.hasDatasources) {
       if (this.options.bluemix) {
-        var msg = 'No Bluemix datasource found';
+        this.abort = true;
+        this.log('No Bluemix datasource found.');
         var done = this.async();
-        return done(new Error(msg));
+        return done();
       } else {
         var warning = chalk.red(g.f('Warning: Found no data sources to ' +
         'attach model. There will be no data-access methods available until ' +
@@ -94,6 +104,7 @@ module.exports = yeoman.Base.extend({
   },
 
   askForName: function() {
+    if (this.abort) return;
     var prompts = [
       {
         name: 'name',
@@ -110,6 +121,7 @@ module.exports = yeoman.Base.extend({
   },
 
   askForDataSource: function() {
+    if (this.abort) return;
     if (!this.hasDatasources) {
       this.dataSource = null;
       return;
@@ -163,6 +175,7 @@ module.exports = yeoman.Base.extend({
   },
 
   getBaseModels: function() {
+    if (this.abort) return;
     if (!this.dataSource) {
       this.baseModel = 'Model';
       return;
@@ -177,6 +190,7 @@ module.exports = yeoman.Base.extend({
   },
 
   askForParameters: function() {
+    if (this.abort) return;
     this.displayName = chalk.yellow(this.name);
 
     var baseModelChoices = ['Model', 'PersistedModel']
@@ -263,6 +277,7 @@ module.exports = yeoman.Base.extend({
   },
 
   modelDefinition: function() {
+    if (this.abort) return;
     var done = this.async();
     var config = {
       name: this.name,
@@ -278,6 +293,7 @@ module.exports = yeoman.Base.extend({
   },
 
   modelConfiguration: function() {
+    if (this.abort) return;
     var done = this.async();
     var config = {
       name: this.name,
@@ -293,6 +309,7 @@ module.exports = yeoman.Base.extend({
   },
 
   delim: function() {
+    if (this.abort) return;
     if (this.base === 'KeyValueModel' || !this.databaseModel)
       return;
 
@@ -300,6 +317,7 @@ module.exports = yeoman.Base.extend({
   },
 
   property: function() {
+    if (this.abort) return;
     if (this.databaseModel) {
       var done = this.async();
 
