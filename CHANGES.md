@@ -1,3 +1,15 @@
+2017-07-27, Version 4.0.1
+=========================
+
+ * Gracefully handle model errors (Hage Yaapa)
+
+ * Bind service to app conditionally (Hage Yaapa)
+
+ * Add CODEOWNERS file (Diana Lau)
+
+ * Update test to check datasources-config.json (Hage Yaapa)
+
+
 2017-07-15, Version 4.0.0
 =========================
 
