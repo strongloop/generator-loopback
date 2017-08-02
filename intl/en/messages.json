@@ -61,6 +61,7 @@
   "4778bed7b43fd4a1b3503d14cee055d1": "Generating {0}",
   "49211833b2cba8e0b5d7ef64680f1f49": "Do you want to create Dockerfile?",
   "4942825db5deda928ed027faba5e275b": "Select the access type:",
+  "4c4e9df4451d7a6d3d64fa1ec8c9fbde": "Provision a Bluemix service",
   "4d3791e48970f081cdae3e3f2771fbf4": "Enter the property name",
   "4e65ffd4035e43eb543f5a779d256ccd": "Enter an empty path name when done.",
   "4efb4b6d9a0d99bcf7b5a9e7ce83d4dd": "URL or file path of the WSDL",
