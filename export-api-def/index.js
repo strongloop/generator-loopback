@@ -45,5 +45,8 @@ module.exports = yeoman.Base.extend({
     } else {
       process.stdout.write(apiDef);
     }
+
+    // Kill app if still alive
+    setTimeout(process.exit, 100);
   },
 });

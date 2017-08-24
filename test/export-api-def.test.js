@@ -8,6 +8,7 @@ var path = require('path');
 var helpers = require('yeoman-test');
 var fs = require('fs');
 var expect = require('chai').expect;
+var sinon = require('sinon');
 var wsModels = require('loopback-workspace').models;
 var common = require('./common');
 var yaml = require('js-yaml');
@@ -16,6 +17,7 @@ var SANDBOX =  path.resolve(__dirname, 'sandbox');
 var PKG_CACHE = path.resolve(__dirname, '..', '.pkgcache');
 
 describe('loopback:export-api-def generator', function() {
+  var PROCESS_EXIT_STUB;
   this.timeout(30 * 60 * 1000); // 30 minutes
   before(common.resetWorkspace);
 
@@ -42,6 +44,14 @@ describe('loopback:export-api-def generator', function() {
 
   before(function installDependencies(done) {
     install(SANDBOX, PKG_CACHE, ['dependencies'], done);
+  });
+
+  beforeEach(function stubProcessExit() {
+    PROCESS_EXIT_STUB = sinon.stub(process, 'exit');
+  });
+
+  afterEach(function unstubProcessExit() {
+    PROCESS_EXIT_STUB.restore();
   });
 
   it('produces JSON format', function(done) {
@@ -101,6 +111,34 @@ describe('loopback:export-api-def generator', function() {
       done();
     });
   });
+
+  describe('running on project with onging async operations', function() {
+    it('immediately does not exit the process', function(done) {
+      var gen = givenGenerator();
+      expect(PROCESS_EXIT_STUB.called).to.equal(false);
+      gen.run(function() {
+        expect(PROCESS_EXIT_STUB.called).to.equal(false);
+        done();
+      });
+    });
+    it('eventually exits the process', function(done) {
+      this.timeout(1000); // 10 seconds
+      var gen = givenGenerator();
+      expect(PROCESS_EXIT_STUB.called).to.equal(false);
+      gen.run(function() {
+        // Periodically check process.exit was called until timeout
+        checkProcessExitCalled(done);
+      });
+    });
+  });
+
+  function checkProcessExitCalled(done) {
+    if (PROCESS_EXIT_STUB.called) {
+      done();
+    } else {
+      setTimeout(checkProcessExitCalled, 10, done);
+    }
+  }
 
   function givenGenerator(args) {
     var path = '../../export-api-def';
