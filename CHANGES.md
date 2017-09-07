@@ -1,3 +1,19 @@
+2017-09-07, Version 5.0.0
+=========================
+
+ * Increment loopback-workspace to ^4.0.0 (#319) (Rashmi Hunt)
+
+ * travis: drop Node.js 7.x, add 8.x (Miroslav Bajtoš)
+
+ * Update translations from TVT (Allen Boone)
+
+ * Add stalebot configuration (Kevin Delisle)
+
+ * Update translated strings Q3 2017 (Allen Boone)
+
+ * update messages.json (Diana Lau)
+
+
 2017-07-27, Version 4.0.1
 =========================
 
