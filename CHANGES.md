@@ -1,3 +1,9 @@
+2017-09-20, Version 5.0.1
+=========================
+
+ * Fix export-api-def never exitting (Remi Beges)
+
+
 2017-09-07, Version 5.0.0
 =========================
 
