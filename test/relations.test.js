@@ -30,8 +30,17 @@ describe('loopback:relation generator', function() {
         facetName: 'common',
       },
       function(err, model) {
+        if (err) return done(err);
         test.Model = model;
-        done(err);
+        wsModels.ModelConfig.create(
+          {
+            name: 'Car',
+            facetName: 'server',
+            public: true,
+          },
+          function(err) {
+            done(err);
+          });
       });
   });
 
@@ -130,6 +139,68 @@ describe('loopback:relation generator', function() {
         foreignKey: 'customKey',
         model: 'Part',
         through: 'CarPart',
+      });
+      done();
+    });
+  });
+
+  it('asks for nestRemoting', function(done) {
+    var relationGenerator = givenRelationGenerator();
+    helpers.mockPrompt(relationGenerator, {
+      model: 'Car',
+      toModel: 'Part',
+      asPropertyName: 'parts',
+      foreignKey: 'customKey',
+      type: 'hasMany',
+      through: true,
+      throughModel: null,
+      customThroughModel: 'CarPart',
+      nestRemoting: true,
+    });
+
+    relationGenerator.run(function() {
+      var definition = common.readJsonSync('common/models/car.json');
+      var relations = definition.relations || {};
+      expect(relations).to.have.property('parts');
+      expect(relations.parts).to.eql({
+        type: 'hasMany',
+        foreignKey: 'customKey',
+        model: 'Part',
+        through: 'CarPart',
+        options: {
+          nestRemoting: true,
+        },
+      });
+      done();
+    });
+  });
+
+  it('asks for disableInclude', function(done) {
+    var relationGenerator = givenRelationGenerator();
+    helpers.mockPrompt(relationGenerator, {
+      model: 'Car',
+      toModel: 'Part',
+      asPropertyName: 'parts',
+      foreignKey: 'customKey',
+      type: 'hasMany',
+      through: true,
+      throughModel: null,
+      customThroughModel: 'CarPart',
+      disableInclude: true,
+    });
+
+    relationGenerator.run(function() {
+      var definition = common.readJsonSync('common/models/car.json');
+      var relations = definition.relations || {};
+      expect(relations).to.have.property('parts');
+      expect(relations.parts).to.eql({
+        type: 'hasMany',
+        foreignKey: 'customKey',
+        model: 'Part',
+        through: 'CarPart',
+        options: {
+          disableInclude: true,
+        },
       });
       done();
     });

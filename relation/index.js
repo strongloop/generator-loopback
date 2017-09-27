@@ -60,6 +60,21 @@ module.exports = yeoman.Base.extend({
       var msg = g.f('Model not found: %s', this.modelName);
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
+    } else {
+      var done = this.async();
+      var self = this;
+      workspace.models.ModelConfig.findOne(
+        {
+          where: {
+            facetName: 'server',
+            name: self.modelName,
+          },
+        },
+        function(err, config) {
+          self.modelConfig = config;
+          done(err);
+        }
+      );
     }
   },
 
@@ -75,6 +90,7 @@ module.exports = yeoman.Base.extend({
 
   askForParameters: function() {
     var modelDef = this.modelDefinition;
+    var modelConfig = this.modelConfig;
 
     var modelChoices = this.editableModelNames.concat({
       name: g.f('(other)'),
@@ -155,6 +171,21 @@ module.exports = yeoman.Base.extend({
           return answers.through && answers.throughModel === null;
         },
       },
+      {
+        name: 'nestRemoting',
+        message: g.f('Allow the relation to be nested in REST APIs:'),
+        type: 'confirm',
+        default: false,
+        when: function(answers) {
+          return modelConfig && modelConfig.public;
+        },
+      },
+      {
+        name: 'disableInclude',
+        message: g.f('Disable the relation from being included:'),
+        type: 'confirm',
+        default: false,
+      },
     ];
 
     return this.prompt(prompts).then(function(answers) {
@@ -162,6 +193,8 @@ module.exports = yeoman.Base.extend({
       this.toModel = answers.customToModel || answers.toModel;
       this.asPropertyName = answers.asPropertyName;
       this.foreignKey = answers.foreignKey;
+      this.disableInclude = answers.disableInclude;
+      this.nestRemoting = answers.nestRemoting;
       if (answers.through) {
         this.throughModel = answers.customThroughModel || answers.throughModel;
       }
@@ -176,6 +209,15 @@ module.exports = yeoman.Base.extend({
       foreignKey: this.foreignKey,
       name: this.asPropertyName,
     };
+    if (this.nestRemoting || this.disableInclude) {
+      def.options = {};
+      if (this.nestRemoting) {
+        def.options.nestRemoting = true;
+      }
+      if (this.disableInclude) {
+        def.options.disableInclude = true;
+      }
+    }
     if (this.throughModel) {
       def.through = this.throughModel;
     }
