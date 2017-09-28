@@ -1,3 +1,9 @@
+2017-09-28, Version 5.1.1
+=========================
+
+ * Allow public flag to be undefined (Raymond Feng)
+
+
 2017-09-28, Version 5.1.0
 =========================
 
