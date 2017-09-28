@@ -177,7 +177,8 @@ module.exports = yeoman.Base.extend({
         type: 'confirm',
         default: false,
         when: function(answers) {
-          return modelConfig && modelConfig.public;
+          // Only prompt if the model is public (true or undefined)
+          return modelConfig && modelConfig.public !== false;
         },
       },
       {
