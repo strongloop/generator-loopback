@@ -1,3 +1,11 @@
+2017-09-28, Version 5.1.0
+=========================
+
+ * Allow disableInclude and nestRemoting options (Raymond Feng)
+
+ * Update issue and pull-request templates (Sakib Hasan)
+
+
 2017-09-20, Version 5.0.1
 =========================
 
