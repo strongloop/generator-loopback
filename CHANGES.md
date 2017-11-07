@@ -1,3 +1,9 @@
+2017-11-07, Version 5.1.2
+=========================
+
+ * Fix oracle driver checking (Raymond Feng)
+
+
 2017-09-28, Version 5.1.1
 =========================
 
