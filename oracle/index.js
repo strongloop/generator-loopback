@@ -15,7 +15,7 @@ var open = require('open');
 
 var helpText = require('../lib/help');
 var oci = require('./oci');
-var discoverOCI = oci.dsicoverOCI;
+var discoverOCI = oci.discoverOCI;
 var detectClientPlatform = oci.detectClientPlatform;
 
 var INSTALL_URL =
@@ -204,36 +204,46 @@ module.exports = yeoman.Base.extend({
 
   // Make sure checkDriver will be run after npm install
   end: {
-    requireConnector: function() {
+    requireDriver: function() {
       if (this.skip) return;
       try {
-        var m = require(
-          this.destinationPath('node_modules/loopback-connector-oracle'));
-        this.log(chalk.green('Oracle connector is ready.'));
+        // We cannot check by requiring node_modules/loopback-connector-oracle
+        // here as it's cached by previous require
+        // First check node_modules/oracledb
+        require(
+          this.destinationPath('node_modules/oracledb'));
+        this.log(chalk.green('Oracle driver is ready.'));
       } catch (e) {
-        this.log(chalk.red('Oracle connector fails to load: ' + e));
-        this.log(
-          chalk.red('Please try `lb oracle --driver` or ' +
-            'follow instructions at ' + INSTALL_URL + '.'));
-        var done = this.async();
+        try {
+          // Try the local oracledb inside loopback-connector-oracle
+          require(
+            this.destinationPath(
+              'node_modules/loopback-connector-oracle/node_modules/oracledb'));
+          this.log(chalk.green('Oracle driver is ready.'));
+        } catch (e) {
+          this.log(chalk.red('Oracle driver fails to load: ' + e));
+          this.log(
+            chalk.red('Please try `lb oracle --driver` or ' +
+              'follow instructions at ' + INSTALL_URL + '.'));
+          var done = this.async();
 
-        var prompts = [
-          {
-            name: 'openInstruction',
-            message: g.f('Open oracledb installation page?'),
-            type: 'confirm',
-            default: true,
-          },
-        ];
+          var prompts = [
+            {
+              name: 'openInstruction',
+              message: g.f('Open oracledb installation page?'),
+              type: 'confirm',
+              default: true,
+            },
+          ];
 
-        return this.prompt(prompts).then(function(props) {
-          if (props.openInstruction) {
-            open(INSTALL_URL);
-          }
-          done();
-        }.bind(this));
+          return this.prompt(prompts).then(function(props) {
+            if (props.openInstruction) {
+              open(INSTALL_URL);
+            }
+            done();
+          }.bind(this));
+        }
       }
     },
   },
-
 });

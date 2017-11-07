@@ -180,6 +180,6 @@ function detectClientPlatform() {
   return info;
 }
 
-exports.dsicoverOCI = discoverOCI;
+exports.discoverOCI = discoverOCI;
 exports.detectClientPlatform = detectClientPlatform;
 
