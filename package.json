@@ -36,7 +36,7 @@
     "loopback-api-definition": "^3.0.0",
     "loopback-bluemix": "^3.0.0",
     "loopback-soap": "^1.0.0",
-    "loopback-swagger": "^4.0.0",
+    "loopback-swagger": "^5.4.0",
     "loopback-workspace": "^4.0.0",
     "mkdirp": "^0.5.1",
     "open": "0.0.5",
