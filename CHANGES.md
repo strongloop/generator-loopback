@@ -1,3 +1,11 @@
+2017-11-23, Version 5.2.0
+=========================
+
+ * update loopback-swagger dep (Diana Lau)
+
+ * Update LICENSE (Diana Lau)
+
+
 2017-11-07, Version 5.1.2
 =========================
 
