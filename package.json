@@ -46,7 +46,7 @@
     "strong-soap": "^1.2.2",
     "text-table": "^0.2.0",
     "yaml-js": "^0.1.4",
-    "yeoman-generator": "^0.23.1"
+    "yeoman-generator": "^0.24.1"
   },
   "devDependencies": {
     "bluebird": "^3.1.1",
