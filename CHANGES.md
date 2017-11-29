@@ -1,3 +1,13 @@
+2017-11-29, Version 5.1.3
+=========================
+
+ * chore: update dep (#323) (Taranveer Virk)
+
+ * update loopback-swagger dep (Diana Lau)
+
+ * Update LICENSE (Diana Lau)
+
+
 2017-11-07, Version 5.1.2
 =========================
 
