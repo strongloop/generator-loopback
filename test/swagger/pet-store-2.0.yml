@@ -432,13 +432,13 @@ definitions:
       tags:
         type: "array"
         items:
-          $ref: "Tag"
+          $ref: "#/definitions/Tag"
       photoUrls:
         type: "array"
         items:
           type: "string"
       category:
-        $ref: "Category"
+        $ref: "#/definitions/Category"
       id:
         type: "integer"
         format: "int64"

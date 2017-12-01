@@ -44,6 +44,7 @@
     "request": "^2.60.0",
     "strong-globalize": "^2.6.8",
     "strong-soap": "^1.2.2",
+    "swagger-parser": "^4.0.1",
     "text-table": "^0.2.0",
     "yaml-js": "^0.1.4",
     "yeoman-generator": "^0.24.1"

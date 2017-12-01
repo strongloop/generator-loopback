@@ -6,8 +6,10 @@
 'use strict';
 var url = require('url');
 var chalk = require('chalk');
+var lodash = require('lodash');
 
 var generator = require('loopback-swagger');
+var SwaggerParser = require('swagger-parser');
 var request = require('request');
 var yaml = require('js-yaml');
 var fs = require('fs');
@@ -117,8 +119,24 @@ function parseSpec(base, spec, log, cb) {
       });
     }
   } else if (spec.swagger === '2.0') {
-    process.nextTick(function() {
-      cb(null, [spec]);
+    // Preserve $ref as $REF after deference
+    spec = lodash.cloneDeepWith(spec, function(o) {
+      if (o.$ref) {
+        o.$REF = o.$ref;
+      }
+    });
+    var swaggerParser = new SwaggerParser();
+    return swaggerParser.dereference(spec, function(err, spec) {
+      if (spec) {
+        // Restore $ref
+        spec = lodash.cloneDeepWith(spec, function(o) {
+          if (o.$REF) {
+            o.$ref = o.$REF;
+            delete o.$REF;
+          }
+        });
+      }
+      cb(err, [spec]);
     });
   } else {
     process.nextTick(function() {
