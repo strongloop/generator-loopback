@@ -1,3 +1,12 @@
+2017-12-04, Version 5.4.0
+=========================
+
+ * Improve $ref support for swagger objects (Raymond Feng)
+
+
+2017-11-29, Version 5.3.0
+=========================
+
 
 
 2017-11-29, Version 5.1.3
