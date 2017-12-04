@@ -45,7 +45,7 @@
         "notes": "",
         "type": "array",
         "items": {
-          "$ref": "Pet"
+          "$ref": "#/models/Pet"
         },
         "nickname": "partialUpdate",
         "produces": ["application/json", "application/xml"],
@@ -242,7 +242,7 @@
         "notes": "Multiple status values can be provided with comma seperated strings",
         "type": "array",
         "items": {
-          "$ref": "Pet"
+          "$ref": "#/models/Pet"
         },
         "nickname": "findPetsByStatus",
         "authorizations": {},
@@ -276,7 +276,7 @@
         "notes": "Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.",
         "type": "array",
         "items": {
-          "$ref": "Pet"
+          "$ref": "#/models/Pet"
         },
         "nickname": "findPetsByTags",
         "authorizations": {},
@@ -368,7 +368,7 @@
         "maximum": "100.0"
       },
       "category": {
-        "$ref": "Category"
+        "$ref": "#/models/Category"
       },
       "name": {
         "type": "string"
@@ -382,7 +382,7 @@
       "tags": {
         "type": "array",
         "items": {
-          "$ref": "Tag"
+          "$ref": "#/models/Tag"
         }
       },
       "status": {

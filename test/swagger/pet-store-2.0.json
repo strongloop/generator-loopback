@@ -440,12 +440,7 @@
       "produces": ["application/json", "application/xml"],
       "parameters": [
         {
-          "in": "path",
-          "name": "petId",
-          "description": "ID of pet that needs to be fetched",
-          "required": true,
-          "type": "integer",
-          "format": "int64"
+          "$ref": "#/parameters/petId"
         }
       ],
       "responses": {
@@ -463,6 +458,15 @@
         }
       }
     }
+  }
+}, "parameters": {
+  "petId": {
+    "in": "path",
+    "name": "petId",
+    "description": "ID of pet that needs to be fetched",
+    "required": true,
+    "type": "integer",
+    "format": "int64"
   }
 }, "definitions": {
   "Customer": {
@@ -513,7 +517,7 @@
       "tags": {
         "type": "array",
         "items": {
-          "$ref": "Tag"
+          "$ref": "#/definitions/Tag"
         }
       },
       "photoUrls": {
@@ -523,7 +527,7 @@
         }
       },
       "category": {
-        "$ref": "Category"
+        "$ref": "#/definitions/Category"
       },
       "id": {
         "type": "integer",
