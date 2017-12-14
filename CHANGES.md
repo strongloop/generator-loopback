@@ -1,3 +1,9 @@
+2017-12-14, Version 5.5.0
+=========================
+
+ * Add z/OS Connect EE command (Andrew Smithson)
+
+
 2017-12-04, Version 5.4.0
 =========================
 
