@@ -29,10 +29,11 @@ module.exports = yeoman.Base.extend({
       type: String,
     });
 
-    this.option('skip-install', {
-      desc: g.f('Do not install npm dependencies.'),
-      type: Boolean,
-    });
+    // For the options coming from Yeoman,
+    // overwrite the description because they do not get translated.
+    this._options['help'].desc = g.f('Print the command\'s options and usage');
+    this._options['skip-cache'].desc = g.f('Do not remember prompt answers');
+    this._options['skip-install'].desc = g.f('Do not install npm dependencies');
 
     this.option('skip-next-steps', {
       desc: g.f('Do not print "next steps" info'),
