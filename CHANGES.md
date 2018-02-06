@@ -1,3 +1,15 @@
+2018-02-06, Version 5.5.1
+=========================
+
+ * [WebFM] de/es/fr/it/ja/ko/nl/pt_BR/tr/zh_CN/zh_TW (candytangnb)
+
+ * fix translation for help messages (Diana Lau)
+
+ * extract message for translation for oracle (Diana Lau)
+
+ * update messages for translation (Diana Lau)
+
+
 2017-12-14, Version 5.5.0
 =========================
 
