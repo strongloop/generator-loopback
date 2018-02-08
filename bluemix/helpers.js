@@ -51,7 +51,7 @@ bluemix.configurePrompt = function() {
   if (this.done) return;
   // https://github.com/strongloop/generator-loopback/issues/38
   // yeoman-generator normalize the appname with ' '
-  this.appName = path.basename(process.cwd())
+  this.appName = this.options.appName || path.basename(process.cwd())
                 .replace(/[\/@\s\+%:\.]+?/g, '-');
 
   // Generate .bluemix/...
