@@ -23,6 +23,12 @@ module.exports = yeoman.Base.extend({
   constructor: function() {
     yeoman.Base.apply(this, arguments);
     this.done = false;
+
+    this.option('appName', {
+      desc: g.f('Application name'),
+      type: String,
+    });
+
     this.option('docker', {
       desc: g.f('Generate Dockerfile'),
       type: Boolean,
