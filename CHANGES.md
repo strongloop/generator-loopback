@@ -1,3 +1,11 @@
+2018-02-10, Version 5.6.0
+=========================
+
+ * update test (Joy Chang)
+
+ * feat: Allow appName to be passed in as options (Joy Chang)
+
+
 2018-02-06, Version 5.5.1
 =========================
 
