@@ -26,7 +26,7 @@ module.exports = yeoman.Base.extend({
 
     this.option('appName', {
       desc: g.f('Application name'),
-      type: String
+      type: String,
     });
 
     this.option('docker', {
