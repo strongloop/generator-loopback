@@ -150,7 +150,7 @@ describe('loopback:app generator', function() {
     });
   });
 
-  it('scaffolds 3.x app when option.loopbackVersion is 3.x',
+  it('scaffolds 3.x app when loopbackVersion is 3.x',
     function(done) {
       var gen = givenAppGenerator();
 
@@ -162,6 +162,80 @@ describe('loopback:app generator', function() {
       gen.run(function() {
         var pkg = common.readJsonSync('package.json', {});
         expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(false);
+        done();
+      });
+    });
+
+  it('scaffolds 3.x app when options.loopbackVersion is 3.x',
+    function(done) {
+      var gen = givenAppGenerator();
+
+      gen.options.loopbackVersion = '3.x';
+      helpers.mockPrompt(gen, {
+        name: 'test-app',
+        template: 'api-server',
+      });
+      gen.run(function() {
+        var pkg = common.readJsonSync('package.json', {});
+        expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(false);
+        done();
+      });
+    });
+
+  it('scaffolds 3.x app with loopbackVersion "3.x" and template "notes"',
+    function(done) {
+      var gen = givenAppGenerator();
+
+      gen.options.loopbackVersion = '3.x';
+      gen.options.template = 'notes';
+      helpers.mockPrompt(gen, {
+        name: 'test-app',
+      });
+      gen.run(function() {
+        var notes = common.readJsonSync('common/models/note.json', {});
+        expect(notes).to.have.property('name', 'Note');
+        done();
+      });
+    });
+
+  it('reports error if options.loopbackVersion is invalid',
+    function(done) {
+      var gen = givenAppGenerator();
+
+      gen.options.loopbackVersion = 'invalid-version';
+      helpers.mockPrompt(gen, {
+        name: 'test-app',
+        template: 'api-server',
+      });
+      gen.on('error', function(err) {
+        // Set a no-op error handler and deal with it in the
+        // callback function below
+      });
+      gen.run(function(err) {
+        expect(err.message).to.eql(
+          'Invalid LoopBack version: invalid-version. ' +
+          'Available versions are 2.x, 3.x.');
+        done();
+      });
+    });
+
+  it('reports error if options.template is invalid',
+    function(done) {
+      var gen = givenAppGenerator();
+
+      gen.options.loopbackVersion = '3.x';
+      gen.options.template = 'invalid-template';
+      helpers.mockPrompt(gen, {
+        name: 'test-app',
+      });
+      gen.on('error', function(err) {
+        // Set a no-op error handler and deal with it in the
+        // callback function below
+      });
+      gen.run(function(err) {
+        expect(err.message).to.eql(
+          'Invalid template: invalid-template. Available templates for 3.x ' +
+          'are api-server, empty-server, hello-world, notes');
         done();
       });
     });
@@ -217,7 +291,7 @@ describe('loopback:app generator', function() {
       });
     });
 
-    it('should ommit Docker files', function(done) {
+    it('should omit Docker files', function(done) {
       var gen = givenAppGenerator();
 
       helpers.mockPrompt(gen, {

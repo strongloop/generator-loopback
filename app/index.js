@@ -46,6 +46,16 @@ module.exports = yeoman.Base.extend({
       type: Boolean,
     });
 
+    this.option('loopbackVersion', {
+      desc: g.f('Select the LoopBack version'),
+      type: String,
+    });
+
+    this.option('template', {
+      desc: g.f('Set up the LoopBack application template'),
+      type: String,
+    });
+
     this.option('bluemix', {
       desc: g.f('Set up as a Bluemix app'),
       type: Boolean,
@@ -101,15 +111,19 @@ module.exports = yeoman.Base.extend({
         };
       });
 
-      // TODO(bajtos) generator-loopback should not be coupled with APIC
-      // See also https://github.com/strongloop/generator-loopback/issues/139
-      if (helpers.getCommandName() === 'apic') {
-        this.defaultTemplate = 'hello-world';
-        this.templates = this.templates.filter(function(t) {
-          return t.value !== 'api-server';
-        });
+      if (this.options.template) {
+        this.defaultTemplate = this.wsTemplate = this.options.template;
       } else {
-        this.defaultTemplate = 'api-server';
+        // TODO(bajtos) generator-loopback should not be coupled with APIC
+        // See also https://github.com/strongloop/generator-loopback/issues/139
+        if (helpers.getCommandName() === 'apic') {
+          this.defaultTemplate = 'hello-world';
+          this.templates = this.templates.filter(function(t) {
+            return t.value !== 'api-server';
+          });
+        } else {
+          this.defaultTemplate = 'api-server';
+        }
       }
       done();
     }.bind(this));
@@ -161,6 +175,18 @@ module.exports = yeoman.Base.extend({
   },
 
   askForLBVersion: function() {
+    var LBVersion = this.options.loopbackVersion;
+    if (LBVersion) {
+      var lbVersions = this.availableLBVersions.map(
+        function(v) { return v.value; }
+      );
+      if (lbVersions.indexOf(LBVersion) === -1) {
+        throw new Error('Invalid LoopBack version: ' +
+          LBVersion + '. Available versions are ' +
+          lbVersions.join(', ') + '.');
+      }
+      return;
+    }
     var prompts = [{
       name: 'loopbackVersion',
       message: g.f('Which version of {{LoopBack}} would you like to use?'),
@@ -185,6 +211,16 @@ module.exports = yeoman.Base.extend({
   },
 
   askForTemplate: function() {
+    if (this.wsTemplate) {
+      var templates = this.templates.map(function(t) { return t.value; });
+      if (templates.indexOf(this.wsTemplate) === -1) {
+        throw new Error('Invalid template: ' + this.wsTemplate +
+          '. Available templates for ' + this.options.loopbackVersion +
+          ' are ' + templates.join(', '));
+      } else {
+        return;
+      }
+    }
     var prompts = [{
       name: 'wsTemplate',
       message: g.f('What kind of application do you have in mind?'),
