@@ -1,3 +1,9 @@
+2018-02-22, Version 5.7.0
+=========================
+
+ * Add loopbackVersion and template options to skip prompts (Raymond Feng)
+
+
 2018-02-10, Version 5.6.0
 =========================
 
