@@ -121,7 +121,7 @@ function parseSpec(base, spec, log, cb) {
   } else if (spec.swagger === '2.0') {
     // Preserve $ref as $REF after deference
     spec = lodash.cloneDeepWith(spec, function(o) {
-      if (o.$ref) {
+      if (o && o.$ref) {
         o.$REF = o.$ref;
       }
     });
@@ -130,7 +130,7 @@ function parseSpec(base, spec, log, cb) {
       if (spec) {
         // Restore $ref
         spec = lodash.cloneDeepWith(spec, function(o) {
-          if (o.$REF) {
+          if (o && o.$REF) {
             o.$ref = o.$REF;
             delete o.$REF;
           }
