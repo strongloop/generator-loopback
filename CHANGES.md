@@ -1,3 +1,15 @@
+2018-04-27, Version 5.7.1
+=========================
+
+ * fix italian translation msg (Diana Lau)
+
+ * [WebFM] de/es/fr/it/ja/ko/nl/pt_BR/tr/zh_CN/zh_TW (candytangnb)
+
+ * docs: update links from docs.strongloop.com (Diana Lau)
+
+ * GVT: extract oracle related messages (Diana Lau)
+
+
 2018-02-22, Version 5.7.0
 =========================
 
