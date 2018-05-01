@@ -48,7 +48,7 @@
     "swagger-parser": "^4.0.1",
     "text-table": "^0.2.0",
     "yaml-js": "^0.1.4",
-    "yeoman-generator": "^0.24.1",
+    "yeoman-generator": "^2.0.5",
     "zosconnect-node": "^1.0.3"
   },
   "devDependencies": {
