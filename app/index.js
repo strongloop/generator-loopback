@@ -61,10 +61,12 @@ module.exports = yeoman.Base.extend({
       type: Boolean,
     });
 
-    this.option('version', {
-      desc: g.f('Display version information'),
-      type: Boolean,
-    });
+    if (helpers.getCommandName() === 'loopback-cli') {
+      this.option('version', {
+        desc: g.f('Display version information'),
+        type: Boolean,
+      });
+    }
   },
 
   help: function() {
