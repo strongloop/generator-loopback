@@ -70,7 +70,7 @@ module.exports = yeoman.Base.extend({
           choices: this.editableModelNames,
         },
       ];
-      return  this.prompt(prompts).then(function(answers) {
+      return this.prompt(prompts).then(function(answers) {
         this.modelName = answers.model;
       }.bind(this));
     }
@@ -409,7 +409,7 @@ function buildIntroduction(def) {
 }
 
 function buildJsdoc(def) {
-  var jsdocLines =  [
+  var jsdocLines = [
     '/**',
     util.format(' * %s', def.description),
   ];
@@ -431,7 +431,7 @@ function buildMethodSource(def) {
   var functionDef = [util.format(
     ref + ' = function(%s) {',
     chalk.green(buildInputArgs(def.accepts).join(', '))
-    ),
+  ),
   ];
 
   if (def.returns.length > 0)

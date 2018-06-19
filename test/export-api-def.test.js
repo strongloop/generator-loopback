@@ -13,7 +13,7 @@ var wsModels = require('loopback-workspace').models;
 var common = require('./common');
 var yaml = require('js-yaml');
 var install = require('strong-cached-install');
-var SANDBOX =  path.resolve(__dirname, 'sandbox');
+var SANDBOX = path.resolve(__dirname, 'sandbox');
 var PKG_CACHE = path.resolve(__dirname, '..', '.pkgcache');
 
 describe('loopback:export-api-def generator', function() {

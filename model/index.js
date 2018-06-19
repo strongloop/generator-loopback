@@ -140,15 +140,15 @@ module.exports = yeoman.Base.extend({
       var bluemixDataSources = [];
       var bluemixDataSourcesList = this.bluemixDataSourcesList;
       Object.keys(bluemixDataSourcesList)
-      .forEach(function(datasourceName) {
-        var datasource = bluemixDataSourcesList[datasourceName];
-        var bluemixDataSource = {
-          name: datasourceName + ' (' + datasource.connector + ')',
-          value: datasourceName,
-          _connector: datasource.connector,
-        };
-        bluemixDataSources.push(bluemixDataSource);
-      });
+        .forEach(function(datasourceName) {
+          var datasource = bluemixDataSourcesList[datasourceName];
+          var bluemixDataSource = {
+            name: datasourceName + ' (' + datasource.connector + ')',
+            value: datasourceName,
+            _connector: datasource.connector,
+          };
+          bluemixDataSources.push(bluemixDataSource);
+        });
       promptObject.default = null;
       promptObject.choices = bluemixDataSources;
     } else {
@@ -267,7 +267,7 @@ module.exports = yeoman.Base.extend({
         },
       ];
     }
-    return  this.prompt(prompts).then(function(props) {
+    return this.prompt(prompts).then(function(props) {
       this.public = props.public;
       this.plural = props.plural || undefined;
       this.facetName = props.facetName;
@@ -353,7 +353,7 @@ module.exports = yeoman.Base.extend({
               return done(err);
             }
             this.log(g.f('\nLet\'s add another %s property.',
-                        this.displayName));
+              this.displayName));
             this.property();
           }.bind(this));
       }.bind(this));

@@ -14,7 +14,7 @@ var ygAssert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var rimraf = require('rimraf');
 var yaml = require('yaml-js');
-var SANDBOX =  path.resolve(__dirname, 'sandbox');
+var SANDBOX = path.resolve(__dirname, 'sandbox');
 
 var BASIC_BLUEMIX_FILES = [
   '.cfignore',
@@ -89,7 +89,7 @@ describe('loopback:bluemix generator', function() {
     });
     gen.run(function() {
       ygAssert.file(BASIC_BLUEMIX_FILES.concat(DOCKER_FILES)
-      .concat(TOOLCHAIN_FILES));
+        .concat(TOOLCHAIN_FILES));
       done();
     });
   });
@@ -165,53 +165,53 @@ describe('loopback:bluemix generator', function() {
   });
 
   itSkipIf(!process.env.BLUEMIX_EMAIL || !process.env.BLUEMIX_PASSWORD)(
-  'should login with user/password', function(done) {
-    var gen = givenBluemixGenerator('--force --login');
-    helpers.mockPrompt(gen, {
-      email: process.env.BLUEMIX_EMAIL,
-      password: process.env.BLUEMIX_PASSWORD,
-      rememberMe: true,
-      tryAgain: false,
+    'should login with user/password', function(done) {
+      var gen = givenBluemixGenerator('--force --login');
+      helpers.mockPrompt(gen, {
+        email: process.env.BLUEMIX_EMAIL,
+        password: process.env.BLUEMIX_PASSWORD,
+        rememberMe: true,
+        tryAgain: false,
+      });
+      gen.run(function() {
+        var configFile = path.join(os.homedir(), '.bluemix/.loopback/config.json');
+        ygAssert.file([configFile]);
+        var config = readJsonFile(configFile);
+        assert.equal('string', typeof config.apiURL);
+        assert.equal('string', typeof config.accessToken);
+        assert.equal('object', typeof config.organization);
+        assert.equal('string', typeof config.organization.guid);
+        assert.equal('string', typeof config.organization.name);
+        assert.equal('object', typeof config.space);
+        assert.equal('string', typeof config.space.guid);
+        assert.equal('string', typeof config.space.name);
+        done();
+      });
     });
-    gen.run(function() {
-      var configFile = path.join(os.homedir(), '.bluemix/.loopback/config.json');
-      ygAssert.file([configFile]);
-      var config = readJsonFile(configFile);
-      assert.equal('string', typeof config.apiURL);
-      assert.equal('string', typeof config.accessToken);
-      assert.equal('object', typeof config.organization);
-      assert.equal('string', typeof config.organization.guid);
-      assert.equal('string', typeof config.organization.name);
-      assert.equal('object', typeof config.space);
-      assert.equal('string', typeof config.space.guid);
-      assert.equal('string', typeof config.space.name);
-      done();
-    });
-  });
 
   itSkipIf(!process.env.BLUEMIX_EMAIL || !process.env.BLUEMIX_PASSWORD)(
-  'should login with SSO passcode', function(done) {
-    var gen = givenBluemixGenerator('--force --sso');
-    helpers.mockPrompt(gen, {
-      password: process.env.BLUEMIX_PASSCODE,
-      rememberMe: true,
-      tryAgain: false,
+    'should login with SSO passcode', function(done) {
+      var gen = givenBluemixGenerator('--force --sso');
+      helpers.mockPrompt(gen, {
+        password: process.env.BLUEMIX_PASSCODE,
+        rememberMe: true,
+        tryAgain: false,
+      });
+      gen.run(function() {
+        var configFile = path.join(os.homedir(), '.bluemix/.loopback/config.json');
+        ygAssert.file([configFile]);
+        var config = readJsonFile(configFile);
+        assert.equal('string', typeof config.apiURL);
+        assert.equal('string', typeof config.accessToken);
+        assert.equal('object', typeof config.organization);
+        assert.equal('string', typeof config.organization.guid);
+        assert.equal('string', typeof config.organization.name);
+        assert.equal('object', typeof config.space);
+        assert.equal('string', typeof config.space.guid);
+        assert.equal('string', typeof config.space.name);
+        done();
+      });
     });
-    gen.run(function() {
-      var configFile = path.join(os.homedir(), '.bluemix/.loopback/config.json');
-      ygAssert.file([configFile]);
-      var config = readJsonFile(configFile);
-      assert.equal('string', typeof config.apiURL);
-      assert.equal('string', typeof config.accessToken);
-      assert.equal('object', typeof config.organization);
-      assert.equal('string', typeof config.organization.guid);
-      assert.equal('string', typeof config.organization.name);
-      assert.equal('object', typeof config.space);
-      assert.equal('string', typeof config.space.guid);
-      assert.equal('string', typeof config.space.name);
-      done();
-    });
-  });
 });
 
 function givenBluemixGenerator(args) {

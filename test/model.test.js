@@ -7,7 +7,7 @@
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-test');
-var SANDBOX =  path.resolve(__dirname, 'sandbox');
+var SANDBOX = path.resolve(__dirname, 'sandbox');
 var fs = require('fs-extra');
 var chai = require('chai');
 var expect = chai.expect;
@@ -196,29 +196,29 @@ describe('loopback:model generator', function() {
 
     describe('with --bluemix', function() {
       it('should not throw if no Bluemix datasources are found',
-      function(done) {
-        var srcPath = path.join(__dirname, 'fixtures',
-                      'datasources-config-empty.json');
-        var destPath = path.join(SANDBOX, '.bluemix',
-                      'datasources-config.json');
-        fs.copySync(srcPath, destPath);
+        function(done) {
+          var srcPath = path.join(__dirname, 'fixtures',
+            'datasources-config-empty.json');
+          var destPath = path.join(SANDBOX, '.bluemix',
+            'datasources-config.json');
+          fs.copySync(srcPath, destPath);
 
-        var modelGen = givenModelGenerator('--bluemix --login=false');
-        helpers.mockPrompt(modelGen, {
-          name: 'Product',
-        });
+          var modelGen = givenModelGenerator('--bluemix --login=false');
+          helpers.mockPrompt(modelGen, {
+            name: 'Product',
+          });
 
-        modelGen.run(function() {
-          expect(modelGen.abort).to.eql(true);
-          done();
+          modelGen.run(function() {
+            expect(modelGen.abort).to.eql(true);
+            done();
+          });
         });
-      });
 
       it('should not throw on parsing datasources-config.json', function(done) {
         var srcPath = path.join(__dirname, 'fixtures',
-                      'datasources-config-empty.json');
+          'datasources-config-empty.json');
         var destPath = path.join(SANDBOX, '.bluemix',
-                      'datasources-config.json');
+          'datasources-config.json');
         fs.copySync(srcPath, destPath);
         fs.writeFileSync(destPath, '');
 
@@ -235,9 +235,9 @@ describe('loopback:model generator', function() {
 
       it('should use Bluemix datasource', function(done) {
         var srcPath = path.join(__dirname, 'fixtures',
-                      'datasources-config-filled.json');
+          'datasources-config-filled.json');
         var destPath = path.join(SANDBOX, '.bluemix',
-                      'datasources-config.json');
+          'datasources-config.json');
         fs.copySync(srcPath, destPath);
 
         var modelGen = givenModelGenerator('--bluemix --login=false');
@@ -250,7 +250,7 @@ describe('loopback:model generator', function() {
           assert('cloudant-demo-service' in modelGen.bluemixDataSourcesList);
           var modelConfig = readModelsJsonSync();
           expect(modelConfig.Product.dataSource).to
-          .eql('cloudant-demo-service');
+            .eql('cloudant-demo-service');
           done();
         });
       });

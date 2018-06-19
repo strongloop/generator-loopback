@@ -26,7 +26,7 @@ describe('loopback:soap tests', function() {
       helpers.mockPrompt(modelGen, {
         name: 'soapds',
         customConnector: '', // temporary workaround for
-                             // https://github.com/yeoman/generator/issues/600
+        // https://github.com/yeoman/generator/issues/600
         connector: 'soap',
         url: 'http://www.webservicex.net/stockquote.asmx',
         wsdl: path.join(__dirname, 'soap/stockquote.wsdl'),
@@ -91,7 +91,7 @@ describe('loopback:soap tests', function() {
       helpers.mockPrompt(modelGen, {
         name: 'soapds',
         customConnector: '', // temporary workaround for
-                             // https://github.com/yeoman/generator/issues/600
+        // https://github.com/yeoman/generator/issues/600
         connector: 'soap',
         url: 'http://www.webservicex.net/periodictable.asmx',
         wsdl: 'http://www.webservicex.net/periodictable.asmx?WSDL',
@@ -122,7 +122,7 @@ describe('loopback:soap tests', function() {
           expect(content).to.have.property('excludeBaseProperties');
           var expectedExcludeProps = ['id'];
           expect(content.excludeBaseProperties).
-                      to.deep.equal(expectedExcludeProps);
+            to.deep.equal(expectedExcludeProps);
 
           content = readModelJsonSync('get-atomic-weight-response');
           expect(content.properties.GetAtomicWeightResult.type).to.eql('string'); // eslint-disable-line max-len
@@ -160,7 +160,7 @@ describe('loopback:soap tests', function() {
       helpers.mockPrompt(modelGen, {
         name: 'soapds',
         customConnector: '', // temporary workaround for
-                             // https://github.com/yeoman/generator/issues/600
+        // https://github.com/yeoman/generator/issues/600
         connector: 'soap',
         url: 'http://localhost:15099/rpc_Literal_testing',
         wsdl: path.join(__dirname, 'soap/special_char_test.wsdl'),

@@ -7,7 +7,7 @@
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-test');
-var SANDBOX =  path.resolve(__dirname, 'sandbox');
+var SANDBOX = path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
@@ -29,7 +29,7 @@ describe('loopback:datasource generator', function() {
     helpers.mockPrompt(datasourceGen, {
       name: 'crm',
       customConnector: '', // temporary workaround for
-                           // https://github.com/yeoman/generator/issues/600
+      // https://github.com/yeoman/generator/issues/600
       connector: 'mysql',
       installConnector: false,
     });
@@ -48,7 +48,7 @@ describe('loopback:datasource generator', function() {
     helpers.mockPrompt(datasourceGen, {
       name: 'kafka1',
       customConnector: '', // temporary workaround for
-                           // https://github.com/yeoman/generator/issues/600
+      // https://github.com/yeoman/generator/issues/600
       connector: 'kafka',
       installConnector: false,
     });
@@ -67,7 +67,7 @@ describe('loopback:datasource generator', function() {
     helpers.mockPrompt(datasourceGen, {
       name: 'rest0',
       customConnector: '', // temporary workaround for
-                           // https://github.com/yeoman/generator/issues/600
+      // https://github.com/yeoman/generator/issues/600
       connector: 'rest',
     });
 
@@ -110,7 +110,7 @@ describe('loopback:datasource generator', function() {
     helpers.mockPrompt(datasourceGen, {
       name: 'rest1',
       customConnector: '', // temporary workaround for
-                           // https://github.com/yeoman/generator/issues/600
+      // https://github.com/yeoman/generator/issues/600
       connector: 'rest',
       options: JSON.stringify(restOptions),
       operations: '[]',
@@ -279,14 +279,14 @@ describe('loopback:datasource generator', function() {
             // eslint-disable-next-line no-unused-expressions
             expect(pkg.dependencies['loopback-component-storage']).to.exist;
             var dsConf = fs.readFileSync(path.join(SANDBOX, 'test-app',
-                        '.bluemix', 'datasources-config.json'), 'UTF-8');
+              '.bluemix', 'datasources-config.json'), 'UTF-8');
             dsConf = JSON.parse(dsConf);
             // eslint-disable-next-line no-unused-expressions
             expect(dsConf.datasources['My-Object-Storage']).to.exist;
             expect(dsConf.datasources['My-Object-Storage'].name)
-                  .to.equal('My-Object-Storage');
+              .to.equal('My-Object-Storage');
             expect(dsConf.datasources['My-Object-Storage'].connector)
-                  .to.equal('loopback-component-storage');
+              .to.equal('loopback-component-storage');
             done();
           });
         });

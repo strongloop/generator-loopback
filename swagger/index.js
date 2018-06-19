@@ -133,69 +133,69 @@ module.exports = yeoman.Base.extend({
 
     async.parallel([
       function(done) {
-          // Find existing model definitions
+        // Find existing model definitions
         wsModels.ModelDefinition.find(
-            {where: {name: {inq: self.modelNames}}}, done);
+          {where: {name: {inq: self.modelNames}}}, done);
       },
       function(done) {
         wsModels.ModelConfig.find(
-            {where: {name: {inq: self.modelNames}}}, done);
+          {where: {name: {inq: self.modelNames}}}, done);
       }],
-      function(err, objs) {
-        if (err) {
-          helpers.reportValidationError(err, self.log);
-          return done(err);
-        }
+    function(err, objs) {
+      if (err) {
+        helpers.reportValidationError(err, self.log);
+        return done(err);
+      }
 
-        objs[0].forEach(function(d) {
-          self.selectedModels[d.name] = CONFLICT_DETECTED;
-        });
+      objs[0].forEach(function(d) {
+        self.selectedModels[d.name] = CONFLICT_DETECTED;
+      });
 
-        objs[1].forEach(function(c) {
-          self.selectedModels[c.name] = CONFLICT_DETECTED;
-        });
+      objs[1].forEach(function(c) {
+        self.selectedModels[c.name] = CONFLICT_DETECTED;
+      });
 
-        var choices = Object.keys(self.selectedModels).map(function(m) {
-          var flag = self.selectedModels[m];
-          return {
-            name: m + ((flag === CONFLICT_DETECTED) ? ' (!)' : ''),
-            modelName: m,
-            flag: flag,
-            checked: flag !== CONFLICT_DETECTED, // force users to decide
-          };
-        });
+      var choices = Object.keys(self.selectedModels).map(function(m) {
+        var flag = self.selectedModels[m];
+        return {
+          name: m + ((flag === CONFLICT_DETECTED) ? ' (!)' : ''),
+          modelName: m,
+          flag: flag,
+          checked: flag !== CONFLICT_DETECTED, // force users to decide
+        };
+      });
 
-        var prompts = [
-          {
-            name: 'modelSelections',
-            message: g.f('Select models to be generated:'),
-            type: 'checkbox',
-            choices: choices,
-          },
-          {
-            name: 'dataSource',
-            message: g.f('Select the datasource to attach models to:'),
-            type: 'list',
-            default: self.defaultDataSource,
-            choices: self.dataSources,
-          },
-        ];
-        return self.prompt(prompts).then(function(answers) {
-          self.dataSource = answers.dataSource;
-          answers.modelSelections.forEach(function(m) {
-            for (var i = 0, n = choices.length; i < n; i++) {
-              var c = choices[i];
-              if (c.name === m) {
-                self.selectedModels[c.modelName] =
+      var prompts = [
+        {
+          name: 'modelSelections',
+          message: g.f('Select models to be generated:'),
+          type: 'checkbox',
+          choices: choices,
+        },
+        {
+          name: 'dataSource',
+          message: g.f('Select the datasource to attach models to:'),
+          type: 'list',
+          default: self.defaultDataSource,
+          choices: self.dataSources,
+        },
+      ];
+      return self.prompt(prompts).then(function(answers) {
+        self.dataSource = answers.dataSource;
+        answers.modelSelections.forEach(function(m) {
+          for (var i = 0, n = choices.length; i < n; i++) {
+            var c = choices[i];
+            if (c.name === m) {
+              self.selectedModels[c.modelName] =
                   (c.flag === CONFLICT_DETECTED ?
                     SELECTED_FOR_UPDATE : SELECTED_FOR_CREATE);
-                break;
-              }
+              break;
             }
-          });
-          done();
+          }
         });
+        done();
       });
+    });
   },
 
   generateApis: function() {

@@ -57,7 +57,7 @@ module.exports = yeoman.Base.extend({
   askForModel: function() {
     var modelChoices =
       [{name: '(all existing models)', value: null}]
-      .concat(this.editableModelNames);
+        .concat(this.editableModelNames);
 
     var prompts = [
       {
@@ -162,7 +162,7 @@ module.exports = yeoman.Base.extend({
     var aclDef = this.aclDef;
     var filter = this.modelName ?
       {where: {name: this.modelName}, limit: 1} :
-    {};
+      {};
 
     wsModels.ModelDefinition.find(filter, function(err, models) {
       if (err) {
