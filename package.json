@@ -11,7 +11,7 @@
     "url": "http://strongloop.com/"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
