@@ -60,6 +60,13 @@ module.exports = yeoman.Base.extend({
       desc: g.f('Set up as a Bluemix app'),
       type: Boolean,
     });
+
+    if (helpers.getCommandName() === 'loopback-cli') {
+      this.option('version', {
+        desc: g.f('Display version information'),
+        type: Boolean,
+      });
+    }
   },
 
   help: function() {
