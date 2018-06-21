@@ -178,15 +178,15 @@ module.exports = generators.Base.extend({
       var dataSources = JSON.parse(fs.readFileSync('server/datasources.json'));
       var templateFile = 'server/' + this.dataSource.name + '_template.json';
       fs.writeFileSync(templateFile,
-                JSON.stringify(this.masterTemplate, null, 2));
+        JSON.stringify(this.masterTemplate, null, 2));
       dataSources[this.dataSource.name].template =
                 this.dataSource.name + '_template.json';
       fs.writeFileSync('server/datasources.json',
-                JSON.stringify(dataSources, null, 2));
+        JSON.stringify(dataSources, null, 2));
     },
   },
   end: function() {
     this.log('Configured DataSource', chalk.bold(this.dataSource.name),
-            'for API', chalk.bold(this.apiName));
+      'for API', chalk.bold(this.apiName));
   },
 });

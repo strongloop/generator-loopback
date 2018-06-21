@@ -11,7 +11,7 @@ var path = require('path');
 var assert = require('assert');
 var common = require('./common');
 var helpers = require('yeoman-test');
-var SANDBOX =  path.resolve(__dirname, 'sandbox');
+var SANDBOX = path.resolve(__dirname, 'sandbox');
 
 describe('loopback generator help', function() {
   this.timeout(300000); // 5 minutes

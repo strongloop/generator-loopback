@@ -144,7 +144,7 @@ module.exports = yeoman.Base.extend({
       debug('answers: %j', answers);
       this.name = answers.name || this.name;
       if (answers.type === 'array') {
-        var itemType =  answers.customItemType || answers.itemType;
+        var itemType = answers.customItemType || answers.itemType;
         this.type = itemType ? [itemType] : 'array';
       } else {
         this.type = answers.customType || answers.type;
@@ -171,7 +171,7 @@ module.exports = yeoman.Base.extend({
         debug('Failed to coerce property default value: ', err);
         this.log(g.f('Warning: please enter the %s property again. The ' +
           'default value provided "%s" is not valid for the selected type: %s',
-          this.name, answers.defaultValue, this.type));
+        this.name, answers.defaultValue, this.type));
         return this.askForParameters();
       }
     }.bind(this));

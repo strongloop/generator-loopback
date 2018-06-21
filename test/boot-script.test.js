@@ -7,7 +7,7 @@
 'use strict';
 var path = require('path');
 var helpers = require('yeoman-test');
-var SANDBOX =  path.resolve(__dirname, 'sandbox');
+var SANDBOX = path.resolve(__dirname, 'sandbox');
 var fs = require('fs');
 var expect = require('chai').expect;
 var common = require('./common');
