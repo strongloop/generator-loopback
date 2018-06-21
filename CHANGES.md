@@ -1,3 +1,21 @@
+2018-06-21, Version 5.8.0
+=========================
+
+ * Update strong-globalize to 4.x (Miroslav Bajtoš)
+
+ * Update eslint + config to latest (Miroslav Bajtoš)
+
+ * Disable package-lock feature of npm (Miroslav Bajtoš)
+
+ * Travis: add Node.js 10.x to the build matrix (Miroslav Bajtoš)
+
+ * Drop support for Node 4.x (Miroslav Bajtoš)
+
+ * Only show --version for lb command (Andrew Smithson)
+
+ * Add --version to help options (Andrew Smithson)
+
+
 2018-04-27, Version 5.7.1
 =========================
 
