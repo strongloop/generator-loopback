@@ -11,7 +11,7 @@ var yeoman = require('yeoman-generator');
 var path = require('path');
 var fs = require('fs');
 var fse = require('fs-extra');
-var open = require('open');
+var open = require('opn');
 
 var helpText = require('../lib/help');
 var oci = require('./oci');
