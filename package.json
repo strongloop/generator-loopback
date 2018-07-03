@@ -16,7 +16,9 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "test": "mocha",
-    "posttest": "npm run lint"
+    "posttest": "npm run lint",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "keywords": [
     "yeoman-generator",
@@ -49,7 +51,8 @@
     "text-table": "^0.2.0",
     "yaml-js": "^0.1.4",
     "yeoman-generator": "^0.24.1",
-    "zosconnect-node": "^1.0.3"
+    "zosconnect-node": "^1.0.3",
+    "snyk": "^1.88.0"
   },
   "devDependencies": {
     "bluebird": "^3.1.1",
@@ -64,5 +67,6 @@
     "strong-cached-install": "^2.0.0",
     "yeoman-assert": "^2.2.1",
     "yeoman-test": "^1.4.0"
-  }
+  },
+  "snyk": true
 }
