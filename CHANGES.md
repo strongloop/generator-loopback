@@ -1,3 +1,9 @@
+2018-07-10, Version 5.8.2
+=========================
+
+ * [WebFM] cs/pl/ru translation (candytangnb)
+
+
 2018-06-22, Version 5.8.1
 =========================
 
