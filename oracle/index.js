@@ -67,14 +67,16 @@ module.exports = yeoman.Base.extend({
   checkConnector: function() {
     try {
       var m = require(
-        this.destinationPath('node_modules/loopback-connector-oracle'));
+        this.destinationPath('node_modules/loopback-connector-oracle')
+      );
       this.log(chalk.green(g.f('Oracle connector is ready.')));
       if (!this.options.connector && !this.options.driver) this.skip = true;
     } catch (e) {
       if (e.code === 'MODULE_NOT_FOUND') {
         // loopback-connector-oracle is not installed
         this.log(chalk.red(
-          g.f('Module is not installed: ' + e)));
+          g.f('Module is not installed: ' + e)
+        ));
         this.options.connector =
           e.message.indexOf('loopback-connector-oracle') !== -1;
         this.options.driver =
@@ -82,7 +84,8 @@ module.exports = yeoman.Base.extend({
       } else {
         // oracledb cannot be loaded due to dynamic lib issues
         this.log(chalk.red(
-          g.f('Module oracledb fails to load: ' + e)));
+          g.f('Module oracledb fails to load: ' + e)
+        ));
         this.options.driver = true;
       }
     }
@@ -151,7 +154,8 @@ module.exports = yeoman.Base.extend({
         // Delete node_modules/loopback-oracle-installer so that
         // npm install loopback-connector-oracle will trigger post-install
         var dir = this.destinationPath(
-          'node_modules/loopback-oracle-installer');
+          'node_modules/loopback-oracle-installer'
+        );
         if (this.options.verbose) {
           this.log('Removing directory: ' + dir);
         }
@@ -186,7 +190,8 @@ module.exports = yeoman.Base.extend({
         // so that the top-level oracledb will be used
         var dir =
           this.destinationPath(
-            'node_modules/loopback-connector-oracle/node_modules/oracledb');
+            'node_modules/loopback-connector-oracle/node_modules/oracledb'
+          );
         if (this.options.verbose) {
           this.log('Removing directory: ' + dir);
         }
@@ -211,20 +216,24 @@ module.exports = yeoman.Base.extend({
         // here as it's cached by previous require
         // First check node_modules/oracledb
         require(
-          this.destinationPath('node_modules/oracledb'));
+          this.destinationPath('node_modules/oracledb')
+        );
         this.log(chalk.green(g.f('Oracle driver is ready.')));
       } catch (e) {
         try {
           // Try the local oracledb inside loopback-connector-oracle
           require(
             this.destinationPath(
-              'node_modules/loopback-connector-oracle/node_modules/oracledb'));
+              'node_modules/loopback-connector-oracle/node_modules/oracledb'
+            )
+          );
           this.log(chalk.green(g.f('Oracle driver is ready.')));
         } catch (e) {
           this.log(chalk.red(g.f('Oracle driver fails to load: ' + e)));
           this.log(
             chalk.red(g.f('Please try `lb oracle --driver` or ' +
-              'follow instructions at ' + INSTALL_URL + '.')));
+              'follow instructions at ' + INSTALL_URL + '.'))
+          );
           var done = this.async();
 
           var prompts = [

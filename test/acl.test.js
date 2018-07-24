@@ -41,8 +41,10 @@ describe('loopback:acl generator', function() {
           {
             name: 'Location',
             facetName: 'common',
-          }, done);
-      });
+          }, done
+        );
+      }
+    );
   });
 
   it('adds an entry to models.json', function(done) {

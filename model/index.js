@@ -186,7 +186,8 @@ module.exports = yeoman.Base.extend({
         if (err) return done(err);
         this.baseModel = model;
         done();
-      }.bind(this));
+      }.bind(this)
+    );
   },
 
   askForParameters: function() {
@@ -355,7 +356,8 @@ module.exports = yeoman.Base.extend({
             this.log(g.f('\nLet\'s add another %s property.',
               this.displayName));
             this.property();
-          }.bind(this));
+          }.bind(this)
+        );
       }.bind(this));
     }
   },

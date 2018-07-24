@@ -32,7 +32,8 @@ describe('loopback:property generator', function() {
       function(err, model) {
         test.Model = model;
         done(err);
-      });
+      }
+    );
   });
 
   it('creates model with non required default', function(done) {

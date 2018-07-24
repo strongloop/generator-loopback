@@ -40,8 +40,10 @@ describe('loopback:relation generator', function() {
           },
           function(err) {
             done(err);
-          });
-      });
+          }
+        );
+      }
+    );
   });
 
   it('adds an entry to common/models/{name}.json', function(done) {
@@ -221,8 +223,7 @@ describe('loopback:relation generator', function() {
         expect(Object.keys(relations)).to.include('part');
         done();
       });
-    }
-  );
+    });
 
   // requires generator-yeoman v0.17
   it('provides default property name based on target model for hasMany',
@@ -239,8 +240,7 @@ describe('loopback:relation generator', function() {
         expect(Object.keys(relations)).to.include('parts');
         done();
       });
-    }
-  );
+    });
 
   function givenRelationGenerator() {
     var name = 'loopback:relation';

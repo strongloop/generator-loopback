@@ -214,7 +214,12 @@ describe('loopback:app generator', function() {
       gen.run(function(err) {
         expect(err.message).to.eql(
           'Invalid LoopBack version: invalid-version. ' +
-          'Available versions are 2.x, 3.x.');
+          'Available versions are 2.x, 3.x.'
+        );
+
+        // a way to get around Workspace.copyRecursive not being properly
+        // restored to its original method
+        gen.emit('end');
         done();
       });
     });
@@ -235,7 +240,12 @@ describe('loopback:app generator', function() {
       gen.run(function(err) {
         expect(err.message).to.eql(
           'Invalid template: invalid-template. Available templates for 3.x ' +
-          'are api-server, empty-server, hello-world, notes');
+          'are api-server, empty-server, hello-world, notes'
+        );
+
+        // a way to get around Workspace.copyRecursive not being properly
+        // restored to its original method
+        gen.emit('end');
         done();
       });
     });

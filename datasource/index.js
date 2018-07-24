@@ -253,7 +253,8 @@ module.exports = yeoman.Base.extend({
       npmModule += '@' + pkg.version;
     }
     var projectPkg = JSON.parse(
-      fs.readFileSync(path.join(this.projectDir, 'package.json'), 'utf-8'));
+      fs.readFileSync(path.join(this.projectDir, 'package.json'), 'utf-8')
+    );
     if (projectPkg.dependencies[pkg.name]) {
       return;
     }

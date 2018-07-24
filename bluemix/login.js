@@ -108,7 +108,8 @@ function login() {
           });
           if (choices.length === 1) {
             this.log(chalk.cyan(
-              g.f('> Default organization: ') + choices[0].name));
+              g.f('> Default organization: ') + choices[0].name
+            ));
             this.organization = choices[0].value;
           }
           var prompts = [
@@ -136,7 +137,8 @@ function login() {
                 });
                 if (choices.length === 1) {
                   this.log(chalk.cyan(
-                    g.f('> Default space: ') + choices[0].name));
+                    g.f('> Default space: ') + choices[0].name
+                  ));
                   this.space = choices[0].value;
                 }
                 var prompts = [

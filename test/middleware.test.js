@@ -71,7 +71,8 @@ describe('loopback:middleware generator', function() {
       });
 
       var builtinSources = Object.keys(
-        readMiddlewaresJsonSync('server').routes);
+        readMiddlewaresJsonSync('server').routes
+      );
       modelGen.run(function() {
         var newSources = Object.keys(readMiddlewaresJsonSync('server').routes);
         var expectedSources = builtinSources.concat(['my-middleware-3']);
@@ -91,10 +92,12 @@ describe('loopback:middleware generator', function() {
     });
 
     var builtinSources = Object.keys(
-      readMiddlewaresJsonSync('server')['routes:after'] || {});
+      readMiddlewaresJsonSync('server')['routes:after'] || {}
+    );
     modelGen.run(function() {
       var newSources = Object.keys(
-        readMiddlewaresJsonSync('server')['routes:after']);
+        readMiddlewaresJsonSync('server')['routes:after']
+      );
       var expectedSources = builtinSources.concat(['my-middleware-4']);
       expect(newSources).to.have.members(expectedSources);
       done();

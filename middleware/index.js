@@ -224,7 +224,8 @@ module.exports = yeoman.Base.extend({
       helpers.reportValidationError(err, self.log);
       if (!err && inst) {
         self.log(g.f(
-          'Middleware %s is added to phase %s.', inst.name, inst.phase));
+          'Middleware %s is added to phase %s.', inst.name, inst.phase
+        ));
       }
       return done(err);
     });

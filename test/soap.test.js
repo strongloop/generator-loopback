@@ -25,8 +25,6 @@ describe('loopback:soap tests', function() {
       var modelGen = givenDataSourceGenerator();
       helpers.mockPrompt(modelGen, {
         name: 'soapds',
-        customConnector: '', // temporary workaround for
-        // https://github.com/yeoman/generator/issues/600
         connector: 'soap',
         url: 'http://www.webservicex.net/stockquote.asmx',
         wsdl: path.join(__dirname, 'soap/stockquote.wsdl'),
@@ -75,7 +73,7 @@ describe('loopback:soap tests', function() {
       });
   });
 
-  describe('periodic table wsdl', function() {
+  describe('calculator wsdl', function() {
     beforeEach(common.resetWorkspace);
 
     beforeEach(function createSandbox(done) {
@@ -90,11 +88,9 @@ describe('loopback:soap tests', function() {
       var modelGen = givenDataSourceGenerator();
       helpers.mockPrompt(modelGen, {
         name: 'soapds',
-        customConnector: '', // temporary workaround for
-        // https://github.com/yeoman/generator/issues/600
         connector: 'soap',
-        url: 'http://www.webservicex.net/periodictable.asmx',
-        wsdl: 'http://www.webservicex.net/periodictable.asmx?WSDL',
+        url: 'http://www.dneonline.com/calculator.asmx',
+        wsdl: 'http://www.dneonline.com/calculator.asmx?WSDL',
         remotingEnabled: true,
         installConnector: false,
       });
@@ -103,44 +99,70 @@ describe('loopback:soap tests', function() {
       });
     });
 
-    it('periodic table wsdl',
+    it('calculator wsdl',
       function(done) {
         var modelGen = givenModelGenerator();
         helpers.mockPrompt(modelGen, {
           dataSource: 'soapds',
-          url: 'http://www.webservicex.net/periodictable.asmx?WSDL',
-          service: 'periodictable',
-          binding: 'periodictableSoap',
-          operations: ['GetAtomicNumber', 'GetAtomicWeight'],
+          url: 'http://www.dneonline.com/calculator.asmx?WSDL',
+          service: 'Calculator',
+          binding: 'CalculatorSoap',
+          operations: ['Add', 'Divide', 'Multiply', 'Subtract'],
         });
-        // this runs command  loopback:soap command with mock up /test/soap/stockquote.wsdl as input from command prompt
+
         modelGen.run(function() {
-          var content = readModelJsonSync('get-atomic-weight');
+          var content = readModelJsonSync('add');
           expect(content).to.not.have.property('public');
           expect(content).to.have.property('properties');
-          expect(content.properties.ElementName.type).to.eql('string');
+          expect(content.properties.intA.type).to.eql('number');
+          expect(content.properties.intB.type).to.eql('number');
           expect(content).to.have.property('excludeBaseProperties');
           var expectedExcludeProps = ['id'];
           expect(content.excludeBaseProperties).
             to.deep.equal(expectedExcludeProps);
 
-          content = readModelJsonSync('get-atomic-weight-response');
-          expect(content.properties.GetAtomicWeightResult.type).to.eql('string'); // eslint-disable-line max-len
+          content = readModelJsonSync('add-response');
+          expect(content.properties.AddResult.type).to.eql('number');
 
-          content = readModelJsonSync('get-atomic-number');
+          content = readModelJsonSync('divide');
           expect(content).to.not.have.property('public');
           expect(content).to.have.property('properties');
-          expect(content.properties.ElementName.type).to.eql('string');
+          expect(content.properties.intA.type).to.eql('number');
+          expect(content.properties.intB.type).to.eql('number');
 
-          content = readModelJsonSync('get-atomic-number-response');
-          expect(content.properties.GetAtomicNumberResult.type).to.eql('string'); // eslint-disable-line max-len
+          content = readModelJsonSync('divide-response');
+          expect(content.properties.DivideResult.type).to.eql('number');
+
+          content = readModelJsonSync('multiply');
+          expect(content).to.not.have.property('public');
+          expect(content).to.have.property('properties');
+          expect(content.properties.intA.type).to.eql('number');
+          expect(content.properties.intB.type).to.eql('number');
+
+          content = readModelJsonSync('multiply-response');
+          expect(content.properties.MultiplyResult.type).to.eql('number');
+
+          content = readModelJsonSync('subtract');
+          expect(content).to.not.have.property('public');
+          expect(content).to.have.property('properties');
+          expect(content.properties.intA.type).to.eql('number');
+          expect(content.properties.intB.type).to.eql('number');
+
+          content = readModelJsonSync('subtract-response');
+          expect(content.properties.SubtractResult.type).to.eql('number');
 
           var modelConfig = readModelConfigSync('server');
-          expect(modelConfig).to.have.property('GetAtomicWeight');
-          expect(modelConfig.GetAtomicWeight).to.have.property('public', true);
+          expect(modelConfig).to.have.property('Add');
+          expect(modelConfig.Add).to.have.property('public', true);
 
-          expect(modelConfig).to.have.property('GetAtomicNumber');
-          expect(modelConfig.GetAtomicNumber).to.have.property('public', true);
+          expect(modelConfig).to.have.property('Divide');
+          expect(modelConfig.Divide).to.have.property('public', true);
+
+          expect(modelConfig).to.have.property('Multiply');
+          expect(modelConfig.Multiply).to.have.property('public', true);
+
+          expect(modelConfig).to.have.property('Subtract');
+          expect(modelConfig.Subtract).to.have.property('public', true);
 
           done();
         });
@@ -159,8 +181,6 @@ describe('loopback:soap tests', function() {
       var modelGen = givenDataSourceGenerator();
       helpers.mockPrompt(modelGen, {
         name: 'soapds',
-        customConnector: '', // temporary workaround for
-        // https://github.com/yeoman/generator/issues/600
         connector: 'soap',
         url: 'http://localhost:15099/rpc_Literal_testing',
         wsdl: path.join(__dirname, 'soap/special_char_test.wsdl'),
@@ -182,7 +202,7 @@ describe('loopback:soap tests', function() {
           operations: ['myMethod'],
         });
 
-        // this runs command  loopback:soap command with mock up /test/soap/stockquote.wsdl as input from command prompt
+        // this runs command  loopback:soap command with mock up /test/soap/special_char_test.wsdl as input from command prompt
         modelGen.run(function() {
           var content = readAPIFileSync('soap-rpc-literal-test-2-0-binding');
           done();

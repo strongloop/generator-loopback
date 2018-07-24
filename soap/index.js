@@ -369,7 +369,8 @@ module.exports = yeoman.Base.extend({
       if (!err) {
         self.log(
           chalk.green(g.f('Models are successfully generated from ' +
-            '{{WSDL}}.')));
+            '{{WSDL}}.'))
+        );
       }
       helpers.reportValidationError(err, self.log);
       done(err);

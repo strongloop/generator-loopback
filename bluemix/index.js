@@ -69,10 +69,11 @@ module.exports = yeoman.Base.extend({
   validateLoopBackDir: function() {
     var root = this.destinationRoot();
     if (!(this.options.login || this.options.sso)) {
-      if (!fs.existsSync(path.join(root, 'package.json')) ||
-        !fs.existsSync(path.join(root, 'server', 'server.js'))) {
-        this.log(chalk.red('\n Invalid LoopBack directory\n'));
-        process.exit();
+      if (
+        !fs.existsSync(path.join(root, 'package.json')) ||
+        !fs.existsSync(path.join(root, 'server', 'server.js'))
+      ) {
+        throw new Error('Invalid LoopBack directory');
       }
     }
   },
