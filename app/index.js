@@ -252,8 +252,8 @@ module.exports = yeoman.Base.extend({
         cb();
       } else {
         cb(new Error(
-          g.f('The generator must be run in an empty directory.'))
-        );
+          g.f('The generator must be run in an empty directory.')
+        ));
       }
     });
   },
@@ -349,7 +349,8 @@ module.exports = yeoman.Base.extend({
           'support and maintain LoopBack, which is at the core of\n' +
           'API Connect. When your APIs need robust management and\n' +
           'security options, please check out %s',
-        'http://ibm.biz/tryAPIC')));
+        'http://ibm.biz/tryAPIC'
+      )));
       this.log();
     },
   },

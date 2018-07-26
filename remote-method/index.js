@@ -177,7 +177,8 @@ module.exports = yeoman.Base.extend({
           verb: answers.httpVerb || answers.customHttpVerb,
         });
         this.log(g.f(
-          '\nLet\'s add another endpoint, enter an empty name when done.'));
+          '\nLet\'s add another endpoint, enter an empty name when done.'
+        ));
         this.askForEndpoints();
       }.bind(this));
     }.bind(this));
@@ -343,7 +344,8 @@ module.exports = yeoman.Base.extend({
           description: answers.returnsDes,
         });
         this.log(g.f(
-          '\nLet\'s add another return argument. Enter empty name when done.'));
+          '\nLet\'s add another return argument. Enter empty name when done.'
+        ));
         this.askForReturns();
       }.bind(this));
     }.bind(this));

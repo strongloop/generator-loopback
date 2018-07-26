@@ -32,7 +32,8 @@ describe('loopback:remote-method generator', function() {
       function(err, model) {
         test.Model = model;
         done(err);
-      });
+      }
+    );
   });
 
   it('adds an entry to common/models/{name}.json', function(done) {

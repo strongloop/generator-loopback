@@ -187,7 +187,8 @@ describe('loopback:bluemix generator', function() {
         assert.equal('string', typeof config.space.name);
         done();
       });
-    });
+    }
+  );
 
   itSkipIf(!process.env.BLUEMIX_EMAIL || !process.env.BLUEMIX_PASSWORD)(
     'should login with SSO passcode', function(done) {
@@ -211,7 +212,8 @@ describe('loopback:bluemix generator', function() {
         assert.equal('string', typeof config.space.name);
         done();
       });
-    });
+    }
+  );
 });
 
 function givenBluemixGenerator(args) {

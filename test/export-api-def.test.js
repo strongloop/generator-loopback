@@ -39,7 +39,8 @@ describe('loopback:export-api-def generator', function() {
       function(err, model) {
         test.Model = model;
         done(err);
-      });
+      }
+    );
   });
 
   before(function installDependencies(done) {
@@ -67,7 +68,8 @@ describe('loopback:export-api-def generator', function() {
       expect(content).to.have.property('basePath');
       expect(content).to.have.property('info');
       expect(content.info).to.have.property(
-        'title', 'test-app');
+        'title', 'test-app'
+      );
       expect(content).to.have.property('tags');
       expect(content.consumes).to.have.members([
         'application/json',
@@ -96,7 +98,8 @@ describe('loopback:export-api-def generator', function() {
       expect(content).to.have.property('basePath');
       expect(content).to.have.property('info');
       expect(content.info).to.have.property(
-        'title', 'test-app');
+        'title', 'test-app'
+      );
       expect(content).to.have.property('tags');
       expect(content.consumes).to.have.members([
         'application/json',

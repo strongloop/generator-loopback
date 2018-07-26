@@ -73,7 +73,8 @@ describe('loopback:datasource generator', function() {
 
     datasourceGen.run(function() {
       var pkg = fs.readFileSync(
-        path.join(SANDBOX, 'package.json'), 'UTF-8');
+        path.join(SANDBOX, 'package.json'), 'UTF-8'
+      );
       pkg = JSON.parse(pkg);
       // eslint-disable-next-line no-unused-expressions
       expect(pkg.dependencies['loopback-connector-rest']).to.exist;
@@ -91,7 +92,8 @@ describe('loopback:datasource generator', function() {
 
     datasourceGen.run(function() {
       var pkg = fs.readFileSync(
-        path.join(SANDBOX, 'package.json'), 'UTF-8');
+        path.join(SANDBOX, 'package.json'), 'UTF-8'
+      );
       pkg = JSON.parse(pkg);
       // eslint-disable-next-line no-unused-expressions
       expect(pkg.dependencies.lodash).to.exist;
@@ -274,7 +276,8 @@ describe('loopback:datasource generator', function() {
             var datasources = Object.keys(readDataSourcesJsonSync('server'));
             expect(datasources).to.not.include('ds-object-storage');
             var pkg = fs.readFileSync(
-              path.join(SANDBOX, 'test-app', 'package.json'), 'UTF-8');
+              path.join(SANDBOX, 'test-app', 'package.json'), 'UTF-8'
+            );
             pkg = JSON.parse(pkg);
             // eslint-disable-next-line no-unused-expressions
             expect(pkg.dependencies['loopback-component-storage']).to.exist;

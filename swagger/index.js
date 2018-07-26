@@ -135,11 +135,13 @@ module.exports = yeoman.Base.extend({
       function(done) {
         // Find existing model definitions
         wsModels.ModelDefinition.find(
-          {where: {name: {inq: self.modelNames}}}, done);
+          {where: {name: {inq: self.modelNames}}}, done
+        );
       },
       function(done) {
         wsModels.ModelConfig.find(
-          {where: {name: {inq: self.modelNames}}}, done);
+          {where: {name: {inq: self.modelNames}}}, done
+        );
       }],
     function(err, objs) {
       if (err) {
@@ -347,7 +349,8 @@ module.exports = yeoman.Base.extend({
       if (!err) {
         self.log(
           chalk.green(g.f('Models are successfully generated from ' +
-            '{{swagger spec}}.')));
+            '{{swagger spec}}.'))
+        );
       }
       helpers.reportValidationError(err, self.log);
       done(err);

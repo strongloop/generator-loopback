@@ -84,8 +84,7 @@ describe('loopback:zosconnectee generator', function() {
           'zosconnectee_template.json');
         done();
       });
-    }
-  );
+    });
 
   function givenDataSourceGenerator(dsArgs, _dsPath) {
     var dsPath = _dsPath || '../../datasource';

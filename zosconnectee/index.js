@@ -42,7 +42,8 @@ module.exports = generators.Base.extend({
         that.datasources = tempList;
         if (that.datasources.length == 0) {
           that.env.error(
-            'Define a zosconnectee datasource before running this command');
+            'Define a zosconnectee datasource before running this command'
+          );
         }
         done(); // End the sync
       }
