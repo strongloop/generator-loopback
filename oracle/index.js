@@ -231,7 +231,12 @@ Please follow instructions at %s.', INSTALL_URL)));
         } catch (e) {
           this.log(chalk.red(g.f('Oracle driver fails to load: %s', e)));
           this.log(
-            chalk.red(g.f('Please try `lb oracle --driver` or follow instructions at %s.', INSTALL_URL))
+            chalk.red(
+              g.f(
+                'Please try `lb oracle --driver` or follow instructions at %s.',
+                INSTALL_URL
+              )
+            )
           );
           var done = this.async();
 
