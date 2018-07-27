@@ -75,7 +75,7 @@ module.exports = yeoman.Base.extend({
       if (e.code === 'MODULE_NOT_FOUND') {
         // loopback-connector-oracle is not installed
         this.log(chalk.red(
-          g.f('Module is not installed: ' + e)
+          g.f('Module is not installed: %s', e)
         ));
         this.options.connector =
           e.message.indexOf('loopback-connector-oracle') !== -1;
@@ -84,7 +84,7 @@ module.exports = yeoman.Base.extend({
       } else {
         // oracledb cannot be loaded due to dynamic lib issues
         this.log(chalk.red(
-          g.f('Module oracledb fails to load: ' + e)
+          g.f('Module oracledb fails to load: %s', e)
         ));
         this.options.driver = true;
       }
@@ -95,8 +95,8 @@ module.exports = yeoman.Base.extend({
     if (this.skip) return;
     var oci = discoverOCI(this.options.verbose ? this.log : null);
     if (!oci.libDir) {
-      this.log(chalk.red(g.f('Oracle Instant Client is not found. ' +
-        'Please follow instructions at ' + INSTALL_URL)));
+      this.log(chalk.red(g.f('Oracle Instant Client is not found. \
+Please follow instructions at %s.', INSTALL_URL)));
       var done = this.async();
 
       var prompts = [
@@ -229,10 +229,9 @@ module.exports = yeoman.Base.extend({
           );
           this.log(chalk.green(g.f('Oracle driver is ready.')));
         } catch (e) {
-          this.log(chalk.red(g.f('Oracle driver fails to load: ' + e)));
+          this.log(chalk.red(g.f('Oracle driver fails to load: %s', e)));
           this.log(
-            chalk.red(g.f('Please try `lb oracle --driver` or ' +
-              'follow instructions at ' + INSTALL_URL + '.'))
+            chalk.red(g.f('Please try `lb oracle --driver` or follow instructions at %s.', INSTALL_URL))
           );
           var done = this.async();
 
