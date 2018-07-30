@@ -8,20 +8,15 @@
 var path = require('path');
 var g = require('../lib/globalize');
 var yeoman = require('yeoman-generator');
-var chalk = require('chalk');
-var workspace = require('loopback-workspace');
-var Workspace = workspace.models.Workspace;
 var fs = require('fs');
-var actions = require('../lib/actions');
-var helpers = require('../lib/helpers');
+var ActionsMixin = require('../lib/actions');
 var helpText = require('../lib/help');
-var bluemix = require('./helpers');
-var validateAppName = helpers.validateAppName;
-var pkg = require('../package.json');
+var BluemixMixin = require('./helpers');
 
-module.exports = yeoman.Base.extend({
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+module.exports = class BluemixGenerator extends
+  BluemixMixin(ActionsMixin(yeoman)) {
+  constructor(args, opts) {
+    super(args, opts);
     this.done = false;
 
     this.option('appName', {
@@ -60,13 +55,13 @@ module.exports = yeoman.Base.extend({
       type: Boolean,
       default: false,
     });
-  },
+  };
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_bluemix_usage.txt');
-  },
+  }
 
-  validateLoopBackDir: function() {
+  validateLoopBackDir() {
     var root = this.destinationRoot();
     if (!(this.options.login || this.options.sso)) {
       if (
@@ -76,20 +71,47 @@ module.exports = yeoman.Base.extend({
         throw new Error('Invalid LoopBack directory');
       }
     }
-  },
+  }
 
-  loginToBluemix: function() {
-    bluemix.login.apply(this);
-  },
+  loginToBluemix() {
+    this.login.apply(this);
+  }
 
-  promptServiceName: bluemix.promptServiceName,
-  getServicePlans: bluemix.getServicePlans,
-  promptServicePlan: bluemix.promptServicePlan,
-  provisionService: bluemix.provisionService,
+  BMPromptServiceName() {
+    this.promptServiceName();
+  }
 
-  configurePrompt: bluemix.configurePrompt,
-  promptBluemixSettings: bluemix.promptSettings,
-  generateBluemixFiles: bluemix.generateFiles,
-  promptDefaultServices: bluemix.promptDefaultServices,
-  addDefaultServices: bluemix.addDefaultServices,
-});
+  BMGetServicePlans() {
+    this.getServicePlans();
+  }
+
+  BMPromptServicePlan() {
+    this.promptServicePlan();
+  }
+
+  BMProvisionService() {
+    this.provisionService();
+  };
+
+  BMConfigurePrompt() {
+    this.configurePrompt();
+  }
+
+  BMPromptBluemixSettings() {
+    if (this.promptSettings) {
+      this.promptSettings();
+    };
+  }
+
+  BMGenerateBluemixFiles() {
+    this.generateFiles();
+  }
+
+  BMPromptDefaultServices() {
+    this.promptDefaultServices();
+  }
+
+  BMAddDefaultServices() {
+    this.addDefaultServices();
+  }
+};

@@ -46,206 +46,183 @@ describe('loopback:relation generator', function() {
     );
   });
 
-  it('adds an entry to common/models/{name}.json', function(done) {
-    var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
-      model: 'Car',
-      toModel: 'Part',
-      asPropertyName: 'parts',
-      foreignKey: 'customKey',
-      type: 'hasMany',
-    });
-
-    relationGenerator.run(function() {
-      var definition = common.readJsonSync('common/models/car.json');
-      var relations = definition.relations || {};
-      expect(relations).to.have.property('parts');
-      expect(relations.parts).to.eql({
-        type: 'hasMany',
+  it('adds an entry to common/models/{name}.json', function() {
+    return helpers.run(path.join(__dirname, '../relation'))
+      .cd(SANDBOX)
+      .withPrompts({
+        model: 'Car',
+        toModel: 'Part',
+        asPropertyName: 'parts',
         foreignKey: 'customKey',
-        model: 'Part',
+        type: 'hasMany',
+      }).then(function() {
+        var definition = common.readJsonSync('common/models/car.json');
+        var relations = definition.relations || {};
+        expect(relations).to.have.property('parts');
+        expect(relations.parts).to.eql({
+          type: 'hasMany',
+          foreignKey: 'customKey',
+          model: 'Part',
+        });
       });
-      done();
-    });
   });
 
-  it('asks for custom model name', function(done) {
-    var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
-      model: 'Car',
-      toModel: null,
-      customToModel: 'Part',
-      asPropertyName: 'parts',
-      foreignKey: 'customKey',
-      type: 'hasMany',
-    });
-
-    relationGenerator.run(function() {
-      var definition = common.readJsonSync('common/models/car.json');
-      var relations = definition.relations || {};
-      expect(relations).to.have.property('parts');
-      expect(relations.parts).to.eql({
-        type: 'hasMany',
+  it('asks for custom model name', function() {
+    return helpers.run(path.join(__dirname, '../relation'))
+      .cd(SANDBOX)
+      .withPrompts({
+        model: 'Car',
+        toModel: null,
+        customToModel: 'Part',
+        asPropertyName: 'parts',
         foreignKey: 'customKey',
-        model: 'Part',
+        type: 'hasMany',
+      }).then(function() {
+        var definition = common.readJsonSync('common/models/car.json');
+        var relations = definition.relations || {};
+        expect(relations).to.have.property('parts');
+        expect(relations.parts).to.eql({
+          type: 'hasMany',
+          foreignKey: 'customKey',
+          model: 'Part',
+        });
       });
-      done();
-    });
   });
 
-  it('asks for through model name', function(done) {
-    var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
-      model: 'Car',
-      toModel: 'Part',
-      asPropertyName: 'parts',
-      foreignKey: 'customKey',
-      type: 'hasMany',
-      through: true,
-      throughModel: 'CarPart',
-    });
-
-    relationGenerator.run(function() {
-      var definition = common.readJsonSync('common/models/car.json');
-      var relations = definition.relations || {};
-      expect(relations).to.have.property('parts');
-      expect(relations.parts).to.eql({
-        type: 'hasMany',
+  it('asks for through model name', function() {
+    return helpers.run(path.join(__dirname, '../relation'))
+      .cd(SANDBOX)
+      .withPrompts({
+        model: 'Car',
+        toModel: 'Part',
+        asPropertyName: 'parts',
         foreignKey: 'customKey',
-        model: 'Part',
-        through: 'CarPart',
+        type: 'hasMany',
+        through: true,
+        throughModel: 'CarPart',
+      }).then(function() {
+        var definition = common.readJsonSync('common/models/car.json');
+        var relations = definition.relations || {};
+        expect(relations).to.have.property('parts');
+        expect(relations.parts).to.eql({
+          type: 'hasMany',
+          foreignKey: 'customKey',
+          model: 'Part',
+          through: 'CarPart',
+        });
       });
-      done();
-    });
   });
 
-  it('asks for custom through model name', function(done) {
-    var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
-      model: 'Car',
-      toModel: 'Part',
-      asPropertyName: 'parts',
-      foreignKey: 'customKey',
-      type: 'hasMany',
-      through: true,
-      throughModel: null,
-      customThroughModel: 'CarPart',
-    });
-
-    relationGenerator.run(function() {
-      var definition = common.readJsonSync('common/models/car.json');
-      var relations = definition.relations || {};
-      expect(relations).to.have.property('parts');
-      expect(relations.parts).to.eql({
-        type: 'hasMany',
+  it('asks for custom through model name', function() {
+    return helpers.run(path.join(__dirname, '../relation'))
+      .cd(SANDBOX)
+      .withPrompts({
+        model: 'Car',
+        toModel: 'Part',
+        asPropertyName: 'parts',
         foreignKey: 'customKey',
-        model: 'Part',
-        through: 'CarPart',
+        type: 'hasMany',
+        through: true,
+        throughModel: null,
+        customThroughModel: 'CarPart',
+      }).then(function() {
+        var definition = common.readJsonSync('common/models/car.json');
+        var relations = definition.relations || {};
+        expect(relations).to.have.property('parts');
+        expect(relations.parts).to.eql({
+          type: 'hasMany',
+          foreignKey: 'customKey',
+          model: 'Part',
+          through: 'CarPart',
+        });
       });
-      done();
-    });
   });
 
-  it('asks for nestRemoting', function(done) {
-    var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
-      model: 'Car',
-      toModel: 'Part',
-      asPropertyName: 'parts',
-      foreignKey: 'customKey',
-      type: 'hasMany',
-      through: true,
-      throughModel: null,
-      customThroughModel: 'CarPart',
-      nestRemoting: true,
-    });
-
-    relationGenerator.run(function() {
-      var definition = common.readJsonSync('common/models/car.json');
-      var relations = definition.relations || {};
-      expect(relations).to.have.property('parts');
-      expect(relations.parts).to.eql({
-        type: 'hasMany',
+  it('asks for nestRemoting', function() {
+    return helpers.run(path.join(__dirname, '../relation'))
+      .cd(SANDBOX)
+      .withPrompts({
+        model: 'Car',
+        toModel: 'Part',
+        asPropertyName: 'parts',
         foreignKey: 'customKey',
-        model: 'Part',
-        through: 'CarPart',
-        options: {
-          nestRemoting: true,
-        },
+        type: 'hasMany',
+        through: true,
+        throughModel: null,
+        customThroughModel: 'CarPart',
+        nestRemoting: true,
+      }).then(function() {
+        var definition = common.readJsonSync('common/models/car.json');
+        var relations = definition.relations || {};
+        expect(relations).to.have.property('parts');
+        expect(relations.parts).to.eql({
+          type: 'hasMany',
+          foreignKey: 'customKey',
+          model: 'Part',
+          through: 'CarPart',
+          options: {
+            nestRemoting: true,
+          },
+        });
       });
-      done();
-    });
   });
 
-  it('asks for disableInclude', function(done) {
-    var relationGenerator = givenRelationGenerator();
-    helpers.mockPrompt(relationGenerator, {
-      model: 'Car',
-      toModel: 'Part',
-      asPropertyName: 'parts',
-      foreignKey: 'customKey',
-      type: 'hasMany',
-      through: true,
-      throughModel: null,
-      customThroughModel: 'CarPart',
-      disableInclude: true,
-    });
-
-    relationGenerator.run(function() {
-      var definition = common.readJsonSync('common/models/car.json');
-      var relations = definition.relations || {};
-      expect(relations).to.have.property('parts');
-      expect(relations.parts).to.eql({
-        type: 'hasMany',
+  it('asks for disableInclude', function() {
+    return helpers.run(path.join(__dirname, '../relation'))
+      .cd(SANDBOX)
+      .withPrompts({
+        model: 'Car',
+        toModel: 'Part',
+        asPropertyName: 'parts',
         foreignKey: 'customKey',
-        model: 'Part',
-        through: 'CarPart',
-        options: {
-          disableInclude: true,
-        },
+        type: 'hasMany',
+        through: true,
+        throughModel: null,
+        customThroughModel: 'CarPart',
+        disableInclude: true,
+      }).then(function() {
+        var definition = common.readJsonSync('common/models/car.json');
+        var relations = definition.relations || {};
+        expect(relations).to.have.property('parts');
+        expect(relations.parts).to.eql({
+          type: 'hasMany',
+          foreignKey: 'customKey',
+          model: 'Part',
+          through: 'CarPart',
+          options: {
+            disableInclude: true,
+          },
+        });
       });
-      done();
-    });
   });
 
-  // requires generator-yeoman v0.17
   it('provides default property name based on target model for belongsTo',
-    function(done) {
-      var relationGenerator = givenRelationGenerator();
-      helpers.mockPrompt(relationGenerator, {
-        model: 'Car',
-        toModel: 'Part',
-        type: 'belongsTo',
-      });
-      relationGenerator.run(function() {
-        var definition = common.readJsonSync('common/models/car.json');
-        var relations = definition.relations || {};
-        expect(Object.keys(relations)).to.include('part');
-        done();
-      });
+    function() {
+      return helpers.run(path.join(__dirname, '../relation'))
+        .cd(SANDBOX)
+        .withPrompts({
+          model: 'Car',
+          toModel: 'Part',
+          type: 'belongsTo',
+        }).then(function() {
+          var definition = common.readJsonSync('common/models/car.json');
+          var relations = definition.relations || {};
+          expect(Object.keys(relations)).to.include('part');
+        });
     });
 
-  // requires generator-yeoman v0.17
   it('provides default property name based on target model for hasMany',
-    function(done) {
-      var relationGenerator = givenRelationGenerator();
-      helpers.mockPrompt(relationGenerator, {
-        model: 'Car',
-        toModel: 'Part',
-        type: 'hasMany',
-      });
-      relationGenerator.run(function() {
-        var definition = common.readJsonSync('common/models/car.json');
-        var relations = definition.relations || {};
-        expect(Object.keys(relations)).to.include('parts');
-        done();
-      });
+    function() {
+      return helpers.run(path.join(__dirname, '../relation'))
+        .cd(SANDBOX)
+        .withPrompts({
+          model: 'Car',
+          toModel: 'Part',
+          type: 'hasMany',
+        }).then(function() {
+          var definition = common.readJsonSync('common/models/car.json');
+          var relations = definition.relations || {};
+          expect(Object.keys(relations)).to.include('parts');
+        });
     });
-
-  function givenRelationGenerator() {
-    var name = 'loopback:relation';
-    var path = '../../relation';
-    var gen = common.createGenerator(name, path);
-    return gen;
-  }
 });
