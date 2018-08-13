@@ -1,5 +1,5 @@
 Descrizione:
-  Programma di utilità che fornisce assistenza per l'installazione del connettore LoopBack Oracle.
+  Programma di utilità per aiutare ad installare LoopBack Oracle connector.
 
 Esempio:
 

@@ -1,0 +1,6 @@
+Descripción:
+  Configura un origen de datos de z/OS Connect EE.
+
+Ejemplo:
+
+  {{slc loopback:zosconnectee}}

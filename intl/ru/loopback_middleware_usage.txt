@@ -1,0 +1,8 @@
+Описание:
+  Создает новое промежуточное ПО в приложении LoopBack.
+
+Пример:
+
+  {{slc loopback:middleware myMiddleware}}
+
+  Эта команда добавляет запись в {{`middleware.json`}}, определяющую промежуточное ПО "myMiddleware".

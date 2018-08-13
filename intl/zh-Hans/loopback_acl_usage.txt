@@ -1,7 +1,7 @@
 描述：
   向 LoopBack 应用程序添加新的 ACL 条目。
 
-例如：
+示例：
 
   {{slc loopback:acl}}
 

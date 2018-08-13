@@ -1,5 +1,5 @@
 Description :
-  CrÃ©e une relation de modÃ¨le dans l'application LoopBack.
+  Crée une relation de modèle dans l'application LoopBack.
 
 Exemple :
 

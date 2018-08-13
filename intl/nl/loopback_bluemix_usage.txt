@@ -1,3 +1,5 @@
 Beschrijving:
   'toolchain', 'manifest' en 'docker' zijn steunopties (scaffold). Als u geen van alle opgeeft, wordt dit
   geïnterpreteerd alsof u ze allemaal opgeeft.
+
+  Geef 'provision' op om een door LoopBack ondersteunde Bluemix-gegevensservice beschikbaar te stellen.

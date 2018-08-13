@@ -1,0 +1,14 @@
+Описание:
+  Создать определения API Swagger для приложений LoopBack.
+
+Пример:
+
+  {{slc loopback:export-api-def [--json]}}
+
+  Вывод определений API в stdout.
+  Для вывода в формате JSON, а не YAML укажите параметр {{--json}}.
+
+  {{slc loopback:export-api-def [--o outputFile]}}
+
+  Вывод определений API в указанное место. В зависимости от расширения файла
+  вывод будет в формате {{yaml}} или {{json}}.

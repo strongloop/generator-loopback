@@ -1,0 +1,9 @@
+Popis:
+  Přidá novou položku ACL do aplikace LoopBack.
+
+Například:
+
+  {{slc loopback:acl}}
+
+  Bude zapotřebí položit několik otázek pro určení voleb ACL
+a poté přidat položku do odpovídajícího modelu {{json}}.

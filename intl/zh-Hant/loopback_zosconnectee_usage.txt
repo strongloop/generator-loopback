@@ -1,0 +1,6 @@
+說明：
+  配置 z/OS Connect EE 資料來源。
+
+範例：
+
+  {{slc loopback:zosconnectee}}

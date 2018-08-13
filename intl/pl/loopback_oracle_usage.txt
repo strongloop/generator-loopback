@@ -1,0 +1,8 @@
+Opis:
+  Program narzędziowy ułatwiający instalację konektora Oracle LoopBack.
+
+Przykład:
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+Gdy opcje nie zostaną podane, komenda podejmie próbę wykrycia instalacji klienta Oracle Instant Client i sprawdzenia, czy można załadować `loopback-connector-oracle`.

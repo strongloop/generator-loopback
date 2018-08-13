@@ -1,0 +1,6 @@
+Description:
+  z/OS Connect EE 데이터 소스를 구성합니다.
+
+예:
+
+  {{slc loopback:zosconnectee}}

@@ -1,6 +1,6 @@
 描述：创建 LoopBack 应用程序。
 
-例如：
+示例：
 
   {{slc loopback}}
 

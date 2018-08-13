@@ -1,5 +1,5 @@
 Açıklama:
-  LoopBack Oracle bağlayıcısının kurulmasına yardımcı olacak program.
+  LoopBack Oracle bağlayıcısının kurulmasına yardımcı olacak yardımcı program.
 
 Örneğin:
 

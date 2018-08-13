@@ -1,2 +1,4 @@
 Açıklama:
   `toolchain`, `manifest` ve `docker` yapı oluşturma seçenekleridir. Bunlardan birinin belirtilmemesi tümünün belirtilmesi olarak yorumlanır.
+
+  LoopBack destekli bir Bluemix veri hizmetini sağlamak için `provision` seçeneğini belirtin.

@@ -1,0 +1,6 @@
+描述：
+  配置 z/OS Connect EE 数据源。
+
+示例：
+
+  {{slc loopback:zosconnectee}}

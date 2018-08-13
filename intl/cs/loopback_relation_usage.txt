@@ -1,0 +1,6 @@
+Popis
+  Vytvoří v aplikaci LoopBack nový vztah mezi modely.
+
+Například:
+
+  {{slc loopback:relation}}

@@ -1,0 +1,6 @@
+Açıklama:
+  Bir z/OS Connect EE DataSource'u yapılandırır.
+
+Örneğin:
+
+  {{slc loopback:zosconnectee}}

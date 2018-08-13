@@ -1,7 +1,7 @@
 描述：
   帮助安装 LoopBack Oracle 连接器的实用程序。
 
-例如：
+示例：
 
   {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
 

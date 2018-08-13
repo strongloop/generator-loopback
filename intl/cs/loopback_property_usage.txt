@@ -1,0 +1,6 @@
+Popis
+  Vytvoří v aplikaci LoopBack novou vlastnost modelu.
+
+Například:
+
+  {{slc loopback:property}}

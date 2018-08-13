@@ -1,0 +1,6 @@
+説明:
+  z/OS Connect EE データ・ソースを構成します。
+
+例:
+
+  {{slc loopback:zosconnectee}}
