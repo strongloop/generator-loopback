@@ -1,0 +1,9 @@
+Opis:
+  Dodaje nową pozycję listy ACL do aplikacji LoopBack.
+
+Przykład:
+
+  {{slc loopback:acl}}
+
+  Spowoduje to zadanie szeregu pytań w celu określenia opcji ACL,
+  a następnie dodanie pozycji do odpowiedniego modelu {{json}}.

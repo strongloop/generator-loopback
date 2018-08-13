@@ -1,0 +1,5 @@
+Opis:
+  `toolchain`, `manifest` i `docker` są opcjami scaffold. Nieokreślenie żadnej z nich
+  jest interpretowane jako określenie wszystkich tych opcji.
+
+  Podaj opcję `provision`, aby udostępnić usługę danych Bluemix obsługiwaną przez aplikację LoopBack.

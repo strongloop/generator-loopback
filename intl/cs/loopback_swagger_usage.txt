@@ -1,0 +1,6 @@
+Popis
+  Ze specifikace rozhraní API svagger vygeneruje modely a vzdálené metody.
+
+Například:
+
+  {{slc loopback:swagger}}

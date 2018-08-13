@@ -1,7 +1,7 @@
 描述：
   在 LoopBack 应用程序中创建新的引导脚本。
 
-例如：
+示例：
 
   {{slc loopback:boot-script}} [your-script-name]
 

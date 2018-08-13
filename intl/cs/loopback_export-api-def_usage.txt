@@ -1,0 +1,14 @@
+Popis:
+  Vytvoří pro aplikaci LoopBack definici rozhraní API Swagger.
+
+Například:
+
+  {{slc loopback:export-api-def [--json]}}
+
+  Tím se vygeneruje výstup definice rozhraní na standardní výstupní zařízení stdout.
+  Při volbě {{--json}} se zobrazí ve formátu JSON, jinak se standardně zobrazí ve formátu YAML.
+
+  {{slc loopback:export-api-def [--o outputFile]}}
+
+  Tím se vygeneruje výstup definice rozhraní na určený umístění. Podle přípony souboru
+  se vytiskne ve formátu {{yaml}} či {{json}}.

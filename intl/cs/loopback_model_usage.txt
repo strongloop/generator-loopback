@@ -1,0 +1,8 @@
+Popis
+  Vytvoří v aplikaci LoopBack nový model.
+
+Například:
+
+  {{slc loopback:model Product}}
+
+  Takto se přidá položka do souboru {{`Product.json`}}, která definuje model "Product".

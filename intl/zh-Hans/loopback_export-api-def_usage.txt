@@ -1,7 +1,7 @@
 描述：
   为 LoopBack 应用程序生成 Swagger API 定义。
 
-例如：
+示例：
 
   {{slc loopback:export-api-def [--json]}}
 

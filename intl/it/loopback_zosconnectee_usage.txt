@@ -1,0 +1,6 @@
+Descrizione:
+  Configura un z/OS Connect EE DataSource.
+
+Esempio:
+
+  {{slc loopback:zosconnectee}}

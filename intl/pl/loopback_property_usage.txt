@@ -1,0 +1,6 @@
+Opis:
+  Tworzy nową właściwość modelu w aplikacji LoopBack.
+
+Przykład:
+
+  {{slc loopback:property}}

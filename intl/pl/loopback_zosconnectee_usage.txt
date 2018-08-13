@@ -1,0 +1,6 @@
+Opis:
+  Konfiguruje źródło danych z/OS Connect EE.
+
+Przykład:
+
+  {{slc loopback:zosconnectee}}

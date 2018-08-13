@@ -7,12 +7,12 @@ Przykład:
 
   Spowoduje to utworzenie następujących elementów:
 
-    {{package.json}}: Pakiety programistyczne zainstalowane przez {{npm}}.
+    {{package.json}}: pakiety programistyczne instalowane przez {{npm}}.
 
-    {{common/models/<modelName>.json}}: Definicja podstawowych modeli udostępnianych przez aplikację LoopBack.
-    {{common/models/}}: Katalog, w którym zostanie umieszczony niestandardowy kod modelu.
+    {{common/models/<nazwa_modelu>.json}}: definicja modeli podstawowych udostępnianych przez LoopBack.
+    {{common/models/}}: katalog, w którym zostanie umieszczony kod modelu.
 
-    {{server/server.js}}: Główny plik aplikacji.
-    {{server/config.json}}: Konfiguracja aplikacji możliwa do edycji przez komputer.
-    {{server/datasources.json}}: Definicja źródeł danych.
-    {{server/model-config.json}}: Konfiguracja modelu.
+    {{server/server.js}}: główny plik aplikacji.
+    {{server/config.json}}: konfiguracja aplikacji dostępna do edycji przez komputer.
+    {{server/datasources.json}}: definicja źródła danych.
+    {{server/model-config.json}}: konfiguracja modelu.

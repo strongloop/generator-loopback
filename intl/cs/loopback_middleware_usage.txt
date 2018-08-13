@@ -1,0 +1,8 @@
+Popis
+  Vytvoří v aplikaci LoopBack nový middleware.
+
+Například:
+
+  {{slc loopback:middleware myMiddleware}}
+
+  Takto se přidá položka do souboru {{`middleware.json`}}, která definuje middleware "myMiddleware".

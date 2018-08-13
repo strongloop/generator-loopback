@@ -1,0 +1,6 @@
+Popis:
+  Konfiguruje zdroj dat z/OS Connect EE DataSource.
+
+Například:
+
+  {{slc loopback:zosconnectee}}

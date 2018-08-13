@@ -1,0 +1,5 @@
+Popis:
+  `toolchain`, `manifest` a `docker` jsou volby pro generování šablon. Nezadáte-li, kterou specifikujete, znamená to,
+   že specifikujete všechny.
+
+  Chcete-li poskytovat datovou službu Bluemix s podporou LoopBack, zadejte volbu "provision" (zajištění).

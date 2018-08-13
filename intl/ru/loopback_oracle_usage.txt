@@ -1,0 +1,8 @@
+Описание:
+  Вспомогательная утилита для установки коннектора Oracle для LoopBack.
+
+Пример:
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+Без параметров команда ищет установленный экземпляр Oracle Instant Client и проверяет возможность загрузки `loopback-connector-oracle`.

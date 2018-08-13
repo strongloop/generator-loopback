@@ -5,4 +5,4 @@ Exemple :
 
   {{slc loopback:boot-script}} [your-script-name]
 
-  Cette opératio génère un script d'amorçage dans {{`/server/boot`}}.
+  Cette opération génère un script d'amorçage dans {{`/server/boot`}}.
