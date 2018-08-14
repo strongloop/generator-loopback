@@ -1,4 +1,18 @@
-2018-07-10, Version 5.8.2
+2018-08-14, Version 5.9.0
+=========================
+
+ * [WebFM] cs/de/es/fr/it/ja/ko/nl/pl/pt_BR/ru/tr/zh (candytangnb)
+
+ * fix linting (Diana Lau)
+
+ * translated messages not showing up for oracle (Diana Lau)
+
+ * Fix failing tests (shimks)
+
+ * [WebFM] cs/pl/ru translation (candytangnb)
+
+
+2018-07-09, Version 5.8.2
 =========================
 
  * [WebFM] cs/pl/ru translation (candytangnb)
