@@ -48,7 +48,7 @@ module.exports = yeoman.Base.extend({
       type: Boolean,
     });
 
-    this.argument('name', {
+    this.argument(g.f('name'), {
       desc: g.f('Name of the datasource to create.'),
       required: false,
       type: String,
