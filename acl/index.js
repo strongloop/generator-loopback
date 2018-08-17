@@ -56,7 +56,7 @@ module.exports = yeoman.Base.extend({
 
   askForModel: function() {
     var modelChoices =
-      [{name: '(all existing models)', value: null}]
+      [{name: g.f('(all existing models)'), value: null}]
         .concat(this.editableModelNames);
 
     var prompts = [
@@ -123,7 +123,7 @@ module.exports = yeoman.Base.extend({
         message: g.f('Select the role'),
         type: 'list',
         default: '$everyone',
-        choices: this.roleValues.concat(['other']),
+        choices: this.roleValues.concat([{name: g.f('other'), value: 'other'}]),
       },
       {
         name: 'customRole',
