@@ -44,7 +44,7 @@ module.exports = yeoman.Base.extend({
   constructor: function() {
     yeoman.Base.apply(this, arguments);
 
-    this.argument('name', {
+    this.argument(g.f('name'), {
       desc: g.f('Name of the middleware to create.'),
       required: false,
       type: String,

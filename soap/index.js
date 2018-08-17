@@ -32,7 +32,7 @@ module.exports = yeoman.Base.extend({
   constructor: function() {
     yeoman.Base.apply(this, arguments);
 
-    this.argument('url', {
+    this.argument(g.f('url'), {
       desc: g.f('URL or file path of the WSDL'),
       required: false,
       type: String,

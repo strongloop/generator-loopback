@@ -32,7 +32,7 @@ module.exports = yeoman.Base.extend({
       desc: g.f('Bind to a Bluemix datasource'),
     });
 
-    this.argument('name', {
+    this.argument(g.f('name'), {
       desc: g.f('Name of the model to create.'),
       required: false,
       type: String,

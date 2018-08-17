@@ -36,7 +36,7 @@ module.exports = yeoman.Base.extend({
   constructor: function() {
     yeoman.Base.apply(this, arguments);
 
-    this.argument('url', {
+    this.argument(g.f('url'), {
       desc: g.f('URL of the swagger spec.'),
       required: false,
       type: String,

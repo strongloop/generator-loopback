@@ -27,13 +27,13 @@ module.exports = yeoman.Base.extend({
   constructor: function() {
     yeoman.Base.apply(this, arguments);
 
-    this.argument('modelName', {
+    this.argument(g.f('modelName'), {
       desc: g.f('Name of the model'),
       required: false,
       type: String,
     });
 
-    this.argument('methodName', {
+    this.argument(g.f('methodName'), {
       desc: g.f('Name of the remote method'),
       required: false,
       type: String,
