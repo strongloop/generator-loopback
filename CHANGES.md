@@ -1,3 +1,15 @@
+2018-08-22, Version 5.9.1
+=========================
+
+ * [WebFM] ja/ko/zh_CN/zh_TW translation (candytangnb)
+
+ * Make select role prompt translatable (Diana Lau)
+
+ * Extract name argument in help msg (Diana Lau)
+
+ * extract msg for oracle (Diana Lau)
+
+
 2018-08-14, Version 5.9.0
 =========================
 
