@@ -39,11 +39,11 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
       required: false,
       type: String,
     });
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_remote-method_usage.txt');
-  };
+  }
 
   loadProject() {
     debug('loading project...');
@@ -55,7 +55,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
     debug('loading models...');
     this.loadModelsForGenerator();
     debug('loaded models.');
-  };
+  }
 
   askForModel() {
     if (this.modelName) {
@@ -83,7 +83,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
         this.modelName = answers.model;
       }.bind(this));
     }
-  };
+  }
 
   findModelDefinition() {
     this.modelDefinition = this.projectModels.filter(function(m) {
@@ -95,7 +95,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
     }
-  };
+  }
 
   askForParameters() {
     var name = this.methodName;
@@ -129,7 +129,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
       this.isStatic = answers.isStatic;
       this.description = answers.description;
     }.bind(this));
-  };
+  }
 
   delimEndpoints() {
     this.log();
@@ -138,7 +138,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
     this.log(g.f('You can provide multiple HTTP endpoints, enter an empty ' +
       'path when you are done.'));
     this.http = [];
-  };
+  }
 
   askForEndpoints() {
     var done = this.async();
@@ -191,7 +191,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
         this.askForEndpoints();
       }.bind(this));
     }.bind(this));
-  };
+  }
 
   delimAccepts() {
     this.log();
@@ -202,7 +202,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
       'arguments.'));
 
     this.accepts = [];
-  };
+  }
 
   askForAccepts() {
     var done = this.async();
@@ -296,7 +296,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
         this.askForAccepts();
       }.bind(this));
     }.bind(this));
-  };
+  }
 
   delimReturns() {
     this.log();
@@ -306,7 +306,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
     this.log(g.f('Enter an empty name when you\'ve defined all output ' +
       'arguments.'));
     this.returns = [];
-  };
+  }
 
   askForReturns() {
     var done = this.async();
@@ -358,7 +358,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
         this.askForReturns();
       }.bind(this));
     }.bind(this));
-  };
+  }
 
   remote() {
     var done = this.async();
@@ -375,7 +375,7 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  };
+  }
 
   printSampleRemoteMethodSource() {
     // print an empty line as a visual delimiter
@@ -390,11 +390,11 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
 
     // print an empty line as a visual delimiter
     this.log();
-  };
+  }
 
   saveProject() {
     this.saveProjectForGenerator();
-  };
+  }
 };
 
 function buildIntroduction(def) {

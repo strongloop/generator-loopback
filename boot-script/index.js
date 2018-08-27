@@ -25,11 +25,11 @@ module.exports = class BootScriptGenerator extends ActionsMixin(yeoman) {
       optional: true,
       type: String,
     });
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_boot-script_usage.txt');
-  };
+  }
 
   askForName() {
     var done = this.async();
@@ -47,7 +47,7 @@ module.exports = class BootScriptGenerator extends ActionsMixin(yeoman) {
       this.name = answer.name;
       done();
     }.bind(this));
-  };
+  }
 
   askForType() {
     var question = {
@@ -63,7 +63,7 @@ module.exports = class BootScriptGenerator extends ActionsMixin(yeoman) {
     return this.prompt(question).then(function(answer) {
       this.type = answer.type;
     }.bind(this));
-  };
+  }
 
   generate() {
     var source = this.templatePath(this.type + '.js');
@@ -73,5 +73,5 @@ module.exports = class BootScriptGenerator extends ActionsMixin(yeoman) {
     var target = this.destinationPath(targetPath);
 
     this.copy(source, target);
-  };
+  }
 };

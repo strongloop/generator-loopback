@@ -25,26 +25,26 @@ module.exports = function BluemixMixin(baseClass) {
       if (!this.done && this.options && this.options.provision) {
         provision.promptServiceName(this, g);
       }
-    };
+    }
 
     getServicePlans() {
       if (!this.done && this.options && this.options.provision) {
         provision.getServicePlans(this);
       }
-    };
+    }
 
     promptServicePlan() {
       if (!this.done && this.options && this.options.provision) {
         provision.promptServicePlan(this, g);
       }
-    };
+    }
 
     provisionService() {
       if (!this.done && this.options && this.options.provision) {
         provision.provisionService(this, g);
         this.done = true;
       }
-    };
+    }
 
     /**
  * Prepare prompts for bluemix options
@@ -173,7 +173,7 @@ module.exports = function BluemixMixin(baseClass) {
           done();
         }.bind(this));
       }.bind(this));
-    };
+    }
 
     generateFiles() {
       if (this.done) return;
@@ -188,7 +188,7 @@ module.exports = function BluemixMixin(baseClass) {
         lbBm.generateBluemixFiles(bluemixOptions,
           this.copy.bind(this), this.directory.bind(this));
       }
-    };
+    }
 
     promptDefaultServices() {
       if (this.done) return;
@@ -211,7 +211,7 @@ module.exports = function BluemixMixin(baseClass) {
           this.enableAppMetrics = answers.enableAppMetrics;
         }.bind(this));
       }
-    };
+    }
 
     addDefaultServices() {
       if (this.done) return;
@@ -225,10 +225,10 @@ module.exports = function BluemixMixin(baseClass) {
         };
         lbBm.addDefaultServices(options, done);
       }
-    };
+    }
 
     login() {
       require('./login');
-    };
+    }
   };
 };

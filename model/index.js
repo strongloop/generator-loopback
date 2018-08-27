@@ -47,11 +47,11 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
     //   "generator#invoke() is deprecated. Use generator#composeWith()"
     // See https://github.com/strongloop/generator-loopback/issues/116
     // this.invoke = require('yeoman-generator/lib/actions/invoke');
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_model_usage.txt');
-  };
+  }
 
   loadProject() {
     debug('loading project...');
@@ -63,17 +63,17 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
     debug('loading datasources...');
     this.loadDatasourcesForGenerator();
     debug('loaded datasources.');
-  };
+  }
 
   loadModels() {
     debug('loading models...');
     this.loadModelsForGenerator();
     debug('loaded models.');
-  };
+  }
 
   addNullDataSourceItem() {
     this.addNullDataSourceItemForGenerator();
-  };
+  }
 
   setBluemixDatasourceState() {
     if (this.abort) return;
@@ -97,7 +97,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
         }
       }
     }
-  };
+  }
 
   checkForDatasource() {
     if (this.abort) return;
@@ -115,7 +115,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
         return;
       }
     }
-  };
+  }
 
   askForName() {
     if (this.abort) return;
@@ -132,7 +132,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
       this.name = props.name;
       this.displayName = chalk.yellow(this.name);
     }.bind(this));
-  };
+  }
 
   askForDataSource() {
     if (this.abort) return;
@@ -187,7 +187,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
       }
       debug('database is chosen.');
     }.bind(this));
-  };
+  }
 
   getBaseModels() {
     debug('getting the base model....');
@@ -204,7 +204,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
         done();
       }.bind(this)
     );
-  };
+  }
 
   askForParameters() {
     debug('asking for the parameters....');
@@ -291,7 +291,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
       if (this.databaseModel) this.base = props.customBase || props.base;
       else this.base = 'Model';
     }.bind(this));
-  };
+  }
 
   modelDefinition() {
     if (this.abort) return;
@@ -307,7 +307,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  };
+  }
 
   modelConfiguration() {
     if (this.abort) return;
@@ -323,7 +323,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  };
+  }
 
   delim() {
     if (this.abort) return;
@@ -331,7 +331,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
       return;
 
     this.log(g.f('Let\'s add some %s properties now.\n', this.displayName));
-  };
+  }
 
   property() {
     if (this.abort) return;
@@ -376,7 +376,7 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
         );
       }.bind(this));
     }
-  };
+  }
 
   saveProject() {
     this.saveProjectForGenerator();

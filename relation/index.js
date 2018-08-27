@@ -25,7 +25,7 @@ var debug = require('debug')('loopback:generator:relation');
 module.exports = class RelationGenerator extends ActionsMixin(yeoman) {
   help() {
     return helpText.customHelp(this, 'loopback_relation_usage.txt');
-  };
+  }
 
   loadProject() {
     debug('loading project...');
@@ -37,7 +37,7 @@ module.exports = class RelationGenerator extends ActionsMixin(yeoman) {
     debug('loading models...');
     this.loadModelsForGenerator();
     debug('loaded models.');
-  };
+  }
 
   askForModel() {
     if (this.options.modelName) {
@@ -57,7 +57,7 @@ module.exports = class RelationGenerator extends ActionsMixin(yeoman) {
     return this.prompt(prompts).then(function(answers) {
       this.modelName = answers.model;
     }.bind(this));
-  };
+  }
 
   findModelDefinition() {
     this.modelDefinition = this.projectModels.filter(function(m) {
@@ -84,7 +84,7 @@ module.exports = class RelationGenerator extends ActionsMixin(yeoman) {
         }
       );
     }
-  };
+  }
 
   getTypeChoices() {
     var self = this;
@@ -94,7 +94,7 @@ module.exports = class RelationGenerator extends ActionsMixin(yeoman) {
       self.availableTypes = availableTypes;
       done();
     });
-  };
+  }
 
   askForParameters() {
     var modelDef = this.modelDefinition;
@@ -208,7 +208,7 @@ module.exports = class RelationGenerator extends ActionsMixin(yeoman) {
         this.throughModel = answers.customThroughModel || answers.throughModel;
       }
     }.bind(this));
-  };
+  }
 
   relation() {
     var done = this.async();
@@ -234,9 +234,9 @@ module.exports = class RelationGenerator extends ActionsMixin(yeoman) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  };
+  }
 
   saveProject() {
     this.saveProjectForGenerator();
-  };
+  }
 };

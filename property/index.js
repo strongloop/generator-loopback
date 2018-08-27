@@ -25,7 +25,7 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
 
   help() {
     return helpText.customHelp(this, 'loopback_property_usage.txt');
-  };
+  }
 
   loadProject() {
     debug('loading project...');
@@ -57,7 +57,7 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
     return this.prompt(prompts).then(function(answers) {
       this.modelName = answers.model;
     }.bind(this));
-  };
+  }
 
   findModelDefinition() {
     this.modelDefinition = this.projectModels.filter(function(m) {
@@ -69,7 +69,7 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
     }
-  };
+  }
 
   askForParameters() {
     if (this.modelDefinition.base === 'KeyValueModel') {
@@ -183,7 +183,7 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
         return this.askForParameters();
       }
     }.bind(this));
-  };
+  }
 
   property() {
     var done = this.async();
@@ -191,7 +191,7 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  };
+  }
   saveProject() {
     debug('saving project...');
     this.saveProjectForGenerator();

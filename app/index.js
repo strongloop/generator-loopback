@@ -309,7 +309,7 @@ module.exports = class AppGenerator extends ActionsMixin(yeoman) {
       this.log(g.f('\nBluemix configuration:'));
       this.composeWith(require.resolve('../bluemix'), this.options);
     }
-  };
+  }
   printNextSteps() {
     if (this.options.initBluemix || this.options.skipNextSteps) return;
 
@@ -342,7 +342,7 @@ module.exports = class AppGenerator extends ActionsMixin(yeoman) {
       this.log(chalk.green('    $ node .'));
       this.log();
     }
-  };
+  }
 
   promotion() {
     var cmd = helpers.getCommandName();

@@ -26,7 +26,6 @@ module.exports = class ACLGenerator extends ActionsMixin(yeoman) {
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
-
   help() {
     return helpText.customHelp(this, 'loopback_acl_usage.txt');
   }

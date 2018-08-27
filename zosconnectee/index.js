@@ -24,11 +24,11 @@ module.exports = class ZosconnecteeGenerator extends ActionsMixin(yeoman) {
       }
       return obj;
     };
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_zosconnectee_usage.txt');
-  };
+  }
 
   initializing() {
     var done = this.async();
@@ -51,7 +51,7 @@ module.exports = class ZosconnecteeGenerator extends ActionsMixin(yeoman) {
         done(); // End the sync
       }
     );
-  };
+  }
 
   getDataSources() {
     return this.prompt([{
@@ -75,7 +75,7 @@ module.exports = class ZosconnecteeGenerator extends ActionsMixin(yeoman) {
       });
       this.dataSource = tempSource;
     }.bind(this));
-  };
+  }
   getapis() {
     var that = this;
     var done = this.async();
@@ -93,7 +93,7 @@ module.exports = class ZosconnecteeGenerator extends ActionsMixin(yeoman) {
     this.zosconnect.getApis()
       .then(function(apis) { that.apiList = apis; done(null, true); })
       .catch(done);
-  };
+  }
   selectApi() {
     return this.prompt([{
       type: 'list',
@@ -103,14 +103,14 @@ module.exports = class ZosconnecteeGenerator extends ActionsMixin(yeoman) {
     }]).then(function(answers) {
       this.apiName = answers.api;
     }.bind(this));
-  };
+  }
   loadApi() {
     var done = this.async();
     var that = this;
     this.zosconnect.getApi(this.apiName)
       .then(function(api) { that.api = api; done(null, true); })
       .catch(done);
-  };
+  }
   loadSwagger() {
     var done = this.async();
     var that = this;
@@ -120,7 +120,7 @@ module.exports = class ZosconnecteeGenerator extends ActionsMixin(yeoman) {
         done(null, true);
       })
       .catch(done);
-  };
+  }
   generateTemplate() {
     this.masterTemplate = {};
     var masterTemplate = this.masterTemplate;
@@ -175,7 +175,7 @@ module.exports = class ZosconnecteeGenerator extends ActionsMixin(yeoman) {
       }
     }
     masterTemplate.operations = operations;
-  };
+  }
   writeDataSource() {
     var dataSources = JSON.parse(fs.readFileSync('server/datasources.json'));
     var templateFile = 'server/' + this.dataSource.name + '_template.json';
@@ -185,7 +185,7 @@ module.exports = class ZosconnecteeGenerator extends ActionsMixin(yeoman) {
       this.dataSource.name + '_template.json';
     fs.writeFileSync('server/datasources.json',
       JSON.stringify(dataSources, null, 2));
-  };
+  }
   end() {
     this.log('Configured DataSource', chalk.bold(this.dataSource.name),
       'for API', chalk.bold(this.apiName));

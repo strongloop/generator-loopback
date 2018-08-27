@@ -48,7 +48,7 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
       required: false,
       type: String,
     });
-  };
+  }
 
   loadProject() {
     this.loadProjectForGenerator();
@@ -56,7 +56,7 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
 
   help() {
     return helpText.customHelp(this, 'loopback_middleware_usage.txt');
-  };
+  }
 
   loadPhases() {
     var done = this.async();
@@ -71,7 +71,7 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
 
       done();
     }.bind(this));
-  };
+  }
 
   askForName() {
     var prompts = [
@@ -86,7 +86,7 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
     return this.prompt(prompts).then(function(props) {
       this.name = props.name;
     }.bind(this));
-  };
+  }
 
   askForPhase() {
     var displayName = chalk.yellow(this.name);
@@ -137,12 +137,12 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
       this.nextPhase = props.nextPhase;
       this.subPhase = props.subPhase;
     }.bind(this));
-  };
+  }
 
   promptForPaths() {
     var displayName = chalk.yellow(this.name);
     this.log(g.f('Specify paths for %s:', displayName));
-  };
+  }
 
   askForPaths() {
     var done = this.async();
@@ -174,7 +174,7 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
       this.log(g.f('Let\'s add another path.'));
       this.askForPaths();
     }.bind(this));
-  };
+  }
 
   askForParams() {
     var prompts = [
@@ -199,7 +199,7 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
     return this.prompt(prompts).then(function(answers) {
       this.params = JSON.parse(answers.params);
     }.bind(this));
-  };
+  }
 
   middleware() {
     var done = this.async();
@@ -232,7 +232,7 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
       }
       return done(err);
     });
-  };
+  }
 
   saveProject() {
     this.saveProjectForGenerator();

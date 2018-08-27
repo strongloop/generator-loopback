@@ -48,11 +48,11 @@ module.exports = class OracleGenerator extends ActionsMixin(yeoman) {
     // when adding more than 10 properties
     // See https://github.com/strongloop/generator-loopback/issues/99
     this.env.sharedFs.setMaxListeners(256);
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_oracle_usage.txt');
-  };
+  }
 
   checkConnector() {
     try {
@@ -79,7 +79,7 @@ module.exports = class OracleGenerator extends ActionsMixin(yeoman) {
         this.options.driver = true;
       }
     }
-  };
+  }
 
   discoverOCI() {
     if (this.skip) return;
@@ -121,7 +121,7 @@ Please follow instructions at %s.', INSTALL_URL)));
         this.log(chalk.green(g.f('  - ' + i + ': ' + client[i])));
       }
     }
-  };
+  }
 
   installConnector() {
     if (!this.options.connector) return;
@@ -195,7 +195,7 @@ Please follow instructions at %s.', INSTALL_URL)));
         done();
       }
     }.bind(this));
-  };
+  }
 
   // Make sure checkDriver will be run after npm install
   requireDriver() {
@@ -245,6 +245,6 @@ Please follow instructions at %s.', INSTALL_URL)));
           done();
         }.bind(this));
       }
-    };
-  };
+    }
+  }
 };

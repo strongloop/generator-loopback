@@ -54,11 +54,11 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
       required: false,
       type: String,
     });
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_datasource_usage.txt');
-  };
+  }
 
   loadProject() {
     debug('loading project...');
@@ -71,7 +71,7 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
     // yeoman-generator normalize the appname with ' '
     this.appName =
       path.basename(process.cwd()).replace(/[\/@\s\+%:\.]+?/g, '-');
-  };
+  }
 
   loadConnectors() {
     var done = this.async();
@@ -102,7 +102,7 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
 
       done();
     }.bind(this));
-  };
+  }
 
   askForName() {
     if (!this.options.bluemix) {
@@ -118,7 +118,7 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
         this.name = props.name;
       }.bind(this));
     }
-  };
+  }
 
   askForParameters() {
     if (!this.options.bluemix) {
@@ -147,11 +147,11 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
         this.connector = props.customConnector || props.connector;
       }.bind(this));
     }
-  };
+  }
 
   loginToBluemix() {
     if (this.options.bluemix) { this.login(); }
-  };
+  }
 
   generateBluemixFiles() {
     this.generateFiles();
@@ -159,7 +159,7 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
 
   selectBluemixDatasource() {
     if (this.options.bluemix) { ds.selectBluemixDatasource(this, g); }
-  };
+  }
 
   bindServiceToApp() {
     if (this.abort) return;
@@ -168,7 +168,7 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
       ds.bindServiceToApp(this);
       this.serviceBindingStatus = 'bound';
     }
-  };
+  }
 
   askForConfig() {
     var self = this;
@@ -244,7 +244,7 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
       this.settings = props || {};
       reportWarnings();
     }.bind(this));
-  };
+  }
 
   installConnector() {
     var connector = this.availableConnectors[this.connector];
@@ -293,7 +293,7 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
         );
       }
     }.bind(this));
-  };
+  }
 
   dataSource() {
     if (this.abort) return;
@@ -318,12 +318,12 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
         return done(err);
       }.bind(this));
     }
-  };
+  }
 
   updatePipeline() {
     if (this.abort) return;
     if (this.options.bluemix) { ds.updatePipeline(this); }
-  };
+  }
 
   printAddConfigForCustomConnector() {
     if (this.abort) return;
@@ -334,9 +334,9 @@ module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeo
     } else {
       return;
     }
-  };
+  }
 
   saveProject() {
     this.saveProjectForGenerator();
-  };
+  }
 };

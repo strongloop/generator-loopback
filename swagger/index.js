@@ -43,11 +43,11 @@ module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
       required: false,
       type: String,
     });
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_swagger_usage.txt');
-  };
+  }
 
   loadProject() {
     debug('loading project...');
@@ -59,11 +59,11 @@ module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
     debug('loading datasources...');
     this.loadDatasourcesForGenerator();
     debug('loaded datasources.');
-  };
+  }
 
   addNullDataSourceItem() {
     this.addNullDataSourceItemForGenerator();
-  };
+  }
 
   askForSpecUrlOrPath() {
     var prompts = [
@@ -77,7 +77,7 @@ module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
     return this.prompt(prompts).then(function(answers) {
       this.url = answers.url.trim();
     }.bind(this));
-  };
+  }
 
   swagger() {
     var self = this;
@@ -90,7 +90,7 @@ module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
         done();
       }
     });
-  };
+  }
 
   checkModels() {
     var self = this;
@@ -211,7 +211,7 @@ module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
         done();
       });
     });
-  };
+  }
 
   generateApis() {
     var self = this;
@@ -368,7 +368,7 @@ module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
       helpers.reportValidationError(err, self.log);
       done(err);
     });
-  };
+  }
 
   saveProject() {
     this.saveProjectForGenerator();

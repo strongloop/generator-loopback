@@ -55,7 +55,7 @@ module.exports = class BluemixGenerator extends
       type: Boolean,
       default: false,
     });
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_bluemix_usage.txt');
@@ -91,7 +91,7 @@ module.exports = class BluemixGenerator extends
 
   BMProvisionService() {
     this.provisionService();
-  };
+  }
 
   BMConfigurePrompt() {
     this.configurePrompt();
@@ -100,7 +100,7 @@ module.exports = class BluemixGenerator extends
   BMPromptBluemixSettings() {
     if (this.promptSettings) {
       this.promptSettings();
-    };
+    }
   }
 
   BMGenerateBluemixFiles() {

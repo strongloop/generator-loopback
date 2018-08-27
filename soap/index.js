@@ -29,11 +29,11 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
       required: false,
       type: String,
     });
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_soap_usage.txt'); // TODO (rashmihunt) add this .txt
-  };
+  }
 
   loadProject() {
     debug('loading project...');
@@ -45,22 +45,22 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
     debug('loading datasources...');
     this.loadDatasourcesForGenerator();
     debug('loaded datasources.');
-  };
+  }
 
   addNullDataSourceItem() {
     this.addNullDataSourceItemForGenerator();
-  };
+  }
 
   loadModels() {
     debug('loading models...');
     this.loadModelsForGenerator();
     debug('loaded models.');
-  };
+  }
 
   existingModels() {
     var self = this;
     self.existingModels = this.modelNames;
-  };
+  }
 
   checkForDatasource() {
     var self = this;
@@ -84,7 +84,7 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
       this.log(error);
       return false;
     }
-  };
+  }
 
   askForDataSource() {
     var self = this;
@@ -110,7 +110,7 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
       self.log(chalk.green(g.f('WSDL for datasource %s: %s',
         this.selectedDSName, self.url)));
     }.bind(this));
-  };
+  }
 
   // command:  slc loopback:soap
   soap() {
@@ -129,7 +129,7 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
         done();
       }
     });
-  };
+  }
 
   askForService() {
     var prompts = [
@@ -145,7 +145,7 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
       this.servieName = answers.service;
       this.bindingNames = generator.getBindings(this.servieName);
     }.bind(this));
-  };
+  }
 
   askForBinding() {
     var prompts = [
@@ -160,7 +160,7 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
       this.bindingName = answers.binding;
       this.operations = generator.getOperations(this.bindingName);
     }.bind(this));
-  };
+  }
 
   askForOperation() {
     var prompts = [
@@ -177,7 +177,7 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
     return this.prompt(prompts).then(function(answers) {
       this.operations = answers.operations;
     }.bind(this));
-  };
+  }
 
   generate() {
     var self = this;
@@ -381,7 +381,7 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
       helpers.reportValidationError(err, self.log);
       done(err);
     });
-  };
+  }
 
   saveProject() {
     this.saveProjectForGenerator();

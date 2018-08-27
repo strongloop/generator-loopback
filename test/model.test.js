@@ -171,7 +171,7 @@ describe('loopback:model generator', function() {
             reject(err);
           } else {
             resolve(returnResult());
-          };
+          }
         });
       });
 

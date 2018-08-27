@@ -25,11 +25,11 @@ module.exports = class ExportAPIDefGenerator extends ActionsMixin(yeoman) {
       desc: g.f('Name/Full path to the output file.'),
       defaults: '',
     });
-  };
+  }
 
   help() {
     return helpText.customHelp(this, 'loopback_export-api-def_usage.txt');
-  };
+  }
 
   generate() {
     var filePath = this.options.output;
@@ -47,5 +47,5 @@ module.exports = class ExportAPIDefGenerator extends ActionsMixin(yeoman) {
 
     // Kill app if still alive
     setTimeout(process.exit, 100);
-  };
+  }
 };
