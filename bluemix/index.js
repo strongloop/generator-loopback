@@ -77,41 +77,41 @@ module.exports = class BluemixGenerator extends
     this.login.apply(this);
   }
 
-  BMPromptServiceName() {
+  bmPromptServiceName() {
     this.promptServiceName();
   }
 
-  BMGetServicePlans() {
+  bmGetServicePlans() {
     this.getServicePlans();
   }
 
-  BMPromptServicePlan() {
+  bmPromptServicePlan() {
     this.promptServicePlan();
   }
 
-  BMProvisionService() {
+  bmProvisionService() {
     this.provisionService();
   }
 
-  BMConfigurePrompt() {
+  bmConfigurePrompt() {
     this.configurePrompt();
   }
 
-  BMPromptBluemixSettings() {
+  bmPromptBluemixSettings() {
     if (this.promptSettings) {
       this.promptSettings();
     }
   }
 
-  BMGenerateBluemixFiles() {
+  bmGenerateBluemixFiles() {
     this.generateFiles();
   }
 
-  BMPromptDefaultServices() {
+  bmPromptDefaultServices() {
     this.promptDefaultServices();
   }
 
-  BMAddDefaultServices() {
+  bmAddDefaultServices() {
     this.addDefaultServices();
   }
 };

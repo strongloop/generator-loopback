@@ -85,7 +85,7 @@ module.exports = function BluemixMixin(baseClass) {
       };
 
       var done = this.async();
-      this.prompt([manifestPrompt]).then(function(answers) {
+      this.prompt([manifestPrompt]).then((answers) => {
         this.enableManifest = answers.enableManifest || this.enableManifest;
         var prompts = [];
         if (this.enableManifest) {
@@ -159,7 +159,7 @@ module.exports = function BluemixMixin(baseClass) {
 
         prompts.push(toolchainPrompt, dockerPrompt);
 
-        this.prompt(prompts).then(function(answers) {
+        this.prompt(prompts).then((answers) => {
           this.appMemory = answers.appMemory;
           this.appInstances = answers.appInstances;
           this.appDomain = answers.appDomain;
@@ -171,8 +171,8 @@ module.exports = function BluemixMixin(baseClass) {
           this.bluemix = this.enableManifest || this.enableDocker ||
           this.enableToolchain;
           done();
-        }.bind(this));
-      }.bind(this));
+        });
+      });
     }
 
     generateFiles() {

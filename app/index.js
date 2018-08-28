@@ -280,7 +280,7 @@ module.exports = class AppGenerator extends ActionsMixin(yeoman) {
     );
   }
 
-  writing() {
+  copyFiles() {
     this.directory('.', '.');
   }
 

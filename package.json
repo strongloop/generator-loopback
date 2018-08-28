@@ -14,7 +14,7 @@
     "node": ">=6"
   },
   "scripts": {
-    "lint:fix": "eslint --ignore-path .gitignore --fix .",
+    "lint:fix": "npm run lint -- --fix",
     "lint": "eslint --ignore-path .gitignore .",
     "test": "mocha",
     "posttest": "npm run lint"

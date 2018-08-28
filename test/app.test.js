@@ -16,10 +16,6 @@ var expect = require('chai').expect;
 var fs = require('fs');
 var rimraf = require('rimraf');
 
-// Rename it to run as the last test
-// This is a workaround for it causing the bluemix, middleware, export-api-def
-// tests fail.
-
 describe('loopback:app generator', function() {
   this.timeout(30 * 60 * 1000); // 30 minutes
   beforeEach(common.resetWorkspace);
@@ -82,7 +78,8 @@ describe('loopback:app generator', function() {
   });
 
   it('creates the project in a subdirectory if asked to', function() {
-    return helpers.run(path.join(__dirname, '../app'))
+    const ctx = helpers.run(path.join(__dirname, '../app'));
+    return ctx
       .cd(SANDBOX)
       .withPrompts({
         appname: 'test-app',
@@ -98,8 +95,7 @@ describe('loopback:app generator', function() {
           return 'test-dir/' + f;
         });
         ygAssert.file(expectedFiles);
-        // Janny: Fix it! Will figure out the new property.
-        // assert.equal(helpers.dir, 'test-dir');
+        assert.equal(ctx.generator.dir, 'test-dir');
       });
   });
 

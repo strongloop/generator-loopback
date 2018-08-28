@@ -76,10 +76,9 @@ describe('loopback:datasource generator', function() {
       });
   });
 
-  // Jannyhou: To be fixed (3)!
-  // I manually verified that by choosing "install connector",
-  // the custom module is intalled
-  // Here it fails since folder `node_modules` is not created
+  // FIXME(jannyHou) This test fails because folder `node_modules` is not created.
+  // For now, verify this functionality manually by choosing "install connector"
+  // and checking that the custom module is installed.
   it.skip('should support custom connector', function() {
     return helpers.run(path.join(__dirname, '../datasource'))
       .cd(SANDBOX)
@@ -237,7 +236,7 @@ describe('loopback:datasource generator', function() {
               });
           });
       });
-      // Jannyhou: To be fixed (2)!
+      // FIXME(jannyHou)
       // this test requires an IBM Object Storage service named "My-Object-Storage" to be provisioned already
       it.skip('should support IBM Object Storage ', function() {
         return helpers.run(path.join(__dirname, '../app'))
