@@ -1,3 +1,13 @@
+2018-08-29, Version 5.9.2
+=========================
+
+ * [WebFM] tr translation (candytangnb)
+
+ * [WebFM] de translation (candytangnb)
+
+ * [WebFM] cs/es/fr/it/nl/pl/pt_BR/ru translation (candytangnb)
+
+
 2018-08-22, Version 5.9.1
 =========================
 
