@@ -5,12 +5,12 @@
 
 'use strict';
 
+var ActionsMixin = require('../lib/actions');
 var g = require('../lib/globalize');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 var extend = require('util')._extend;
 var wsModels = require('loopback-workspace').models;
-var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
@@ -19,18 +19,19 @@ var path = require('path');
 var fs = require('fs');
 var jsonfileUpdater = require('jsonfile-updater');
 var ds = require('loopback-bluemix').ds;
-var bx = require('../bluemix/helpers');
+var BluemixMixin = require('../bluemix/helpers');
+var debug = require('debug')('loopback:generator:datasource');
+var util = require('util');
 
-module.exports = yeoman.Base.extend({
+// eslint-disable-next-line max-len
+module.exports = class DatasourceGenerator extends BluemixMixin(ActionsMixin(yeoman)) {
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
-  // saving project changes.
+  // saving project changes
 
-  loadProject: actions.loadProject,
-
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+  constructor(args, opts) {
+    super(args, opts);
     this.abort = false;
     this.serviceBindingStatus = 'unbound';
     this.option('bluemix', {
@@ -53,20 +54,26 @@ module.exports = yeoman.Base.extend({
       required: false,
       type: String,
     });
-  },
+  }
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_datasource_usage.txt');
-  },
+  }
 
-  setAppName: function() {
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
+
+  setAppName() {
     // https://github.com/strongloop/generator-loopback/issues/38
     // yeoman-generator normalize the appname with ' '
     this.appName =
       path.basename(process.cwd()).replace(/[\/@\s\+%:\.]+?/g, '-');
-  },
+  }
 
-  loadConnectors: function() {
+  loadConnectors() {
     var done = this.async();
     wsModels.Workspace.listAvailableConnectors(function(err, list) {
       if (err) {
@@ -95,9 +102,9 @@ module.exports = yeoman.Base.extend({
 
       done();
     }.bind(this));
-  },
+  }
 
-  askForName: function() {
+  askForName() {
     if (!this.options.bluemix) {
       var prompts = [
         {
@@ -111,9 +118,9 @@ module.exports = yeoman.Base.extend({
         this.name = props.name;
       }.bind(this));
     }
-  },
+  }
 
-  askForParameters: function() {
+  askForParameters() {
     if (!this.options.bluemix) {
       var displayName = chalk.yellow(this.name);
       var connectorChoices = this.listOfAvailableConnectors.concat(['other']);
@@ -140,28 +147,30 @@ module.exports = yeoman.Base.extend({
         this.connector = props.customConnector || props.connector;
       }.bind(this));
     }
-  },
+  }
 
-  loginToBluemix: function() {
-    if (this.options.bluemix) { bx.login.apply(this); }
-  },
+  loginToBluemix() {
+    if (this.options.bluemix) { this.login(); }
+  }
 
-  generateBluemixFiles: bx.generateFiles,
+  generateBluemixFiles() {
+    this.generateFiles();
+  }
 
-  selectBluemixDatasource: function() {
+  selectBluemixDatasource() {
     if (this.options.bluemix) { ds.selectBluemixDatasource(this, g); }
-  },
+  }
 
-  bindServiceToApp: function() {
+  bindServiceToApp() {
     if (this.abort) return;
     if (this.options.bluemix) {
       this.serviceBindingStatus = 'binding';
       ds.bindServiceToApp(this);
       this.serviceBindingStatus = 'bound';
     }
-  },
+  }
 
-  askForConfig: function() {
+  askForConfig() {
     var self = this;
     var settings = this.connectorSettings[this.connector];
     this.settings = {};
@@ -235,9 +244,9 @@ module.exports = yeoman.Base.extend({
       this.settings = props || {};
       reportWarnings();
     }.bind(this));
-  },
+  }
 
-  installConnector: function() {
+  installConnector() {
     var connector = this.availableConnectors[this.connector];
     var pkg = {};
     if (connector) {
@@ -278,14 +287,15 @@ module.exports = yeoman.Base.extend({
         var moduleVersion = npmModule.split('@');
         var dependency = {};
         dependency[moduleVersion[0]] = moduleVersion[1];
+        debug('add dependency %s', util.inspect(dependency, {depth: null}));
         jsonfileUpdater(path.join(this.projectDir, 'package.json')).append(
           'dependencies', dependency, done
         );
       }
     }.bind(this));
-  },
+  }
 
-  dataSource: function() {
+  dataSource() {
     if (this.abort) return;
     var done = this.async();
     var config = extend(this.settings, {
@@ -308,14 +318,14 @@ module.exports = yeoman.Base.extend({
         return done(err);
       }.bind(this));
     }
-  },
+  }
 
-  updatePipeline: function() {
+  updatePipeline() {
     if (this.abort) return;
     if (this.options.bluemix) { ds.updatePipeline(this); }
-  },
+  }
 
-  printAddConfigForCustomConnector: function() {
+  printAddConfigForCustomConnector() {
     if (this.abort) return;
     var connector = this.connector;
     if (!this.availableConnectors[connector]) {
@@ -324,7 +334,9 @@ module.exports = yeoman.Base.extend({
     } else {
       return;
     }
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    this.saveProjectForGenerator();
+  }
+};

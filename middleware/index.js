@@ -15,6 +15,7 @@ var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
+var ActionsMixin = require('../lib/actions');
 
 function toNumberedList(items) {
   var lastIndex = items.length - 1;
@@ -34,28 +35,30 @@ function toNumberedList(items) {
 var OTHER_PHASE = '(custom phase)';
 var LAST_PHASE = '(last phase)';
 
-module.exports = yeoman.Base.extend({
+module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
-  loadProject: actions.loadProject,
-
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+  constructor(args, opts) {
+    super(args, opts);
 
     this.argument(g.f('name'), {
       desc: g.f('Name of the middleware to create.'),
       required: false,
       type: String,
     });
-  },
+  }
 
-  help: function() {
+  loadProject() {
+    this.loadProjectForGenerator();
+  }
+
+  help() {
     return helpText.customHelp(this, 'loopback_middleware_usage.txt');
-  },
+  }
 
-  loadPhases: function() {
+  loadPhases() {
     var done = this.async();
     wsModels.Middleware.getPhases(function(err, list) {
       if (err) {
@@ -68,9 +71,9 @@ module.exports = yeoman.Base.extend({
 
       done();
     }.bind(this));
-  },
+  }
 
-  askForName: function() {
+  askForName() {
     var prompts = [
       {
         name: 'name',
@@ -83,9 +86,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(props) {
       this.name = props.name;
     }.bind(this));
-  },
+  }
 
-  askForPhase: function() {
+  askForPhase() {
     var displayName = chalk.yellow(this.name);
 
     var prompts = [
@@ -134,14 +137,14 @@ module.exports = yeoman.Base.extend({
       this.nextPhase = props.nextPhase;
       this.subPhase = props.subPhase;
     }.bind(this));
-  },
+  }
 
-  promptForPaths: function() {
+  promptForPaths() {
     var displayName = chalk.yellow(this.name);
     this.log(g.f('Specify paths for %s:', displayName));
-  },
+  }
 
-  askForPaths: function() {
+  askForPaths() {
     var done = this.async();
     this.log(g.f('Enter an empty path name when done.'));
     var prompts = [
@@ -171,9 +174,9 @@ module.exports = yeoman.Base.extend({
       this.log(g.f('Let\'s add another path.'));
       this.askForPaths();
     }.bind(this));
-  },
+  }
 
-  askForParams: function() {
+  askForParams() {
     var prompts = [
       {
         name: 'params',
@@ -196,9 +199,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(answers) {
       this.params = JSON.parse(answers.params);
     }.bind(this));
-  },
+  }
 
-  middleware: function() {
+  middleware() {
     var done = this.async();
     var config = {
       name: this.name,
@@ -229,7 +232,9 @@ module.exports = yeoman.Base.extend({
       }
       return done(err);
     });
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    this.saveProjectForGenerator();
+  }
+};

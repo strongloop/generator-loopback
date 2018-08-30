@@ -6,5 +6,5 @@
       "ignoreUrls": true,
       "ignorePattern": "^\\s*var\\s.+=\\s*(require\\s*\\()|(/)"
     }]
-   }
+  }
 }

@@ -14,12 +14,14 @@ var loadSwaggerSpecs = require('./spec-loader');
 var workspace = require('loopback-workspace');
 var wsModels = workspace.models;
 
-var actions = require('../lib/actions');
+var ActionsMixin = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 
 var fs = require('fs');
 var async = require('async');
+
+var debug = require('debug')('loopback:generator:swagger');
 
 // A list of flags to control whether a model should be generated
 var NOT_SELECTED = 0; // It's not selected
@@ -27,32 +29,43 @@ var CONFLICT_DETECTED = -1; // A model with the same name exists
 var SELECTED_FOR_UPDATE = 1; // Selected for update
 var SELECTED_FOR_CREATE = 2; // Selected for create
 
-module.exports = yeoman.Base.extend({
+module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+  constructor(args, opts) {
+    super(args, opts);
 
     this.argument(g.f('url'), {
       desc: g.f('URL of the swagger spec.'),
       required: false,
       type: String,
     });
-  },
+  }
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_swagger_usage.txt');
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadDataSources: actions.loadDataSources,
-  addNullDataSourceItem: actions.addNullDataSourceItem,
+  loadDataSources() {
+    debug('loading datasources...');
+    this.loadDatasourcesForGenerator();
+    debug('loaded datasources.');
+  }
 
-  askForSpecUrlOrPath: function() {
+  addNullDataSourceItem() {
+    this.addNullDataSourceItemForGenerator();
+  }
+
+  askForSpecUrlOrPath() {
     var prompts = [
       {
         name: 'url',
@@ -64,9 +77,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(answers) {
       this.url = answers.url.trim();
     }.bind(this));
-  },
+  }
 
-  swagger: function() {
+  swagger() {
     var self = this;
     var done = this.async();
     loadSwaggerSpecs(this.url, this.log, function(err, apis) {
@@ -77,9 +90,9 @@ module.exports = yeoman.Base.extend({
         done();
       }
     });
-  },
+  }
 
-  checkModels: function() {
+  checkModels() {
     var self = this;
     var done = this.async();
 
@@ -198,9 +211,9 @@ module.exports = yeoman.Base.extend({
         done();
       });
     });
-  },
+  }
 
-  generateApis: function() {
+  generateApis() {
     var self = this;
     var found = false;
     for (var m in this.selectedModels) {
@@ -355,10 +368,12 @@ module.exports = yeoman.Base.extend({
       helpers.reportValidationError(err, self.log);
       done(err);
     });
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    this.saveProjectForGenerator();
+  }
+};
 
 function validateUrlOrFile(specUrlStr) {
   if (!specUrlStr) {

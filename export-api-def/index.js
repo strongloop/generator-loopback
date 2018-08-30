@@ -9,15 +9,14 @@ var path = require('path');
 var g = require('../lib/globalize');
 var fs = require('fs');
 var yeoman = require('yeoman-generator');
-var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var apiGenerator = require('loopback-api-definition');
 var mkdirp = require('mkdirp');
+var ActionsMixin = require('../lib/actions');
 
-module.exports = yeoman.Base.extend({
-
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+module.exports = class ExportAPIDefGenerator extends ActionsMixin(yeoman) {
+  constructor(args, opts) {
+    super(args, opts);
     var format = this.options.json;
     this.format = format ? 'json' : 'yaml';
     this.option('output', {
@@ -26,13 +25,13 @@ module.exports = yeoman.Base.extend({
       desc: g.f('Name/Full path to the output file.'),
       defaults: '',
     });
-  },
+  }
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_export-api-def_usage.txt');
-  },
+  }
 
-  generate: function() {
+  generate() {
     var filePath = this.options.output;
     var options = {format: this.format, output: filePath};
     var app = require(this.destinationRoot());
@@ -48,5 +47,5 @@ module.exports = yeoman.Base.extend({
 
     // Kill app if still alive
     setTimeout(process.exit, 100);
-  },
-});
+  }
+};

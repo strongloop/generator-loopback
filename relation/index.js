@@ -13,25 +13,33 @@ var inflection = require('inflection');
 var workspace = require('loopback-workspace');
 var ModelRelation = workspace.models.ModelRelation;
 
-var actions = require('../lib/actions');
+var ActionsMixin = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateOptionalName = helpers.validateOptionalName;
 var validateRequiredName = helpers.validateRequiredName;
 var checkRelationName = helpers.checkRelationName;
 var checkPropertyName = helpers.checkPropertyName;
+var debug = require('debug')('loopback:generator:relation');
 
-module.exports = yeoman.Base.extend({
-
-  help: function() {
+module.exports = class RelationGenerator extends ActionsMixin(yeoman) {
+  help() {
     return helpText.customHelp(this, 'loopback_relation_usage.txt');
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadModels: actions.loadModels,
+  loadModels() {
+    debug('loading models...');
+    this.loadModelsForGenerator();
+    debug('loaded models.');
+  }
 
-  askForModel: function() {
+  askForModel() {
     if (this.options.modelName) {
       this.modelName = this.options.modelName;
       return;
@@ -49,9 +57,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(answers) {
       this.modelName = answers.model;
     }.bind(this));
-  },
+  }
 
-  findModelDefinition: function() {
+  findModelDefinition() {
     this.modelDefinition = this.projectModels.filter(function(m) {
       return m.name === this.modelName;
     }.bind(this))[0];
@@ -76,9 +84,9 @@ module.exports = yeoman.Base.extend({
         }
       );
     }
-  },
+  }
 
-  getTypeChoices: function() {
+  getTypeChoices() {
     var self = this;
     var done = this.async();
     ModelRelation.getValidTypes(function(err, availableTypes) {
@@ -86,9 +94,9 @@ module.exports = yeoman.Base.extend({
       self.availableTypes = availableTypes;
       done();
     });
-  },
+  }
 
-  askForParameters: function() {
+  askForParameters() {
     var modelDef = this.modelDefinition;
     var modelConfig = this.modelConfig;
 
@@ -200,9 +208,9 @@ module.exports = yeoman.Base.extend({
         this.throughModel = answers.customThroughModel || answers.throughModel;
       }
     }.bind(this));
-  },
+  }
 
-  relation: function() {
+  relation() {
     var done = this.async();
     var def = {
       type: this.type,
@@ -226,7 +234,9 @@ module.exports = yeoman.Base.extend({
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    this.saveProjectForGenerator();
+  }
+};

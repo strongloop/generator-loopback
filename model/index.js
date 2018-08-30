@@ -5,27 +5,27 @@
 
 'use strict';
 
-var path = require('path');
 var g = require('../lib/globalize');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 var wsModels = require('loopback-workspace').models;
 
-var actions = require('../lib/actions');
+var ActionsMixin = require('../lib/actions');
+var debug = require('debug')('loopback:generator:model');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
 var fs = require('fs');
 
-module.exports = yeoman.Base.extend({
+module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+  constructor(args, opts) {
+    super(args, opts);
     this.abort = false;
     this.databaseModel = true; // `false` if using ibm-object-store datasource
     this.option('bluemix', {
@@ -42,26 +42,35 @@ module.exports = yeoman.Base.extend({
     // when adding more than 10 properties
     // See https://github.com/strongloop/generator-loopback/issues/99
     this.env.sharedFs.setMaxListeners(256);
+  }
 
-    // A workaround to get rid of deprecation notice
-    //   "generator#invoke() is deprecated. Use generator#composeWith()"
-    // See https://github.com/strongloop/generator-loopback/issues/116
-    this.invoke = require('yeoman-generator/lib/actions/invoke');
-  },
-
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_model_usage.txt');
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadDataSources: actions.loadDataSources,
+  loadDataSources() {
+    debug('loading datasources...');
+    this.loadDatasourcesForGenerator();
+    debug('loaded datasources.');
+  }
 
-  loadModels: actions.loadModels,
+  loadModels() {
+    debug('loading models...');
+    this.loadModelsForGenerator();
+    debug('loaded models.');
+  }
 
-  addNullDataSourceItem: actions.addNullDataSourceItem,
+  addNullDataSourceItem() {
+    this.addNullDataSourceItemForGenerator();
+  }
 
-  setBluemixDatasourceState: function() {
+  setBluemixDatasourceState() {
     if (this.abort) return;
     if (this.options.bluemix) {
       var configPath = this.destinationPath('.bluemix/datasources-config.json');
@@ -83,9 +92,9 @@ module.exports = yeoman.Base.extend({
         }
       }
     }
-  },
+  }
 
-  checkForDatasource: function() {
+  checkForDatasource() {
     if (this.abort) return;
     if (!this.hasDatasources) {
       if (this.options.bluemix) {
@@ -101,9 +110,9 @@ module.exports = yeoman.Base.extend({
         return;
       }
     }
-  },
+  }
 
-  askForName: function() {
+  askForName() {
     if (this.abort) return;
     var prompts = [
       {
@@ -118,9 +127,9 @@ module.exports = yeoman.Base.extend({
       this.name = props.name;
       this.displayName = chalk.yellow(this.name);
     }.bind(this));
-  },
+  }
 
-  askForDataSource: function() {
+  askForDataSource() {
     if (this.abort) return;
     if (!this.hasDatasources) {
       this.dataSource = null;
@@ -171,10 +180,12 @@ module.exports = yeoman.Base.extend({
       } else {
         this.dataSource = null;
       }
+      debug('database is chosen.');
     }.bind(this));
-  },
+  }
 
-  getBaseModels: function() {
+  getBaseModels() {
+    debug('getting the base model....');
     if (this.abort) return;
     if (!this.dataSource) {
       this.baseModel = 'Model';
@@ -188,9 +199,10 @@ module.exports = yeoman.Base.extend({
         done();
       }.bind(this)
     );
-  },
+  }
 
-  askForParameters: function() {
+  askForParameters() {
+    debug('asking for the parameters....');
     if (this.abort) return;
     this.displayName = chalk.yellow(this.name);
 
@@ -200,7 +212,6 @@ module.exports = yeoman.Base.extend({
         name: g.f('(custom)'),
         value: null,
       }]);
-
     var prompts;
 
     if (this.databaseModel) {
@@ -275,9 +286,9 @@ module.exports = yeoman.Base.extend({
       if (this.databaseModel) this.base = props.customBase || props.base;
       else this.base = 'Model';
     }.bind(this));
-  },
+  }
 
-  modelDefinition: function() {
+  modelDefinition() {
     if (this.abort) return;
     var done = this.async();
     var config = {
@@ -291,9 +302,9 @@ module.exports = yeoman.Base.extend({
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  },
+  }
 
-  modelConfiguration: function() {
+  modelConfiguration() {
     if (this.abort) return;
     var done = this.async();
     var config = {
@@ -307,17 +318,17 @@ module.exports = yeoman.Base.extend({
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  },
+  }
 
-  delim: function() {
+  delim() {
     if (this.abort) return;
     if (this.base === 'KeyValueModel' || !this.databaseModel)
       return;
 
     this.log(g.f('Let\'s add some %s properties now.\n', this.displayName));
-  },
+  }
 
-  property: function() {
+  property() {
     if (this.abort) return;
     if (this.databaseModel) {
       var done = this.async();
@@ -360,7 +371,9 @@ module.exports = yeoman.Base.extend({
         );
       }.bind(this));
     }
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    this.saveProjectForGenerator();
+  }
+};

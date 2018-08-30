@@ -9,9 +9,9 @@ var debug = require('debug')('test');
 var fs = require('fs');
 var path = require('path');
 var assert = require('assert');
-var common = require('./common');
 var helpers = require('yeoman-test');
 var SANDBOX = path.resolve(__dirname, 'sandbox');
+var yeomanEnv = require('yeoman-environment');
 
 describe('loopback generator help', function() {
   this.timeout(300000); // 5 minutes
@@ -24,7 +24,7 @@ describe('loopback generator help', function() {
     var names = ['app', 'acl', 'datasource', 'model', 'property', 'relation',
       'bluemix'];
     names.forEach(function(name) {
-      var gen = givenGenerator(name, ['--help']);
+      var gen = givenGenerator(name);
       var helpText = gen.help();
       assert(helpText.indexOf(' yo ') !== -1);
       assert(helpText.indexOf(' slc ') === -1);
@@ -51,7 +51,7 @@ describe('loopback generator help', function() {
 
   it('prints help message with lb if invoked from loopback-cli', function() {
     process.env.SLC_COMMAND = 'loopback-cli';
-    var gen = givenGenerator('app', ['--help']);
+    var gen = givenGenerator('app');
     var helpText = gen.help();
     debug('--HELP TEXT--\n', helpText);
     assert(helpText.indexOf(' lb ') !== -1,
@@ -75,12 +75,12 @@ describe('loopback generator help', function() {
     CMD_NAMES.forEach(function(name) {
       it('prints right help message for generator ' + name, function() {
         process.env.SLC_COMMAND = 'slc';
-        var gen = givenGenerator(name, ['--help']);
+        var gen = givenGenerator(name);
         var helpText = gen.help();
         var helpFileName = 'loopback_' + name + '_help.txt';
         var helpFilePath = '../fixtures/help-texts/' + helpFileName;
         var output = fs.readFileSync(helpFilePath, 'utf8');
-        assert.equal(output, helpText);
+        assert.equal(helpText, output);
       });
     });
 
@@ -89,10 +89,16 @@ describe('loopback generator help', function() {
     });
   });
 
-  function givenGenerator(name, modelArgs) {
-    var fullName = 'loopback:' + name;
-    var path = '../../' + name;
-    var gen = common.createGenerator(fullName, path, [], modelArgs, {});
+  function givenGenerator(name) {
+    var genPath = path.join(__dirname, '../', name);
+    var genClass = require(genPath);
+    var gen = new genClass({
+      env: yeomanEnv.createEnv(),
+      resolved: genPath,
+      // manually set the namespace here since in a real
+      // use case, it's set by loopback-cli
+      namespace: 'loopback:' + name,
+    });
     return gen;
   }
 });

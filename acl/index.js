@@ -12,49 +12,68 @@ var async = require('async');
 var wsModels = require('loopback-workspace').models;
 var ModelAccessControl = wsModels.ModelAccessControl;
 
-var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
+var ActionsMixin = require('../lib/actions');
+var debug = require('debug')('loopback:generator:acl');
 
-module.exports = yeoman.Base.extend({
+module.exports = class ACLGenerator extends ActionsMixin(yeoman) {
+  constructor(args, opts) {
+    super(args, opts);
+  }
+
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
-
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_acl_usage.txt');
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadModels: actions.loadModels,
+  loadModels() {
+    debug('loading models...');
+    this.loadModelsForGenerator();
+    debug('loaded models.');
+  }
 
-  loadAccessTypeValues: function() {
+  loadAccessTypeValues() {
+    debug('loading access type values...');
     var done = this.async();
     ModelAccessControl.getAccessTypes(function(err, list) {
       this.accessTypeValues = list;
       done(err);
     }.bind(this));
-  },
+    debug('loaded access type values.');
+  }
 
-  loadRoleValues: function() {
+  loadRoleValues() {
+    debug('loading role values.');
     var done = this.async();
     ModelAccessControl.getBuiltinRoles(function(err, list) {
       this.roleValues = list;
       done(err);
     }.bind(this));
-  },
+    debug('loaded role values.');
+  }
 
-  loadPermissionValues: function() {
+  loadPermissionValues() {
+    debug('loading permissions values...');
     var done = this.async();
     ModelAccessControl.getPermissionTypes(function(err, list) {
       this.permissionValues = list;
       done(err);
     }.bind(this));
-  },
+    debug('loaded permissions values.');
+  }
 
-  askForModel: function() {
+  askForModel() {
+    debug('asking for model...');
     var modelChoices =
       [{name: g.f('(all existing models)'), value: null}]
         .concat(this.editableModelNames);
@@ -77,9 +96,10 @@ module.exports = yeoman.Base.extend({
         })[0];
       }
     }.bind(this));
-  },
+  }
 
-  askForParameters: function() {
+  askForParameters() {
+    debug('asking for parameters...');
     var prompts = [
       {
         name: 'scope',
@@ -154,9 +174,10 @@ module.exports = yeoman.Base.extend({
         permission: answers.permission,
       };
     }.bind(this));
-  },
+  }
 
-  acl: function() {
+  acl() {
+    debug('creating acls for model...');
     var done = this.async();
 
     var aclDef = this.aclDef;
@@ -180,7 +201,11 @@ module.exports = yeoman.Base.extend({
         });
       }, done);
     });
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    debug('saving project...');
+    this.saveProjectForGenerator();
+    debug('saved project.');
+  }
+};

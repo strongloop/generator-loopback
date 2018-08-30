@@ -9,7 +9,7 @@ var g = require('../lib/globalize');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
-var actions = require('../lib/actions');
+var ActionsMixin = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
@@ -17,21 +17,29 @@ var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
 var debug = require('debug')('loopback:generator:property');
 
-module.exports = yeoman.Base.extend({
+module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_property_usage.txt');
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadModels: actions.loadModels,
+  loadModels() {
+    debug('loading models...');
+    this.loadModelsForGenerator();
+    debug('loaded models.');
+  }
 
-  askForModel: function() {
+  askForModel() {
     if (this.options.modelName) {
       this.modelName = this.options.modelName;
       return;
@@ -49,9 +57,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(answers) {
       this.modelName = answers.model;
     }.bind(this));
-  },
+  }
 
-  findModelDefinition: function() {
+  findModelDefinition() {
     this.modelDefinition = this.projectModels.filter(function(m) {
       return m.name === this.modelName;
     }.bind(this))[0];
@@ -61,9 +69,9 @@ module.exports = yeoman.Base.extend({
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
     }
-  },
+  }
 
-  askForParameters: function() {
+  askForParameters() {
     if (this.modelDefinition.base === 'KeyValueModel') {
       var msg = g.f('KeyValueModel does not support model definition ' +
         'properties');
@@ -175,17 +183,21 @@ module.exports = yeoman.Base.extend({
         return this.askForParameters();
       }
     }.bind(this));
-  },
+  }
 
-  property: function() {
+  property() {
     var done = this.async();
     this.modelDefinition.properties.create(this.propDefinition, function(err) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  },
-  saveProject: actions.saveProject,
-});
+  }
+  saveProject() {
+    debug('saving project...');
+    this.saveProjectForGenerator();
+    debug('saved project.');
+  }
+};
 
 function coerceDefaultValue(propDef, value) {
   var itemType;
