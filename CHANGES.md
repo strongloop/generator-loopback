@@ -1,3 +1,15 @@
+2018-08-30, Version 6.0.0
+=========================
+
+ * [WebFM] cs/es/fr/it/ja/nl/pl/pt_BR/ru/tr/zh_CN/zh (candytangnb)
+
+ * fix: apply feedback (jannyHou)
+
+ * lint: fix extra semi (jannyHou)
+
+ * upgrade: yeoman-generator 3.x (jannyHou)
+
+
 2018-08-29, Version 5.9.2
 =========================
 
