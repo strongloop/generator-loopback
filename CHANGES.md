@@ -1,3 +1,9 @@
+2018-09-06, Version 5.9.3
+=========================
+
+ * [WebFM] cs/es/fr/it/ja/nl/pl/pt_BR/ru/tr/zh_CN/zh (candytangnb)
+
+
 2018-08-29, Version 5.9.2
 =========================
 
