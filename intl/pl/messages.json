@@ -185,7 +185,7 @@
   "b833af1d1ee74fb4a86a7c4f7ddd7904": "Wspólny model czy tylko serwer?",
   "b95cae2e12e566ac57f25eff5be46da9": "Składnia:",
   "bb90b55f1c1819f21ed704573f903cc8": "Sterownik Oracle jest gotowy.",
-  "bc575e13a3244997f182ba5285223bd2": "Spróbuj użyć komendy 'lb oracle --driver' lub wykonaj instrukcje tutaj: {0}.",
+  "bc575e13a3244997f182ba5285223bd2": "Spróbuj użyć komendy 'lb oracle --driver' lub wykonaj instrukcje dostępne pod adresem: {0}.",
   "bc87867dc09c5b084add087081205ddf": "Zaloguj się na konto Bluemix:",
   "bd0e91e949f90d4ef7e16e01179c3836": "\nDodaj następny punkt końcowy. Po zakończeniu wprowadź pustą nazwę.",
   "bf41388ecda5bc3c2fe804299e24f95c": "Drukuj szczegółowe informacje",
