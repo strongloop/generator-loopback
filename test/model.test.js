@@ -112,6 +112,19 @@ describe('loopback:model generator', function() {
       });
   });
 
+  it('honors the model name in arg', function() {
+    return helpers.run(path.join(__dirname, '../model'))
+      .cd(SANDBOX)
+      .withArguments(['AdvancedProduct'])
+      .withPrompts({
+        dataSource: 'db',
+        base: 'Product',
+      }).then(function() {
+        var product = readAdvancedProductJsonSync();
+        expect(product).to.have.property('base', 'Product');
+      });
+  });
+
   describe('in an empty project', function() {
     beforeEach(common.resetWorkspace);
     beforeEach(function createSandbox(done) {
@@ -265,6 +278,12 @@ describe('loopback:model generator', function() {
     var productJson = path.resolve(SANDBOX, 'common/models/product.json');
     expect(fs.existsSync(productJson), 'file exists');
     return JSON.parse(fs.readFileSync(productJson));
+  }
+
+  function readAdvancedProductJsonSync() {
+    var advancedProductJson = path.resolve(SANDBOX, 'common/models/advanced-product.json');
+    expect(fs.existsSync(advancedProductJson), 'file exists');
+    return JSON.parse(fs.readFileSync(advancedProductJson));
   }
 
   function readModelsJsonSync(facet) {
