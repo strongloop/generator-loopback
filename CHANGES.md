@@ -1,3 +1,11 @@
+2018-11-13, Version 6.0.1
+=========================
+
+ * honor app name in arguments (jannyHou)
+
+ * [WebFM] pl translation (candytangnb)
+
+
 2018-08-30, Version 6.0.0
 =========================
 
