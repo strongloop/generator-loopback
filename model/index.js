@@ -114,6 +114,16 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
 
   askForName() {
     if (this.abort) return;
+
+    if (this.arguments && this.arguments.length >= 1) {
+      debug('model name is provided as %s', this.arguments[0]);
+      this.name = this.arguments[0];
+      var valid = validateRequiredName(this.name);
+      if (valid === true) return;
+      this.log(valid);
+      this.name = undefined;
+    }
+
     var prompts = [
       {
         name: 'name',
