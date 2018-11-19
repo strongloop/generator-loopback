@@ -17,6 +17,7 @@ var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
 var fs = require('fs');
+const EventEmitter = require('events');
 
 module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
   // NOTE(bajtos)
@@ -354,31 +355,32 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
           validate: validateOptionalName,
         },
       ];
-      return this.prompt(prompts).then(function(answers) {
+      this.prompt(prompts).then(function(answers) {
         if (answers.propertyName == null || answers.propertyName === '') {
           return done();
         }
-
-        this.invoke(
+        const emitter = new EventEmitter();
+        this.composeWith(
           'loopback:property',
           {
-            options: {
-              nested: true,
-              projectDir: this.projectDir,
-              project: this.project,
-              modelName: this.name,
-              propertyName: answers.propertyName,
-            },
-          },
-          function(err) {
-            if (err) {
-              return done(err);
-            }
-            this.log(g.f('\nLet\'s add another %s property.',
-              this.displayName));
-            this.property();
-          }.bind(this)
+            nested: true,
+            projectDir: this.projectDir,
+            project: this.project,
+            modelName: this.name,
+            propertyName: answers.propertyName,
+            modelEmitter: emitter,
+          }
         );
+        // `this.composeWith` doesn't wait until the sub-generator finishes,
+        // but runs tasks according to yeoman-generator's run loop, which determine
+        // the task sequences by phases, details see
+        // http://yeoman.io/authoring/composability.html
+        // as a workaround, an event emitter is introduced to invoke another property prompts
+        emitter.on('finished', ()=> {
+          this.log(g.f('\nLet\'s add another %s property.', this.displayName));
+          this.property();
+        });
+        return done();
       }.bind(this));
     }
   }
