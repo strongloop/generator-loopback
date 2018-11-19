@@ -23,6 +23,11 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
+  constructor(args, opts) {
+    super(args, opts);
+    this.modelEmitter = opts.modelEmitter;
+  }
+
   help() {
     return helpText.customHelp(this, 'loopback_property_usage.txt');
   }
@@ -196,6 +201,10 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
     debug('saving project...');
     this.saveProjectForGenerator();
     debug('saved project.');
+  }
+
+  emitEventEnd() {
+    if (this.modelEmitter) this.modelEmitter.emit('finished');
   }
 };
 
