@@ -25,7 +25,7 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
 
   constructor(args, opts) {
     super(args, opts);
-    this.modelEmitter = opts.modelEmitter;
+    this.modelEmitter = opts && opts.modelEmitter;
   }
 
   help() {

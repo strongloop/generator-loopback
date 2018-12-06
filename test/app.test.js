@@ -224,7 +224,7 @@ describe('loopback:app generator', function() {
         }).catch(function(err) {
           expect(err.message).to.eql(
             'Invalid LoopBack version: invalid-version. ' +
-            'Available versions are 2.x, 3.x.'
+            'Available versions are 3.x, 2.x.'
           );
           ctx.generator.emit('end');
         });
