@@ -35,7 +35,7 @@
     "js-yaml": "^3.4.2",
     "json-schema-faker": "^0.4.0",
     "jsonfile-updater": "^2.1.0",
-    "lodash": "^4.16.1",
+    "lodash": "^4.17.11",
     "loopback-api-definition": "^3.0.0",
     "loopback-bluemix": "^3.0.0",
     "loopback-soap": "^1.0.0",
