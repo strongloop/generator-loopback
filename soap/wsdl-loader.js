@@ -18,8 +18,8 @@ var selectedWsdl, selectedWsdlUrl, wsdlServices,
   selectedService, selectedBinding;
 
 // loads remote WSDL or local WSDL using strong-soap module APIs.
-function loadWsdl(wsdlUrl, log, cb) {
-  WSDL.open(wsdlUrl, {}, function(err, wsdl) {
+function loadWsdl(wsdlUrl, options, log, cb) {
+  WSDL.open(wsdlUrl, options, function(err, wsdl) {
     if (err) {
       return cb(err);
     }
@@ -28,8 +28,8 @@ function loadWsdl(wsdlUrl, log, cb) {
 }
 
 // get services defined in the wsdl
-exports.getServices = function getServices(wsdlUrl, log, cb) {
-  loadWsdl(wsdlUrl, log, function(err, wsdl) {
+exports.getServices = function getServices(wsdlUrl, options, log, cb) {
+  loadWsdl(wsdlUrl, options, log, function(err, wsdl) {
     if (err) {
       return cb(err);
     }

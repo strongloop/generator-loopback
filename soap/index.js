@@ -4,7 +4,6 @@
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
-
 var g = require('../lib/globalize');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
@@ -107,6 +106,7 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
         }
       }
       self.url = self.selectedDS.data.wsdl;
+      self.options = self.selectedDS.data;
       self.log(chalk.green(g.f('WSDL for datasource %s: %s',
         this.selectedDSName, self.url)));
     }.bind(this));
@@ -116,19 +116,20 @@ module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
   soap() {
     var self = this;
     var done = this.async();
-    generator.getServices(this.url, this.log, function(err, services) {
-      if (err) {
-        done(err);
-      } else {
-        self.services = services;
-        var serviceNames = [];
-        for (var s in services) {
-          serviceNames.push(services[s].$name);
+    generator.getServices(this.url, this.options, this.log,
+      function(err, services) {
+        if (err) {
+          done(err);
+        } else {
+          self.services = services;
+          var serviceNames = [];
+          for (var s in services) {
+            serviceNames.push(services[s].$name);
+          }
+          self.serviceNames = serviceNames;
+          done();
         }
-        self.serviceNames = serviceNames;
-        done();
-      }
-    });
+      });
   }
 
   askForService() {
