@@ -5,11 +5,7 @@
   "license": "MIT",
   "main": "app/index.js",
   "repository": "strongloop/generator-loopback",
-  "author": {
-    "name": "Miroslav Bajtoš",
-    "email": "miroslav@strongloop.com",
-    "url": "http://strongloop.com/"
-  },
+  "author": "IBM Corp.",
   "engines": {
     "node": ">=6"
   },
