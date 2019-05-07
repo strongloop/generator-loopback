@@ -224,7 +224,7 @@ describe('loopback:app generator', function() {
         }).catch(function(err) {
           expect(err.message).to.eql(
             'Invalid LoopBack version: invalid-version. ' +
-            'Available versions are 3.x, 2.x.'
+            'Available versions are 3.x.'
           );
           ctx.generator.emit('end');
         });
@@ -247,23 +247,6 @@ describe('loopback:app generator', function() {
             'are api-server, empty-server, hello-world, notes'
           );
           ctx.generator.emit('end');
-        });
-    });
-
-  it('scaffolds 2.x app when option.loopbackVersion is 2.x',
-    function() {
-      return helpers.run(path.join(__dirname, '../app'))
-        .cd(SANDBOX)
-        .withPrompts({
-          name: 'test-app',
-          template: 'api-server',
-          loopbackVersion: '2.x',
-        })
-        .then(function() {
-          // generator calls `chdir` on change of the destination root
-          process.chdir(SANDBOX);
-          var pkg = common.readJsonSync('package.json', {});
-          expect(semver.gtr('3.0.0', pkg.dependencies.loopback)).to.equal(true);
         });
     });
 

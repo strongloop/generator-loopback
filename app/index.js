@@ -48,11 +48,6 @@ module.exports = class AppGenerator extends ActionsMixin(yeoman) {
       type: Boolean,
     });
 
-    this.option('loopbackVersion', {
-      desc: g.f('Select the LoopBack version'),
-      type: String,
-    });
-
     this.option('template', {
       desc: g.f('Set up the LoopBack application template'),
       type: String,
