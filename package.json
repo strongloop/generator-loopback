@@ -7,7 +7,7 @@
   "repository": "strongloop/generator-loopback",
   "author": "IBM Corp.",
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   },
   "scripts": {
     "lint:fix": "npm run lint -- --fix",
