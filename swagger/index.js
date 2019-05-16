@@ -66,6 +66,11 @@ module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
   }
 
   askForSpecUrlOrPath() {
+    if (this.arguments && this.arguments.length >= 1) {
+      debug('swagger file path is provided as %s', this.arguments[0]);
+      this.url = this.arguments[0];
+    }
+
     var prompts = [
       {
         name: 'url',
