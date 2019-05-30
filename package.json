@@ -1,17 +1,13 @@
 {
   "name": "generator-loopback",
-  "version": "6.0.2",
+  "version": "6.0.4",
   "description": "Yeoman generator for LoopBack",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "strongloop/generator-loopback",
-  "author": {
-    "name": "Miroslav Bajtoš",
-    "email": "miroslav@strongloop.com",
-    "url": "http://strongloop.com/"
-  },
+  "author": "IBM Corp.",
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   },
   "scripts": {
     "lint:fix": "npm run lint -- --fix",
@@ -40,7 +36,7 @@
     "loopback-bluemix": "^3.0.0",
     "loopback-soap": "^1.0.0",
     "loopback-swagger": "^5.4.0",
-    "loopback-workspace": "^4.0.0",
+    "loopback-workspace": "^5.0.0",
     "mkdirp": "^0.5.1",
     "opn": "^5.3.0",
     "ora": "^1.3.0",

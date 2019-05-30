@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2014,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -22,6 +22,36 @@ describe('loopback:swagger generator', function() {
   beforeEach(function createProject(done) {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
+
+  it('honors the first argument as url',
+    function() {
+      const url = path.join(__dirname, 'swagger/pet-store-2.0.json');
+      return helpers.run(path.join(__dirname, '../swagger'))
+        .cd(SANDBOX)
+        .withArguments([url])
+        .withPrompts({
+          modelSelections:
+          ['swagger_v2_petstore', 'Category',
+            'Pet', 'Tag', 'Order', 'Customer'],
+          dataSource: 'db',
+        }).then(function() {
+          var content = readModelJsonSync('pet');
+          expect(content).to.have.property('name', 'Pet');
+          expect(content).to.not.have.property('public');
+          expect(content).to.have.property('properties');
+          expect(content.properties).to.have.property('tags');
+          expect(content.properties).to.have.property('category');
+
+          expect(content.properties.tags.type).to.eql(['Tag']);
+          expect(content.properties.category.type).to.eql('Category');
+          expect(content.properties.photoUrls.type).to.eql(['string']);
+
+          var modelConfig = readModelConfigSync('server');
+          expect(modelConfig).to.have.property('Pet');
+          expect(modelConfig.Pet).to.have.property('public', false);
+          expect(modelConfig.Pet).to.have.property('dataSource', 'db');
+        });
+    });
 
   it('creates and configures Pet model from swagger 2.0 spec',
     function() {

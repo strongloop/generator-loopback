@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2014,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -66,6 +66,11 @@ module.exports = class SwaggerGenerator extends ActionsMixin(yeoman) {
   }
 
   askForSpecUrlOrPath() {
+    if (this.arguments && this.arguments.length >= 1) {
+      debug('swagger file path is provided as %s', this.arguments[0]);
+      this.url = this.arguments[0];
+    }
+
     var prompts = [
       {
         name: 'url',

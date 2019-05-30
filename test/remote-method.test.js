@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Copyright IBM Corp. 2015,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -52,7 +52,6 @@ describe('loopback:remote-method generator', function() {
         var methods = definition.methods || {};
         expect(methods).to.have.property('myRemote');
         expect(methods.myRemote).to.eql({
-          isStatic: true,
           accepts: [],
           returns: [],
           http: [],
@@ -60,7 +59,7 @@ describe('loopback:remote-method generator', function() {
       });
   });
 
-  it('method name with `prototype.` should be removed', function() {
+  it('method name with `prototype.` should not be removed', function() {
     return helpers.run(path.join(__dirname, '../remote-method'))
       .cd(SANDBOX)
       .withPrompts({
@@ -74,10 +73,8 @@ describe('loopback:remote-method generator', function() {
       }).then(function() {
         var definition = common.readJsonSync('common/models/car.json');
         var methods = definition.methods || {};
-        expect(methods).to.have.property('myRemote');
-        expect(methods).to.not.have.property('prototype.myRemote');
-        expect(methods.myRemote).to.eql({
-          isStatic: false,
+        expect(methods).to.have.property('prototype.myRemote');
+        expect(methods['prototype.myRemote']).to.eql({
           accepts: [],
           returns: [],
           http: [],

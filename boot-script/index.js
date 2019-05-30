@@ -1,10 +1,11 @@
-// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Copyright IBM Corp. 2015,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
 
+var debug = require('debug')('loopback:generator:boot-script');
 var g = require('../lib/globalize');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
@@ -33,8 +34,11 @@ module.exports = class BootScriptGenerator extends ActionsMixin(yeoman) {
 
   askForName() {
     var done = this.async();
-
-    if (this.name) return done();
+    if (this.arguments && this.arguments.length >= 1) {
+      debug('boot-script name is provided as %s', this.arguments[0]);
+      this.name = this.arguments[0];
+      return done();
+    }
 
     var question = {
       name: 'name',

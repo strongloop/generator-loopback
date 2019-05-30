@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2014,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -46,11 +46,6 @@ module.exports = class AppGenerator extends ActionsMixin(yeoman) {
       desc: g.f('Add {{Loopback Explorer}} to the project ({{true}} ' +
         'by default)'),
       type: Boolean,
-    });
-
-    this.option('loopbackVersion', {
-      desc: g.f('Select the LoopBack version'),
-      type: String,
     });
 
     this.option('template', {

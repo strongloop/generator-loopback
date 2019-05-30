@@ -1,3 +1,33 @@
+2019-05-17, Version 6.0.4
+=========================
+
+ * fix: honor the argument (jannyHou)
+
+
+2019-05-14, Version 6.0.3
+=========================
+
+ * chore: update node engine (jannyHou)
+
+ * fix tests after removing 2.x in workspace (Diana Lau)
+
+ * chore: update copyrights years (Agnes Lin)
+
+ * chore: update copyright year (Diana Lau)
+
+ * chore: update LTS status (Diana Lau)
+
+ * fix: update lodash (jannyHou)
+
+ * Fix the expected list of supported LB versions. (Miroslav Bajtoš)
+
+ * Fix build failure introduced by 49a6d68dfc (Miroslav Bajtoš)
+
+ * add lts announcement (jannyHou)
+
+ * remove .npmignore (jannyHou)
+
+
 2018-11-19, Version 6.0.2
 =========================
 
