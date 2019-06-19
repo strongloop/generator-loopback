@@ -97,6 +97,24 @@ describe('loopback:middleware generator', function() {
       });
   });
 
+  it('honors the first argument as middleware name', function() {
+    var builtinSources = Object.keys(readMiddlewaresJsonSync('server'));
+    return helpers.run(path.join(__dirname, '../middleware'))
+      .cd(SANDBOX)
+      .withArguments('my-middleware-with-name')
+      .withPrompts({
+        phase: 'my-phase-with-middleware-name',
+        paths: ['/x', '/y'],
+        params: '{"z": 1}',
+      }).then(function() {
+        var newSources = Object.keys(readMiddlewaresJsonSync('server'));
+        var expectedSources = builtinSources.concat(
+          ['my-phase-with-middleware-name']
+        );
+        expect(newSources).to.have.members(expectedSources);
+      });
+  });
+
   function givenMiddlewareGenerator(dsArgs) {
     var path = '../../middleware';
     var name = 'loopback:middleware';
