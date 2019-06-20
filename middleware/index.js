@@ -5,13 +5,13 @@
 
 'use strict';
 
+var debug = require('debug')('loopback:generator:middleware');
 var g = require('../lib/globalize');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 
 var wsModels = require('loopback-workspace').models;
 
-var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
@@ -74,6 +74,13 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
   }
 
   askForName() {
+    var done = this.async();
+    if (this.arguments && this.arguments.length >= 1) {
+      debug('middleware name is provided as %s', this.arguments[0]);
+      this.name = this.arguments[0];
+      return done();
+    }
+
     var prompts = [
       {
         name: 'name',
@@ -85,6 +92,7 @@ module.exports = class MiddlewareGenerator extends ActionsMixin(yeoman) {
 
     return this.prompt(prompts).then(function(props) {
       this.name = props.name;
+      done();
     }.bind(this));
   }
 

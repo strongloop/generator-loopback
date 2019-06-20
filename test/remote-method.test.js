@@ -81,4 +81,26 @@ describe('loopback:remote-method generator', function() {
         });
       });
   });
+
+  it('honors the arguments as model and method names', function() {
+    return helpers.run(path.join(__dirname, '../remote-method'))
+      .cd(SANDBOX)
+      .withArguments(['Car', 'myRemote'])
+      .withPrompts({
+        isStatic: 'true',
+        desription: 'This is my remote method created with arguments',
+        httpPath: '',
+        acceptsArg: '',
+        returnsArg: '',
+      }).then(function() {
+        var definition = common.readJsonSync('common/models/car.json');
+        var methods = definition.methods || {};
+        expect(methods).to.have.property('myRemote');
+        expect(methods['myRemote']).to.eql({
+          accepts: [],
+          returns: [],
+          http: [],
+        });
+      });
+  });
 });

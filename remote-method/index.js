@@ -58,31 +58,34 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
   }
 
   askForModel() {
-    if (this.modelName) {
+    var done = this.async();
+    if (this.arguments && this.arguments.length >= 1) {
+      this.modelName = this.arguments[0];
       this.modelDefinition = this.projectModels.filter(function(m) {
         return m.name === this.modelName;
       }.bind(this))[0];
-
-      if (!this.modelDefinition) {
-        var msg = g.f('Model not found: %s' +
-                  '. Please choose from Model List:', this.modelName);
-        this.log(chalk.red(msg));
-      }
     }
 
-    if (!this.modelDefinition) {
-      var prompts = [
-        {
-          name: 'model',
-          message: g.f('Select the model:'),
-          type: 'list',
-          choices: this.editableModelNames,
-        },
-      ];
-      return this.prompt(prompts).then(function(answers) {
-        this.modelName = answers.model;
-      }.bind(this));
+    if (this.modelDefinition) {
+      return done();
     }
+
+    var msg = g.f('Model not found: %s' +
+    '. Please choose from Model List:', this.modelName);
+    this.log(chalk.red(msg));
+
+    var prompts = [
+      {
+        name: 'model',
+        message: g.f('Select the model:'),
+        type: 'list',
+        choices: this.editableModelNames,
+      },
+    ];
+    return this.prompt(prompts).then(function(answers) {
+      this.modelName = answers.model;
+      done();
+    }.bind(this));
   }
 
   findModelDefinition() {
@@ -98,7 +101,13 @@ module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
   }
 
   askForParameters() {
-    var name = this.methodName;
+    var name;
+    if (this.arguments && this.arguments.length >= 2) {
+      debug('middleware name is provided as %s', this.arguments[1]);
+      // the method name
+      name = this.arguments[1];
+    }
+
     var prompts = [
       {
         name: 'methodName',
