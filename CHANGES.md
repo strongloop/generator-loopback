@@ -1,4 +1,10 @@
-2019-05-17, Version 6.0.4
+2019-06-20, Version 6.0.5
+=========================
+
+ * fix: arguments for 2 commands (jannyHou)
+
+
+2019-05-16, Version 6.0.4
 =========================
 
  * fix: honor the argument (jannyHou)
