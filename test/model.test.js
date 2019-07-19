@@ -18,6 +18,7 @@ var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
 
 describe('loopback:model generator', function() {
+  process.env.LB_CLI_SKIP_PROPERTY = true;
   beforeEach(common.resetWorkspace);
 
   beforeEach(function createSandbox(done) {
@@ -59,7 +60,6 @@ describe('loopback:model generator', function() {
         name: 'Product',
         dataSource: 'db',
         public: false,
-        propertyName: '',
       }).then(function() {
         var modelConfig = readModelsJsonSync('server');
         var newModels = Object.keys(modelConfig);

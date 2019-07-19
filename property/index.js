@@ -26,6 +26,12 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
   constructor(args, opts) {
     super(args, opts);
     this.modelEmitter = opts && opts.modelEmitter;
+    this.isInvokedByModelGenerator = opts && opts.isInvokedByModelGenerator;
+    // yeoman generator doesn't have a function to exit in the middle
+    // so this flag is introduced to skip executing the followed functions
+    // whenever we decide to exit.
+    // See its usage in function `askForPropertyName()`
+    this.skipExecution = false;
   }
 
   help() {
@@ -76,26 +82,51 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
     }
   }
 
-  askForParameters() {
-    if (this.modelDefinition.base === 'KeyValueModel') {
-      var msg = g.f('KeyValueModel does not support model definition ' +
-        'properties');
-      this.log(chalk.red(msg));
-      return this.async(new Error(msg));
-    }
-
+  // Seperate the property name prompt from others so that the
+  // generator could exit when:
+  // - it is invoked by the model generator
+  // - the property name is empty
+  askForPropertyName() {
+    const self = this;
     this.name = this.options.propertyName;
 
     var prompts = [
       {
         name: 'name',
         message: g.f('Enter the property name:'),
-        validate: checkPropertyName,
+        validate: checkModelPropertyName,
         default: this.propDefinition && this.propDefinition.name,
         when: function() {
           return !this.name && this.name !== 0;
         }.bind(this),
       },
+    ];
+
+    return this.prompt(prompts).then(function(answers) {
+      debug('answers: %j', answers);
+      if (self.isInvokedByModelGenerator && !answers.name) {
+        self.modelEmitter.emit('exitModelGenerator');
+        // Set the flag to `true` to perform 'exit' for the generator
+        self.skipExecution = true;
+      }
+      this.name = answers.name || this.name;
+    }.bind(this));
+
+    function checkModelPropertyName(name) {
+      if (self.isInvokedByModelGenerator && !name) return true;
+      return checkPropertyName(name);
+    }
+  }
+
+  askForParameters() {
+    if (this.skipExecution) return;
+    if (this.modelDefinition.base === 'KeyValueModel') {
+      var msg = g.f('KeyValueModel does not support model definition ' +
+        'properties');
+      this.log(chalk.red(msg));
+      return this.async(new Error(msg));
+    }
+    var prompts = [
       {
         name: 'type',
         message: g.f('Property type:'),
@@ -153,9 +184,9 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
         },
       },
     ];
+
     return this.prompt(prompts).then(function(answers) {
       debug('answers: %j', answers);
-      this.name = answers.name || this.name;
       if (answers.type === 'array') {
         var itemType = answers.customItemType || answers.itemType;
         this.type = itemType ? [itemType] : 'array';
@@ -191,6 +222,7 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
   }
 
   property() {
+    if (this.skipExecution) return;
     var done = this.async();
     this.modelDefinition.properties.create(this.propDefinition, function(err) {
       helpers.reportValidationError(err, this.log);
@@ -198,12 +230,15 @@ module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
     }.bind(this));
   }
   saveProject() {
+    if (this.skipExecution) return;
     debug('saving project...');
     this.saveProjectForGenerator();
     debug('saved project.');
   }
 
   emitEventEnd() {
+    if (this.skipExecution) return;
+    debug("property generator emits event 'finished'");
     if (this.modelEmitter) this.modelEmitter.emit('finished');
   }
 };

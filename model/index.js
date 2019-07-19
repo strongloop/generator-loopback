@@ -340,48 +340,46 @@ module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
   }
 
   property() {
+    // Skip executing the `property` function when run tests.
+    // The model generator test is broken with .composeWith(),
+    // and we didn't test the composed property generator before anyway.
+    if (process.env.LB_CLI_SKIP_PROPERTY) return;
+    const emitter = new EventEmitter();
+
+    emitter.on('exitModelGenerator', ()=> {
+      debug("model generator receives event 'exitModelGenerator'");
+      return;
+    });
+
     if (this.abort) return;
     if (this.databaseModel) {
-      var done = this.async();
-
       if (this.base === 'KeyValueModel')
         return;
 
       this.log(g.f('Enter an empty property name when done.'));
-      var prompts = [
+
+      // `this.composeWith` doesn't wait until the sub-generator finishes,
+      // but runs tasks according to yeoman-generator's run loop, which determine
+      // the task sequences by phases, details see
+      // http://yeoman.io/authoring/composability.html
+      // as a workaround, an event emitter is introduced to invoke another property prompts
+      emitter.on('finished', ()=> {
+        debug("model generator receives event 'finished'");
+        this.log(g.f('\nLet\'s add another %s property.', this.displayName));
+        this.property();
+      });
+
+      this.composeWith(
+        require.resolve('../property/index.js'),
         {
-          name: 'propertyName',
-          message: g.f('Property name:'),
-          validate: validateOptionalName,
-        },
-      ];
-      this.prompt(prompts).then(function(answers) {
-        if (answers.propertyName == null || answers.propertyName === '') {
-          return done();
+          nested: true,
+          projectDir: this.projectDir,
+          project: this.project,
+          modelName: this.name,
+          modelEmitter: emitter,
+          isInvokedByModelGenerator: true,
         }
-        const emitter = new EventEmitter();
-        this.composeWith(
-          'loopback:property',
-          {
-            nested: true,
-            projectDir: this.projectDir,
-            project: this.project,
-            modelName: this.name,
-            propertyName: answers.propertyName,
-            modelEmitter: emitter,
-          }
-        );
-        // `this.composeWith` doesn't wait until the sub-generator finishes,
-        // but runs tasks according to yeoman-generator's run loop, which determine
-        // the task sequences by phases, details see
-        // http://yeoman.io/authoring/composability.html
-        // as a workaround, an event emitter is introduced to invoke another property prompts
-        emitter.on('finished', ()=> {
-          this.log(g.f('\nLet\'s add another %s property.', this.displayName));
-          this.property();
-        });
-        return done();
-      }.bind(this));
+      );
     }
   }
 
