@@ -1,3 +1,9 @@
+2019-07-19, Version 6.1.0
+=========================
+
+ * move property name check to property generator (jannyHou)
+
+
 2019-06-20, Version 6.0.5
 =========================
 
