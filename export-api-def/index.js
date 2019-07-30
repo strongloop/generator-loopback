@@ -35,17 +35,25 @@ module.exports = class ExportAPIDefGenerator extends ActionsMixin(yeoman) {
     var filePath = this.options.output;
     var options = {format: this.format, output: filePath};
     var app = require(this.destinationRoot());
-    var apiDef = apiGenerator.getApiDef(app, options);
 
-    // Print to console if no output file specified.
-    if (filePath) {
-      mkdirp.sync(path.dirname(filePath));
-      fs.writeFileSync(filePath, apiDef);
+    if (app.booting) {
+      app.on('booted', runGenerator);
     } else {
-      process.stdout.write(apiDef);
+      runGenerator();
     }
 
-    // Kill app if still alive
-    setTimeout(process.exit, 100);
+    function runGenerator() {
+      var apiDef = apiGenerator.getApiDef(app, options);
+      // Print to console if no output file specified.
+      if (filePath) {
+        mkdirp.sync(path.dirname(filePath));
+        fs.writeFileSync(filePath, apiDef);
+      } else {
+        process.stdout.write(apiDef);
+      }
+
+      // Kill app if still alive
+      setTimeout(process.exit, 100);
+    }
   }
 };
