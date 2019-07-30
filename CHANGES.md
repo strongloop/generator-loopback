@@ -1,3 +1,9 @@
+2019-07-30, Version 6.1.1
+=========================
+
+ * run api generator after app is booted (Matteo Padovano)
+
+
 2019-07-19, Version 6.1.0
 =========================
 
