@@ -1,3 +1,5 @@
 Beschreibung:
   `toolchain`, `manifest` und `docker` sind Scaffolding-Optionen. Wird keine der Optionen angegeben, wird das als Angabe
   aller Optionen interpretiert.
+
+  Geben Sie `provision` an, um einen Bluemix-Datenservice mit LoopBack-Unterstützung bereitzustellen.

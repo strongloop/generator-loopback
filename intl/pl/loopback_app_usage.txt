@@ -1,0 +1,18 @@
+Opis:
+  Tworzy aplikację LoopBack.
+
+Przykład:
+
+  {{slc loopback}}
+
+  Spowoduje to utworzenie następujących elementów:
+
+    {{package.json}}: pakiety programistyczne instalowane przez {{npm}}.
+
+    {{common/models/<nazwa_modelu>.json}}: definicja modeli podstawowych udostępnianych przez LoopBack.
+    {{common/models/}}: katalog, w którym zostanie umieszczony kod modelu.
+
+    {{server/server.js}}: główny plik aplikacji.
+    {{server/config.json}}: konfiguracja aplikacji dostępna do edycji przez komputer.
+    {{server/datasources.json}}: definicja źródła danych.
+    {{server/model-config.json}}: konfiguracja modelu.

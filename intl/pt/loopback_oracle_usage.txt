@@ -1,5 +1,5 @@
 Descrição:
-  Utilitário para ajudar a instalar o conector Oracle LoopBack.
+  Utilitário que ajuda na instalação do conector Oracle do LoopBack. 
 
 Exemplo:
 

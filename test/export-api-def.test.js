@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Copyright IBM Corp. 2015,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -13,7 +13,7 @@ var wsModels = require('loopback-workspace').models;
 var common = require('./common');
 var yaml = require('js-yaml');
 var install = require('strong-cached-install');
-var SANDBOX =  path.resolve(__dirname, 'sandbox');
+var SANDBOX = path.resolve(__dirname, 'sandbox');
 var PKG_CACHE = path.resolve(__dirname, '..', '.pkgcache');
 
 describe('loopback:export-api-def generator', function() {
@@ -39,7 +39,8 @@ describe('loopback:export-api-def generator', function() {
       function(err, model) {
         test.Model = model;
         done(err);
-      });
+      }
+    );
   });
 
   before(function installDependencies(done) {
@@ -54,81 +55,87 @@ describe('loopback:export-api-def generator', function() {
     PROCESS_EXIT_STUB.restore();
   });
 
-  it('produces JSON format', function(done) {
-    var gen = givenGenerator();
-    gen.options.output = 'swagger.json';
-
-    gen.run(function() {
-      var content = readJsonFile();
-      expect(content).to.have.property('swagger', '2.0');
-      expect(content).to.not.have.property('host');
-      expect(content).to.not.have.property('schemes');
-      expect(content).to.not.have.property('public');
-      expect(content).to.have.property('basePath');
-      expect(content).to.have.property('info');
-      expect(content.info).to.have.property(
-        'title', 'test-app');
-      expect(content).to.have.property('tags');
-      expect(content.consumes).to.have.members([
-        'application/json',
-        'application/x-www-form-urlencoded',
-        'application/xml', 'text/xml',
-      ]);
-      expect(content.produces).to.have.members([
-        'application/json',
-        'application/xml', 'text/xml',
-        'application/javascript', 'text/javascript',
-      ]);
-      done();
-    });
+  it('produces JSON format', function() {
+    return helpers.run(path.join(__dirname, '../export-api-def'))
+      .cd(SANDBOX)
+      .withOptions({
+        output: 'swagger.json',
+      }).then(function() {
+        var content = readJsonFile();
+        expect(content).to.have.property('swagger', '2.0');
+        expect(content).to.not.have.property('host');
+        expect(content).to.not.have.property('schemes');
+        expect(content).to.not.have.property('public');
+        expect(content).to.have.property('basePath');
+        expect(content).to.have.property('info');
+        expect(content.info).to.have.property(
+          'title', 'test-app'
+        );
+        expect(content).to.have.property('tags');
+        expect(content.consumes).to.have.members([
+          'application/json',
+          'application/x-www-form-urlencoded',
+          'application/xml', 'text/xml',
+        ]);
+        expect(content.produces).to.have.members([
+          'application/json',
+          'application/xml', 'text/xml',
+          'application/javascript', 'text/javascript',
+        ]);
+      });
   });
 
-  it('produces YAML format', function(done) {
-    var gen = givenGenerator();
-    gen.options.output = 'swagger.yaml';
-
-    gen.run(function() {
-      var content = readYamlFile();
-      expect(content).to.have.property('swagger', '2.0');
-      expect(content).to.not.have.property('host');
-      expect(content).to.not.have.property('schemes');
-      expect(content).to.not.have.property('public');
-      expect(content).to.have.property('basePath');
-      expect(content).to.have.property('info');
-      expect(content.info).to.have.property(
-        'title', 'test-app');
-      expect(content).to.have.property('tags');
-      expect(content.consumes).to.have.members([
-        'application/json',
-        'application/x-www-form-urlencoded',
-        'application/xml', 'text/xml',
-      ]);
-      expect(content.produces).to.have.members([
-        'application/json',
-        'application/xml', 'text/xml',
-        'application/javascript', 'text/javascript',
-      ]);
-      done();
-    });
+  it('produces YAML format', function() {
+    return helpers.run(path.join(__dirname, '../export-api-def'))
+      .cd(SANDBOX)
+      .withOptions({
+        output: 'swagger.yaml',
+      }).then(function() {
+        var content = readYamlFile();
+        expect(content).to.have.property('swagger', '2.0');
+        expect(content).to.not.have.property('host');
+        expect(content).to.not.have.property('schemes');
+        expect(content).to.not.have.property('public');
+        expect(content).to.have.property('basePath');
+        expect(content).to.have.property('info');
+        expect(content.info).to.have.property(
+          'title', 'test-app'
+        );
+        expect(content).to.have.property('tags');
+        expect(content.consumes).to.have.members([
+          'application/json',
+          'application/x-www-form-urlencoded',
+          'application/xml', 'text/xml',
+        ]);
+        expect(content.produces).to.have.members([
+          'application/json',
+          'application/xml', 'text/xml',
+          'application/javascript', 'text/javascript',
+        ]);
+      });
   });
 
   describe('running on project with onging async operations', function() {
-    it('immediately does not exit the process', function(done) {
-      var gen = givenGenerator();
+    it('immediately does not exit the process', function() {
       expect(PROCESS_EXIT_STUB.called).to.equal(false);
-      gen.run(function() {
-        expect(PROCESS_EXIT_STUB.called).to.equal(false);
-        done();
-      });
+      return helpers.run(path.join(__dirname, '../export-api-def'))
+        .cd(SANDBOX)
+        .withOptions({
+          output: 'swagger.yaml',
+        }).then(function() {
+          expect(PROCESS_EXIT_STUB.called).to.equal(false);
+        });
     });
     it('eventually exits the process', function(done) {
       this.timeout(1000); // 10 seconds
-      var gen = givenGenerator();
       expect(PROCESS_EXIT_STUB.called).to.equal(false);
-      gen.run(function() {
-        // Periodically check process.exit was called until timeout
-        checkProcessExitCalled(done);
-      });
+      helpers.run(path.join(__dirname, '../export-api-def'))
+        .cd(SANDBOX)
+        .withOptions({
+          output: 'swagger.yaml',
+        }).then(function() {
+          checkProcessExitCalled(done);
+        });
     });
   });
 
@@ -138,14 +145,6 @@ describe('loopback:export-api-def generator', function() {
     } else {
       setTimeout(checkProcessExitCalled, 10, done);
     }
-  }
-
-  function givenGenerator(args) {
-    var path = '../../export-api-def';
-    var name = 'loopback:export-api-def';
-    var gen = common.createGenerator(name, path, [], args);
-    gen.options['skip-install'] = false;
-    return gen;
   }
 
   function readJsonFile() {

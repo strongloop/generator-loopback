@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2014,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -23,134 +23,148 @@ describe('loopback:swagger generator', function() {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
+  it('honors the first argument as url',
+    function() {
+      const url = path.join(__dirname, 'swagger/pet-store-2.0.json');
+      return helpers.run(path.join(__dirname, '../swagger'))
+        .cd(SANDBOX)
+        .withArguments([url])
+        .withPrompts({
+          modelSelections:
+          ['swagger_v2_petstore', 'Category',
+            'Pet', 'Tag', 'Order', 'Customer'],
+          dataSource: 'db',
+        }).then(function() {
+          var content = readModelJsonSync('pet');
+          expect(content).to.have.property('name', 'Pet');
+          expect(content).to.not.have.property('public');
+          expect(content).to.have.property('properties');
+          expect(content.properties).to.have.property('tags');
+          expect(content.properties).to.have.property('category');
+
+          expect(content.properties.tags.type).to.eql(['Tag']);
+          expect(content.properties.category.type).to.eql('Category');
+          expect(content.properties.photoUrls.type).to.eql(['string']);
+
+          var modelConfig = readModelConfigSync('server');
+          expect(modelConfig).to.have.property('Pet');
+          expect(modelConfig.Pet).to.have.property('public', false);
+          expect(modelConfig.Pet).to.have.property('dataSource', 'db');
+        });
+    });
+
   it('creates and configures Pet model from swagger 2.0 spec',
-    function(done) {
-      var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
-        url: path.join(__dirname, 'swagger/pet-store-2.0.json'),
-        modelSelections:
-        ['swagger_v2_petstore', 'Category',
-          'Pet', 'Tag', 'Order', 'Customer'],
-        dataSource: 'db',
-      });
+    function() {
+      return helpers.run(path.join(__dirname, '../swagger'))
+        .cd(SANDBOX)
+        .withPrompts({
+          url: path.join(__dirname, 'swagger/pet-store-2.0.json'),
+          modelSelections:
+          ['swagger_v2_petstore', 'Category',
+            'Pet', 'Tag', 'Order', 'Customer'],
+          dataSource: 'db',
+        }).then(function() {
+          var content = readModelJsonSync('pet');
+          expect(content).to.have.property('name', 'Pet');
+          expect(content).to.not.have.property('public');
+          expect(content).to.have.property('properties');
+          expect(content.properties).to.have.property('tags');
+          expect(content.properties).to.have.property('category');
 
-      modelGen.run(function() {
-        var content = readModelJsonSync('pet');
-        expect(content).to.have.property('name', 'Pet');
-        expect(content).to.not.have.property('public');
-        expect(content).to.have.property('properties');
-        expect(content.properties).to.have.property('tags');
-        expect(content.properties).to.have.property('category');
+          expect(content.properties.tags.type).to.eql(['Tag']);
+          expect(content.properties.category.type).to.eql('Category');
+          expect(content.properties.photoUrls.type).to.eql(['string']);
 
-        expect(content.properties.tags.type).to.eql(['Tag']);
-        expect(content.properties.category.type).to.eql('Category');
-        expect(content.properties.photoUrls.type).to.eql(['string']);
-
-        var modelConfig = readModelConfigSync('server');
-        expect(modelConfig).to.have.property('Pet');
-        expect(modelConfig.Pet).to.have.property('public', false);
-        expect(modelConfig.Pet).to.have.property('dataSource', 'db');
-        done();
-      });
+          var modelConfig = readModelConfigSync('server');
+          expect(modelConfig).to.have.property('Pet');
+          expect(modelConfig.Pet).to.have.property('public', false);
+          expect(modelConfig.Pet).to.have.property('dataSource', 'db');
+        });
     });
 
   it('creates and configures Pet model from swagger 2.0 spec yml',
-    function(done) {
-      var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
-        url: path.join(__dirname, 'swagger/pet-store-2.0.yml'),
-        modelSelections:
-        ['swagger_v2_petstore', 'Category',
-          'Pet', 'Tag', 'Order', 'Customer'],
-        dataSource: 'db',
-      });
+    function() {
+      return helpers.run(path.join(__dirname, '../swagger'))
+        .cd(SANDBOX)
+        .withPrompts({
+          url: path.join(__dirname, 'swagger/pet-store-2.0.yml'),
+          modelSelections:
+          ['swagger_v2_petstore', 'Category',
+            'Pet', 'Tag', 'Order', 'Customer'],
+          dataSource: 'db',
+        }).then(function() {
+          var content = readModelJsonSync('pet');
+          expect(content).to.have.property('name', 'Pet');
+          expect(content).to.not.have.property('public');
+          expect(content).to.have.property('properties');
+          expect(content.properties).to.have.property('tags');
+          expect(content.properties).to.have.property('category');
 
-      modelGen.run(function() {
-        var content = readModelJsonSync('pet');
-        expect(content).to.have.property('name', 'Pet');
-        expect(content).to.not.have.property('public');
-        expect(content).to.have.property('properties');
-        expect(content.properties).to.have.property('tags');
-        expect(content.properties).to.have.property('category');
+          expect(content.properties.tags.type).to.eql(['Tag']);
+          expect(content.properties.category.type).to.eql('Category');
+          expect(content.properties.photoUrls.type).to.eql(['string']);
 
-        expect(content.properties.tags.type).to.eql(['Tag']);
-        expect(content.properties.category.type).to.eql('Category');
-        expect(content.properties.photoUrls.type).to.eql(['string']);
-
-        var modelConfig = readModelConfigSync('server');
-        expect(modelConfig).to.have.property('Pet');
-        expect(modelConfig.Pet).to.have.property('public', false);
-        expect(modelConfig.Pet).to.have.property('dataSource', 'db');
-        done();
-      });
+          var modelConfig = readModelConfigSync('server');
+          expect(modelConfig).to.have.property('Pet');
+          expect(modelConfig.Pet).to.have.property('public', false);
+          expect(modelConfig.Pet).to.have.property('dataSource', 'db');
+        });
     });
 
   it('creates and configures note model from swagger 2.0 spec yaml',
-    function(done) {
-      var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
-        url: path.join(__dirname, 'swagger/demo4.yaml'),
-        modelSelections:
+    function() {
+      return helpers.run(path.join(__dirname, '../swagger'))
+        .cd(SANDBOX)
+        .withPrompts({
+          url: path.join(__dirname, 'swagger/demo4.yaml'),
+          modelSelections:
           ['swagger_api', 'note'],
-        dataSource: 'db',
-      });
+          dataSource: 'db',
+        }).then(function() {
+          var content = readModelJsonSync('note');
+          expect(content).to.have.property('name', 'note');
+          expect(content).to.not.have.property('public');
+          expect(content).to.have.property('properties');
+          expect(content.properties).to.have.property('title');
+          expect(content.properties).to.have.property('content');
 
-      modelGen.run(function() {
-        var content = readModelJsonSync('note');
-        expect(content).to.have.property('name', 'note');
-        expect(content).to.not.have.property('public');
-        expect(content).to.have.property('properties');
-        expect(content.properties).to.have.property('title');
-        expect(content.properties).to.have.property('content');
+          expect(content.properties.title.type).to.eql('string');
+          expect(content.properties.title.required).to.eql(true);
+          expect(content.properties.content.type).to.eql('string');
 
-        expect(content.properties.title.type).to.eql('string');
-        expect(content.properties.title.required).to.eql(true);
-        expect(content.properties.content.type).to.eql('string');
-
-        var modelConfig = readModelConfigSync('server');
-        expect(modelConfig).to.have.property('note');
-        expect(modelConfig.note).to.have.property('public', true);
-        expect(modelConfig.note).to.have.property('dataSource', 'db');
-        done();
-      });
+          var modelConfig = readModelConfigSync('server');
+          expect(modelConfig).to.have.property('note');
+          expect(modelConfig.note).to.have.property('public', true);
+          expect(modelConfig.note).to.have.property('dataSource', 'db');
+        });
     });
 
   it('creates and configures Pet model from swagger 1.2 spec',
-    function(done) {
-      var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
-        url: path.join(__dirname, 'swagger/pet-store-1.2.json'),
-        modelSelections: ['swagger_pet', 'Category', 'Pet', 'Tag'],
-        dataSource: 'db',
-      });
+    function() {
+      return helpers.run(path.join(__dirname, '../swagger'))
+        .cd(SANDBOX)
+        .withPrompts({
+          url: path.join(__dirname, 'swagger/pet-store-1.2.json'),
+          modelSelections: ['swagger_pet', 'Category', 'Pet', 'Tag'],
+          dataSource: 'db',
+        }).then(function() {
+          var content = readModelJsonSync('pet');
+          expect(content).to.have.property('name', 'Pet');
+          expect(content).to.not.have.property('public');
+          expect(content).to.have.property('properties');
+          expect(content.properties).to.have.property('tags');
+          expect(content.properties).to.have.property('category');
 
-      modelGen.run(function() {
-        var content = readModelJsonSync('pet');
-        expect(content).to.have.property('name', 'Pet');
-        expect(content).to.not.have.property('public');
-        expect(content).to.have.property('properties');
-        expect(content.properties).to.have.property('tags');
-        expect(content.properties).to.have.property('category');
+          expect(content.properties.tags.type).to.eql(['Tag']);
+          expect(content.properties.category.type).to.eql('Category');
+          expect(content.properties.photoUrls.type).to.eql(['string']);
 
-        expect(content.properties.tags.type).to.eql(['Tag']);
-        expect(content.properties.category.type).to.eql('Category');
-        expect(content.properties.photoUrls.type).to.eql(['string']);
-
-        var modelConfig = readModelConfigSync('server');
-        expect(modelConfig).to.have.property('Pet');
-        expect(modelConfig.Pet).to.have.property('public', false);
-        expect(modelConfig.Pet).to.have.property('dataSource', 'db');
-        done();
-      });
+          var modelConfig = readModelConfigSync('server');
+          expect(modelConfig).to.have.property('Pet');
+          expect(modelConfig.Pet).to.have.property('public', false);
+          expect(modelConfig.Pet).to.have.property('dataSource', 'db');
+        });
     });
-
-  function givenModelGenerator(modelArgs) {
-    var path = '../../swagger';
-    var name = 'loopback:swagger';
-    var deps = [];
-    var gen = common.createGenerator(name, path, deps, modelArgs, {});
-    return gen;
-  }
 
   function readModelJsonSync(name, facet) {
     facet = facet || 'common';

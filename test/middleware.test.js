@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2015. All Rights Reserved.
+// Copyright IBM Corp. 2015,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -22,83 +22,97 @@ describe('loopback:middleware generator', function() {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-  it('adds a new phase to server/middleware.json', function(done) {
-    var modelGen = givenMiddlewareGenerator();
-    helpers.mockPrompt(modelGen, {
-      name: 'my-middleware-1',
-      phase: 'my-phase',
-      paths: ['/x', '/y'],
-      params: '{"z": 1}',
-    });
-
+  it('adds a new phase to server/middleware.json', function() {
     var builtinSources = Object.keys(readMiddlewaresJsonSync('server'));
-    modelGen.run(function() {
-      var newSources = Object.keys(readMiddlewaresJsonSync('server'));
-      var expectedSources = builtinSources.concat(['my-phase']);
-      expect(newSources).to.have.members(expectedSources);
-      done();
-    });
+    return helpers.run(path.join(__dirname, '../middleware'))
+      .cd(SANDBOX)
+      .withPrompts({
+        name: 'my-middleware-1',
+        phase: 'my-phase',
+        paths: ['/x', '/y'],
+        params: '{"z": 1}',
+      }).then(function() {
+        var newSources = Object.keys(readMiddlewaresJsonSync('server'));
+        var expectedSources = builtinSources.concat(['my-phase']);
+        expect(newSources).to.have.members(expectedSources);
+      });
   });
 
-  it('adds a new phase next to a selected one', function(done) {
-    var modelGen = givenMiddlewareGenerator();
-    helpers.mockPrompt(modelGen, {
-      name: 'my-middleware-2',
-      phase: '(custom phase)',
-      customPhase: 'my-phase-2',
-      nextPhase: 'routes',
-      paths: ['/x', '/y'],
-      params: '{"z": 1}',
-    });
-
-    modelGen.run(function() {
-      var newSources = Object.keys(readMiddlewaresJsonSync('server'));
-      var p1 = newSources.indexOf('my-phase-2');
-      var p2 = newSources.indexOf('routes');
-      expect(p1).to.equal(p2 - 1);
-      done();
-    });
+  it('adds a new phase next to a selected one', function() {
+    return helpers.run(path.join(__dirname, '../middleware'))
+      .cd(SANDBOX)
+      .withPrompts({
+        name: 'my-middleware-2',
+        phase: '(custom phase)',
+        customPhase: 'my-phase-2',
+        nextPhase: 'routes',
+        paths: ['/x', '/y'],
+        params: '{"z": 1}',
+      }).then(function() {
+        var newSources = Object.keys(readMiddlewaresJsonSync('server'));
+        var p1 = newSources.indexOf('my-phase-2');
+        var p2 = newSources.indexOf('routes');
+        expect(p1).to.equal(p2 - 1);
+      });
   });
 
   it('adds a new entry to an existing phase in server/middleware.json',
-    function(done) {
-      var modelGen = givenMiddlewareGenerator();
-      helpers.mockPrompt(modelGen, {
-        name: 'my-middleware-3',
+    function() {
+      var builtinSources = Object.keys(
+        readMiddlewaresJsonSync('server').routes
+      );
+      return helpers.run(path.join(__dirname, '../middleware'))
+        .cd(SANDBOX)
+        .withPrompts({
+          name: 'my-middleware-3',
+          phase: 'routes',
+          paths: ['/x', '/y'],
+          params: '{"z": 1}',
+        }).then(function() {
+          const middlewareRoutes = readMiddlewaresJsonSync('server').routes;
+          const newSources = Object.keys(middlewareRoutes);
+          const expectedSources = builtinSources.concat(['my-middleware-3']);
+          expect(newSources).to.have.members(expectedSources);
+        });
+    });
+
+  it('supports sub-phase', function() {
+    var builtinSources = Object.keys(
+      readMiddlewaresJsonSync('server')['routes:after'] || {}
+    );
+    return helpers.run(path.join(__dirname, '../middleware'))
+      .cd(SANDBOX)
+      .withPrompts({
+        name: 'my-middleware-4',
         phase: 'routes',
+        subPhase: 'after',
         paths: ['/x', '/y'],
         params: '{"z": 1}',
-      });
-
-      var builtinSources = Object.keys(
-        readMiddlewaresJsonSync('server').routes);
-      modelGen.run(function() {
-        var newSources = Object.keys(readMiddlewaresJsonSync('server').routes);
-        var expectedSources = builtinSources.concat(['my-middleware-3']);
+      }).then(function() {
+        var newSources = Object.keys(
+          readMiddlewaresJsonSync('server')['routes:after']
+        );
+        var expectedSources = builtinSources.concat(['my-middleware-4']);
         expect(newSources).to.have.members(expectedSources);
-        done();
       });
-    });
+  });
 
-  it('supports sub-phase', function(done) {
-    var modelGen = givenMiddlewareGenerator();
-    helpers.mockPrompt(modelGen, {
-      name: 'my-middleware-4',
-      phase: 'routes',
-      subPhase: 'after',
-      paths: ['/x', '/y'],
-      params: '{"z": 1}',
-    });
-
-    var builtinSources = Object.keys(
-        readMiddlewaresJsonSync('server')['routes:after'] || {});
-    modelGen.run(function() {
-      var newSources = Object.keys(
-          readMiddlewaresJsonSync('server')['routes:after']);
-      var expectedSources = builtinSources.concat(['my-middleware-4']);
-      expect(newSources).to.have.members(expectedSources);
-      done();
-    });
+  it('honors the first argument as middleware name', function() {
+    var builtinSources = Object.keys(readMiddlewaresJsonSync('server'));
+    return helpers.run(path.join(__dirname, '../middleware'))
+      .cd(SANDBOX)
+      .withArguments('my-middleware-with-name')
+      .withPrompts({
+        phase: 'my-phase-with-middleware-name',
+        paths: ['/x', '/y'],
+        params: '{"z": 1}',
+      }).then(function() {
+        var newSources = Object.keys(readMiddlewaresJsonSync('server'));
+        var expectedSources = builtinSources.concat(
+          ['my-phase-with-middleware-name']
+        );
+        expect(newSources).to.have.members(expectedSources);
+      });
   });
 
   function givenMiddlewareGenerator(dsArgs) {

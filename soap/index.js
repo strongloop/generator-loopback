@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2017,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -6,13 +6,11 @@
 'use strict';
 
 var g = require('../lib/globalize');
-var url = require('url');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 var generator = require('./wsdl-loader');
-var path = require('path');
 
-var actions = require('../lib/actions');
+var ActionsMixin = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 
@@ -20,43 +18,51 @@ var fs = require('fs');
 var async = require('async');
 var workspace = require('loopback-workspace');
 var wsModels = workspace.models;
+var debug = require('debug')('loopback:generator:soap');
 
-// A list of flags to control whether a model should be generated
-var NOT_SELECTED = 0; // It's not selected
-var CONFLICT_DETECTED = -1; // A model with the same name exists
-var SELECTED_FOR_UPDATE = 1; // Selected for update
-var SELECTED_FOR_CREATE = 2; // Selected for create
+module.exports = class SoapGenerator extends ActionsMixin(yeoman) {
+  constructor(args, opts) {
+    super(args, opts);
 
-module.exports = yeoman.Base.extend({
-
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
-
-    this.argument('url', {
+    this.argument(g.f('url'), {
       desc: g.f('URL or file path of the WSDL'),
       required: false,
       type: String,
     });
-  },
+  }
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_soap_usage.txt'); // TODO (rashmihunt) add this .txt
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadDataSources: actions.loadDataSources,
+  loadDataSources() {
+    debug('loading datasources...');
+    this.loadDatasourcesForGenerator();
+    debug('loaded datasources.');
+  }
 
-  addNullDataSourceItem: actions.addNullDataSourceItem,
+  addNullDataSourceItem() {
+    this.addNullDataSourceItemForGenerator();
+  }
 
-  loadModels: actions.loadModels,
+  loadModels() {
+    debug('loading models...');
+    this.loadModelsForGenerator();
+    debug('loaded models.');
+  }
 
-  existingModels: function() {
+  existingModels() {
     var self = this;
     self.existingModels = this.modelNames;
-  },
+  }
 
-  checkForDatasource: function() {
+  checkForDatasource() {
     var self = this;
     self.soapDataSources = this.dataSources.filter(function(ds) {
       return (ds._connector === 'soap') ||
@@ -78,9 +84,9 @@ module.exports = yeoman.Base.extend({
       this.log(error);
       return false;
     }
-  },
+  }
 
-  askForDataSource: function() {
+  askForDataSource() {
     var self = this;
     var prompts = [{
       name: 'dataSource',
@@ -104,10 +110,10 @@ module.exports = yeoman.Base.extend({
       self.log(chalk.green(g.f('WSDL for datasource %s: %s',
         this.selectedDSName, self.url)));
     }.bind(this));
-  },
+  }
 
   // command:  slc loopback:soap
-  soap: function() {
+  soap() {
     var self = this;
     var done = this.async();
     generator.getServices(this.url, this.log, function(err, services) {
@@ -123,9 +129,9 @@ module.exports = yeoman.Base.extend({
         done();
       }
     });
-  },
+  }
 
-  askForService: function() {
+  askForService() {
     var prompts = [
       {
         name: 'service',
@@ -139,9 +145,9 @@ module.exports = yeoman.Base.extend({
       this.servieName = answers.service;
       this.bindingNames = generator.getBindings(this.servieName);
     }.bind(this));
-  },
+  }
 
-  askForBinding: function() {
+  askForBinding() {
     var prompts = [
       {
         name: 'binding',
@@ -154,9 +160,9 @@ module.exports = yeoman.Base.extend({
       this.bindingName = answers.binding;
       this.operations = generator.getOperations(this.bindingName);
     }.bind(this));
-  },
+  }
 
-  askForOperation: function() {
+  askForOperation() {
     var prompts = [
       {
         name: 'operations',
@@ -171,9 +177,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(answers) {
       this.operations = answers.operations;
     }.bind(this));
-  },
+  }
 
-  generate: function() {
+  generate() {
     var self = this;
     var done = this.async();
 
@@ -369,15 +375,18 @@ module.exports = yeoman.Base.extend({
       if (!err) {
         self.log(
           chalk.green(g.f('Models are successfully generated from ' +
-            '{{WSDL}}.')));
+            '{{WSDL}}.'))
+        );
       }
       helpers.reportValidationError(err, self.log);
       done(err);
     });
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    this.saveProjectForGenerator();
+  }
+};
 function validateNoOperation(operations) {
   if (operations.length == 0) {
     return g.f('Please select at least one operation.');

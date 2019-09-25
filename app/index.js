@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2014,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -11,19 +11,21 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var workspace = require('loopback-workspace');
 var Workspace = workspace.models.Workspace;
-var bluemix = require('../bluemix/helpers');
 var fs = require('fs');
-var actions = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateAppName = helpers.validateAppName;
 var pkg = require('../package.json');
+var ActionsMixin = require('../lib/actions');
+var BluemixMixin = require('../bluemix/helpers');
+var debug = require('debug')('loopback:generator:app');
+var util = require('util');
 
-module.exports = yeoman.Base.extend({
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+module.exports = class AppGenerator extends ActionsMixin(yeoman) {
+  constructor(args, opts) {
+    super(args, opts);
 
-    this.argument('name', {
+    this.argument(g.f('name'), {
       desc: g.f('Name of the application to scaffold.'),
       required: false,
       type: String,
@@ -46,11 +48,6 @@ module.exports = yeoman.Base.extend({
       type: Boolean,
     });
 
-    this.option('loopbackVersion', {
-      desc: g.f('Select the LoopBack version'),
-      type: String,
-    });
-
     this.option('template', {
       desc: g.f('Set up the LoopBack application template'),
       type: String,
@@ -60,9 +57,17 @@ module.exports = yeoman.Base.extend({
       desc: g.f('Set up as a Bluemix app'),
       type: Boolean,
     });
-  },
 
-  help: function() {
+    if (helpers.getCommandName() === 'loopback-cli') {
+      this.option('version', {
+        desc: g.f('Display version information'),
+        type: Boolean,
+        default: false,
+      });
+    }
+  }
+
+  help() {
     var msgs = [helpText.customHelp(this, 'loopback_app_usage.txt')];
 
     var list = Object.keys(this.options.env.getGeneratorsMeta())
@@ -78,9 +83,9 @@ module.exports = yeoman.Base.extend({
 
     msgs.push(list.map(it => '  ' + it).join('\n'));
     return msgs.join('') + '\n';
-  },
+  }
 
-  injectWorkspaceCopyRecursive: function() {
+  injectWorkspaceCopyRecursive() {
     var originalMethod = Workspace.copyRecursive;
     Workspace.copyRecursive = function(src, dest, cb) {
       var isDir = fs.statSync(src).isDirectory();
@@ -96,9 +101,9 @@ module.exports = yeoman.Base.extend({
     this.on('end', function() {
       Workspace.copyRecursive = originalMethod;
     });
-  },
+  }
 
-  loadTemplates: function() {
+  loadTemplates() {
     var done = this.async();
 
     Workspace.describeAvailableTemplates(function(err, list) {
@@ -127,11 +132,12 @@ module.exports = yeoman.Base.extend({
       }
       done();
     }.bind(this));
-  },
+  }
 
-  askForProjectName: function() {
-    if (this.options.nested && this.name) {
-      this.appname = this.name;
+  askForProjectName() {
+    if (this.arguments && this.arguments.length >= 1) {
+      debug('app name is provided as %s', this.arguments[0]);
+      this.appname = this.arguments[0];
       return;
     }
 
@@ -154,11 +160,13 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(props) {
       this.appname = props.appname || this.appname;
     }.bind(this));
-  },
+  }
 
-  configureDestinationDir: actions.configureDestinationDir,
+  configureDestinationDirForApp() {
+    this.configureDestinationDir();
+  }
 
-  fetchLoopBackVersions: function() {
+  fetchLoopBackVersions() {
     var done = this.async();
     var self = this;
     Workspace.getAvailableLBVersions(function(err, versionsMap) {
@@ -172,9 +180,9 @@ module.exports = yeoman.Base.extend({
       });
       done();
     });
-  },
+  }
 
-  askForLBVersion: function() {
+  askForLBVersion() {
     var LBVersion = this.options.loopbackVersion;
     if (LBVersion) {
       var lbVersions = this.availableLBVersions.map(
@@ -199,18 +207,18 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(answers) {
       self.options.loopbackVersion = answers.loopbackVersion;
     }.bind(this));
-  },
+  }
 
-  applyFilterOnTemplate: function() {
+  applyFilterOnTemplate() {
     var LBVersion = this.options.loopbackVersion;
     var templates = this.templates;
 
     this.templates = templates.filter(function(t) {
       return t.supportedLBVersions.indexOf(LBVersion) !== -1;
     });
-  },
+  }
 
-  askForTemplate: function() {
+  askForTemplate() {
     if (this.wsTemplate) {
       var templates = this.templates.map(function(t) { return t.value; });
       if (templates.indexOf(this.wsTemplate) === -1) {
@@ -234,24 +242,26 @@ module.exports = yeoman.Base.extend({
       // Do NOT use name template as it's a method in the base class
       self.wsTemplate = answers.wsTemplate;
     }.bind(this));
-  },
+  }
 
-  initWorkspace: actions.initWorkspace,
+  initWorkspace() {
+    this.initWorkspaceForGenerator();
+  }
 
-  detectExistingProject: function() {
+  detectExistingProject() {
     var cb = this.async();
     Workspace.isValidDir(function(err) {
       if (err) {
         cb();
       } else {
         cb(new Error(
-          g.f('The generator must be run in an empty directory.'))
-        );
+          g.f('The generator must be run in an empty directory.')
+        ));
       }
     });
-  },
+  }
 
-  project: function() {
+  project() {
     var done = this.async();
 
     Workspace.createFromTemplate(
@@ -263,93 +273,92 @@ module.exports = yeoman.Base.extend({
       },
       done
     );
-  },
+  }
 
-  copyFiles: function() {
+  copyFiles() {
     this.directory('.', '.');
-  },
+  }
 
-  generateYoRc: function() {
+  // call `this.fs.commit` to finish moving the template files
+  // from memory to destination folder.
+  commit() {
+    var done = this.async();
+    this.fs.commit(done);
+  }
+
+  generateYoRc() {
     if (!this.options.initBluemix) {
       this.log(g.f('Generating {{.yo-rc.json}}'));
       this.config.save();
     }
-  },
+  }
 
-  installing: function() {
+  installing() {
     if (!this.options.initBluemix) {
-      actions.installDeps.call(this);
+      this.installDeps.call(this);
     }
-  },
+  }
 
-  install: {
-    bluemix: function() {
-      if (this.options.bluemix) {
-        this.log('\nBluemix configuration:');
-        this.composeWith(require.resolve('../bluemix'), {
-          options: this.options,
-        });
-      }
-    },
-  },
+  bluemix() {
+    if (this.options.bluemix) {
+      this.log(g.f('\nBluemix configuration:'));
+      this.composeWith(require.resolve('../bluemix'), this.options);
+    }
+  }
+  printNextSteps() {
+    if (this.options.initBluemix || this.options.skipNextSteps) return;
 
-  end: {
-    printNextSteps: function() {
-      if (!this.options.initBluemix) {
-        if (this.options.skipNextSteps) return;
-
-        var cmd = helpers.getCommandName();
-        if (!this._skipInstall) {
-          this.log();
-          this.log();
-        }
-
-        this.log(g.f('Next steps:'));
-        this.log();
-        if (this.dir && this.dir !== '.') {
-          this.log(g.f('  Change directory to your app'));
-          this.log(chalk.green('    $ cd ' + this.dir));
-          this.log();
-        }
-        if (cmd === 'apic') {
-          this.log(g.f('  Run {{API Designer}} to create, test, ' +
-            ' and publish your application'));
-          this.log(chalk.green('    $ apic edit'));
-          this.log();
-        } else {
-          this.log(g.f('  Create a model in your app'));
-          if (cmd === 'loopback-cli')
-            this.log(chalk.green('    $ lb model'));
-          else
-            this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
-          this.log();
-          this.log(g.f('  Run the app'));
-          this.log(chalk.green('    $ node .'));
-          this.log();
-        }
-      }
-    },
-
-    promotion: function() {
-      var cmd = helpers.getCommandName();
-      if (cmd !== 'loopback-cli') return;
-      if (this.options.skipNextSteps) {
-        this.log();
-      }
-
-      this.log(chalk.blue(g.f(
-        'The API Connect team at IBM happily continues to develop,\n' +
-          'support and maintain LoopBack, which is at the core of\n' +
-          'API Connect. When your APIs need robust management and\n' +
-          'security options, please check out %s',
-        'http://ibm.biz/tryAPIC')));
+    var cmd = helpers.getCommandName();
+    if (!this._skipInstall) {
       this.log();
-    },
-  },
-});
+      this.log();
+    }
+
+    this.log(g.f('Next steps:'));
+    this.log();
+    if (this.dir && this.dir !== '.') {
+      this.log(g.f('  Change directory to your app'));
+      this.log(chalk.green('    $ cd ' + this.dir));
+      this.log();
+    }
+    if (cmd === 'apic') {
+      this.log(g.f('  Run {{API Designer}} to create, test, ' +
+        ' and publish your application'));
+      this.log(chalk.green('    $ apic edit'));
+      this.log();
+    } else {
+      this.log(g.f('  Create a model in your app'));
+      if (cmd === 'loopback-cli')
+        this.log(chalk.green('    $ lb model'));
+      else
+        this.log(chalk.green('    $ ' + cmd + ' loopback:model'));
+      this.log();
+      this.log(g.f('  Run the app'));
+      this.log(chalk.green('    $ node .'));
+      this.log();
+    }
+  }
+
+  promotion() {
+    var cmd = helpers.getCommandName();
+    if (cmd !== 'loopback-cli') return;
+    if (this.options.skipNextSteps) {
+      this.log();
+    }
+
+    this.log(chalk.blue(g.f(
+      'The API Connect team at IBM happily continues to develop,\n' +
+        'support and maintain LoopBack, which is at the core of\n' +
+        'API Connect. When your APIs need robust management and\n' +
+        'security options, please check out %s',
+      'http://ibm.biz/tryAPIC'
+    )));
+    this.log();
+  }
+};
 
 // Export it for strong-cli to use
 module.exports._package = pkg.name + ': ' + pkg.version;
-module.exports._yeoman = yeoman;
+module.exports._yeomanEnv = require('yeoman-environment');
 module.exports.workspaceVersion =
   require('loopback-workspace/package.json').version;

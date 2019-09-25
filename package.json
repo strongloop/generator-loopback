@@ -1,19 +1,16 @@
 {
   "name": "generator-loopback",
-  "version": "5.7.1",
+  "version": "6.1.1",
   "description": "Yeoman generator for LoopBack",
   "license": "MIT",
   "main": "app/index.js",
   "repository": "strongloop/generator-loopback",
-  "author": {
-    "name": "Miroslav Bajtoš",
-    "email": "miroslav@strongloop.com",
-    "url": "http://strongloop.com/"
-  },
+  "author": "IBM Corp.",
   "engines": {
-    "node": ">=4"
+    "node": ">=8"
   },
   "scripts": {
+    "lint:fix": "npm run lint -- --fix",
     "lint": "eslint --ignore-path .gitignore .",
     "test": "mocha",
     "posttest": "npm run lint"
@@ -28,41 +25,44 @@
     "chalk": "^1.1.0",
     "debug": "^2.2.0",
     "fs-extra": "^2.1.2",
-    "glob": "^7.1.1",
+    "glob": "^7.1.2",
     "inflection": "^1.7.1",
+    "istextorbinary": "^2.2.1",
     "js-yaml": "^3.4.2",
-    "jsonfile-updater": "^2.1.0",
     "json-schema-faker": "^0.4.0",
-    "lodash": "^4.16.1",
+    "jsonfile-updater": "^2.1.0",
+    "lodash": "^4.17.11",
     "loopback-api-definition": "^3.0.0",
     "loopback-bluemix": "^3.0.0",
     "loopback-soap": "^1.0.0",
     "loopback-swagger": "^5.4.0",
-    "loopback-workspace": "^4.0.0",
+    "loopback-workspace": "^5.0.0",
     "mkdirp": "^0.5.1",
-    "open": "0.0.5",
+    "opn": "^5.3.0",
     "ora": "^1.3.0",
+    "read-chunk": "^2.1.0",
     "request": "^2.60.0",
-    "strong-globalize": "^2.6.8",
+    "strong-globalize": "^4.1.1",
     "strong-soap": "^1.2.2",
     "swagger-parser": "^4.0.1",
     "text-table": "^0.2.0",
     "yaml-js": "^0.1.4",
-    "yeoman-generator": "^0.24.1",
+    "yeoman-environment": "^2.3.1",
+    "yeoman-generator": "^3.1.1",
     "zosconnect-node": "^1.0.3"
   },
   "devDependencies": {
     "bluebird": "^3.1.1",
     "chai": "^3.2.0",
-    "eslint": "^3.11.1",
-    "eslint-config-loopback": "^8.0.0",
-    "mocha": "^3.2.0",
+    "eslint": "^5.2.0",
+    "eslint-config-loopback": "^11.0.0",
+    "mocha": "^5.2.0",
     "nock": "^9.0.14",
     "rimraf": "^2.6.1",
     "semver": "^5.1.0",
-    "sinon": "^3.2.1",
+    "sinon": "^6.1.4",
     "strong-cached-install": "^2.0.0",
-    "yeoman-assert": "^2.2.1",
-    "yeoman-test": "^1.4.0"
+    "yeoman-assert": "^3.1.1",
+    "yeoman-test": "^1.9.0"
   }
 }

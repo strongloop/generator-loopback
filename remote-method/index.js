@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Copyright IBM Corp. 2015,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -11,7 +11,7 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var util = require('util');
 
-var actions = require('../lib/actions');
+var ActionsMixin = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
@@ -19,64 +19,76 @@ var validateOptionalName = helpers.validateOptionalName;
 var validateRemoteMethodName = helpers.validateRemoteMethodName;
 var typeChoices = helpers.getTypeChoices();
 var ModelDefinition = require('loopback-workspace').models.ModelDefinition;
+var debug = require('debug')('loopback:generator:remote-method');
 
-module.exports = yeoman.Base.extend({
+module.exports = class RemoteMethodGenerator extends ActionsMixin(yeoman) {
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+  constructor(args, opts) {
+    super(args, opts);
 
-    this.argument('modelName', {
+    this.argument(g.f('modelName'), {
       desc: g.f('Name of the model'),
       required: false,
       type: String,
     });
 
-    this.argument('methodName', {
+    this.argument(g.f('methodName'), {
       desc: g.f('Name of the remote method'),
       required: false,
       type: String,
     });
-  },
+  }
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_remote-method_usage.txt');
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadModels: actions.loadModels,
+  loadModels() {
+    debug('loading models...');
+    this.loadModelsForGenerator();
+    debug('loaded models.');
+  }
 
-  askForModel: function() {
-    if (this.modelName) {
+  askForModel() {
+    var done = this.async();
+    if (this.arguments && this.arguments.length >= 1) {
+      this.modelName = this.arguments[0];
       this.modelDefinition = this.projectModels.filter(function(m) {
         return m.name === this.modelName;
       }.bind(this))[0];
-
-      if (!this.modelDefinition) {
-        var msg = g.f('Model not found: %s' +
-                  '. Please choose from Model List:', this.modelName);
-        this.log(chalk.red(msg));
-      }
     }
 
-    if (!this.modelDefinition) {
-      var prompts = [
-        {
-          name: 'model',
-          message: g.f('Select the model:'),
-          type: 'list',
-          choices: this.editableModelNames,
-        },
-      ];
-      return  this.prompt(prompts).then(function(answers) {
-        this.modelName = answers.model;
-      }.bind(this));
+    if (this.modelDefinition) {
+      return done();
     }
-  },
 
-  findModelDefinition: function() {
+    var msg = g.f('Model not found: %s' +
+    '. Please choose from Model List:', this.modelName);
+    this.log(chalk.red(msg));
+
+    var prompts = [
+      {
+        name: 'model',
+        message: g.f('Select the model:'),
+        type: 'list',
+        choices: this.editableModelNames,
+      },
+    ];
+    return this.prompt(prompts).then(function(answers) {
+      this.modelName = answers.model;
+      done();
+    }.bind(this));
+  }
+
+  findModelDefinition() {
     this.modelDefinition = this.projectModels.filter(function(m) {
       return m.name === this.modelName;
     }.bind(this))[0];
@@ -86,10 +98,16 @@ module.exports = yeoman.Base.extend({
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
     }
-  },
+  }
 
-  askForParameters: function() {
-    var name = this.methodName;
+  askForParameters() {
+    var name;
+    if (this.arguments && this.arguments.length >= 2) {
+      debug('middleware name is provided as %s', this.arguments[1]);
+      // the method name
+      name = this.arguments[1];
+    }
+
     var prompts = [
       {
         name: 'methodName',
@@ -120,18 +138,18 @@ module.exports = yeoman.Base.extend({
       this.isStatic = answers.isStatic;
       this.description = answers.description;
     }.bind(this));
-  },
+  }
 
-  delimEndpoints: function() {
+  delimEndpoints() {
     this.log();
     this.log(g.f('Let\'s configure where to expose your new method ' +
       'in the public REST API.'));
     this.log(g.f('You can provide multiple HTTP endpoints, enter an empty ' +
       'path when you are done.'));
     this.http = [];
-  },
+  }
 
-  askForEndpoints: function() {
+  askForEndpoints() {
     var done = this.async();
 
     var prompts = [
@@ -177,13 +195,14 @@ module.exports = yeoman.Base.extend({
           verb: answers.httpVerb || answers.customHttpVerb,
         });
         this.log(g.f(
-          '\nLet\'s add another endpoint, enter an empty name when done.'));
+          '\nLet\'s add another endpoint, enter an empty name when done.'
+        ));
         this.askForEndpoints();
       }.bind(this));
     }.bind(this));
-  },
+  }
 
-  delimAccepts: function() {
+  delimAccepts() {
     this.log();
     this.log(g.f('Describe the input ("accepts") arguments of your remote ' +
       'method.'));
@@ -192,9 +211,9 @@ module.exports = yeoman.Base.extend({
       'arguments.'));
 
     this.accepts = [];
-  },
+  }
 
-  askForAccepts: function() {
+  askForAccepts() {
     var done = this.async();
 
     var prompts = [
@@ -286,9 +305,9 @@ module.exports = yeoman.Base.extend({
         this.askForAccepts();
       }.bind(this));
     }.bind(this));
-  },
+  }
 
-  delimReturns: function() {
+  delimReturns() {
     this.log();
     this.log(g.f('Describe the output ("returns") arguments ' +
      'to the remote method\'s callback function.'));
@@ -296,9 +315,9 @@ module.exports = yeoman.Base.extend({
     this.log(g.f('Enter an empty name when you\'ve defined all output ' +
       'arguments.'));
     this.returns = [];
-  },
+  }
 
-  askForReturns: function() {
+  askForReturns() {
     var done = this.async();
 
     var prompts = [
@@ -343,13 +362,14 @@ module.exports = yeoman.Base.extend({
           description: answers.returnsDes,
         });
         this.log(g.f(
-          '\nLet\'s add another return argument. Enter empty name when done.'));
+          '\nLet\'s add another return argument. Enter empty name when done.'
+        ));
         this.askForReturns();
       }.bind(this));
     }.bind(this));
-  },
+  }
 
-  remote: function() {
+  remote() {
     var done = this.async();
     var def = {
       name: this.methodName,
@@ -364,9 +384,9 @@ module.exports = yeoman.Base.extend({
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  },
+  }
 
-  printSampleRemoteMethodSource: function() {
+  printSampleRemoteMethodSource() {
     // print an empty line as a visual delimiter
     this.log();
 
@@ -379,10 +399,12 @@ module.exports = yeoman.Base.extend({
 
     // print an empty line as a visual delimiter
     this.log();
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    this.saveProjectForGenerator();
+  }
+};
 
 function buildIntroduction(def) {
   var modelDef = def.modelDefinition;
@@ -409,7 +431,7 @@ function buildIntroduction(def) {
 }
 
 function buildJsdoc(def) {
-  var jsdocLines =  [
+  var jsdocLines = [
     '/**',
     util.format(' * %s', def.description),
   ];
@@ -431,7 +453,7 @@ function buildMethodSource(def) {
   var functionDef = [util.format(
     ref + ' = function(%s) {',
     chalk.green(buildInputArgs(def.accepts).join(', '))
-    ),
+  ),
   ];
 
   if (def.returns.length > 0)

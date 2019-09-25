@@ -2,16 +2,17 @@ Usage:
   slc loopback:bluemix [options]
 
 Options:
-  -h,   --help          # Print the generator's options and usage
-        --skip-cache    # Do not remember prompt answers             Default: false
-        --skip-install  # Do not automatically install dependencies  Default: false
-        --appName       # Application name
-        --docker        # Generate Dockerfile
-        --manifest      # Generate Bluemix manifest file
-        --toolchain     # Set up Bluemix toolchain
-        --login         # Log into Bluemix                           Default: false
-        --sso           # Log into Bluemix with SSO
-        --provision     # Provision a Bluemix service                Default: false
+  -h,   --help           # Print the generator's options and usage
+        --skip-cache     # Do not remember prompt answers             Default: false
+        --skip-install   # Do not automatically install dependencies  Default: false
+        --force-install  # Fail on install dependencies error         Default: false
+        --appName        # Application name
+        --docker         # Generate Dockerfile
+        --manifest       # Generate Bluemix manifest file
+        --toolchain      # Set up Bluemix toolchain
+        --login          # Log into Bluemix                           Default: false
+        --sso            # Log into Bluemix with SSO
+        --provision      # Provision a Bluemix service                Default: false
 
 Description:
   `toolchain`, `manifest`, and `docker` are scaffold options. Not specifying any of them is interpreted as

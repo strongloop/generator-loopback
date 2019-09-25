@@ -1,0 +1,6 @@
+Descrição:
+  Configura uma origem de dados EE do z/OS Connect.
+
+Exemplo:
+
+  { }

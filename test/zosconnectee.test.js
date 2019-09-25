@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2017. All Rights Reserved.
+// Copyright IBM Corp. 2017,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -26,23 +26,21 @@ describe('loopback:zosconnectee generator', function() {
     common.createDummyProject(SANDBOX, 'test-app', done);
   });
 
-  beforeEach(function createDataSource(done) {
-    var modelGen = givenDataSourceGenerator();
-    helpers.mockPrompt(modelGen, {
-      name: 'zosconnectee',
-      connector: 'zosconnectee',
-      baseURL: 'http://test:9080',
-      user: 'user',
-      password: 'pass',
-      installConnector: false,
-    });
-    modelGen.run(function() {
-      done();
-    });
+  beforeEach(function createDataSource() {
+    return helpers.run(path.join(__dirname, '../datasource'))
+      .cd(SANDBOX)
+      .withPrompts({
+        name: 'zosconnectee',
+        connector: 'zosconnectee',
+        baseURL: 'http://test:9080',
+        user: 'user',
+        password: 'pass',
+        installConnector: false,
+      }).then();
   });
 
   it('creates and configures CatalogManager API',
-    function(done) {
+    function() {
       // Setup the http requests
       nock('http://test:9080').get('/zosConnect/apis').reply(200, {
         apis: [
@@ -66,41 +64,23 @@ describe('loopback:zosconnectee generator', function() {
       });
       nock('http://test:9080').get('/catalog/api-docs').reply(200, apiSwagger);
 
-      var modelGen = givenModelGenerator();
-      helpers.mockPrompt(modelGen, {
-        ds: 'zosconnectee',
-        api: 'catalog',
-      });
-
-      modelGen.run(function() {
-        var template = readTemplateJsonSync('zosconnectee_template.json');
-        expect(template).to.have.property('name', 'catalog');
-        expect(template).to.have.property('connector', 'zosconnectee');
-        expect(template).to.have.property('baseURL', 'http://test:9080/catalog');
-        expect(template).to.have.property('operations').with.lengthOf(3);
-        var datasources = readDataSourcesJsonSync('server');
-        expect(datasources).to.have.property('zosconnectee');
-        expect(datasources.zosconnectee).to.have.property('template',
-          'zosconnectee_template.json');
-        done();
-      });
-    }
-  );
-
-  function givenDataSourceGenerator(dsArgs, _dsPath) {
-    var dsPath = _dsPath || '../../datasource';
-    var name = 'loopback:datasource';
-    var gen = common.createGenerator(name, dsPath, [], dsArgs, {});
-    return gen;
-  }
-
-  function givenModelGenerator(modelArgs) {
-    var path = '../../zosconnectee';
-    var name = 'loopback:zosconnectee';
-    var deps = [];
-    var gen = common.createGenerator(name, path, deps, modelArgs, {});
-    return gen;
-  }
+      return helpers.run(path.join(__dirname, '../zosconnectee'))
+        .cd(SANDBOX)
+        .withPrompts({
+          ds: 'zosconnectee',
+          api: 'catalog',
+        }).then(function() {
+          var template = readTemplateJsonSync('zosconnectee_template.json');
+          expect(template).to.have.property('name', 'catalog');
+          expect(template).to.have.property('connector', 'zosconnectee');
+          expect(template).to.have.property('baseURL', 'http://test:9080/catalog');
+          expect(template).to.have.property('operations').with.lengthOf(3);
+          var datasources = readDataSourcesJsonSync('server');
+          expect(datasources).to.have.property('zosconnectee');
+          expect(datasources.zosconnectee).to.have.property('template',
+            'zosconnectee_template.json');
+        });
+    });
 
   function readDataSourcesJsonSync(facet) {
     var filepath = path.resolve(SANDBOX, facet || 'server', 'datasources.json');

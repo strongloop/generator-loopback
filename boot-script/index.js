@@ -1,22 +1,24 @@
-// Copyright IBM Corp. 2015,2016. All Rights Reserved.
+// Copyright IBM Corp. 2015,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
 
+var debug = require('debug')('loopback:generator:boot-script');
 var g = require('../lib/globalize');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 
 var path = require('path');
 var yeoman = require('yeoman-generator');
+var ActionsMixin = require('../lib/actions');
 
 var validateRequiredName = helpers.validateRequiredName;
 
-module.exports = yeoman.Base.extend({
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+module.exports = class BootScriptGenerator extends ActionsMixin(yeoman) {
+  constructor(args, opts) {
+    super(args, opts);
 
     this.argument('name', {
       desc: g.f('Name of the boot script to create.'),
@@ -24,16 +26,19 @@ module.exports = yeoman.Base.extend({
       optional: true,
       type: String,
     });
-  },
+  }
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_boot-script_usage.txt');
-  },
+  }
 
-  askForName: function() {
+  askForName() {
     var done = this.async();
-
-    if (this.name) return done();
+    if (this.arguments && this.arguments.length >= 1) {
+      debug('boot-script name is provided as %s', this.arguments[0]);
+      this.name = this.arguments[0];
+      return done();
+    }
 
     var question = {
       name: 'name',
@@ -46,9 +51,9 @@ module.exports = yeoman.Base.extend({
       this.name = answer.name;
       done();
     }.bind(this));
-  },
+  }
 
-  askForType: function() {
+  askForType() {
     var question = {
       name: 'type',
       message: g.f('What type of boot script do you want to generate?'),
@@ -62,9 +67,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(question).then(function(answer) {
       this.type = answer.type;
     }.bind(this));
-  },
+  }
 
-  generate: function() {
+  generate() {
     var source = this.templatePath(this.type + '.js');
 
     // yeoman-generator 0.20.x doesn't like the leading /
@@ -72,5 +77,5 @@ module.exports = yeoman.Base.extend({
     var target = this.destinationPath(targetPath);
 
     this.copy(source, target);
-  },
-});
+  }
+};

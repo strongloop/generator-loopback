@@ -1,38 +1,39 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2014,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
 'use strict';
 
-var path = require('path');
 var g = require('../lib/globalize');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
 var wsModels = require('loopback-workspace').models;
 
-var actions = require('../lib/actions');
+var ActionsMixin = require('../lib/actions');
+var debug = require('debug')('loopback:generator:model');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
 var validateOptionalName = helpers.validateOptionalName;
 var fs = require('fs');
+const EventEmitter = require('events');
 
-module.exports = yeoman.Base.extend({
+module.exports = class ModelGenerator extends ActionsMixin(yeoman) {
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+  constructor(args, opts) {
+    super(args, opts);
     this.abort = false;
     this.databaseModel = true; // `false` if using ibm-object-store datasource
     this.option('bluemix', {
       desc: g.f('Bind to a Bluemix datasource'),
     });
 
-    this.argument('name', {
+    this.argument(g.f('name'), {
       desc: g.f('Name of the model to create.'),
       required: false,
       type: String,
@@ -42,26 +43,35 @@ module.exports = yeoman.Base.extend({
     // when adding more than 10 properties
     // See https://github.com/strongloop/generator-loopback/issues/99
     this.env.sharedFs.setMaxListeners(256);
+  }
 
-    // A workaround to get rid of deprecation notice
-    //   "generator#invoke() is deprecated. Use generator#composeWith()"
-    // See https://github.com/strongloop/generator-loopback/issues/116
-    this.invoke = require('yeoman-generator/lib/actions/invoke');
-  },
-
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_model_usage.txt');
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadDataSources: actions.loadDataSources,
+  loadDataSources() {
+    debug('loading datasources...');
+    this.loadDatasourcesForGenerator();
+    debug('loaded datasources.');
+  }
 
-  loadModels: actions.loadModels,
+  loadModels() {
+    debug('loading models...');
+    this.loadModelsForGenerator();
+    debug('loaded models.');
+  }
 
-  addNullDataSourceItem: actions.addNullDataSourceItem,
+  addNullDataSourceItem() {
+    this.addNullDataSourceItemForGenerator();
+  }
 
-  setBluemixDatasourceState: function() {
+  setBluemixDatasourceState() {
     if (this.abort) return;
     if (this.options.bluemix) {
       var configPath = this.destinationPath('.bluemix/datasources-config.json');
@@ -83,9 +93,9 @@ module.exports = yeoman.Base.extend({
         }
       }
     }
-  },
+  }
 
-  checkForDatasource: function() {
+  checkForDatasource() {
     if (this.abort) return;
     if (!this.hasDatasources) {
       if (this.options.bluemix) {
@@ -101,10 +111,20 @@ module.exports = yeoman.Base.extend({
         return;
       }
     }
-  },
+  }
 
-  askForName: function() {
+  askForName() {
     if (this.abort) return;
+
+    if (this.arguments && this.arguments.length >= 1) {
+      debug('model name is provided as %s', this.arguments[0]);
+      this.name = this.arguments[0];
+      var valid = validateRequiredName(this.name);
+      if (valid === true) return;
+      this.log(valid);
+      this.name = undefined;
+    }
+
     var prompts = [
       {
         name: 'name',
@@ -118,9 +138,9 @@ module.exports = yeoman.Base.extend({
       this.name = props.name;
       this.displayName = chalk.yellow(this.name);
     }.bind(this));
-  },
+  }
 
-  askForDataSource: function() {
+  askForDataSource() {
     if (this.abort) return;
     if (!this.hasDatasources) {
       this.dataSource = null;
@@ -140,15 +160,15 @@ module.exports = yeoman.Base.extend({
       var bluemixDataSources = [];
       var bluemixDataSourcesList = this.bluemixDataSourcesList;
       Object.keys(bluemixDataSourcesList)
-      .forEach(function(datasourceName) {
-        var datasource = bluemixDataSourcesList[datasourceName];
-        var bluemixDataSource = {
-          name: datasourceName + ' (' + datasource.connector + ')',
-          value: datasourceName,
-          _connector: datasource.connector,
-        };
-        bluemixDataSources.push(bluemixDataSource);
-      });
+        .forEach(function(datasourceName) {
+          var datasource = bluemixDataSourcesList[datasourceName];
+          var bluemixDataSource = {
+            name: datasourceName + ' (' + datasource.connector + ')',
+            value: datasourceName,
+            _connector: datasource.connector,
+          };
+          bluemixDataSources.push(bluemixDataSource);
+        });
       promptObject.default = null;
       promptObject.choices = bluemixDataSources;
     } else {
@@ -171,10 +191,12 @@ module.exports = yeoman.Base.extend({
       } else {
         this.dataSource = null;
       }
+      debug('database is chosen.');
     }.bind(this));
-  },
+  }
 
-  getBaseModels: function() {
+  getBaseModels() {
+    debug('getting the base model....');
     if (this.abort) return;
     if (!this.dataSource) {
       this.baseModel = 'Model';
@@ -186,10 +208,12 @@ module.exports = yeoman.Base.extend({
         if (err) return done(err);
         this.baseModel = model;
         done();
-      }.bind(this));
-  },
+      }.bind(this)
+    );
+  }
 
-  askForParameters: function() {
+  askForParameters() {
+    debug('asking for the parameters....');
     if (this.abort) return;
     this.displayName = chalk.yellow(this.name);
 
@@ -199,7 +223,6 @@ module.exports = yeoman.Base.extend({
         name: g.f('(custom)'),
         value: null,
       }]);
-
     var prompts;
 
     if (this.databaseModel) {
@@ -267,16 +290,16 @@ module.exports = yeoman.Base.extend({
         },
       ];
     }
-    return  this.prompt(prompts).then(function(props) {
+    return this.prompt(prompts).then(function(props) {
       this.public = props.public;
       this.plural = props.plural || undefined;
       this.facetName = props.facetName;
       if (this.databaseModel) this.base = props.customBase || props.base;
       else this.base = 'Model';
     }.bind(this));
-  },
+  }
 
-  modelDefinition: function() {
+  modelDefinition() {
     if (this.abort) return;
     var done = this.async();
     var config = {
@@ -290,9 +313,9 @@ module.exports = yeoman.Base.extend({
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  },
+  }
 
-  modelConfiguration: function() {
+  modelConfiguration() {
     if (this.abort) return;
     var done = this.async();
     var config = {
@@ -306,59 +329,61 @@ module.exports = yeoman.Base.extend({
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  },
+  }
 
-  delim: function() {
+  delim() {
     if (this.abort) return;
     if (this.base === 'KeyValueModel' || !this.databaseModel)
       return;
 
     this.log(g.f('Let\'s add some %s properties now.\n', this.displayName));
-  },
+  }
 
-  property: function() {
+  property() {
+    // Skip executing the `property` function when run tests.
+    // The model generator test is broken with .composeWith(),
+    // and we didn't test the composed property generator before anyway.
+    if (process.env.LB_CLI_SKIP_PROPERTY) return;
+    const emitter = new EventEmitter();
+
+    emitter.on('exitModelGenerator', ()=> {
+      debug("model generator receives event 'exitModelGenerator'");
+      return;
+    });
+
     if (this.abort) return;
     if (this.databaseModel) {
-      var done = this.async();
-
       if (this.base === 'KeyValueModel')
         return;
 
       this.log(g.f('Enter an empty property name when done.'));
-      var prompts = [
+
+      // `this.composeWith` doesn't wait until the sub-generator finishes,
+      // but runs tasks according to yeoman-generator's run loop, which determine
+      // the task sequences by phases, details see
+      // http://yeoman.io/authoring/composability.html
+      // as a workaround, an event emitter is introduced to invoke another property prompts
+      emitter.on('finished', ()=> {
+        debug("model generator receives event 'finished'");
+        this.log(g.f('\nLet\'s add another %s property.', this.displayName));
+        this.property();
+      });
+
+      this.composeWith(
+        require.resolve('../property/index.js'),
         {
-          name: 'propertyName',
-          message: g.f('Property name:'),
-          validate: validateOptionalName,
-        },
-      ];
-      return this.prompt(prompts).then(function(answers) {
-        if (answers.propertyName == null || answers.propertyName === '') {
-          return done();
+          nested: true,
+          projectDir: this.projectDir,
+          project: this.project,
+          modelName: this.name,
+          modelEmitter: emitter,
+          isInvokedByModelGenerator: true,
         }
-
-        this.invoke(
-          'loopback:property',
-          {
-            options: {
-              nested: true,
-              projectDir: this.projectDir,
-              project: this.project,
-              modelName: this.name,
-              propertyName: answers.propertyName,
-            },
-          },
-          function(err) {
-            if (err) {
-              return done(err);
-            }
-            this.log(g.f('\nLet\'s add another %s property.',
-                        this.displayName));
-            this.property();
-          }.bind(this));
-      }.bind(this));
+      );
     }
-  },
+  }
 
-  saveProject: actions.saveProject,
-});
+  saveProject() {
+    this.saveProjectForGenerator();
+  }
+};

@@ -5,8 +5,10 @@ Options:
   -h,   --help             # Print the command's options and usage
         --skip-cache       # Do not remember prompt answers                          Default: false
         --skip-install     # Do not install npm dependencies                         Default: false
+        --force-install    # Fail on install dependencies error                      Default: false
         --skip-next-steps  # Do not print "next steps" info
         --explorer         # Add Loopback Explorer to the project (true by default)
+        --template         # Set up the LoopBack application template
         --bluemix          # Set up as a Bluemix app
 
 Arguments:
@@ -33,4 +35,4 @@ Example:
 
 Available generators:
 
-  loopback:app
+

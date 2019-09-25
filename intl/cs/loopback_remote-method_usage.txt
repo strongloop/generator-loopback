@@ -1,0 +1,6 @@
+Popis
+  Vytvoří v aplikaci LoopBack novou vzdálenou metodu.
+
+Například:
+
+  {{slc loopback:remote-method}}

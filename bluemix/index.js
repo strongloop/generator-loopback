@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2017,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -8,20 +8,15 @@
 var path = require('path');
 var g = require('../lib/globalize');
 var yeoman = require('yeoman-generator');
-var chalk = require('chalk');
-var workspace = require('loopback-workspace');
-var Workspace = workspace.models.Workspace;
 var fs = require('fs');
-var actions = require('../lib/actions');
-var helpers = require('../lib/helpers');
+var ActionsMixin = require('../lib/actions');
 var helpText = require('../lib/help');
-var bluemix = require('./helpers');
-var validateAppName = helpers.validateAppName;
-var pkg = require('../package.json');
+var BluemixMixin = require('./helpers');
 
-module.exports = yeoman.Base.extend({
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+module.exports = class BluemixGenerator extends
+  BluemixMixin(ActionsMixin(yeoman)) {
+  constructor(args, opts) {
+    super(args, opts);
     this.done = false;
 
     this.option('appName', {
@@ -60,35 +55,63 @@ module.exports = yeoman.Base.extend({
       type: Boolean,
       default: false,
     });
-  },
+  }
 
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_bluemix_usage.txt');
-  },
+  }
 
-  validateLoopBackDir: function() {
+  validateLoopBackDir() {
     var root = this.destinationRoot();
     if (!(this.options.login || this.options.sso)) {
-      if (!fs.existsSync(path.join(root, 'package.json')) ||
-        !fs.existsSync(path.join(root, 'server', 'server.js'))) {
-        this.log(chalk.red('\n Invalid LoopBack directory\n'));
-        process.exit();
+      if (
+        !fs.existsSync(path.join(root, 'package.json')) ||
+        !fs.existsSync(path.join(root, 'server', 'server.js'))
+      ) {
+        throw new Error('Invalid LoopBack directory');
       }
     }
-  },
+  }
 
-  loginToBluemix: function() {
-    bluemix.login.apply(this);
-  },
+  loginToBluemix() {
+    this.login.apply(this);
+  }
 
-  promptServiceName: bluemix.promptServiceName,
-  getServicePlans: bluemix.getServicePlans,
-  promptServicePlan: bluemix.promptServicePlan,
-  provisionService: bluemix.provisionService,
+  bmPromptServiceName() {
+    this.promptServiceName();
+  }
 
-  configurePrompt: bluemix.configurePrompt,
-  promptBluemixSettings: bluemix.promptSettings,
-  generateBluemixFiles: bluemix.generateFiles,
-  promptDefaultServices: bluemix.promptDefaultServices,
-  addDefaultServices: bluemix.addDefaultServices,
-});
+  bmGetServicePlans() {
+    this.getServicePlans();
+  }
+
+  bmPromptServicePlan() {
+    this.promptServicePlan();
+  }
+
+  bmProvisionService() {
+    this.provisionService();
+  }
+
+  bmConfigurePrompt() {
+    this.configurePrompt();
+  }
+
+  bmPromptBluemixSettings() {
+    if (this.promptSettings) {
+      this.promptSettings();
+    }
+  }
+
+  bmGenerateBluemixFiles() {
+    this.generateFiles();
+  }
+
+  bmPromptDefaultServices() {
+    this.promptDefaultServices();
+  }
+
+  bmAddDefaultServices() {
+    this.addDefaultServices();
+  }
+};

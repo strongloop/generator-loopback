@@ -1,0 +1,8 @@
+Popis:
+  Obslužný program pomáhající při instalaci konektoru LoopBack Oracle.
+
+Například:
+
+  {{slc loopback:oracle [--connector] [--driver] [--verbose]}}
+
+Bez voleb se příkaz pokusí zjistit instalaci instantního klienta Oracle, zkontrolujte, zda lze modul 'loopback-connector-oracle' načíst.

@@ -1,5 +1,5 @@
 Description :
-  Utilitaire destiné à faciliter l'installation du connecteur Oracle LoopBack.
+  Utilitaire destiné à faciliter l'installation du connecteur Oracle LoopBack. 
 
 Exemple :
 

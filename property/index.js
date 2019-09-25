@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2014,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -9,7 +9,7 @@ var g = require('../lib/globalize');
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 
-var actions = require('../lib/actions');
+var ActionsMixin = require('../lib/actions');
 var helpers = require('../lib/helpers');
 var helpText = require('../lib/help');
 var validateRequiredName = helpers.validateRequiredName;
@@ -17,21 +17,40 @@ var checkPropertyName = helpers.checkPropertyName;
 var typeChoices = helpers.getTypeChoices();
 var debug = require('debug')('loopback:generator:property');
 
-module.exports = yeoman.Base.extend({
+module.exports = class PropertyGenerator extends ActionsMixin(yeoman) {
   // NOTE(bajtos)
   // This generator does not track file changes via yeoman,
   // as loopback-workspace is editing (modifying) files when
   // saving project changes.
 
-  help: function() {
+  constructor(args, opts) {
+    super(args, opts);
+    this.modelEmitter = opts && opts.modelEmitter;
+    this.isInvokedByModelGenerator = opts && opts.isInvokedByModelGenerator;
+    // yeoman generator doesn't have a function to exit in the middle
+    // so this flag is introduced to skip executing the followed functions
+    // whenever we decide to exit.
+    // See its usage in function `askForPropertyName()`
+    this.skipExecution = false;
+  }
+
+  help() {
     return helpText.customHelp(this, 'loopback_property_usage.txt');
-  },
+  }
 
-  loadProject: actions.loadProject,
+  loadProject() {
+    debug('loading project...');
+    this.loadProjectForGenerator();
+    debug('loaded project.');
+  }
 
-  loadModels: actions.loadModels,
+  loadModels() {
+    debug('loading models...');
+    this.loadModelsForGenerator();
+    debug('loaded models.');
+  }
 
-  askForModel: function() {
+  askForModel() {
     if (this.options.modelName) {
       this.modelName = this.options.modelName;
       return;
@@ -49,9 +68,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function(answers) {
       this.modelName = answers.model;
     }.bind(this));
-  },
+  }
 
-  findModelDefinition: function() {
+  findModelDefinition() {
     this.modelDefinition = this.projectModels.filter(function(m) {
       return m.name === this.modelName;
     }.bind(this))[0];
@@ -61,28 +80,53 @@ module.exports = yeoman.Base.extend({
       this.log(chalk.red(msg));
       this.async()(new Error(msg));
     }
-  },
+  }
 
-  askForParameters: function() {
-    if (this.modelDefinition.base === 'KeyValueModel') {
-      var msg = g.f('KeyValueModel does not support model definition ' +
-        'properties');
-      this.log(chalk.red(msg));
-      return this.async(new Error(msg));
-    }
-
+  // Seperate the property name prompt from others so that the
+  // generator could exit when:
+  // - it is invoked by the model generator
+  // - the property name is empty
+  askForPropertyName() {
+    const self = this;
     this.name = this.options.propertyName;
 
     var prompts = [
       {
         name: 'name',
         message: g.f('Enter the property name:'),
-        validate: checkPropertyName,
+        validate: checkModelPropertyName,
         default: this.propDefinition && this.propDefinition.name,
         when: function() {
           return !this.name && this.name !== 0;
         }.bind(this),
       },
+    ];
+
+    return this.prompt(prompts).then(function(answers) {
+      debug('answers: %j', answers);
+      if (self.isInvokedByModelGenerator && !answers.name) {
+        self.modelEmitter.emit('exitModelGenerator');
+        // Set the flag to `true` to perform 'exit' for the generator
+        self.skipExecution = true;
+      }
+      this.name = answers.name || this.name;
+    }.bind(this));
+
+    function checkModelPropertyName(name) {
+      if (self.isInvokedByModelGenerator && !name) return true;
+      return checkPropertyName(name);
+    }
+  }
+
+  askForParameters() {
+    if (this.skipExecution) return;
+    if (this.modelDefinition.base === 'KeyValueModel') {
+      var msg = g.f('KeyValueModel does not support model definition ' +
+        'properties');
+      this.log(chalk.red(msg));
+      return this.async(new Error(msg));
+    }
+    var prompts = [
       {
         name: 'type',
         message: g.f('Property type:'),
@@ -140,11 +184,11 @@ module.exports = yeoman.Base.extend({
         },
       },
     ];
+
     return this.prompt(prompts).then(function(answers) {
       debug('answers: %j', answers);
-      this.name = answers.name || this.name;
       if (answers.type === 'array') {
-        var itemType =  answers.customItemType || answers.itemType;
+        var itemType = answers.customItemType || answers.itemType;
         this.type = itemType ? [itemType] : 'array';
       } else {
         this.type = answers.customType || answers.type;
@@ -171,21 +215,33 @@ module.exports = yeoman.Base.extend({
         debug('Failed to coerce property default value: ', err);
         this.log(g.f('Warning: please enter the %s property again. The ' +
           'default value provided "%s" is not valid for the selected type: %s',
-          this.name, answers.defaultValue, this.type));
+        this.name, answers.defaultValue, this.type));
         return this.askForParameters();
       }
     }.bind(this));
-  },
+  }
 
-  property: function() {
+  property() {
+    if (this.skipExecution) return;
     var done = this.async();
     this.modelDefinition.properties.create(this.propDefinition, function(err) {
       helpers.reportValidationError(err, this.log);
       return done(err);
     }.bind(this));
-  },
-  saveProject: actions.saveProject,
-});
+  }
+  saveProject() {
+    if (this.skipExecution) return;
+    debug('saving project...');
+    this.saveProjectForGenerator();
+    debug('saved project.');
+  }
+
+  emitEventEnd() {
+    if (this.skipExecution) return;
+    debug("property generator emits event 'finished'");
+    if (this.modelEmitter) this.modelEmitter.emit('finished');
+  }
+};
 
 function coerceDefaultValue(propDef, value) {
   var itemType;

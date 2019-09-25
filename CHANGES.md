@@ -1,3 +1,143 @@
+2019-07-30, Version 6.1.1
+=========================
+
+ * run api generator after app is booted (Matteo Padovano)
+
+
+2019-07-19, Version 6.1.0
+=========================
+
+ * move property name check to property generator (jannyHou)
+
+
+2019-06-20, Version 6.0.5
+=========================
+
+ * fix: arguments for 2 commands (jannyHou)
+
+
+2019-05-16, Version 6.0.4
+=========================
+
+ * fix: honor the argument (jannyHou)
+
+
+2019-05-14, Version 6.0.3
+=========================
+
+ * chore: update node engine (jannyHou)
+
+ * fix tests after removing 2.x in workspace (Diana Lau)
+
+ * chore: update copyrights years (Agnes Lin)
+
+ * chore: update copyright year (Diana Lau)
+
+ * chore: update LTS status (Diana Lau)
+
+ * fix: update lodash (jannyHou)
+
+ * Fix the expected list of supported LB versions. (Miroslav Bajtoš)
+
+ * Fix build failure introduced by 49a6d68dfc (Miroslav Bajtoš)
+
+ * add lts announcement (jannyHou)
+
+ * remove .npmignore (jannyHou)
+
+
+2018-11-19, Version 6.0.2
+=========================
+
+ * fix model generator (jannyHou)
+
+
+2018-11-13, Version 6.0.1
+=========================
+
+ * honor app name in arguments (jannyHou)
+
+ * [WebFM] pl translation (candytangnb)
+
+
+2018-08-30, Version 6.0.0
+=========================
+
+ * [WebFM] cs/es/fr/it/ja/nl/pl/pt_BR/ru/tr/zh_CN/zh (candytangnb)
+
+ * fix: apply feedback (jannyHou)
+
+ * lint: fix extra semi (jannyHou)
+
+ * upgrade: yeoman-generator 3.x (jannyHou)
+
+
+2018-08-29, Version 5.9.2
+=========================
+
+ * [WebFM] tr translation (candytangnb)
+
+ * [WebFM] de translation (candytangnb)
+
+ * [WebFM] cs/es/fr/it/nl/pl/pt_BR/ru translation (candytangnb)
+
+
+2018-08-22, Version 5.9.1
+=========================
+
+ * [WebFM] ja/ko/zh_CN/zh_TW translation (candytangnb)
+
+ * Make select role prompt translatable (Diana Lau)
+
+ * Extract name argument in help msg (Diana Lau)
+
+ * extract msg for oracle (Diana Lau)
+
+
+2018-08-14, Version 5.9.0
+=========================
+
+ * [WebFM] cs/de/es/fr/it/ja/ko/nl/pl/pt_BR/ru/tr/zh (candytangnb)
+
+ * fix linting (Diana Lau)
+
+ * translated messages not showing up for oracle (Diana Lau)
+
+ * Fix failing tests (shimks)
+
+ * [WebFM] cs/pl/ru translation (candytangnb)
+
+
+2018-07-09, Version 5.8.2
+=========================
+
+ * [WebFM] cs/pl/ru translation (candytangnb)
+
+
+2018-06-22, Version 5.8.1
+=========================
+
+ * Migrate from "open" to "opn" (Miroslav Bajtoš)
+
+
+2018-06-21, Version 5.8.0
+=========================
+
+ * Update strong-globalize to 4.x (Miroslav Bajtoš)
+
+ * Update eslint + config to latest (Miroslav Bajtoš)
+
+ * Disable package-lock feature of npm (Miroslav Bajtoš)
+
+ * Travis: add Node.js 10.x to the build matrix (Miroslav Bajtoš)
+
+ * Drop support for Node 4.x (Miroslav Bajtoš)
+
+ * Only show --version for lb command (Andrew Smithson)
+
+ * Add --version to help options (Andrew Smithson)
+
+
 2018-04-27, Version 5.7.1
 =========================
 

@@ -1,0 +1,6 @@
+Opis:
+  Tworzy nową metodę zdalną w aplikacji LoopBack.
+
+Przykład:
+
+  {{slc loopback:remote-method}}

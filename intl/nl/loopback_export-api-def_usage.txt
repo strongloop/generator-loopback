@@ -10,5 +10,4 @@ Bijvoorbeeld:
 
   {{slc loopback:export-api-def [--o uitvoerbestand]}}
 
-  Hiermee worden de API-definities naar de opgegeven uitvoerlocatie gestuurd.
-  Afhankelijk van de bestandsextensie wordt de indeling {{yaml}} of {{json}} gebruikt.
+  Hiermee worden de API-definities naar de opgegeven uitvoerlocatie gestuurd. Afhankelijk van de bestandsextensie wordt de indeling {{yaml}} of {{json}} gebruikt.

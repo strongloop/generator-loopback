@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2017,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -35,13 +35,13 @@ exports.getServices = function getServices(wsdlUrl, log, cb) {
     }
     selectedWsdl = wsdl;
     selectedWsdlUrl = wsdlUrl;
-    return cb(null,  selectedWsdl.services);
+    return cb(null, selectedWsdl.services);
   }.bind(this));
 };
 
 // get bindings for the service
 exports.getBindings = function getBindings(serviceName) {
-  selectedService =  selectedWsdl.services[serviceName];
+  selectedService = selectedWsdl.services[serviceName];
   var ports = selectedService.ports;
   var bindingNames = [];
   for (var name in ports) {
@@ -53,7 +53,7 @@ exports.getBindings = function getBindings(serviceName) {
 
 // get operations for the binding
 exports.getOperations = function getOperations(bindingName) {
-  selectedBinding =  selectedWsdl.definitions.bindings[bindingName];
+  selectedBinding = selectedWsdl.definitions.bindings[bindingName];
   var opNames = [];
   for (var opName in selectedBinding.operations) {
     opNames.push(opName);
@@ -74,7 +74,7 @@ function getSelectedOperations(binding, operationNames) {
 }
 
 // generate remote method and models for list of operations
-exports.generateAPICode  = function generateAPICode(selectedDS, operationNames) { // eslint-disable-line max-len
+exports.generateAPICode = function generateAPICode(selectedDS, operationNames) { // eslint-disable-line max-len
   var apis = [];
   var apiData = {
     'datasource': selectedDS,

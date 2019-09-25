@@ -1,0 +1,8 @@
+Opis:
+  Tworzy nowe źródło danych w aplikacji LoopBack.
+
+Przykład:
+
+  {{slc loopback:datasource crm}}
+
+  Spowoduje to dodanie pozycji do pliku {{`datasources.json`}}, która definiuje źródło danych "crm".

@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2017,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -108,7 +108,8 @@ function login() {
           });
           if (choices.length === 1) {
             this.log(chalk.cyan(
-              g.f('> Default organization: ') + choices[0].name));
+              g.f('> Default organization: ') + choices[0].name
+            ));
             this.organization = choices[0].value;
           }
           var prompts = [
@@ -136,7 +137,8 @@ function login() {
                 });
                 if (choices.length === 1) {
                   this.log(chalk.cyan(
-                    g.f('> Default space: ') + choices[0].name));
+                    g.f('> Default space: ') + choices[0].name
+                  ));
                   this.space = choices[0].value;
                 }
                 var prompts = [

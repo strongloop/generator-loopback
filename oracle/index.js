@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014,2016. All Rights Reserved.
+// Copyright IBM Corp. 2017,2019. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -8,11 +8,9 @@
 var g = require('../lib/globalize');
 var chalk = require('chalk');
 var yeoman = require('yeoman-generator');
-var path = require('path');
-var fs = require('fs');
 var fse = require('fs-extra');
-var open = require('open');
-
+var open = require('opn');
+var ActionsMixin = require('../lib/actions');
 var helpText = require('../lib/help');
 var oci = require('./oci');
 var discoverOCI = oci.discoverOCI;
@@ -24,12 +22,9 @@ var ORACLE_IC_URL =
   'http://www.oracle.com/technetwork/database/features/' +
   'instant-client/index-097480.html';
 
-var binary = 'node_modules/oracledb/build/Release/oracledb.node';
-
-module.exports = yeoman.Base.extend({
-
-  constructor: function() {
-    yeoman.Base.apply(this, arguments);
+module.exports = class OracleGenerator extends ActionsMixin(yeoman) {
+  constructor(args, opts) {
+    super(args, opts);
 
     this.option('connector', {
       desc: g.f('Install loopback-connector-oracle module'),
@@ -53,28 +48,25 @@ module.exports = yeoman.Base.extend({
     // when adding more than 10 properties
     // See https://github.com/strongloop/generator-loopback/issues/99
     this.env.sharedFs.setMaxListeners(256);
+  }
 
-    // A workaround to get rid of deprecation notice
-    //   "generator#invoke() is deprecated. Use generator#composeWith()"
-    // See https://github.com/strongloop/generator-loopback/issues/116
-    this.invoke = require('yeoman-generator/lib/actions/invoke');
-  },
-
-  help: function() {
+  help() {
     return helpText.customHelp(this, 'loopback_oracle_usage.txt');
-  },
+  }
 
-  checkConnector: function() {
+  checkConnector() {
     try {
       var m = require(
-        this.destinationPath('node_modules/loopback-connector-oracle'));
+        this.destinationPath('node_modules/loopback-connector-oracle')
+      );
       this.log(chalk.green(g.f('Oracle connector is ready.')));
       if (!this.options.connector && !this.options.driver) this.skip = true;
     } catch (e) {
       if (e.code === 'MODULE_NOT_FOUND') {
         // loopback-connector-oracle is not installed
         this.log(chalk.red(
-          g.f('Module is not installed: ' + e)));
+          g.f('Module is not installed: %s', e)
+        ));
         this.options.connector =
           e.message.indexOf('loopback-connector-oracle') !== -1;
         this.options.driver =
@@ -82,18 +74,19 @@ module.exports = yeoman.Base.extend({
       } else {
         // oracledb cannot be loaded due to dynamic lib issues
         this.log(chalk.red(
-          g.f('Module oracledb fails to load: ' + e)));
+          g.f('Module oracledb fails to load: %s', e)
+        ));
         this.options.driver = true;
       }
     }
-  },
+  }
 
-  discoverOCI: function() {
+  discoverOCI() {
     if (this.skip) return;
     var oci = discoverOCI(this.options.verbose ? this.log : null);
     if (!oci.libDir) {
-      this.log(chalk.red(g.f('Oracle Instant Client is not found. ' +
-        'Please follow instructions at ' + INSTALL_URL)));
+      this.log(chalk.red(g.f('Oracle Instant Client is not found. \
+Please follow instructions at %s.', INSTALL_URL)));
       var done = this.async();
 
       var prompts = [
@@ -128,9 +121,9 @@ module.exports = yeoman.Base.extend({
         this.log(chalk.green(g.f('  - ' + i + ': ' + client[i])));
       }
     }
-  },
+  }
 
-  installConnector: function() {
+  installConnector() {
     if (!this.options.connector) return;
     var npmModule = 'loopback-connector-oracle';
 
@@ -151,7 +144,8 @@ module.exports = yeoman.Base.extend({
         // Delete node_modules/loopback-oracle-installer so that
         // npm install loopback-connector-oracle will trigger post-install
         var dir = this.destinationPath(
-          'node_modules/loopback-oracle-installer');
+          'node_modules/loopback-oracle-installer'
+        );
         if (this.options.verbose) {
           this.log('Removing directory: ' + dir);
         }
@@ -163,9 +157,9 @@ module.exports = yeoman.Base.extend({
         done();
       }
     }.bind(this));
-  },
+  }
 
-  installDriver: function() {
+  installDriver() {
     if (!this.options.driver) return;
     var npmModule = 'oracledb';
     var done = this.async();
@@ -186,7 +180,8 @@ module.exports = yeoman.Base.extend({
         // so that the top-level oracledb will be used
         var dir =
           this.destinationPath(
-            'node_modules/loopback-connector-oracle/node_modules/oracledb');
+            'node_modules/loopback-connector-oracle/node_modules/oracledb'
+          );
         if (this.options.verbose) {
           this.log('Removing directory: ' + dir);
         }
@@ -200,50 +195,56 @@ module.exports = yeoman.Base.extend({
         done();
       }
     }.bind(this));
-  },
+  }
 
   // Make sure checkDriver will be run after npm install
-  end: {
-    requireDriver: function() {
-      if (this.skip) return;
+  requireDriver() {
+    if (this.skip) return;
+    try {
+      // We cannot check by requiring node_modules/loopback-connector-oracle
+      // here as it's cached by previous require
+      // First check node_modules/oracledb
+      require(
+        this.destinationPath('node_modules/oracledb')
+      );
+      this.log(chalk.green(g.f('Oracle driver is ready.')));
+    } catch (e) {
       try {
-        // We cannot check by requiring node_modules/loopback-connector-oracle
-        // here as it's cached by previous require
-        // First check node_modules/oracledb
+        // Try the local oracledb inside loopback-connector-oracle
         require(
-          this.destinationPath('node_modules/oracledb'));
+          this.destinationPath(
+            'node_modules/loopback-connector-oracle/node_modules/oracledb'
+          )
+        );
         this.log(chalk.green(g.f('Oracle driver is ready.')));
       } catch (e) {
-        try {
-          // Try the local oracledb inside loopback-connector-oracle
-          require(
-            this.destinationPath(
-              'node_modules/loopback-connector-oracle/node_modules/oracledb'));
-          this.log(chalk.green(g.f('Oracle driver is ready.')));
-        } catch (e) {
-          this.log(chalk.red(g.f('Oracle driver fails to load: ' + e)));
-          this.log(
-            chalk.red(g.f('Please try `lb oracle --driver` or ' +
-              'follow instructions at ' + INSTALL_URL + '.')));
-          var done = this.async();
+        this.log(chalk.red(g.f('Oracle driver fails to load: %s', e)));
+        this.log(
+          chalk.red(
+            g.f(
+              'Please try `lb oracle --driver` or follow instructions at %s.',
+              INSTALL_URL
+            )
+          )
+        );
+        var done = this.async();
 
-          var prompts = [
-            {
-              name: 'openInstruction',
-              message: g.f('Open oracledb installation page?'),
-              type: 'confirm',
-              default: true,
-            },
-          ];
+        var prompts = [
+          {
+            name: 'openInstruction',
+            message: g.f('Open oracledb installation page?'),
+            type: 'confirm',
+            default: true,
+          },
+        ];
 
-          return this.prompt(prompts).then(function(props) {
-            if (props.openInstruction) {
-              open(INSTALL_URL);
-            }
-            done();
-          }.bind(this));
-        }
+        return this.prompt(prompts).then(function(props) {
+          if (props.openInstruction) {
+            open(INSTALL_URL);
+          }
+          done();
+        }.bind(this));
       }
-    },
-  },
-});
+    }
+  }
+};

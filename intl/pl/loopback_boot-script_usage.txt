@@ -1,0 +1,8 @@
+Opis:
+  Tworzy nowy skrypt startowy w aplikacji LoopBack.
+
+Przykład:
+
+  {{slc loopback:boot-script}} [wybrana_nazwa_skryptu]
+
+  Spowoduje to wygenerowanie skryptu startowego w katalogu {{`/server/boot`}}.

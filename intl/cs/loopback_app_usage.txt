@@ -1,0 +1,18 @@
+Popis:
+  Vytvoří aplikaci LoopBack.
+
+Například:
+
+  {{slc loopback}}
+
+  Toto vytvoří:
+
+    {{package.json}}: Balíky vývoje nainstalované {{npm}}.
+
+    {{common/models/<modelName>.json}}: Definice základních modelů poskytnutá aplikací LoopBack.
+    {{common/models/}}: Adresář, kam se umístí kód vlastního modelu.
+
+    {{server/server.js}}: Soubor hlavní aplikace.
+    {{server/config.json}}: Konfigurace aplikace upravitelná počítačem.
+    {{server/datasources.json}}: Definice zdrojů dat.
+    {{server/model-config.json}}: Konfigurace modelu.
