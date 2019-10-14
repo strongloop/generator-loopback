@@ -3,6 +3,8 @@ language: node_js
 node_js:
   - 8
   - 10
+  - 12
+
 before_install:
   - currentfolder=${PWD##*/}
   - if [ "$currentfolder" != 'generator-loopback' ]; then cd .. && eval "mv $currentfolder generator-loopback" && cd generator-loopback; fi
