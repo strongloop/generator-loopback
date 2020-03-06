@@ -1,3 +1,15 @@
+2020-03-06, Version 6.2.0
+=========================
+
+ * Update LTS status in README (Miroslav Bajtoš)
+
+ * chore: improve issue and PR templates (Nora)
+
+ * Travis: add Node.js 12 (Miroslav Bajtoš)
+
+ * Travis: drop Node.js 6 (Miroslav Bajtoš)
+
+
 2019-07-30, Version 6.1.1
 =========================
 
