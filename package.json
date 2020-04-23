@@ -34,7 +34,7 @@
     "lodash": "^4.17.11",
     "loopback-api-definition": "^3.0.0",
     "loopback-bluemix": "^3.0.0",
-    "loopback-soap": "^1.0.0",
+    "loopback-soap": "^1.3.2",
     "loopback-swagger": "^5.4.0",
     "loopback-workspace": "^5.0.0",
     "mkdirp": "^0.5.1",

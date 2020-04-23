@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2017,2019. All Rights Reserved.
+// Copyright IBM Corp. 2017,2020. All Rights Reserved.
 // Node module: generator-loopback
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
@@ -53,7 +53,7 @@ describe('loopback:soap tests', function() {
             content = readModelJsonSync('globals');
             expect(content).to.not.have.property('public');
             expect(content).to.have.property('properties');
-            expect(content.properties.Promise.type).to.eql('boolean');
+            expect(content.properties.EventEmitter.type).to.eql('boolean');
             expect(content.properties.Promise.type).to.eql('boolean');
 
             content = readModelJsonSync('get-quote-response');
@@ -191,6 +191,134 @@ describe('loopback:soap tests', function() {
             operations: ['myMethod'],
           }).then(function() {
             var content = readAPIFileSync('soap-rpc-literal-test-2-0-binding');
+          });
+      });
+  });
+
+  describe('DataService wsdl with string array', function() {
+    beforeEach(common.resetWorkspace);
+    beforeEach(function createSandbox(done) {
+      helpers.testDirectory(SANDBOX, done);
+    });
+    beforeEach(function createProject(done) {
+      common.createDummyProject(SANDBOX, 'test-soapapp', done);
+    });
+    beforeEach(function createDataSource() {
+      return helpers.run(path.join(__dirname, '../datasource'))
+        .cd(SANDBOX)
+        .withPrompts({
+          name: 'ds',
+          connector: 'soap',
+          url: 'http://localhost:8080/DomSoap3/services/DataService',
+          wsdl: path.join(__dirname, 'soap/DataService_string_array.wsdl'),
+          remotingEnabled: true,
+          installConnector: false,
+        }).then();
+    });
+
+    it('DataService wsdl with string array',
+      function() {
+        return helpers.run(path.join(__dirname, '../soap'))
+          .cd(SANDBOX)
+          .withPrompts({
+            dataSource: 'ds',
+            service: 'DataServiceService',
+            binding: 'DataServiceSoapBinding',
+            operations: ['getSomeData'],
+          }).then(function() {
+            var content = readModelJsonSync('get-some-data');
+            expect(content).to.not.have.property('public');
+            expect(content).to.have.property('properties');
+            expect(content.properties.myParams.type).to.be.an('array');
+            expect(content.properties.myParams.type[0]).to.eql('string');
+
+            content = readModelJsonSync('some-data');
+            expect(content).to.not.have.property('public');
+            expect(content).to.have.property('properties');
+            expect(content.properties.integer_value.type).to.eql('number');
+            expect(content.properties.string_value.type).to.eql('string');
+            expect(content.properties.date_value.type).to.eql('string');
+
+            content = readModelJsonSync('get-some-data-response');
+            expect(content).to.not.have.property('public');
+            expect(content).to.have.property('properties');
+            expect(content.properties.getSomeDataReturn.type).to.be.an('array');
+            expect(content.properties.getSomeDataReturn.type[0]).
+              to.eql('SomeData');
+
+            var modelConfig = readModelConfigSync('server');
+            expect(modelConfig).to.have.property('SomeData');
+            expect(modelConfig.SomeData).to.have.property('public', true);
+            expect(modelConfig).to.have.property('getSomeData');
+            expect(modelConfig.getSomeData).to.have.property('public', true);
+            expect(modelConfig).to.have.property('getSomeDataResponse');
+            expect(modelConfig.getSomeDataResponse).
+              to.have.property('public', true);
+          });
+      });
+  });
+
+  describe('DataService wsdl with model array', function() {
+    beforeEach(common.resetWorkspace);
+    beforeEach(function createSandbox(done) {
+      helpers.testDirectory(SANDBOX, done);
+    });
+    beforeEach(function createProject(done) {
+      common.createDummyProject(SANDBOX, 'test-soapapp', done);
+    });
+    beforeEach(function createDataSource() {
+      return helpers.run(path.join(__dirname, '../datasource'))
+        .cd(SANDBOX)
+        .withPrompts({
+          name: 'ds',
+          connector: 'soap',
+          url: 'http://localhost:8080/DomSoap4/services/DataService',
+          wsdl: path.join(__dirname, 'soap/DataService_model_array.wsdl'),
+          remotingEnabled: true,
+          installConnector: false,
+        }).then();
+    });
+
+    it('DataService wsdl with model array',
+      function() {
+        return helpers.run(path.join(__dirname, '../soap'))
+          .cd(SANDBOX)
+          .withPrompts({
+            dataSource: 'ds',
+            service: 'DataServiceService',
+            binding: 'DataServiceSoapBinding',
+            operations: ['getSomeData'],
+          }).then(function() {
+            var content = readModelJsonSync('get-some-data');
+            expect(content).to.not.have.property('public');
+            expect(content).to.have.property('properties');
+            expect(content.properties.myParams.type).to.be.an('array');
+            expect(content.properties.myParams.type[0]).to.eql('SomeInputData');
+
+            content = readModelJsonSync('some-data');
+            expect(content).to.not.have.property('public');
+            expect(content).to.have.property('properties');
+            expect(content.properties.integer_value.type).to.eql('number');
+            expect(content.properties.string_value.type).to.eql('string');
+            expect(content.properties.date_value.type).to.eql('string');
+
+            content = readModelJsonSync('get-some-data-response');
+            expect(content).to.not.have.property('public');
+            expect(content).to.have.property('properties');
+            expect(content.properties.getSomeDataReturn.type).to.be.an('array');
+            expect(content.properties.getSomeDataReturn.type[0]).
+              to.eql('SomeData');
+
+            var modelConfig = readModelConfigSync('server');
+            expect(modelConfig).to.have.property('SomeData');
+            expect(modelConfig.SomeData).to.have.property('public', true);
+            expect(modelConfig).to.have.property('SomeInputData');
+            expect(modelConfig.SomeInputData).to.have.property('public', true);
+            expect(modelConfig).to.have.property('getSomeData');
+            expect(modelConfig.getSomeData).to.have.property('public', true);
+            expect(modelConfig).to.have.property('getSomeDataResponse');
+            expect(modelConfig.getSomeDataResponse).
+              to.have.property('public', true);
           });
       });
   });
