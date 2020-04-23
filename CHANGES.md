@@ -1,3 +1,11 @@
+2020-04-23, Version 6.2.1
+=========================
+
+ * fix old test case (Dominique Emond)
+
+ * add soap array tests (Dominique Emond)
+
+
 2020-03-06, Version 6.2.0
 =========================
 
