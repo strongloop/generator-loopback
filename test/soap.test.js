@@ -53,7 +53,7 @@ describe('loopback:soap tests', function() {
             content = readModelJsonSync('globals');
             expect(content).to.not.have.property('public');
             expect(content).to.have.property('properties');
-            expect(content.properties.Promise.type).to.eql('boolean');
+            expect(content.properties.EventEmitter.type).to.eql('boolean');
             expect(content.properties.Promise.type).to.eql('boolean');
 
             content = readModelJsonSync('get-quote-response');
