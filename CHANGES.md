@@ -1,3 +1,11 @@
+2020-05-15, Version 6.3.0
+=========================
+
+ * chore: update mocha to latest (Miroslav Bajtoš)
+
+ * deps: update mkdirp to ^1.0 (Miroslav Bajtoš)
+
+
 2020-04-23, Version 6.2.1
 =========================
 
