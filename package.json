@@ -43,7 +43,7 @@
     "read-chunk": "^2.1.0",
     "request": "^2.60.0",
     "strong-globalize": "^4.1.1",
-    "strong-soap": "^1.2.2",
+    "strong-soap": "^3.0.0",
     "swagger-parser": "^4.0.1",
     "text-table": "^0.2.0",
     "yaml-js": "^0.1.4",
